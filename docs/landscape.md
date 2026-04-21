@@ -115,7 +115,12 @@ agent-card describes **a single A2A agent's capabilities and contact channel**. 
 
 ### vs. `/llms.txt`
 
-llms.txt is a **narrative Markdown index** for LLMs that prefer to read your site as a curated guide rather than crawl every page. agentic-first is a **structured JSON profile** for agents that need facts, not prose. Both can live on the same domain. `llms.txt` should reference `/.well-known/agentic-profile.json` so agents reading the index can also find the structured form (this repo's [`llms.txt`](../llms.txt) does exactly that).
+llms.txt is a **narrative Markdown index** for LLMs. It is, in practice, mostly adopted by developer-tooling and documentation sites — the natural audience is a *coding* agent (Cursor, Claude Code, Codex CLI) reading your docs to write code that integrates with your product. It is **not** a general convention that arbitrary AI agents consult to discover identity or structured data, and treating it as one would overstate its reach.
+
+agentic-first is the opposite: a **structured JSON profile** at a known well-known path, parsed deterministically by any reading agent that knows the standard. The two are complementary and non-conflicting:
+
+- If you publish dev-facing docs, publish `/llms.txt` so coding agents find your reference material — and inside it link to `/.well-known/agentic-profile.json` so a coding agent that's been pointed at the agentic-first standard finds your profile too. (This repo's [`llms.txt`](../llms.txt) does exactly that.)
+- If you don't publish docs, don't bother with `/llms.txt` — publish the agentic-first profile and add Schema.org `Organization` JSON-LD on the home page, which is what current LLM crawlers actually consume.
 
 ---
 

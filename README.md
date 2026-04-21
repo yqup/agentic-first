@@ -61,7 +61,9 @@ If you want to share precise figures, fundraise detail, NDA-protected logos, ref
 | **Build a reading agent** (one that consumes profiles)                         | Pick a `*-reader` skill from [`skills/`](./skills/) and read [`docs/reader-handling.md`](./docs/reader-handling.md)                                                                  |
 | **Validate a profile in code**                                                 | `pip install agentic-first-schema` &nbsp;&middot;&nbsp; see [`python/agentic_first_schema/`](./python/agentic_first_schema/)                                                        |
 | **Validate a profile from the shell**                                          | `pip install agentic-first-schema && agentic-first-validate ./agentic-profile.json`                                                                                                 |
-| **Embed your profile (every popular host: Squarespace, Wix, WP, Shopify, …)**  | [`docs/embed-recipes.md`](./docs/embed-recipes.md)                                                                                                                                  |
+| **Embed your profile (every popular host: Squarespace, Wix, WP, Shopify, …)**  | [`docs/embed-recipes.md`](./docs/embed-recipes.md) — top-level decision tree                                                                                                        |
+| **Get the recipe for *one specific host*** (Gamma, WordPress, Squarespace, Wix, Webflow, Vercel, Netlify, GitHub Pages, Notion, raw HTML/Apache/Nginx/Caddy) | [`docs/recipes/hosts/`](./docs/recipes/hosts/) — one self-contained file per host                                                                                                   |
+| **Get the canonical pattern for *one specific mode*** (file at well-known, script embed, hidden block, AI-builder block) | [`docs/recipes/modes/`](./docs/recipes/modes/) — one file per mode                                                                                                                  |
 | **See how `agentic-first` relates to LEI / XBRL / VCs / Schema.org / mcp.json** | [`docs/landscape.md`](./docs/landscape.md)                                                                                                                                          |
 | **Understand the security model** (publisher rules, prompt-injection defence)   | [`docs/security-policy.md`](./docs/security-policy.md)                                                                                                                              |
 | **Tell us what's missing or broken** (deterministic, code-only ingest)         | [`docs/feedback.md`](./docs/feedback.md) &nbsp;&middot;&nbsp; or post to [`https://directory.agentic-first.co/feedback`](https://www.agentic-first.co/feedback/)                     |
@@ -110,7 +112,10 @@ agentic-first/
 ├── docs/
 │   ├── security-policy.md        threat model, publisher rules, rejected patterns
 │   ├── reader-handling.md        how a reading agent should treat profile prose
-│   ├── embed-recipes.md          how to host on every major platform
+│   ├── embed-recipes.md          top-level decision tree (mode + host) — entry point for publishers
+│   ├── recipes/
+│   │   ├── modes/                01-file-well-known, 02-script-embed, 03-hidden-block, 04-ai-builder-block
+│   │   └── hosts/                gamma, wordpress, squarespace, wix, webflow, vercel, netlify, github-pages, notion, raw-html
 │   ├── landscape.md              relationship to LEI / XBRL / VCs / Schema.org / mcp.json
 │   └── feedback.md               how to send feedback to the directory operators (deterministic, code-only)
 └── python/agentic_first_schema/  Python validator + `agentic-first-validate` CLI

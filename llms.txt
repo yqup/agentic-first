@@ -10,7 +10,8 @@ This repo contains the spec, the four canonical JSON Schemas, drop-in skills for
 - [README.md](https://github.com/yqup/agentic-first/blob/main/README.md): one-page overview, repo map, how to start
 - [docs/security-policy.md](https://github.com/yqup/agentic-first/blob/main/docs/security-policy.md): threat model, publisher rules, rejected-pattern list, unicode hardening
 - [docs/reader-handling.md](https://github.com/yqup/agentic-first/blob/main/docs/reader-handling.md): how reading agents should treat profile prose as untrusted input
-- [docs/embed-recipes.md](https://github.com/yqup/agentic-first/blob/main/docs/embed-recipes.md): copy-paste recipes for every common host (WordPress, Squarespace, Wix, Shopify, Vercel, Netlify, Cloudflare, …)
+- [docs/embed-recipes.md](https://github.com/yqup/agentic-first/blob/main/docs/embed-recipes.md): top-level decision tree — pick mode + host, click through to the recipe
+- [docs/recipes/](https://github.com/yqup/agentic-first/tree/main/docs/recipes): per-mode and per-host recipes (one self-contained file each — fetch only the one you need)
 - [docs/landscape.md](https://github.com/yqup/agentic-first/blob/main/docs/landscape.md): how agentic-first relates to Schema.org, XBRL, VCs/DIDs, LEI, mcp.json, agent-card.json, llms.txt
 
 ## Schemas (v0.1.0)
@@ -74,3 +75,29 @@ Required fields: `subject` (string, max 200 chars) and `body` (string, max 4 000
 Per-IP rate limits are 3/min and 20/hour; global cap is 30/min. HTTP body is capped at 16 KiB; post-encoding entry is capped at 8 192 bytes. Deterministic rejection codes are `type_invalid`, `required`, `too_long`, `enum`, `unknown_key`, `rejected_pattern`, `too_large`, `invalid_json`, `rate_limited`, and `store_error`.
 
 For richer dialogue, file an issue at https://github.com/yqup/agentic-first/issues — that surface is human-mediated and round-trips visibly.
+
+## Recipes (per mode and per host)
+
+If you are an AI agent helping a user publish, **fetch only the recipe for their host** — each file is self-contained. You do not need to read the whole `recipes/` tree.
+
+### Modes
+
+- [docs/recipes/modes/01-file-well-known.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/01-file-well-known.md): canonical — `/.well-known/agentic-profile.json`
+- [docs/recipes/modes/02-script-embed.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/02-script-embed.md): `<script type="application/agentic-profile+json">` data island
+- [docs/recipes/modes/03-hidden-block.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/03-hidden-block.md): `<div hidden id="agentic-profile" data-format="xml">` (soft warning)
+- [docs/recipes/modes/04-ai-builder-block.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/04-ai-builder-block.md): visible structured block with embedded host-AI instructions, for hosts whose AI rewrites the page (Gamma, Tome, Beautiful.AI, Framer AI, Wix ADI) — soft warning
+
+### Hosts
+
+- [docs/recipes/hosts/gamma.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/gamma.md): Gamma (gamma.app) — Mode 4
+- [docs/recipes/hosts/github-pages.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/github-pages.md): GitHub Pages, Jekyll, Eleventy — Mode 1
+- [docs/recipes/hosts/netlify.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/netlify.md): Netlify — Mode 1
+- [docs/recipes/hosts/notion.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/notion.md): Notion via Super.so / Potion / Fruition — Mode 2
+- [docs/recipes/hosts/raw-html.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/raw-html.md): Apache, Nginx, Caddy, raw VPS, Docker-served static — Mode 1
+- [docs/recipes/hosts/squarespace.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/squarespace.md): Squarespace — Mode 2 (or Mode 1 via Cloudflare Worker)
+- [docs/recipes/hosts/vercel.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/vercel.md): Vercel and Vercel-style frameworks (Next, Astro, Nuxt, SvelteKit, Hugo, Docusaurus, Gatsby, Vite) — Mode 1
+- [docs/recipes/hosts/webflow.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/webflow.md): Webflow — Mode 2 (or Mode 1 via Cloudflare Worker)
+- [docs/recipes/hosts/wix.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/wix.md): Wix Premium — Mode 2 (or Velo HTTP function for Mode 1)
+- [docs/recipes/hosts/wordpress.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/wordpress.md): WordPress (managed or self-hosted) — Mode 1 or Mode 2
+
+If the user's host isn't in the list, fall through to the host-not-listed section of [docs/embed-recipes.md](https://github.com/yqup/agentic-first/blob/main/docs/embed-recipes.md). New host recipes are added when real users [send feedback](https://www.agentic-first.co/feedback/) reporting gaps.

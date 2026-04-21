@@ -1,13 +1,17 @@
 ---
 name: agentic-first
-version: 0.1.1
+version: 0.1.2
 description: >-
   Author or update an agentic-first profile (open standard at
   https://www.agentic-first.co/standard/). Use when the user wants to
   publish a company or personal profile, generate
   /.well-known/agentic-profile.json, embed an agentic-first profile in
   HTML, validate one against the canonical JSON Schemas, or submit a
-  domain to the directory at directory.agentic-first.co.
+  domain to the directory at directory.agentic-first.co. v0.1.2 adds a
+  fourth publishing mode for AI-builder hosts (Gamma, Tome, Beautiful.AI,
+  Framer AI, Wix ADI) and per-host recipe files at
+  github.com/yqup/agentic-first/tree/main/docs/recipes — fetch only the
+  recipe for the user's host instead of dumping a generic table.
 ---
 
 # agentic-first profile author
@@ -22,9 +26,14 @@ discover them without scraping. Spec at
 This skill walks the user end-to-end from "I want to publish my profile"
 to a validated JSON file ready to host, then on to submitting the domain
 to the directory. It covers all four schema variants
-(company × person × public × protected), all three publishing modes
-(file at `/.well-known/`, embedded data island, inline XML fallback), and
-includes the security/prompt-injection guardrails the standard expects.
+(company × person × public × protected) and all four publishing modes:
+1. file at `/.well-known/agentic-profile.json` (canonical),
+2. `<script type="application/agentic-profile+json">` data island,
+3. hidden `<div data-format="xml">` block (soft warning),
+4. visible structured `<table>` block with embedded host-AI instructions
+   for AI-builder hosts like Gamma (soft warning, new in v0.1.2).
+
+It includes the security/prompt-injection guardrails the standard expects.
 
 ---
 
@@ -193,7 +202,16 @@ Output the final JSON in a single fenced code block. Then:
    the XML mirror of the JSON. The directory parses it but flags a
    soft warning suggesting an upgrade.
 
-4. **Submit the domain** once the file is live:
+4. **AI-builder hosts (Mode 4)** (Gamma, Tome, Beautiful.AI, Framer
+   AI, Wix ADI — anywhere the host's AI rewrites the page on every
+   save): use a *visible* `<table id="agentic-profile" data-format="html-table">`
+   with key-value rows in dot-path notation, plus a polite
+   human-readable note instructing the host's AI to restyle but not
+   alter the data. Full pattern at
+   <https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/04-ai-builder-block.md>.
+   Soft warning, but it's what survives where modes 2 and 3 don't.
+
+5. **Submit the domain** once the file is live:
 
    ```bash
    curl -sS -X POST https://directory.agentic-first.co/mcp \
@@ -208,53 +226,64 @@ Output the final JSON in a single fenced code block. Then:
    Cursor, Codex CLI) pointed at
    `https://directory.agentic-first.co/mcp`.
 
-5. Optional: tell the team - `hello@agentic-first.co` keeps a list of
+6. Optional: tell the team - `hello@agentic-first.co` keeps a list of
    early publishers.
 
 ---
 
 ### Step 5b - Platform-specific embedding recipes
 
-When the user names their host (Squarespace, WordPress, Wix, Webflow,
-Vercel, etc.), don't make them go hunt; tell them the exact mode and
-the exact paste-target inline. Use this decision tree:
+The recipes are split into one self-contained file per host. **Fetch
+only the recipe for the user's host** — each file has the right mode,
+the exact paste-target, the exact snippet, host-specific gotchas, and
+the verification commands. Don't paraphrase from memory; the recipes
+are kept in lock-step with the directory's parser.
 
-1. Ask: "Where does your website live?"
-2. Map their answer to one of three modes:
+**Workflow:**
 
-| Their host | Use mode | Where to paste |
-|------------|----------|----------------|
-| Vercel, Netlify, Cloudflare Pages, GitHub Pages, AWS S3+CloudFront, Azure Static Web Apps, Fly/Railway/Render | **1 (file)** | `public/.well-known/agentic-profile.json` (or `static/`, depending on framework). |
-| Astro, Next.js, Nuxt, Hugo, Docusaurus, Gatsby | **1 (file)** | `public/.well-known/agentic-profile.json` (Astro/Next/Nuxt/Docusaurus/Gatsby) or `static/.well-known/agentic-profile.json` (SvelteKit, Hugo). |
-| Jekyll | **1 (file)** | Repo root `.well-known/agentic-profile.json` PLUS add `include: [.well-known]` to `_config.yml` (Jekyll excludes dotfiles by default). |
-| Eleventy | **1 (file)** | `src/.well-known/agentic-profile.json` PLUS `eleventyConfig.addPassthroughCopy(".well-known")`. |
-| Apache, Nginx, Caddy, raw VPS | **1 (file)** | Document root `/.well-known/agentic-profile.json` plus a one-line header rule (the recipes page has the exact directive for each). |
-| WordPress | **2 (embed)** for non-devs (Code Snippets plugin → `wp_head` action). **1 (file)** if they have SFTP and a managed-WP host that allows it. |
-| Squarespace | **1 (file) via Cloudflare Worker** (recommended). Otherwise **2 (embed)** via Settings → Advanced → Code Injection → HEADER. |
-| Wix | **2 (embed)** via Settings → Custom Code → Head, all pages. (Or Velo HTTP function for proper `Content-Type`.) |
-| Webflow | **2 (embed)** via Project Settings → Custom Code → Head Code. |
-| Ghost | **2 (embed)** via Settings → Code Injection → Site Header. |
-| Shopify | **2 (embed)** via Online Store → Themes → Edit Code → `theme.liquid` (just before `</head>`). |
-| Notion (via Super.so / Potion / Fruition) | **2 (embed)** via the wrapper's head-code injection. Vanilla Notion: not supported - tell them to host the profile elsewhere. |
-| Carrd | **2 (embed)** via Site Settings → Embed → Head (Pro plan only). |
-| Substack | **1 (file) via Cloudflare Worker** in front of the custom domain. No other option. |
-| Google Sites | **1 (file) via Cloudflare Worker** strongly recommended. Otherwise **3 (XML)** via Embed widget (best-effort, not reliable). |
-| Linktree / Beacons / Bio.link / Medium | **1 (file) via Cloudflare Worker** if they have a custom domain, else recommend they host the profile on a separate static service. |
+1. **Ask the user where their website lives.** ("Vercel? Squarespace?
+   WordPress? Gamma? Something else?") If you can detect it from a
+   repo (`package.json`, `next.config.js`, `_config.yml`,
+   `wrangler.toml`, `netlify.toml`, `vercel.json`), do that first and
+   confirm with the user.
 
-3. Once you know the mode and paste-target, give them the exact
-   snippet they need - the JSON file body for mode 1, the
-   `<script type="application/agentic-profile+json">` block for
-   mode 2, the `<div hidden data-format="xml">` block for mode 3.
-   For mode 2, always pair with the discovery `<link rel="agentic-profile">`
-   tag.
+2. **Look up the recipe URL** in the table below. These are GitHub
+   raw URLs you can fetch directly via your `web_fetch` tool:
 
-4. If they're stuck on a host that doesn't appear in the table
-   above, the **Cloudflare Worker recipe** at
-   <https://www.agentic-first.co/adopt/embed-recipes/#worker> is
-   the universal escape hatch - it works in front of literally any
-   host that lets you set DNS.
+   | Their host | Recipe URL |
+   |------------|------------|
+   | Vercel, Next.js, Astro, Nuxt, SvelteKit, Hugo, Docusaurus, Gatsby, Vite | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/vercel.md> |
+   | Netlify | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/netlify.md> |
+   | GitHub Pages, Jekyll, Eleventy | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/github-pages.md> |
+   | Apache, Nginx, Caddy, raw VPS, Docker static | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/raw-html.md> |
+   | WordPress (managed or self-hosted) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/wordpress.md> |
+   | Squarespace | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/squarespace.md> |
+   | Wix Premium | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/wix.md> |
+   | Webflow | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/webflow.md> |
+   | Notion (via Super.so / Potion / Fruition) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/notion.md> |
+   | **Gamma**, Tome, Beautiful.AI, Framer AI, Wix ADI (any AI-builder host that rewrites the page on save) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> |
 
-5. Always end with the verification triplet:
+3. **Fetch the recipe** and follow it step-by-step. Each recipe has a
+   "The recipe" section (what to do) and a "Common problems" section
+   (what to do when it goes wrong). For mode 4 (Gamma family),
+   *also* fetch the mode reference at
+   <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/modes/04-ai-builder-block.md>
+   for the canonical pattern.
+
+4. **If the host isn't in the table**, fetch the entry-point doc at
+   <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/embed-recipes.md>
+   — it has a "Hosts not in the table" section covering the universal
+   Cloudflare Worker escape hatch and the separate-static-subdomain
+   pattern.
+
+5. **If your tool environment has no network fetch**, fall back to
+   the four-mode summary in Step 5 above. The host-to-mode mapping
+   in the table tells you which mode to default to. The exact
+   paste-target language is in the recipe, but the JSON body and the
+   `<script>` / `<div>` / `<table>` shapes are the same as the
+   examples in Step 5.
+
+6. Always end with the verification triplet:
    - `curl -I https://{their-domain}/.well-known/agentic-profile.json`
      should return `200` with `content-type: application/json`.
    - `curl -sS https://{their-domain}/.well-known/agentic-profile.json | jq .`
@@ -262,10 +291,12 @@ the exact paste-target inline. Use this decision tree:
    - If the user has `pip install agentic-first-schema`:
      `curl -sS https://{their-domain}/.well-known/agentic-profile.json | agentic-first-validate -`
      should print `PASS` (or list the exact field that's wrong).
+   - For mode 2/3/4 (no well-known file), substitute the
+     home-page grep + extract + validate triplet given in each
+     mode recipe.
 
-The full recipes page with copy-pasteable code for every entry above
-is at <https://www.agentic-first.co/adopt/embed-recipes/> - link the
-user there for the long-form version.
+The full recipe tree (modes + hosts) browseable at
+<https://github.com/yqup/agentic-first/tree/main/docs/recipes>.
 
 ---
 
