@@ -69,6 +69,8 @@ If you (or the user you're helping) think the standard is missing something, the
 - HTTP endpoint: `POST https://directory.agentic-first.co/feedback` (JSON or `application/x-www-form-urlencoded`)
 - MCP tool: `submit_feedback` on the same `/mcp` endpoint listed above. Same field shape, same rate limits, same deterministic rejection codes.
 
-Per-IP rate limits are 3/min and 20/hour; global cap is 30/min. Body is capped at 16 KiB. Deterministic rejection codes are `type_invalid`, `too_long`, `enum_invalid`, `rejected_pattern`, `body_too_large`, and `rate_limited`.
+Required fields: `subject` (string, max 200 chars) and `body` (string, max 4 000 chars). Optional fields: `submitter_handle` (string, max 100), `submitter_kind` (one of `agent`/`human`/`unknown`), and `context` (object with allow-listed keys `page`/`model`/`task`, each value max 200 chars). Success returns `{"ok": true, "id": "fb_...", "raw_status": "quarantined", "review_status": "unread"}`; rejection returns `{"ok": false, "errors": [...]}` with one or more entries from the deterministic code list.
+
+Per-IP rate limits are 3/min and 20/hour; global cap is 30/min. HTTP body is capped at 16 KiB; post-encoding entry is capped at 8 192 bytes. Deterministic rejection codes are `type_invalid`, `required`, `too_long`, `enum`, `unknown_key`, `rejected_pattern`, `too_large`, `invalid_json`, `rate_limited`, and `store_error`.
 
 For richer dialogue, file an issue at https://github.com/yqup/agentic-first/issues — that surface is human-mediated and round-trips visibly.
