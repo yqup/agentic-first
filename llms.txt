@@ -14,19 +14,27 @@ This repo contains the spec, the four canonical JSON Schemas, drop-in skills for
 - [docs/recipes/](https://github.com/yqup/agentic-first/tree/main/docs/recipes): per-mode and per-host recipes (one self-contained file each — fetch only the one you need)
 - [docs/landscape.md](https://github.com/yqup/agentic-first/blob/main/docs/landscape.md): how agentic-first relates to Schema.org, XBRL, VCs/DIDs, LEI, mcp.json, agent-card.json, llms.txt
 
-## Schemas (v0.1.0)
+## Schemas
 
-- [company-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/schemas/company-profile/0.1.0.json): public company profile (banded metrics, FCA-aware)
+- [company-profile/0.2.0.json](https://github.com/yqup/agentic-first/blob/main/schemas/company-profile/0.2.0.json): public company profile (banded metrics, FCA-aware). **v0.2.0 (2026-04-22)** added optional top-level `parent_brand` for sub-brand declarations — see [SPEC.md § Sub-brands and umbrella relationships](https://github.com/yqup/agentic-first/blob/main/SPEC.md#sub-brands-and-umbrella-relationships) and [examples/company-public-sub-brand.json](https://github.com/yqup/agentic-first/blob/main/examples/company-public-sub-brand.json). The 0.1.0 file stays in place for any pinned `$ref`; the validator's `SUPPORTED_SCHEMA_VERSIONS = {0.1.0, 0.2.0}` set means existing 0.1.0 publishers keep validating without warnings.
 - [personal-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/schemas/personal-profile/0.1.0.json): public personal profile (NEDs, founders, advisors, fractionals)
 - [company-private-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/schemas/company-private-profile/0.1.0.json): protected company profile (served from publisher's MCP under auth)
 - [personal-private-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/schemas/personal-private-profile/0.1.0.json): protected personal profile (served from publisher's MCP under auth)
 
 The same schemas are also served at canonical URLs by the directory:
 
-- https://directory.agentic-first.co/schemas/company-profile/0.1.0.json
-- https://directory.agentic-first.co/schemas/personal-profile/0.1.0.json
-- https://directory.agentic-first.co/schemas/company-private-profile/0.1.0.json
-- https://directory.agentic-first.co/schemas/personal-private-profile/0.1.0.json
+- https://directory.agentic-first.co/schemas/company-profile-0.2.0.json
+- https://directory.agentic-first.co/schemas/personal-profile-0.1.0.json
+- https://directory.agentic-first.co/schemas/company-private-profile-0.1.0.json
+- https://directory.agentic-first.co/schemas/personal-private-profile-0.1.0.json
+
+The standard **eats its own food**: the agentic-first marketing
+site itself publishes a Mode 1 profile at
+`https://www.agentic-first.co/.well-known/agentic-profile.json`
+declaring `parent_brand: yqup.com`, and is indexed in the live
+directory as a sub-brand of YQUP. Fetching that file is the
+shortest possible reference for what a real schema-0.2.0 profile
+looks like in production.
 
 ## Skills for AI agents
 
