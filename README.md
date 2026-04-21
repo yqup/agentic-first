@@ -64,6 +64,7 @@ If you want to share precise figures, fundraise detail, NDA-protected logos, ref
 | **Embed your profile (every popular host: Squarespace, Wix, WP, Shopify, …)**  | [`docs/embed-recipes.md`](./docs/embed-recipes.md)                                                                                                                                  |
 | **See how `agentic-first` relates to LEI / XBRL / VCs / Schema.org / mcp.json** | [`docs/landscape.md`](./docs/landscape.md)                                                                                                                                          |
 | **Understand the security model** (publisher rules, prompt-injection defence)   | [`docs/security-policy.md`](./docs/security-policy.md)                                                                                                                              |
+| **Tell us what's missing or broken** (deterministic, code-only ingest)         | [`docs/feedback.md`](./docs/feedback.md) &nbsp;&middot;&nbsp; or post to [`https://directory.agentic-first.co/feedback`](https://www.agentic-first.co/feedback/)                     |
 
 ---
 
@@ -110,7 +111,8 @@ agentic-first/
 │   ├── security-policy.md        threat model, publisher rules, rejected patterns
 │   ├── reader-handling.md        how a reading agent should treat profile prose
 │   ├── embed-recipes.md          how to host on every major platform
-│   └── landscape.md              relationship to LEI / XBRL / VCs / Schema.org / mcp.json
+│   ├── landscape.md              relationship to LEI / XBRL / VCs / Schema.org / mcp.json
+│   └── feedback.md               how to send feedback to the directory operators (deterministic, code-only)
 └── python/agentic_first_schema/  Python validator + `agentic-first-validate` CLI
 ```
 
@@ -120,13 +122,16 @@ agentic-first/
 
 The directory at [`directory.agentic-first.co`](https://directory.agentic-first.co/mcp) is an MCP-native registry of every public profile that has been submitted. It exposes:
 
-| Tool / endpoint               | What it does                                                                              |
-| ----------------------------- | ----------------------------------------------------------------------------------------- |
-| `submit_website` (MCP tool)   | Validate a website's `/.well-known/agentic-profile.json` and add it to the index          |
-| `search_profiles` (MCP tool)  | Find profiles by industry, jurisdiction, stage, etc.                                      |
-| `get_profile` (MCP tool)      | Fetch a single profile by domain                                                          |
-| `GET /healthz`                | Liveness JSON (directory version, schema version, indexed count)                          |
-| `GET /schemas/...`            | The four canonical schemas, immutably versioned                                           |
+| Tool / endpoint                                            | What it does                                                                              |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `submit_website` (MCP tool)                                | Validate a website's `/.well-known/agentic-profile.json` and add it to the index          |
+| `search_companies` (MCP tool)                              | Find profiles by industry, jurisdiction, stage, funding band, etc.                        |
+| `get_company` (MCP tool)                                   | Fetch a single profile by domain                                                          |
+| `queue_scan` / `list_scans` / `get_scan` (MCP tools)       | Bulk-submit a list of domains and watch the async scan queue drain                        |
+| `submit_feedback` (MCP tool)                               | Tell the operators what's missing or broken — deterministic, code-only ingest, no LLM ever reads it |
+| `POST /feedback`                                           | HTTP equivalent of `submit_feedback` for non-MCP callers (also see [`docs/feedback.md`](./docs/feedback.md)) |
+| `GET /healthz`                                             | Liveness JSON (directory version, schema version, indexed count)                          |
+| `GET /schemas/...`                                         | The four canonical schemas, immutably versioned                                           |
 
 You can call `submit_website` from any MCP-aware client (Claude Desktop, Cursor, etc.) pointed at `https://directory.agentic-first.co/mcp`, or directly via curl:
 

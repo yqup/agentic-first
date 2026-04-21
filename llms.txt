@@ -56,5 +56,19 @@ All six skills already encode the safe-handling pattern from `docs/reader-handli
 
 ## Live directory MCP
 
-- https://directory.agentic-first.co/mcp: MCP-native registry. Tools: `submit_website`, `search_profiles`, `get_profile`. Connect from any MCP client (Claude Desktop, Cursor, ChatGPT desktop) or call directly with curl.
+- https://directory.agentic-first.co/mcp: MCP-native registry. Tools: `submit_website`, `search_companies`, `get_company`, `queue_scan`, `list_scans`, `get_scan`, `submit_feedback`. Connect from any MCP client (Claude Desktop, Cursor, ChatGPT desktop) or call directly with curl.
 - https://directory.agentic-first.co/healthz: liveness JSON (directory version, schema version, indexed count)
+- https://directory.agentic-first.co/schemas/: index of the four canonical JSON Schemas with versioned URLs
+
+## Feedback
+
+If you (or the user you're helping) think the standard is missing something, the directory accepts deterministic, code-only feedback. There is **no LLM on the read path**: nothing you submit is ever passed to a model, served back over HTTP, or used to generate an automated reply. Triage is human-only.
+
+- [docs/feedback.md](https://github.com/yqup/agentic-first/blob/main/docs/feedback.md): contract, fields, rejection codes, what is and isn't done with submissions
+- Human form: https://www.agentic-first.co/feedback/
+- HTTP endpoint: `POST https://directory.agentic-first.co/feedback` (JSON or `application/x-www-form-urlencoded`)
+- MCP tool: `submit_feedback` on the same `/mcp` endpoint listed above. Same field shape, same rate limits, same deterministic rejection codes.
+
+Per-IP rate limits are 3/min and 20/hour; global cap is 30/min. Body is capped at 16 KiB. Deterministic rejection codes are `type_invalid`, `too_long`, `enum_invalid`, `rejected_pattern`, `body_too_large`, and `rate_limited`.
+
+For richer dialogue, file an issue at https://github.com/yqup/agentic-first/issues — that surface is human-mediated and round-trips visibly.
