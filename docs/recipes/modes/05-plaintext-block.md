@@ -10,7 +10,7 @@ host_requirements:
   - allow_arbitrary_text_in_page_body_or_footer
 soft_warning: true
 trust_rank: lowest
-parser_status: spec defined v0.1.0; directory parser support landing v0.1.x (follow-up code task)
+parser_status: supported by directory scanner; live since 2026-04-21 (Phase 1.14, see pitch-mcp `pitch_client.colophon`)
 schema_revision: v2-2026-04-21
 v1_status: deprecated (multi-line block — did not survive Gamma's publish AI in production testing on yqup.com)
 ---
@@ -168,7 +168,25 @@ curl -sS -X POST https://directory.agentic-first.co/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call",
        "params":{"name":"submit_website",
                  "arguments":{"domain":"your-gamma-site.example"}}}'
-# Expect: {"ok": true, ...} with warnings[] containing "discovery_method: plaintext-colophon"
+# Expect: {"ok": true, "discovery": {"method": "plaintext-colophon",
+# "warnings": ["discovery_method=plaintext-colophon: lowest-trust mode...",
+# ...]}, "validation": {"errors": [], "warnings": [...]}}.
+# The discovery.warnings array names the soft-warning trust signal and
+# any defensive coercions the parser applied (e.g. "coerced updated_at
+# from date to date-time"). Use those to tighten your wire format.
+```
+
+To check the running directory supports Mode 5 before you submit:
+
+```bash
+curl -s https://directory.agentic-first.co/healthz \
+  | python3 -c '
+import json, sys
+modes = json.load(sys.stdin)["supported_discovery_modes"]
+assert any(m["method"] == "plaintext-colophon" for m in modes), \
+  "scanner does not yet support Mode 5; check /healthz output"
+print("Mode 5 is live on this directory.")
+'
 ```
 
 ## Common problems

@@ -257,8 +257,30 @@ curl -sS -X POST https://directory.agentic-first.co/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call",
        "params":{"name":"submit_website",
                  "arguments":{"domain":"your-gamma-site.example"}}}'
-# Expect: {"ok": true, ...} with warnings[] containing "discovery_method: plaintext-colophon"
+# Expect: {"ok": true, "discovery": {"method": "plaintext-colophon",
+#         "warnings": ["discovery_method=plaintext-colophon: lowest-trust...",
+#                      "coerced updated_at from date 'YYYY-MM-DD' to date-time..."]},
+#         "validation": {"errors": [], "warnings": [...]}}.
+# The discovery.warnings array is the soft-warning trust signal plus
+# any defensive coercions the Mode 5 parser had to apply. Tighten your
+# wire format to clear the coercion warnings.
 ```
+
+> **Verified on this directory release.** The directory's `submit_website`
+> walks Mode 1 → convention MCP → **Mode 5 (plaintext colophon)** in that
+> order. You can confirm the running scanner supports Mode 5 with:
+>
+> ```bash
+> curl -s https://directory.agentic-first.co/healthz \
+>   | python3 -c 'import json, sys; print([m["method"] for m in json.load(sys.stdin)["supported_discovery_modes"]])'
+> # Expect: [..., 'plaintext-colophon']
+> ```
+>
+> **Verified on:**
+>
+> | Domain | Date | Result |
+> | --- | --- | --- |
+> | `yqup.com` | 2026-04-21 | Mode 5 v2 single-line colophon, 18 fields preserved byte-exact (see `fb_7e1c06b5380d49df`) |
 
 ## Verify (Mode 1 via Worker path)
 
