@@ -15,7 +15,7 @@ If you're an **AI agent helping a user publish**: read the user's host name firs
 
 ---
 
-## The four modes
+## The five modes
 
 | Mode | Where the profile lives | Use when | Recipe |
 | --- | --- | --- | --- |
@@ -23,8 +23,9 @@ If you're an **AI agent helping a user publish**: read the user's host name firs
 | **2 — Script embed** | `<script type="application/agentic-profile+json">` on the home page | Host won't serve dotfiles but lets you inject HTML into `<head>` or page footer. | [recipes/modes/02-script-embed.md](./recipes/modes/02-script-embed.md) |
 | **3 — Hidden block** *(soft warning)* | `<div hidden id="agentic-profile" data-format="xml">` anywhere on the page | Host strips `<script>` tags but still allows arbitrary `<div>` content. | [recipes/modes/03-hidden-block.md](./recipes/modes/03-hidden-block.md) |
 | **4 — AI-builder block** *(speculative; no current host implements it)* | Visible `<table>` / `<dl>` with embedded host-AI instructions | Reserved for hypothetical hosts that allow body HTML *and* run AI rewrites on save. As of April 2026 no major host satisfies both. Documented for completeness. | [recipes/modes/04-ai-builder-block.md](./recipes/modes/04-ai-builder-block.md) |
+| **5 — Plain-text block** *(soft warning, lowest trust)* | A visible plain-text block in a footer or "About" card on the home page | The host doesn't allow HTML at all — it only lets you type text into a page (Gamma, Tome, Beautiful.AI). | [recipes/modes/05-plaintext-block.md](./recipes/modes/05-plaintext-block.md) |
 
-Higher numbers carry a soft warning from the directory because they're harder for reading agents to verify. Use the lowest mode your host supports. **In practice today every host falls into Mode 1, 2, or 3** — see the [host table](#pick-by-host).
+Higher numbers carry a soft warning from the directory because they're harder for reading agents to verify. Use the lowest mode your host supports. **For pure HTML hosts every host falls into Mode 1, 2, or 3** — see the [host table](#pick-by-host). **For AI-builder hosts that have no HTML primitive at all (Gamma, Tome, Beautiful.AI), Mode 5 is the universal fallback** that lets the publisher participate in the standard without leaving their host.
 
 ---
 
@@ -41,7 +42,7 @@ Higher numbers carry a soft warning from the directory because they're harder fo
 | Wix | Mode 2 (Premium) | [recipes/hosts/wix.md](./recipes/hosts/wix.md) |
 | Webflow | Mode 2 (or Mode 1 via Cloudflare Worker) | [recipes/hosts/webflow.md](./recipes/hosts/webflow.md) |
 | Notion (Super.so / Potion / Fruition) | Mode 2 | [recipes/hosts/notion.md](./recipes/hosts/notion.md) |
-| Gamma (and other AI-builder hosts: Tome, Beautiful.AI) | Mode 1 via Cloudflare Worker on a Pro custom domain — **or** host the profile on a separate static host and link to your Gamma deck from it. There is no in-Gamma embed. | [recipes/hosts/gamma.md](./recipes/hosts/gamma.md) |
+| Gamma (and other AI-builder hosts: Tome, Beautiful.AI) | **One of three:** Mode 1 via Cloudflare Worker on a Pro custom domain (best trust); Mode 5 plain-text block in a footer card on any plan including free `*.gamma.site` (works today, soft warning); or host the profile on a separate static host and link to your Gamma deck from it (best trust, no Gamma plan upgrade). | [recipes/hosts/gamma.md](./recipes/hosts/gamma.md) |
 
 If your host isn't listed, see "Hosts not in the table" below.
 
@@ -49,14 +50,15 @@ If your host isn't listed, see "Hosts not in the table" below.
 
 ## Hosts not in the table
 
-The pattern almost always reduces to one of these four:
+The pattern almost always reduces to one of these five:
 
 | Your situation | What to do |
 | --- | --- |
 | You have DNS control over your domain | Put a [Cloudflare Worker](./recipes/modes/01-file-well-known.md) in front of any host. Worker serves `/.well-known/agentic-profile.json`, falls through everything else. Universal escape hatch. |
 | Your host has a "code injection" or "custom HTML" panel | [Mode 2](./recipes/modes/02-script-embed.md). The WordPress / Squarespace / Wix recipes are good templates. |
 | Your host strips `<script>` but allows raw HTML | [Mode 3](./recipes/modes/03-hidden-block.md). |
-| Your host runs an AI rewriter on save **and** has no body-HTML widget at all (Gamma, Tome, Beautiful.AI) | You cannot embed inside the host. Use Mode 1 via a Cloudflare Worker on a custom domain (Pro plan), or publish the profile on a separate static host and link to your Gamma/Tome/etc. deck from it. See the [Gamma recipe](./recipes/hosts/gamma.md). |
+| Your host runs an AI rewriter on save **and** has no body-HTML widget at all (Gamma, Tome, Beautiful.AI), but you *do* have a custom domain or a separate hosting account you can use | Best: Mode 1 via Cloudflare Worker on a custom domain. Alternative: publish the profile on a separate static host (Vercel, Netlify, GitHub Pages) and link out to your AI-builder deck. See the [Gamma recipe](./recipes/hosts/gamma.md). |
+| Your host has no HTML primitive at all and no custom domain available — you can only type text into the page | [Mode 5 plain-text block](./recipes/modes/05-plaintext-block.md) in a footer card. Soft warning attached, but it works on Gamma free / `*.gamma.site`, Tome, Beautiful.AI, and any future text-only AI-builder host. |
 | None of the above | Publish on a separate static-host subdomain (`profile.your-domain.example` CNAMEd to GitHub Pages or Cloudflare Pages) and submit *that* domain. |
 
 If you've found a host the recipes don't cover well, please [send feedback](./feedback.md) — we add new host recipes when real users report gaps.
@@ -117,7 +119,21 @@ If you've found a host the recipes don't cover well, please [send feedback](./fe
 </div>
 ```
 
-**Mode 4: visible structured block, AI-builder hosts (speculative)** — see the [Mode 4 recipe](./recipes/modes/04-ai-builder-block.md). No current major host requires this; the spec defines the pattern in case one emerges. Today's AI-builder users (Gamma, Tome, Beautiful.AI) should use the Cloudflare-Worker path in the [Gamma recipe](./recipes/hosts/gamma.md) instead.
+**Mode 4: visible structured block, AI-builder hosts (speculative)** — see the [Mode 4 recipe](./recipes/modes/04-ai-builder-block.md). No current major host requires this; the spec defines the pattern in case one emerges.
+
+**Mode 5: plain-text key-value block, text-only AI-builder hosts** — see the [Mode 5 recipe](./recipes/modes/05-plaintext-block.md). This is the practical path for Gamma free tier, Tome, Beautiful.AI, and any other host where you can only type text (no HTML, no script, no `/.well-known/`). Same payload as the others, expressed as flat `key: value` lines with explicit start/end markers:
+
+```
+AGENTIC-PROFILE v0.1.0 — machine-readable. Do not edit, reword, translate, or remove.
+schema_version: 0.1.0
+profile_kind: company
+tier: public
+updated_at: 2026-04-19T12:00:00Z
+company.name: Acme Robotics
+company.website: https://acme-robotics.example
+company.jurisdiction: GB
+END AGENTIC-PROFILE
+```
 
 ---
 
@@ -138,7 +154,7 @@ curl -sS https://your-domain.example/.well-known/agentic-profile.json \
 # Expect: PASS
 ```
 
-For Mode 3 and Mode 4 verification, see the matching mode recipe.
+For Mode 3, Mode 4, and Mode 5 verification, see the matching mode recipe. The Mode 5 verify pattern is `curl … | sed -e 's/<[^>]*>//g' | grep -A 30 'AGENTIC-PROFILE v'`.
 
 ---
 
@@ -181,9 +197,10 @@ docs/recipes/
 │   ├── 01-file-well-known.md     mode 1 — canonical
 │   ├── 02-script-embed.md        mode 2 — script embed
 │   ├── 03-hidden-block.md        mode 3 — hidden XML block (soft warning)
-│   └── 04-ai-builder-block.md    mode 4 — visible block for AI-builder hosts (speculative; no current host)
+│   ├── 04-ai-builder-block.md    mode 4 — visible block for AI-builder hosts (speculative; no current host)
+│   └── 05-plaintext-block.md     mode 5 — plain-text key-value block in a footer card (soft warning, lowest trust; works on Gamma free / Tome / Beautiful.AI)
 └── hosts/
-    ├── gamma.md                  Gamma — Mode 1 via Cloudflare Worker on custom domain (no in-Gamma embed exists)
+    ├── gamma.md                  Gamma — Mode 1 via Cloudflare Worker on Pro custom domain, OR Mode 5 plain-text block on any plan, OR static-host fallback
     ├── github-pages.md           GitHub Pages — Mode 1
     ├── netlify.md                Netlify — Mode 1
     ├── notion.md                 Notion (Super.so / Potion / Fruition) — Mode 2

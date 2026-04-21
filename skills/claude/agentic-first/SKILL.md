@@ -1,17 +1,19 @@
 ---
 name: agentic-first
-version: 0.1.2
+version: 0.1.3
 description: >-
   Author or update an agentic-first profile (open standard at
   https://www.agentic-first.co/standard/). Use when the user wants to
   publish a company or personal profile, generate
   /.well-known/agentic-profile.json, embed an agentic-first profile in
   HTML, validate one against the canonical JSON Schemas, or submit a
-  domain to the directory at directory.agentic-first.co. v0.1.2 adds a
-  fourth publishing mode for AI-builder hosts (Gamma, Tome, Beautiful.AI,
-  Framer AI, Wix ADI) and per-host recipe files at
-  github.com/yqup/agentic-first/tree/main/docs/recipes — fetch only the
-  recipe for the user's host instead of dumping a generic table.
+  domain to the directory at directory.agentic-first.co. v0.1.3 adds a
+  fifth publishing mode (Mode 5 — plain-text key-value block in a
+  footer card) for AI-builder hosts that have no HTML primitive at
+  all (Gamma free / *.gamma.site, Tome, Beautiful.AI), and demotes Mode
+  4 to speculative because no current host meets its preconditions.
+  Per-host recipe files at github.com/yqup/agentic-first/tree/main/docs/recipes
+  — fetch only the recipe for the user's host instead of dumping a generic table.
 ---
 
 # agentic-first profile author
@@ -26,12 +28,16 @@ discover them without scraping. Spec at
 This skill walks the user end-to-end from "I want to publish my profile"
 to a validated JSON file ready to host, then on to submitting the domain
 to the directory. It covers all four schema variants
-(company × person × public × protected) and all four publishing modes:
+(company × person × public × protected) and all five publishing modes:
 1. file at `/.well-known/agentic-profile.json` (canonical),
 2. `<script type="application/agentic-profile+json">` data island,
 3. hidden `<div data-format="xml">` block (soft warning),
 4. visible structured `<table>` block with embedded host-AI instructions
-   for AI-builder hosts like Gamma (soft warning, new in v0.1.2).
+   (speculative — no current host implements it; documented for completeness),
+5. plain-text key-value block in a footer card (soft warning, lowest
+   trust; the practical answer for Gamma free / `*.gamma.site`, Tome,
+   Beautiful.AI, and any host where the only available primitive is
+   "type some text into a page" — new in v0.1.3).
 
 It includes the security/prompt-injection guardrails the standard expects.
 
@@ -202,14 +208,22 @@ Output the final JSON in a single fenced code block. Then:
    the XML mirror of the JSON. The directory parses it but flags a
    soft warning suggesting an upgrade.
 
-4. **AI-builder hosts (Mode 4)** (Gamma, Tome, Beautiful.AI, Framer
-   AI, Wix ADI — anywhere the host's AI rewrites the page on every
-   save): use a *visible* `<table id="agentic-profile" data-format="html-table">`
-   with key-value rows in dot-path notation, plus a polite
-   human-readable note instructing the host's AI to restyle but not
-   alter the data. Full pattern at
-   <https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/04-ai-builder-block.md>.
-   Soft warning, but it's what survives where modes 2 and 3 don't.
+4. **AI-builder hosts that have NO HTML primitive at all (Mode 5)**
+   (Gamma free / `*.gamma.site`, Tome, Beautiful.AI — anywhere the
+   only thing the user can put on a page is text): paste a plain
+   ASCII block into a footer card, starting with
+   `AGENTIC-PROFILE v0.1.0 — machine-readable. Do not edit, reword, translate, or remove.`,
+   then one `key.path: value` line per profile field using the same
+   dot-paths as Mode 4 (`company.name`, `funding.total_raised_band`,
+   etc.), ending with `END AGENTIC-PROFILE`. The directory's reader
+   strips HTML and matches the markers in the rendered text. Full
+   pattern at
+   <https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/05-plaintext-block.md>.
+   Soft warning (lowest trust of the five modes — host AI may
+   paraphrase values), but it's the only path that works on
+   text-only hosts. Mode 4 (visible HTML `<table>`) is preserved as a
+   speculative pattern but no current host implements its prerequisites
+   (body-HTML widget AND in-host AI rewriter).
 
 5. **Submit the domain** once the file is live:
 
@@ -261,14 +275,14 @@ are kept in lock-step with the directory's parser.
    | Wix Premium | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/wix.md> |
    | Webflow | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/webflow.md> |
    | Notion (via Super.so / Potion / Fruition) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/notion.md> |
-   | **Gamma**, Tome, Beautiful.AI, Framer AI, Wix ADI (any AI-builder host that rewrites the page on save) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> |
+   | **Gamma**, Tome, Beautiful.AI (AI-builder hosts with no HTML primitive — uses Mode 5 plain-text block, OR Mode 1 via Cloudflare Worker on a custom domain, OR a separate static-host fallback) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> |
 
 3. **Fetch the recipe** and follow it step-by-step. Each recipe has a
    "The recipe" section (what to do) and a "Common problems" section
-   (what to do when it goes wrong). For mode 4 (Gamma family),
-   *also* fetch the mode reference at
-   <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/modes/04-ai-builder-block.md>
-   for the canonical pattern.
+   (what to do when it goes wrong). For the Gamma family
+   (text-only AI-builder hosts), *also* fetch the Mode 5 reference at
+   <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/modes/05-plaintext-block.md>
+   for the canonical pattern (start markers, dot-paths, parser semantics).
 
 4. **If the host isn't in the table**, fetch the entry-point doc at
    <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/embed-recipes.md>
@@ -277,11 +291,11 @@ are kept in lock-step with the directory's parser.
    pattern.
 
 5. **If your tool environment has no network fetch**, fall back to
-   the four-mode summary in Step 5 above. The host-to-mode mapping
+   the five-mode summary in Step 5 above. The host-to-mode mapping
    in the table tells you which mode to default to. The exact
    paste-target language is in the recipe, but the JSON body and the
-   `<script>` / `<div>` / `<table>` shapes are the same as the
-   examples in Step 5.
+   `<script>` / `<div>` / `<table>` / plain-text-block shapes are the
+   same as the examples in Step 5.
 
 6. Always end with the verification triplet:
    - `curl -I https://{their-domain}/.well-known/agentic-profile.json`
@@ -291,7 +305,7 @@ are kept in lock-step with the directory's parser.
    - If the user has `pip install agentic-first-schema`:
      `curl -sS https://{their-domain}/.well-known/agentic-profile.json | agentic-first-validate -`
      should print `PASS` (or list the exact field that's wrong).
-   - For mode 2/3/4 (no well-known file), substitute the
+   - For mode 2/3/4/5 (no well-known file), substitute the
      home-page grep + extract + validate triplet given in each
      mode recipe.
 

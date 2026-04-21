@@ -18,21 +18,21 @@ status_note: |
 
 # Mode 4 — AI-builder hosts (visible structured block + host-AI instructions)
 
-> **Status — speculative pattern, no current host implements it.** This mode was originally designed for Gamma. After fact-checking in April 2026, Gamma turned out to have no body-HTML primitive at all (no custom HTML widget, no `<head>` injection, no `<script>` block — see [`hosts/gamma.md`](../hosts/gamma.md)), so it cannot run Mode 4 either. No other major host today combines (a) a visible body-HTML widget and (b) an in-host AI that aggressively rewrites pages on save. The pattern below is preserved as a defined, valid design — *if* a host with both properties emerges, this is how to publish on it. **Today, you should not use this mode.** Use Mode 1, 2, or — for Gamma users specifically — the [`hosts/gamma.md`](../hosts/gamma.md) Cloudflare Worker recipe.
+> **Status — speculative pattern, no current host implements it.** This mode was originally designed for Gamma. After fact-checking in April 2026, Gamma turned out to have no body-HTML primitive at all (no custom HTML widget, no `<head>` injection, no `<script>` block — see [`hosts/gamma.md`](../hosts/gamma.md)), so it cannot run Mode 4 either. No other major host today combines (a) a visible body-HTML widget and (b) an in-host AI that aggressively rewrites pages on save. The pattern below is preserved as a defined, valid design — *if* a host with both properties emerges, this is how to publish on it. **Today, you should not use this mode.** Use Mode 1, 2, or — for AI-builder hosts where the only primitive is "type text into a page" (Gamma, Tome, Beautiful.AI) — use **[Mode 5 (plain-text block)](./05-plaintext-block.md)**, which is the practical answer for the population Mode 4 was designed to serve.
 
 ## Current adoption
 
 | Host | Has body-HTML widget? | Runs AI rewrites on save? | Mode 4 fit? |
 | --- | --- | --- | --- |
-| Gamma | **No** | Yes | No — use [Cloudflare Worker on custom domain](../hosts/gamma.md) |
-| Tome | No | Yes | No |
-| Beautiful.AI | No | Yes | No |
+| Gamma | **No** | Yes | No — use [Mode 5 (plain-text block)](./05-plaintext-block.md) or [Cloudflare Worker on custom domain](../hosts/gamma.md) |
+| Tome | No | Yes | No — use [Mode 5](./05-plaintext-block.md) |
+| Beautiful.AI | No | Yes | No — use [Mode 5](./05-plaintext-block.md) |
 | Framer (with AI) | Yes | Light, mostly opt-in | Use [Mode 2](./02-script-embed.md) — Framer accepts typed `<script>` blocks |
 | Wix ADI | Yes (via Premium HTML widget) | No (Wix ADI is a generator, not a per-save rewriter) | Use [Mode 2 (Wix recipe)](../hosts/wix.md) |
 | Notion (Super.so / Potion) | Yes (via embed code blocks) | No | Use [Mode 2 (Notion recipe)](../hosts/notion.md) |
 | WordPress with an AI page-builder plugin (Elementor AI, Divi AI) | Yes | Plugin-dependent; usually opt-in per element | Use [Mode 2 (WordPress recipe)](../hosts/wordpress.md) |
 
-Result: every host that *can* host body HTML can also host Mode 2, which is byte-exact and machine-parseable. Every host that runs aggressive AI rewrites on save is also too restrictive for body HTML at all. Mode 4 sits in an empty intersection.
+Result: every host that *can* host body HTML can also host Mode 2, which is byte-exact and machine-parseable. Every host that runs aggressive AI rewrites on save is also too restrictive for body HTML at all — those hosts are served by **[Mode 5 (plain-text block)](./05-plaintext-block.md)** instead, which doesn't depend on HTML at all. Mode 4 sits in an empty intersection that may or may not ever exist.
 
 ## Why this mode exists at all
 
@@ -158,7 +158,8 @@ curl -sS -X POST https://directory.agentic-first.co/mcp \
 
 ## Cross-references
 
-- [Mode 1 (file)](./01-file-well-known.md) — preferred whenever DNS / Cloudflare Worker is available; this is the right path for current AI-builder users.
+- [Mode 1 (file)](./01-file-well-known.md) — preferred whenever DNS / Cloudflare Worker is available; this is the right path for current AI-builder users with a custom domain.
 - [Mode 2 (script embed)](./02-script-embed.md) — preferred whenever the host accepts a typed `<script>` block; this covers every body-HTML host today.
 - [Mode 3 (hidden block)](./03-hidden-block.md) — preferred when the host strips `<script>` but allows arbitrary `<div>` content.
-- [Gamma host recipe](../hosts/gamma.md) — the host that motivated Mode 4 but cannot actually use it.
+- **[Mode 5 (plain-text block)](./05-plaintext-block.md)** — the practical answer for the population this mode was designed to serve. Works on any host where the only available primitive is "type text into a page" (Gamma, Tome, Beautiful.AI). Soft warning attached, but it actually works today.
+- [Gamma host recipe](../hosts/gamma.md) — the host that motivated Mode 4. Now uses Mode 5 in practice.

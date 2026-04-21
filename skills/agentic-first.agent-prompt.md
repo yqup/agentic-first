@@ -4,7 +4,7 @@
 > Spec: <https://www.agentic-first.co/standard/>
 > Author hub: <https://www.agentic-first.co/adopt/>
 > Recipes (per host, per mode): <https://github.com/yqup/agentic-first/tree/main/docs/recipes>
-> Skill version: 0.1.2
+> Skill version: 0.1.3
 >
 > This is a portable system prompt + workflow you can paste into any chat
 > agent (ChatGPT, Gemini, Cursor chat, your custom assistant). It walks
@@ -242,7 +242,7 @@ needs. Workflow:
    memory — the recipes are kept in sync with the live directory's
    parser.
 
-4. **If you have no fetch tool**, fall back to the four-mode summary
+4. **If you have no fetch tool**, fall back to the five-mode summary
    at the end of this prompt and the table above gives you the right
    mode by default.
 
@@ -252,12 +252,13 @@ needs. Workflow:
    Cloudflare Worker escape hatch and the separate-static-subdomain
    pattern.
 
-The four modes (summary, in case fetch isn't available):
+The five modes (summary, in case fetch isn't available):
 
 - **Mode 1 (file, canonical):** `https://{domain}/.well-known/agentic-profile.json`, `Content-Type: application/json`. Always preferred when the host supports it.
 - **Mode 2 (script embed):** `<script type="application/agentic-profile+json">…JSON…</script>` plus `<link rel="agentic-profile" type="application/json" href="/.well-known/agentic-profile.json">` in the home page `<head>`.
 - **Mode 3 (hidden XML block, soft warning):** `<div hidden id="agentic-profile" data-format="xml">…</div>` with an XML mirror of the JSON. Last resort for hosts that strip `<script>` tags.
-- **Mode 4 (visible block for AI-builder hosts, soft warning):** *new in skill v0.1.2.* For Gamma / Tome / Beautiful.AI / Framer AI / Wix ADI — hosts whose AI rewrites the page on every save. Embed a visible HTML `<table id="agentic-profile" data-format="html-table">` containing key-value rows, with a polite human-readable note instructing the host's AI to restyle but not alter the data. Full pattern: <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/modes/04-ai-builder-block.md>.
+- **Mode 4 (visible block for AI-builder hosts, speculative — no current host implements it):** Originally designed for Gamma; turned out Gamma has no body-HTML primitive. Pattern preserved at <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/modes/04-ai-builder-block.md> in case a host with both a body-HTML widget and an AI rewriter emerges. Do not use today.
+- **Mode 5 (plain-text key-value block, soft warning, lowest trust):** *new in skill v0.1.3.* For Gamma / Tome / Beautiful.AI — hosts where the only available primitive is "type some text into a page". Paste a plain ASCII block into a footer card, starting with `AGENTIC-PROFILE v0.1.0 — machine-readable. Do not edit, reword, translate, or remove.`, then one `key.path: value` per line using the same dot-paths as Mode 4, ending with `END AGENTIC-PROFILE`. Full pattern: <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/modes/05-plaintext-block.md>. The Gamma host recipe at <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> shows the worked example and verify pattern.
 
 Always close with the verification triplet:
 - `curl -I https://{their-domain}/.well-known/agentic-profile.json`

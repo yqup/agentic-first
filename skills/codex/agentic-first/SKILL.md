@@ -1,17 +1,19 @@
 ---
 name: agentic-first
-version: 0.1.2
+version: 0.1.3
 description: >-
   Author or update an agentic-first profile (open standard at
   https://www.agentic-first.co/standard/). Use when the user wants to
   publish a company or personal profile, generate
   /.well-known/agentic-profile.json, embed an agentic-first profile in
   HTML, validate one against the canonical JSON Schemas, or submit a
-  domain to the directory at directory.agentic-first.co. v0.1.2 adds a
-  fourth publishing mode for AI-builder hosts (Gamma, Tome, Beautiful.AI,
-  Framer AI, Wix ADI) and per-host recipe files at
-  github.com/yqup/agentic-first/tree/main/docs/recipes — fetch only the
-  recipe for the user's host instead of dumping a generic table.
+  domain to the directory at directory.agentic-first.co. v0.1.3 adds a
+  fifth publishing mode (Mode 5 — plain-text key-value block in a
+  footer card) for AI-builder hosts that have no HTML primitive at
+  all (Gamma free / *.gamma.site, Tome, Beautiful.AI), and demotes Mode
+  4 to speculative because no current host meets its preconditions.
+  Per-host recipe files at github.com/yqup/agentic-first/tree/main/docs/recipes
+  — fetch only the recipe for the user's host instead of dumping a generic table.
 runtime: codex
 allowed-tools:
   - read
@@ -31,12 +33,16 @@ discover them without scraping. Spec at
 This skill walks the user end-to-end from "I want to publish my profile"
 to a validated JSON file ready to host, then on to submitting the domain
 to the directory. It covers all four schema variants
-(company × person × public × protected) and all four publishing modes:
+(company × person × public × protected) and all five publishing modes:
 1. file at `/.well-known/agentic-profile.json` (canonical),
 2. `<script type="application/agentic-profile+json">` data island,
 3. hidden `<div data-format="xml">` block (soft warning),
 4. visible structured `<table>` block with embedded host-AI instructions
-   for AI-builder hosts like Gamma (soft warning, new in v0.1.2).
+   (speculative — no current host implements it; documented for completeness),
+5. plain-text key-value block in a footer card (soft warning, lowest
+   trust; the practical answer for Gamma free / `*.gamma.site`, Tome,
+   Beautiful.AI, and any host where the only available primitive is
+   "type some text into a page" — new in v0.1.3).
 
 It includes the security/prompt-injection guardrails the standard expects.
 
@@ -228,15 +234,22 @@ After the file is on disk and validated, give the user this checklist
    `<div hidden id="agentic-profile" data-format="xml">…</div>` with
    the XML mirror of the JSON.
 
-4. **AI-builder hosts (Mode 4, new in v0.1.2)** (Gamma, Tome,
-   Beautiful.AI, Framer AI, Wix ADI — anywhere the host's AI rewrites
-   the page on every save): use a *visible*
-   `<table id="agentic-profile" data-format="html-table">` with
-   key-value rows in dot-path notation, plus a polite human-readable
-   note instructing the host's AI to restyle but not alter the data.
-   Full pattern at
-   <https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/04-ai-builder-block.md>.
-   Soft warning, but it's what survives where modes 2 and 3 don't.
+4. **AI-builder hosts that have NO HTML primitive at all (Mode 5,
+   new in v0.1.3)** (Gamma free / `*.gamma.site`, Tome, Beautiful.AI
+   — anywhere the only thing the user can put on a page is text):
+   paste a plain ASCII block into a footer card, starting with
+   `AGENTIC-PROFILE v0.1.0 — machine-readable. Do not edit, reword, translate, or remove.`,
+   then one `key.path: value` line per profile field using the same
+   dot-paths as Mode 4 (`company.name`, `funding.total_raised_band`,
+   etc.), ending with `END AGENTIC-PROFILE`. The directory's reader
+   strips HTML and matches the markers in the rendered text. Full
+   pattern at
+   <https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/05-plaintext-block.md>.
+   Soft warning (lowest trust of the five modes — host AI may
+   paraphrase values), but it's the only path that works on
+   text-only hosts. Mode 4 (visible HTML `<table>`) is preserved as a
+   speculative pattern but no current host implements its
+   prerequisites (body-HTML widget AND in-host AI rewriter).
 
 5. **Submit the domain** once the file is live. Run via the shell tool:
 
@@ -291,7 +304,7 @@ Decision tree:
    | Wix Premium | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/wix.md> |
    | Webflow | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/webflow.md> |
    | Notion (Super.so / Potion / Fruition) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/notion.md> |
-   | **Gamma**, Tome, Beautiful.AI, Framer AI, Wix ADI (any AI-builder host that rewrites the page on save) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> |
+   | **Gamma**, Tome, Beautiful.AI (AI-builder hosts with no HTML primitive — uses Mode 5 plain-text block, OR Mode 1 via Cloudflare Worker on a custom domain, OR a separate static-host fallback) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> |
 
 3. **Fetch the recipe** with `curl -sS <url>` and follow it
    step-by-step. Each recipe has a "The recipe" section (what to do)
@@ -299,7 +312,7 @@ Decision tree:
 
 4. **Apply the recipe.** For mode 1 (file), use the `write` tool to
    place the JSON at the path the recipe specifies, then `ls` the
-   parent directory to confirm. For mode 2/3/4, the recipe contains
+   parent directory to confirm. For mode 2/3/4/5, the recipe contains
    the exact snippet to print to stdout for the user to paste into
    their host's UI panel — don't try to paste it for them, you don't
    have access to their hosting account.
@@ -328,6 +341,10 @@ Decision tree:
 
    For mode 4, swap the grep pattern for
    `'id="agentic-profile"[[:space:]]+data-format="html-'`.
+
+   For mode 5, swap to
+   `curl -sSL https://{their-domain}/ | sed -e 's/<[^>]*>//g' | grep -A 30 'AGENTIC-PROFILE v'`
+   — strips HTML and matches the start marker in the rendered text.
 
 The full recipe tree (modes + hosts) browseable at
 <https://github.com/yqup/agentic-first/tree/main/docs/recipes>.
