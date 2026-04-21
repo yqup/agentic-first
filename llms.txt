@@ -36,6 +36,19 @@ directory as a sub-brand of YQUP. Fetching that file is the
 shortest possible reference for what a real schema-0.2.0 profile
 looks like in production.
 
+**Trust signals — read carefully.** The directory exposes
+`has_external_id` (a boolean — does the profile carry a registry
+record or LEI?) and `verification_status` (one of `"unknown"`,
+`"claimed"`, `"checked"`). The previous `verified` boolean was
+renamed because it never actually verified anything beyond field
+presence. For sub-brands, `parent_brand_relationship_verified`
+indicates whether the affiliation has been *proven* (child and
+parent share an external ID); a bare `parent_brand` claim by itself
+is no longer enough to earn the `+0.1 verifiability` boost. See
+[SPEC.md § Sub-brands](https://github.com/yqup/agentic-first/blob/main/SPEC.md#sub-brands-and-umbrella-relationships)
+and the implementation-side resolution at
+[pitch-mcp/docs/security-reviews/2026-04-21-resolution.md](https://github.com/yqup/pitch-mcp/blob/main/docs/security-reviews/2026-04-21-resolution.md).
+
 ## Skills for AI agents
 
 If you are an AI agent helping a user **author** a profile:

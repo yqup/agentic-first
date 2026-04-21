@@ -67,6 +67,14 @@ Discovery from a homepage:
 
 If the canonical path is unavailable to you (some CMS hosts block dotted paths), publish a `<script type="application/agentic-profile+json">` data island on your homepage with the same JSON content, and still emit the `<link rel="agentic-profile">` discovery tag pointing at it. The standard defines five publishing modes in total — Mode 1 (file at `/.well-known/`, canonical), Mode 2 (script embed), Mode 3 (hidden XML block), Mode 4 (visible HTML table for AI-builder hosts; speculative), and Mode 5 (single-line plain-text colophon in a footer card, for hosts like Gamma / Tome / Beautiful.AI where the only available primitive is "type some text into a page"). Modes 3, 4, and 5 carry a soft warning at the directory because they are harder for reading agents to verify; Mode 5 carries the strongest warning. See [`docs/embed-recipes.md`](./docs/embed-recipes.md) for the full per-host catalogue and the per-mode recipe files at [`docs/recipes/modes/`](./docs/recipes/modes/). For hosts where the canonical path is unavailable, the standard does not prescribe any single fronting vendor: any static host that serves a JSON file from a custom-domain CNAME (Vercel, Netlify, Cloudflare Pages, Cloudflare Workers, Bunny.net, GitHub Pages, self-hosted reverse proxy) implements Mode 1 equivalently — see [`docs/recipes/hosts/gamma.md`](./docs/recipes/hosts/gamma.md) for the de-vendored menu.
 
+### Identity binding
+
+The directory enforces a hard rule on every ingest path: **the domain a profile is fetched from MUST match the host of the profile's `company.website` (or `person.website`) field.** A profile claiming `company.website: https://stripe.com` cannot be indexed under `attacker.example`, even if the JSON itself is structurally valid.
+
+The only normalization rule is leading-`www.` equivalence: `www.acme.example` and `acme.example` are treated as the same identity (a publisher who serves their site from one and declares the other in their profile passes). All other subdomains are different identities — `api.acme.example` is not `acme.example` for binding purposes. IDN punycode equivalence and trailing-dot equivalence are deliberately NOT applied; the rule is "exact host match modulo www".
+
+A profile that omits `company.website` / `person.website` entirely is still indexable, but the directory records a soft warning — `discovery.warnings` will include "binding is implicit only" — so reading agents know the only evidence the publisher controls the domain is that they served the well-known file from it.
+
 ---
 
 ## Discriminators
@@ -158,9 +166,9 @@ Rules:
 
 What the directory does with the relationship:
 
-1. **Reverse linkage.** `get_company { domain: "yqup.com" }` returns a `brand_relationships.sub_brands[]` array listing every indexed sub-brand pointing back to it. `get_company` on a sub-brand returns `brand_relationships.parent` with the umbrella's name and verified status.
-2. **Search filters.** `search_companies { parent_brand: "yqup.com" }` returns just YQUP's sub-brands. `search_companies { brand_role: "umbrella" | "sub_brand" | "standalone" }` slices the index by topology when the parent's domain isn't known up front.
-3. **Trust boost (small but real).** A sub-brand whose declared parent is *also indexed* AND has its own external ID (Companies House registry record or GLEIF LEI) earns `+0.1 verifiability`, capped at `1.0`. The boost is shown transparently in `score_inputs.parent_brand_boost` so a reading agent can decide what to do with it. If the parent is unverified or not indexed, no boost applies — this stops the trust signal being earnable by squatting on a domain.
+1. **Reverse linkage.** `get_company { domain: "yqup.com" }` returns a `brand_relationships.sub_brands[]` array listing every indexed sub-brand whose claim has been proven (see point 3 below). Unproven claims still surface, but under a separate `unverified_sub_brand_claims[]` list so an umbrella's profile can never be polluted by an attacker pointing at it. `get_company` on a sub-brand returns `brand_relationships.parent` with the umbrella's name, `has_external_id` flag, and a `relationship_verified` flag indicating whether the affiliation has been proven.
+2. **Search filters.** `search_companies { parent_brand: "yqup.com" }` returns every indexed profile that *claims* YQUP as a parent (verified and unverified — each result carries `parent_brand_relationship_verified` so the caller can filter further). `search_companies { brand_role: "umbrella" | "sub_brand" | "standalone" }` slices the index by topology when the parent's domain isn't known up front.
+3. **Trust boost (small, gated, real).** A sub-brand earns `+0.1 verifiability` (capped at `1.0`) only when *all three* are true: (a) the declared parent is itself indexed, (b) the parent carries its own external ID (Companies House registry record or GLEIF LEI), and (c) the sub-brand and the parent **share** that external ID — the same registry record `{type, id}` pair, or the same LEI. The shared-ID requirement is the affiliation proof: anyone can claim `parent_brand: yqup.com`, but only the operator of YQUP's actual legal entity can publish a profile under a different domain that *also* carries the YQUP Companies House number. The boost is shown transparently in `score_inputs.parent_brand_boost` so a reading agent can decide what to do with it. If any of the three gates fails, no boost applies and the relationship surfaces as `parent_brand_relationship_verified: false`.
 
 ---
 
