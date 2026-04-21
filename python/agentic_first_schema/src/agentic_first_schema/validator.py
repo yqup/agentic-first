@@ -27,7 +27,14 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 from .security import scan_profile
 
-CANONICAL_SCHEMA_VERSION = "0.1.0"
+CANONICAL_SCHEMA_VERSION = "0.2.0"
+
+#: Versions the validator still accepts. Adding optional fields is
+#: backward-compatible — a 0.1.0 profile validates fine against the
+#: 0.2.0 schema (the new ``parent_brand`` field is optional). Older
+#: versions stay in this set so existing publishers don't see a churny
+#: ``schema_version_mismatch`` warning the moment we ship a minor bump.
+SUPPORTED_SCHEMA_VERSIONS: frozenset[str] = frozenset({"0.1.0", "0.2.0"})
 
 ProfileKind = Literal["company", "person"]
 Tier = Literal["public", "protected"]
@@ -162,14 +169,16 @@ def validate_profile(profile: Any) -> ValidationReport:
         )
 
     declared_version = profile.get("schema_version")
-    if declared_version and declared_version != CANONICAL_SCHEMA_VERSION:
+    if declared_version and declared_version not in SUPPORTED_SCHEMA_VERSIONS:
         warnings.append(
             ValidationIssue(
                 path="$.schema_version",
                 code="schema_version_mismatch",
                 message=(
                     f"Profile declares schema_version {declared_version!r}; "
-                    f"directory canonical is {CANONICAL_SCHEMA_VERSION!r}."
+                    f"directory canonical is {CANONICAL_SCHEMA_VERSION!r} "
+                    f"and supported versions are "
+                    f"{sorted(SUPPORTED_SCHEMA_VERSIONS)!r}."
                 ),
             )
         )

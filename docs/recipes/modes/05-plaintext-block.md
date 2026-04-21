@@ -12,6 +12,7 @@ soft_warning: true
 trust_rank: lowest
 parser_status: supported by directory scanner; live since 2026-04-21 (Phase 1.14, see pitch-mcp `pitch_client.colophon`)
 schema_revision: v2-2026-04-21
+schema_version: 0.2.0 (parent_brand for sub-brands shipped 2026-04-22, Phase 1.15; back-compat with 0.1.0)
 v1_status: deprecated (multi-line block — did not survive Gamma's publish AI in production testing on yqup.com)
 ---
 
@@ -74,6 +75,7 @@ The realistic home for Mode 5 today is **Gamma, Tome, Beautiful.AI, and any futu
 | `{"company": {"industry": ["a","b"]}}` | `company.industry: a, b` | array of strings |
 | `{"funding": {"last_round": {"amount_band": "1m-5m"}}}` | `funding.last_round.amount_band: 1m-5m` | deep nested |
 | `{"updated_at": "2026-04-19"}` | `updated_at: 2026-04-19` | ISO-8601 date or datetime |
+| `{"parent_brand": "yqup.com"}` | `parent_brand: yqup.com` | sub-brand declaring its umbrella (since v0.2.0) |
 
 Anything that the JSON Schema permits, you can express as a pipe-separated `key.path: value` field.
 
@@ -100,6 +102,30 @@ The Mode 5 reader-side parser:
 - Is tolerant of: extra whitespace, the marker appearing mid-sentence, multiple consecutive spaces, smart-quote replacement, em-dash autoreplace.
 - Is **not** tolerant of: missing marker, paraphrased keys (`company.industry` becoming `industry`), paraphrased band values (`11-50` becoming `~12 employees`), reordered key fragments (`company.name.full` instead of `company.name`).
 - The schema validator runs after parsing — paraphrased values fail the banded-enum or pattern check and the submission is rejected with the standard `schema validation failed` envelope.
+
+## Sub-brands (since schema v0.2.0)
+
+If your colophon describes a **sub-brand** of a parent company that itself has an agentic-first profile, declare the relationship with one extra field:
+
+```
+agentic-first profile v0.2.0 | profile_kind: company | tier: public | parent_brand: yqup.com | company.name: Agentic First | company.website: https://agentic-first.co | company.jurisdiction: GB | updated_at: 2026-04-21
+```
+
+The new field:
+
+- **`parent_brand: <bare lowercase domain>`** — the umbrella's website domain. No protocol, no path, lowercase only. The schema rejects `https://yqup.com` and `YQUP.com`; both because we want one canonical form per parent so the directory's reverse-index is unambiguous.
+
+What the directory does with it:
+
+1. **Reverse linkage on `get_company`.** Calling `get_company { domain: "yqup.com" }` returns a `brand_relationships.sub_brands[]` array listing every indexed sub-brand pointing back to it. Calling `get_company { domain: "agentic-first.co" }` returns a `brand_relationships.parent` block with the umbrella's name and verified status.
+2. **Search filters.** `search_companies { parent_brand: "yqup.com" }` returns just the sub-brands of YQUP. `search_companies { brand_role: "umbrella" | "sub_brand" | "standalone" }` slices the index by topology when you don't know the parent's domain.
+3. **Trust boost (small but real).** A sub-brand whose declared parent is *also indexed* AND has its own external ID (Companies House registry record or GLEIF LEI) earns `+0.1` on `verifiability`. The boost is shown transparently in `score_inputs.parent_brand_boost` so a reading agent can decide what to do with it. If the parent is unverified or not indexed, no boost is applied — this stops the trust signal being earnable by squatting on a domain.
+
+What the publisher should know:
+
+- The umbrella's profile **must not** declare a `parent_brand` pointing at itself; that would create a cycle. Just publish the umbrella as a standalone profile.
+- A sub-brand can publish before its umbrella does. The directory will surface `parent_brand_indexed: false` on the sub-brand's results until the umbrella publishes too — useful as a nudge.
+- One sub-brand, one parent. The schema does not model multi-parent or joint-venture relationships in v0.2.0; that would be a v0.3 change. For now, pick the dominant umbrella.
 
 ## Soft warning
 

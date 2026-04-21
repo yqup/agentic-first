@@ -60,9 +60,9 @@ A profile that passes is **structurally** safe to publish. The reading-agent gui
 
 ## Versioning
 
-The schemas are pinned at `0.1.0`. The package version mirrors the schema version. Breaking changes to a schema bump the schema version and the package; non-breaking additions bump only the package.
+The company-profile schema is at `0.2.0` (sub-brand support added 2026-04-22 — new optional `parent_brand` field). The other three schemas remain pinned at `0.1.0`. The package version mirrors the highest schema version it ships. Adding optional fields is backward-compatible — `0.1.0` profiles validate fine against `0.2.0` — and the validator's `SUPPORTED_SCHEMA_VERSIONS` set keeps both versions warning-free so existing publishers don't get churn the moment we ship a minor bump.
 
-The canonical URL for each schema is permanent and versioned, e.g. `https://directory.agentic-first.co/schemas/company-profile/0.1.0.json`. Documents `$ref` that URL; the bytes never change.
+The canonical URL for each schema is permanent and versioned, e.g. `https://directory.agentic-first.co/schemas/company-profile/0.2.0.json`. Documents `$ref` that URL; the bytes never change for a given version.
 
 ## License
 

@@ -1,6 +1,6 @@
 # The agentic-first profile standard
 
-Version 0.1.0 · MIT
+Version 0.2.0 · MIT
 
 A small, well-versioned JSON contract that companies and individuals publish at a known location on their own website. Agents and directories discover it without scraping. Two tiers — **public** for discovery, **protected** for diligence-grade detail behind your own auth.
 
@@ -82,10 +82,12 @@ The pair `(profile_kind, tier)` selects exactly one of the four canonical schema
 
 | `(profile_kind, tier)`     | Schema                              |
 | -------------------------- | ----------------------------------- |
-| `("company", "public")`    | `company-profile/0.1.0.json`         |
+| `("company", "public")`    | `company-profile/0.2.0.json`         |
 | `("company", "protected")` | `company-private-profile/0.1.0.json` |
 | `("person",  "public")`    | `personal-profile/0.1.0.json`        |
 | `("person",  "protected")` | `personal-private-profile/0.1.0.json`|
+
+The company-public schema is at 0.2.0 (sub-brand support — see [§ Sub-brands and umbrella relationships](#sub-brands-and-umbrella-relationships) below). 0.1.0 documents continue to validate; the new `parent_brand` field is optional.
 
 ---
 
@@ -126,8 +128,39 @@ Hosted at `https://your-domain.example/.well-known/agentic-profile.json` with `p
 | `evidence`                     | array                                                      | Citations supporting public claims; empty array caps the trust score                                                            |
 | `contact.preferred_channel`    | enum                                                       | `email`, `form`, `private-mcp`, `none`                                                                                           |
 | `contact.private_mcp`          | URL                                                        | Pointer to your protected-tier MCP, if you run one                                                                              |
+| `parent_brand`                 | bare lowercase domain                                      | If this profile is a sub-brand of an umbrella company, the umbrella's website domain (since 0.2.0). See [§ Sub-brands](#sub-brands-and-umbrella-relationships). |
 
 See [`examples/company-public.json`](./examples/company-public.json) for a complete profile.
+
+### Sub-brands and umbrella relationships
+
+A single legal entity often runs more than one brand: a parent (`yqup.com`) with sub-brands (`agentic-first.co`, `pitch-mcp`, …). Each brand publishes its own profile at its own domain — there is no nested "sub-brands" array on the parent. Instead, sub-brands declare their parent with one field:
+
+```json
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-04-22T00:00:00Z",
+  "parent_brand": "yqup.com",
+  "company": {
+    "name": "Agentic First",
+    "website": "https://agentic-first.co",
+    "jurisdiction": "GB"
+  }
+}
+```
+
+Rules:
+
+- `parent_brand` is a **bare lowercase domain**, no protocol, no path. The schema rejects `https://yqup.com` and `YQUP.com` so each parent has exactly one canonical form in the directory's reverse index.
+- The umbrella publishes a normal profile and **does not** declare a `parent_brand` of its own; that would create a cycle.
+- A sub-brand can publish before its umbrella does. The directory will surface `parent_brand_indexed: false` on the sub-brand's results until the umbrella publishes too.
+- One sub-brand, one parent. Multi-parent / joint-venture relationships are out of scope for 0.2.0.
+
+What the directory does with the relationship:
+
+1. **Reverse linkage.** `get_company { domain: "yqup.com" }` returns a `brand_relationships.sub_brands[]` array listing every indexed sub-brand pointing back to it. `get_company` on a sub-brand returns `brand_relationships.parent` with the umbrella's name and verified status.
+2. **Search filters.** `search_companies { parent_brand: "yqup.com" }` returns just YQUP's sub-brands. `search_companies { brand_role: "umbrella" | "sub_brand" | "standalone" }` slices the index by topology when the parent's domain isn't known up front.
+3. **Trust boost (small but real).** A sub-brand whose declared parent is *also indexed* AND has its own external ID (Companies House registry record or GLEIF LEI) earns `+0.1 verifiability`, capped at `1.0`. The boost is shown transparently in `score_inputs.parent_brand_boost` so a reading agent can decide what to do with it. If the parent is unverified or not indexed, no boost applies — this stops the trust signal being earnable by squatting on a domain.
 
 ---
 

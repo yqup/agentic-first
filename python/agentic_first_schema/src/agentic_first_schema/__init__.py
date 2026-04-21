@@ -29,6 +29,7 @@ from .security import (
 )
 from .validator import (
     CANONICAL_SCHEMA_VERSION,
+    SUPPORTED_SCHEMA_VERSIONS,
     SCHEMA_NAME,
     SCHEMAS,
     ProfileKind,
@@ -43,6 +44,7 @@ from .validator import (
 
 __all__ = [
     "CANONICAL_SCHEMA_VERSION",
+    "SUPPORTED_SCHEMA_VERSIONS",
     "PatternHit",
     "REJECTED_PATTERNS",
     "RejectedPattern",

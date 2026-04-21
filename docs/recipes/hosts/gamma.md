@@ -181,6 +181,14 @@ If you don't have a custom domain (free / `*.gamma.site` plan) and don't want to
 
 5. Submit to the directory. The directory will tag the submission `discovery_method: plaintext-colophon` and attach a soft warning.
 
+**Sub-brand variant.** If the Gamma deck describes a sub-brand of an umbrella company that already has its own profile, add `parent_brand: <umbrella-domain>` to the colophon and bump the schema version. Example for `agentic-first.co` as a sub-brand of `yqup.com`:
+
+```
+agentic-first profile v0.2.0 | profile_kind: company | tier: public | parent_brand: yqup.com | company.name: Agentic First | company.website: https://agentic-first.co | company.jurisdiction: GB | updated_at: 2026-04-21
+```
+
+The directory will then surface "sub-brand of YQUP" linkage on `agentic-first.co`'s search results, expose it under `search_companies { parent_brand: "yqup.com" }`, and award `+0.1 verifiability` because YQUP's own profile carries a Companies House registry entry. Full mechanics in the [Mode 5 spec § Sub-brands](../modes/05-plaintext-block.md#sub-brands-since-schema-v020).
+
 **Critical — what NOT to paste:**
 
 - ❌ A "Do not edit, reword, translate, or remove" preamble. Empirically this *backfires* on Gamma. The publish AI reads it as a prompt directed at itself and starts making unrelated structural edits across multiple pages. The colophon's distinctiveness is its protection; an explicit "do not edit" instruction *reduces* survival, it doesn't increase it.
