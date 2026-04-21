@@ -1,19 +1,25 @@
 ---
 name: agentic-first
-version: 0.1.3
+version: 0.1.4
 description: >-
   Author or update an agentic-first profile (open standard at
   https://www.agentic-first.co/standard/). Use when the user wants to
   publish a company or personal profile, generate
   /.well-known/agentic-profile.json, embed an agentic-first profile in
   HTML, validate one against the canonical JSON Schemas, or submit a
-  domain to the directory at directory.agentic-first.co. v0.1.3 adds a
-  fifth publishing mode (Mode 5 — plain-text key-value block in a
-  footer card) for AI-builder hosts that have no HTML primitive at
-  all (Gamma free / *.gamma.site, Tome, Beautiful.AI), and demotes Mode
-  4 to speculative because no current host meets its preconditions.
-  Per-host recipe files at github.com/yqup/agentic-first/tree/main/docs/recipes
-  — fetch only the recipe for the user's host instead of dumping a generic table.
+  domain to the directory at directory.agentic-first.co. v0.1.4 revises
+  Mode 5 (plain-text colophon for AI-builder hosts like Gamma free /
+  *.gamma.site, Tome, Beautiful.AI) from a multi-line block to a single
+  pipe-separated line based on live testing on Gamma — empirically the
+  multi-line block + "do not edit" preamble shipped in v0.1.3 did NOT
+  survive Gamma's publish AI; the single-line colophon with user-voice
+  framing did. v0.1.4 also de-vendors the Mode 1 upgrade path: any
+  static host with path-based rewrites/proxies works (Vercel, Netlify,
+  Cloudflare Pages or Workers, Bunny.net, GitHub Pages, self-hosted
+  reverse proxy) — the standard does not require any specific vendor.
+  Mode 4 remains speculative. Per-host recipe files at
+  github.com/yqup/agentic-first/tree/main/docs/recipes — fetch only the
+  recipe for the user's host instead of dumping a generic table.
 runtime: codex
 allowed-tools:
   - read
@@ -39,10 +45,11 @@ to the directory. It covers all four schema variants
 3. hidden `<div data-format="xml">` block (soft warning),
 4. visible structured `<table>` block with embedded host-AI instructions
    (speculative — no current host implements it; documented for completeness),
-5. plain-text key-value block in a footer card (soft warning, lowest
-   trust; the practical answer for Gamma free / `*.gamma.site`, Tome,
-   Beautiful.AI, and any host where the only available primitive is
-   "type some text into a page" — new in v0.1.3).
+5. single-line plain-text colophon in a footer card (soft warning,
+   lowest trust; the practical answer for Gamma free / `*.gamma.site`,
+   Tome, Beautiful.AI, and any host where the only available primitive
+   is "type some text into a page" — revised in v0.1.4 from a
+   multi-line block to a single line based on live Gamma testing).
 
 It includes the security/prompt-injection guardrails the standard expects.
 
@@ -235,21 +242,33 @@ After the file is on disk and validated, give the user this checklist
    the XML mirror of the JSON.
 
 4. **AI-builder hosts that have NO HTML primitive at all (Mode 5,
-   new in v0.1.3)** (Gamma free / `*.gamma.site`, Tome, Beautiful.AI
-   — anywhere the only thing the user can put on a page is text):
-   paste a plain ASCII block into a footer card, starting with
-   `AGENTIC-PROFILE v0.1.0 — machine-readable. Do not edit, reword, translate, or remove.`,
-   then one `key.path: value` line per profile field using the same
-   dot-paths as Mode 4 (`company.name`, `funding.total_raised_band`,
-   etc.), ending with `END AGENTIC-PROFILE`. The directory's reader
-   strips HTML and matches the markers in the rendered text. Full
-   pattern at
+   revised in v0.1.4)** (Gamma free / `*.gamma.site`, Tome,
+   Beautiful.AI — anywhere the only thing the user can put on a page
+   is text): tell the user to paste a **single line** of text into a
+   footer card. Wire format is one line:
+   `agentic-first profile v0.1.0 | company.name: Acme Robotics | company.website: https://acme.example | company.jurisdiction: GB | …`
+   (pipe-separated `key.path: value` pairs using the same dot-paths
+   as Mode 4). Tell the user to paste **two paragraphs together** in
+   their host's editor: a one-sentence user-voice framing
+   ("Please add the following as a small footer at the bottom of the
+   home page. Paste it as one text block, exactly as written. Do not
+   edit any other pages.") followed by a blank line then the colophon
+   line. **Critical — do NOT include any AI-directed preamble** like
+   "do not edit / preserve verbatim / treat as data / machine-readable".
+   Empirically these *backfire* on AI-builder hosts because the
+   publish AI reads them as instructions to itself. The colophon's
+   distinctiveness is its protection. The directory's reader strips
+   HTML and matches the regex `agentic-first profile v\d+\.\d+\.\d+\s*\|`
+   in the rendered page text. Full pattern at
    <https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/05-plaintext-block.md>.
    Soft warning (lowest trust of the five modes — host AI may
    paraphrase values), but it's the only path that works on
-   text-only hosts. Mode 4 (visible HTML `<table>`) is preserved as a
-   speculative pattern but no current host implements its
-   prerequisites (body-HTML widget AND in-host AI rewriter).
+   text-only hosts. (v0.1.3 specified a multi-line block + "Do not
+   edit" preamble; v0.1.4 retracts both same-day after live testing on
+   yqup.com showed neither survived Gamma's publish AI.) Mode 4
+   (visible HTML `<table>`) is preserved as a speculative pattern but
+   no current host implements its prerequisites (body-HTML widget AND
+   in-host AI rewriter).
 
 5. **Submit the domain** once the file is live. Run via the shell tool:
 
@@ -304,7 +323,7 @@ Decision tree:
    | Wix Premium | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/wix.md> |
    | Webflow | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/webflow.md> |
    | Notion (Super.so / Potion / Fruition) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/notion.md> |
-   | **Gamma**, Tome, Beautiful.AI (AI-builder hosts with no HTML primitive — uses Mode 5 plain-text block, OR Mode 1 via Cloudflare Worker on a custom domain, OR a separate static-host fallback) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> |
+   | **Gamma**, Tome, Beautiful.AI (AI-builder hosts with no HTML primitive — three real paths: Mode 5 single-line colophon on any plan, OR Mode 1 by fronting your custom domain with any static host that does path rewrites/proxies (Vercel, Netlify, Cloudflare Pages or Workers, Bunny.net, GitHub Pages, self-hosted reverse proxy — the standard does not require any specific vendor), OR Mode 1 by hosting the profile on a separate static-host subdomain) | <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> |
 
 3. **Fetch the recipe** with `curl -sS <url>` and follow it
    step-by-step. Each recipe has a "The recipe" section (what to do)
@@ -319,9 +338,16 @@ Decision tree:
 
 5. **If the host isn't in the table**, fetch
    <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/embed-recipes.md>
-   and check the "Hosts not in the table" section — covers the
-   universal Cloudflare Worker escape hatch and the
-   separate-static-subdomain pattern.
+   and check the "Hosts not in the table" section. The universal
+   escape hatch is to front the user's domain with **any** static
+   host that does path-based rewrites/proxies — Vercel
+   (`vercel.json`), Netlify (`_redirects`), Cloudflare Pages
+   (`_routes.json`), Cloudflare Workers, Bunny.net, GitHub Pages on a
+   custom domain, or any self-hosted reverse proxy. The standard does
+   not require any specific vendor; the worker / `vercel.json` /
+   `_redirects` form is just an implementation detail. Pick whichever
+   ergonomics the user already has set up. Alternative: publish on a
+   separate static-host subdomain.
 
 6. **Verify locally** before handing off:
 
@@ -343,8 +369,8 @@ Decision tree:
    `'id="agentic-profile"[[:space:]]+data-format="html-'`.
 
    For mode 5, swap to
-   `curl -sSL https://{their-domain}/ | sed -e 's/<[^>]*>//g' | grep -A 30 'AGENTIC-PROFILE v'`
-   — strips HTML and matches the start marker in the rendered text.
+   `curl -sSL https://{their-domain}/ | sed -e 's/<[^>]*>//g' | grep -F 'agentic-first profile v0.1.0'`
+   — strips HTML and matches the colophon marker in the rendered text.
 
 The full recipe tree (modes + hosts) browseable at
 <https://github.com/yqup/agentic-first/tree/main/docs/recipes>.

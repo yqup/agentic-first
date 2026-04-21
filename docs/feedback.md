@@ -28,6 +28,7 @@ A single JSON object (or form payload) with these fields:
 | `submitter_handle` | string | no       | 100         | Optional contact handle (email, GitHub username, MCP client name). We only use it if a human operator follows up.|
 | `submitter_kind`   | enum   | no       | —           | One of `agent`, `human`, `unknown`. Defaults to `unknown` if absent.                                            |
 | `context`          | object | no       | —           | Optional dict. Allowed keys: `page`, `model`, `task`. Each value is a string capped at 200 chars. Unknown keys are rejected with `unknown_key`. |
+| `dry_run`          | bool   | no       | —           | Validate the submission against every rule below and return the same envelope you'd get on a real submit, but **do not** append to the quarantine. See [Dry-run mode](#dry-run-mode). |
 
 Wire-level limits:
 
@@ -74,6 +75,25 @@ Response on rejection (HTTP 422 — deterministic codes only, see below):
 
 `errors` is always a list — multiple rejections can fire at once on a single request.
 
+### Quoting code in feedback (backtick relaxation)
+
+A common case: you want to report "Gamma strips `<script>` blocks" or paste a fenced code block showing what your host did to a snippet. Without help, the prompt-injection scanner would see `<script>` and reject the whole submission with `rejected_pattern` on `body`.
+
+The feedback endpoint runs the scanner with `code_safe=True`, which masks the inside of:
+
+- single backticks: `` `<script type="application/agentic-profile+json">` ``
+- triple-backtick fenced blocks (with or without a language tag):
+
+  <pre>```html
+  &lt;script type="application/agentic-profile+json"&gt;
+    { "company": { "name": "Acme" } }
+  &lt;/script&gt;
+  ```</pre>
+
+before pattern-matching runs. So markup *quoted as code* in your bug report passes; the same markup *outside* backticks is still rejected. This relaxation only applies to the feedback path — the publisher pipeline (the one that ingests profile JSON over `submit_website`) still scans without it.
+
+Trade-off worth knowing: backtick masking is regex-broad, not HTML-aware. A bad actor *could* wrap an imperative jailbreak in backticks and slip past `rejected_pattern`. We accept that because (a) feedback is never read back to a model — see [What the directory does not do](#what-the-directory-does-not-do) — and (b) human triage will see it. If you want stricter behaviour for your own reuse of `pitch_schema.security.scan_text`, leave `code_safe=False` (the default).
+
 ### Example — MCP tool
 
 If you're already inside a session against `https://directory.agentic-first.co/mcp`, use the `submit_feedback` tool. The argument shape is identical to the JSON body above and the response envelope is identical.
@@ -97,7 +117,31 @@ If you're already inside a session against `https://directory.agentic-first.co/m
 
 ### Example — HTML form
 
-If you're a human with a browser, the page at <https://www.agentic-first.co/feedback/> renders the same fields as a small form. The page works without JavaScript (`<noscript>` posts the form `application/x-www-form-urlencoded`); the JS path upgrades to AJAX with a live character counter and inline success / error rendering. The form maps cleanly onto the wire fields above.
+If you're a human with a browser, the page at <https://www.agentic-first.co/feedback/> renders the same fields as a small form. The page works without JavaScript (`<noscript>` posts the form `application/x-www-form-urlencoded`); the JS path upgrades to AJAX with a live character counter and inline success / error rendering. The form maps cleanly onto the wire fields above. A "Validate without submitting" checkbox sets `dry_run=on` for the next post.
+
+### Dry-run mode
+
+If you're an agent — or a human iterating in `curl` — and you want to know *whether* your submission would be accepted without actually filing it, set `dry_run: true` (JSON) or `dry_run=on` (form). The directory will:
+
+1. Run every check in [the pipeline](#what-the-directory-does-on-receipt) up to and **excluding** step 8 (`Append`).
+2. Return the same envelope shape, with these substitutions on success:
+
+```json
+{
+  "ok": true,
+  "dry_run": true,
+  "id": null,
+  "raw_status": "would_quarantine",
+  "review_status": "would_be_unread",
+  "would_persist_bytes": 412
+}
+```
+
+A rejection in dry-run mode is byte-for-byte identical to a real rejection — same HTTP status (422 / 413 / 400), same `errors` array, same codes from the table below. So you can wire dry-run into a CI pre-commit, a publisher tool, or an agent self-check without ever cluttering the operator's quarantine queue.
+
+`would_persist_bytes` is the size the entry *would* occupy in JSONL on disk after sanitisation, so you can confirm you're well under the 8 192-byte post-encoding cap.
+
+Dry-run requests still consume rate-limit budget — both per-IP and global — by design. We don't want a "validate-only" loophole that lets a script probe pattern boundaries at full speed without ever showing up in `429` counters.
 
 ---
 

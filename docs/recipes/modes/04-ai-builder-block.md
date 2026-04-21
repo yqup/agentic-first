@@ -24,7 +24,7 @@ status_note: |
 
 | Host | Has body-HTML widget? | Runs AI rewrites on save? | Mode 4 fit? |
 | --- | --- | --- | --- |
-| Gamma | **No** | Yes | No — use [Mode 5 (plain-text block)](./05-plaintext-block.md) or [Cloudflare Worker on custom domain](../hosts/gamma.md) |
+| Gamma | **No** | Yes | No — use [Mode 5 (single-line colophon)](./05-plaintext-block.md) on any plan, or front a custom domain with any static host (Vercel/Netlify/Cloudflare/Bunny/Pages) for [canonical Mode 1](../hosts/gamma.md) |
 | Tome | No | Yes | No — use [Mode 5](./05-plaintext-block.md) |
 | Beautiful.AI | No | Yes | No — use [Mode 5](./05-plaintext-block.md) |
 | Framer (with AI) | Yes | Light, mostly opt-in | Use [Mode 2](./02-script-embed.md) — Framer accepts typed `<script>` blocks |

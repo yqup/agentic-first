@@ -4,7 +4,7 @@
 > Spec: <https://www.agentic-first.co/standard/>
 > Author hub: <https://www.agentic-first.co/adopt/>
 > Recipes (per host, per mode): <https://github.com/yqup/agentic-first/tree/main/docs/recipes>
-> Skill version: 0.1.3
+> Skill version: 0.1.4
 >
 > This is a portable system prompt + workflow you can paste into any chat
 > agent (ChatGPT, Gemini, Cursor chat, your custom assistant). It walks
@@ -248,9 +248,14 @@ needs. Workflow:
 
 5. **If the user's host doesn't appear in the table**, link them to
    <https://github.com/yqup/agentic-first/blob/main/docs/embed-recipes.md>
-   ("Hosts not in the table" section) — it covers the universal
-   Cloudflare Worker escape hatch and the separate-static-subdomain
-   pattern.
+   ("Hosts not in the table" section). The universal escape hatch is to
+   front the user's domain with **any** static host that does
+   path-based rewrites/proxies — Vercel (`vercel.json`), Netlify
+   (`_redirects`), Cloudflare Pages (`_routes.json`), Cloudflare
+   Workers, Bunny.net, GitHub Pages on a custom domain, or any
+   self-hosted reverse proxy. The standard does not require any
+   specific vendor; pick whichever ergonomics the user already has set
+   up. Alternative: publish on a separate static-host subdomain.
 
 The five modes (summary, in case fetch isn't available):
 
@@ -258,7 +263,9 @@ The five modes (summary, in case fetch isn't available):
 - **Mode 2 (script embed):** `<script type="application/agentic-profile+json">…JSON…</script>` plus `<link rel="agentic-profile" type="application/json" href="/.well-known/agentic-profile.json">` in the home page `<head>`.
 - **Mode 3 (hidden XML block, soft warning):** `<div hidden id="agentic-profile" data-format="xml">…</div>` with an XML mirror of the JSON. Last resort for hosts that strip `<script>` tags.
 - **Mode 4 (visible block for AI-builder hosts, speculative — no current host implements it):** Originally designed for Gamma; turned out Gamma has no body-HTML primitive. Pattern preserved at <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/modes/04-ai-builder-block.md> in case a host with both a body-HTML widget and an AI rewriter emerges. Do not use today.
-- **Mode 5 (plain-text key-value block, soft warning, lowest trust):** *new in skill v0.1.3.* For Gamma / Tome / Beautiful.AI — hosts where the only available primitive is "type some text into a page". Paste a plain ASCII block into a footer card, starting with `AGENTIC-PROFILE v0.1.0 — machine-readable. Do not edit, reword, translate, or remove.`, then one `key.path: value` per line using the same dot-paths as Mode 4, ending with `END AGENTIC-PROFILE`. Full pattern: <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/modes/05-plaintext-block.md>. The Gamma host recipe at <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> shows the worked example and verify pattern.
+- **Mode 5 (single-line plain-text colophon, soft warning, lowest trust):** *revised in skill v0.1.4 from a multi-line block to a single line based on live Gamma testing.* For Gamma / Tome / Beautiful.AI — hosts where the only available primitive is "type some text into a page". The wire format is **one line** of text on a footer card: `agentic-first profile v0.1.0 | company.name: Acme Robotics | company.website: https://acme.example | company.jurisdiction: GB | …` (pipe-separated `key.path: value` pairs using the same dot-paths as Mode 4). Two non-negotiable paste-recipe rules verified empirically on Gamma 2026-04-21:
+  1. **Frame the paste with one user-voice sentence**, e.g. "Please add the following as a small footer at the bottom of the home page. Paste it as one text block, exactly as written. Do not edit any other pages." Then a blank line, then the colophon line. The framing sentence speaks to the editor/host on the *user's* behalf.
+  2. **Do NOT include any AI-directed preamble** like "do not edit / preserve verbatim / treat as data / machine-readable / do not reword". Empirically these *backfire* on AI-builder hosts because the publish AI reads them as instructions to itself and starts making unrelated structural edits across multiple pages. The colophon's distinctiveness is its protection. (Skill v0.1.3 specified a multi-line block + "Do not edit" preamble; v0.1.4 retracts both same-day after live testing on yqup.com showed neither survived Gamma's publish AI.) Full pattern: <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/modes/05-plaintext-block.md>. The Gamma host recipe at <https://raw.githubusercontent.com/yqup/agentic-first/main/docs/recipes/hosts/gamma.md> shows the verified-live worked example and verify pattern.
 
 Always close with the verification triplet:
 - `curl -I https://{their-domain}/.well-known/agentic-profile.json`
