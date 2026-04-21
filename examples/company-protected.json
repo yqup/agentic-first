@@ -1,0 +1,52 @@
+{
+  "schema_version": "0.1.0",
+  "updated_at": "2026-04-19T09:30:00Z",
+  "profile_kind": "company",
+  "tier": "protected",
+  "financials": {
+    "currency": "GBP",
+    "as_of": "2026-03-31",
+    "revenue": 287400,
+    "arr": 410000,
+    "mrr": 34167,
+    "gross_margin_pct": 71.2,
+    "burn_per_month": 92000,
+    "runway_months": 14,
+    "cash_on_hand": 1290000,
+    "methodology": "ARR is contracted MRR x 12. Revenue is recognised on delivery."
+  },
+  "traction": {
+    "customer_count": 38,
+    "logos": [
+      { "name": "Northern Fulfilment Group", "url": "https://example.com/nfg", "nda": false },
+      { "name": "RedShield Logistics", "nda": true }
+    ],
+    "pipeline_band": "1m-5m",
+    "churn_pct": 4.2,
+    "nps": 47,
+    "as_of": "2026-03-31"
+  },
+  "fundraise": {
+    "active": true,
+    "instrument": "Equity",
+    "ask": 4000000,
+    "ask_band": "1m-5m",
+    "currency": "GBP",
+    "valuation_target": 18000000,
+    "room_left": 2500000,
+    "use_of_funds": "Hire 4 senior ML engineers, scale to 80 sites, expand to NL/DE.",
+    "deck_url": "https://private-mcp.acme-robotics.example/decks/seriesa-2026.pdf",
+    "data_room_url": "https://dataroom.acme-robotics.example",
+    "syndicate": ["Northern Gravity", "Atomico", "Local Globe"],
+    "close_target_date": "2026-09-30"
+  },
+  "updates": [
+    {
+      "id": "u-2026-04-15",
+      "date": "2026-04-15",
+      "title": "Q1 ARR up 38% QoQ; signed Northern Fulfilment expansion",
+      "body": "ARR closed Q1 at £410k (vs £297k Q4 2025). Northern Fulfilment expanded to 4 sites - fully live by end of May.",
+      "tags": ["traction", "customers"]
+    }
+  ]
+}

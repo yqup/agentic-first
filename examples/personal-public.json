@@ -1,0 +1,57 @@
+{
+  "schema_version": "0.1.0",
+  "updated_at": "2026-04-19T00:00:00Z",
+  "locale": "en-GB",
+  "profile_kind": "person",
+  "tier": "public",
+  "person": {
+    "name": "Jane Lawson",
+    "headline": "Independent NED · former CFO at Series-B SaaS",
+    "website": "https://janelawson.example",
+    "location": { "city": "London", "country": "GB" },
+    "bio": "Twenty years finance leadership in B2B SaaS. Currently independent NED with three boards in fintech and climate. ICAEW Fellow.",
+    "expertise": ["finance", "audit-committee", "fundraising", "saas-metrics", "fintech-regulation"],
+    "languages": ["en", "fr"]
+  },
+  "current_roles": [
+    {
+      "title": "Independent Non-Executive Director",
+      "organisation": "Glassbridge Capital",
+      "organisation_url": "https://glassbridge.example",
+      "since": "2024-06",
+      "evidence_url": "https://glassbridge.example/board"
+    },
+    {
+      "title": "Independent Non-Executive Director",
+      "organisation": "Coastal Climate Bonds plc",
+      "since": "2023-01"
+    }
+  ],
+  "past_roles_band": "5+",
+  "key_past_roles": [
+    {
+      "title": "CFO",
+      "organisation": "Helix Analytics (Series B SaaS, acquired 2022)",
+      "from": "2018-04",
+      "to": "2023-09",
+      "evidence_url": "https://www.example.co.uk/news/helix-acquisition"
+    }
+  ],
+  "credentials": [
+    { "type": "ICAEW", "id": "FCA-publicly-listed", "evidence_url": "https://find.icaew.com/example" }
+  ],
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/example-jane-lawson",
+    "website": "https://janelawson.example"
+  },
+  "evidence": [
+    { "type": "press", "url": "https://www.example.co.uk/news/helix-acquisition", "captured_at": "2022-11-04", "supports": "/key_past_roles/0" },
+    { "type": "podcast", "url": "https://example.com/podcasts/saas-cfo-jane", "captured_at": "2025-06-10", "supports": "/person/expertise" }
+  ],
+  "contact": {
+    "preferred_channel": "form",
+    "form_url": "https://janelawson.example/contact",
+    "private_mcp": "https://private-mcp.janelawson.example/mcp",
+    "notes": "Open to one new advisory engagement Q3 2026."
+  }
+}

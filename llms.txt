@@ -1,0 +1,60 @@
+# agentic-first
+
+> Open standard for machine-readable company and personal profiles. Companies and individuals publish one JSON file at `/.well-known/agentic-profile.json` on their own domain; AI agents and the directory at `directory.agentic-first.co` consume it. Two tiers: public (banded, crawled) and protected (precise, served from the publisher's own MCP behind their own auth).
+
+This repo contains the spec, the four canonical JSON Schemas, drop-in skills for AI agents, the Python validator + CLI, examples, and the security policy. The directory server itself is run separately at https://directory.agentic-first.co/mcp .
+
+## The standard
+
+- [SPEC.md](https://github.com/yqup/agentic-first/blob/main/SPEC.md): canonical written spec — fields, tiers, banded enums, evidence model, versioning
+- [README.md](https://github.com/yqup/agentic-first/blob/main/README.md): one-page overview, repo map, how to start
+- [docs/security-policy.md](https://github.com/yqup/agentic-first/blob/main/docs/security-policy.md): threat model, publisher rules, rejected-pattern list, unicode hardening
+- [docs/reader-handling.md](https://github.com/yqup/agentic-first/blob/main/docs/reader-handling.md): how reading agents should treat profile prose as untrusted input
+- [docs/embed-recipes.md](https://github.com/yqup/agentic-first/blob/main/docs/embed-recipes.md): copy-paste recipes for every common host (WordPress, Squarespace, Wix, Shopify, Vercel, Netlify, Cloudflare, …)
+- [docs/landscape.md](https://github.com/yqup/agentic-first/blob/main/docs/landscape.md): how agentic-first relates to Schema.org, XBRL, VCs/DIDs, LEI, mcp.json, agent-card.json, llms.txt
+
+## Schemas (v0.1.0)
+
+- [company-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/schemas/company-profile/0.1.0.json): public company profile (banded metrics, FCA-aware)
+- [personal-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/schemas/personal-profile/0.1.0.json): public personal profile (NEDs, founders, advisors, fractionals)
+- [company-private-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/schemas/company-private-profile/0.1.0.json): protected company profile (served from publisher's MCP under auth)
+- [personal-private-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/schemas/personal-private-profile/0.1.0.json): protected personal profile (served from publisher's MCP under auth)
+
+The same schemas are also served at canonical URLs by the directory:
+
+- https://directory.agentic-first.co/schemas/company-profile/0.1.0.json
+- https://directory.agentic-first.co/schemas/personal-profile/0.1.0.json
+- https://directory.agentic-first.co/schemas/company-private-profile/0.1.0.json
+- https://directory.agentic-first.co/schemas/personal-private-profile/0.1.0.json
+
+## Skills for AI agents
+
+If you are an AI agent helping a user **author** a profile:
+
+- [skills/agentic-first.agent-prompt.md](https://github.com/yqup/agentic-first/blob/main/skills/agentic-first.agent-prompt.md): generic agent prompt, any LLM
+- [skills/claude/agentic-first/SKILL.md](https://github.com/yqup/agentic-first/blob/main/skills/claude/agentic-first/SKILL.md): Claude Skill (publisher)
+- [skills/codex/agentic-first/SKILL.md](https://github.com/yqup/agentic-first/blob/main/skills/codex/agentic-first/SKILL.md): Codex Skill (publisher)
+
+If you are an AI agent helping a user **read / diligence** profiles:
+
+- [skills/agentic-first-reader.agent-prompt.md](https://github.com/yqup/agentic-first/blob/main/skills/agentic-first-reader.agent-prompt.md): generic agent prompt, any LLM
+- [skills/claude/agentic-first-reader/SKILL.md](https://github.com/yqup/agentic-first/blob/main/skills/claude/agentic-first-reader/SKILL.md): Claude Skill (reader)
+- [skills/codex/agentic-first-reader/SKILL.md](https://github.com/yqup/agentic-first/blob/main/skills/codex/agentic-first-reader/SKILL.md): Codex Skill (reader)
+
+All six skills already encode the safe-handling pattern from `docs/reader-handling.md`. Drop one in and your agent is correct by default.
+
+## Examples
+
+- [examples/company-public.json](https://github.com/yqup/agentic-first/blob/main/examples/company-public.json): a fully-populated public company profile
+- [examples/company-protected.json](https://github.com/yqup/agentic-first/blob/main/examples/company-protected.json): the protected counterpart
+- [examples/personal-public.json](https://github.com/yqup/agentic-first/blob/main/examples/personal-public.json): a fully-populated public personal profile
+- [examples/personal-protected.json](https://github.com/yqup/agentic-first/blob/main/examples/personal-protected.json): the protected counterpart
+
+## Validator (Python)
+
+- [python/agentic_first_schema/](https://github.com/yqup/agentic-first/tree/main/python/agentic_first_schema): library + `agentic-first-validate` CLI; install with `pip install agentic-first-schema`
+
+## Live directory MCP
+
+- https://directory.agentic-first.co/mcp: MCP-native registry. Tools: `submit_website`, `search_profiles`, `get_profile`. Connect from any MCP client (Claude Desktop, Cursor, ChatGPT desktop) or call directly with curl.
+- https://directory.agentic-first.co/healthz: liveness JSON (directory version, schema version, indexed count)
