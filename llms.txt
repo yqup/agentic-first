@@ -85,11 +85,11 @@ If you are an AI agent helping a user publish, **fetch only the recipe for their
 - [docs/recipes/modes/01-file-well-known.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/01-file-well-known.md): canonical — `/.well-known/agentic-profile.json`
 - [docs/recipes/modes/02-script-embed.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/02-script-embed.md): `<script type="application/agentic-profile+json">` data island
 - [docs/recipes/modes/03-hidden-block.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/03-hidden-block.md): `<div hidden id="agentic-profile" data-format="xml">` (soft warning)
-- [docs/recipes/modes/04-ai-builder-block.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/04-ai-builder-block.md): visible structured block with embedded host-AI instructions, for hosts whose AI rewrites the page (Gamma, Tome, Beautiful.AI, Framer AI, Wix ADI) — soft warning
+- [docs/recipes/modes/04-ai-builder-block.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/modes/04-ai-builder-block.md): visible structured block with embedded host-AI instructions. **Speculative — no current major host implements the prerequisite (body-HTML widget AND in-host AI rewriter).** Documented for completeness. Do not use today; if you're on Gamma / Tome / Beautiful.AI, see the Gamma host recipe instead.
 
 ### Hosts
 
-- [docs/recipes/hosts/gamma.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/gamma.md): Gamma (gamma.app) — Mode 4
+- [docs/recipes/hosts/gamma.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/gamma.md): Gamma (gamma.app) — **no in-Gamma embed exists**. Recipe: Mode 1 via Cloudflare Worker on a Pro custom domain, OR host the profile on a separate static host (Vercel/Netlify/Pages) and link to your Gamma deck from it.
 - [docs/recipes/hosts/github-pages.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/github-pages.md): GitHub Pages, Jekyll, Eleventy — Mode 1
 - [docs/recipes/hosts/netlify.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/netlify.md): Netlify — Mode 1
 - [docs/recipes/hosts/notion.md](https://github.com/yqup/agentic-first/blob/main/docs/recipes/hosts/notion.md): Notion via Super.so / Potion / Fruition — Mode 2

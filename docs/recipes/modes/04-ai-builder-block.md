@@ -1,37 +1,55 @@
 ---
 mode: 4
 mode_name: ai-builder-block
-status: supported
+status: speculative
 recommended: false
-data_format: json + visible-table-mirror
-discovery_path: visible block on the home page
+data_format: visible-html-table-or-dl
+discovery_path: visible block on the home page with id="agentic-profile"
 content_type: text/html (host default)
 host_requirements:
-  - allow_visible_html_table_or_definition_list
-  - host_is_an_ai_builder_that_rewrites_the_page
+  - allow_visible_html_table_or_definition_list_with_data_attributes
+  - host_runs_an_ai_that_rewrites_the_page_on_save
 soft_warning: true
+status_note: |
+  As of April 2026 no major hosting platform satisfies BOTH preconditions
+  simultaneously. Documented for completeness so the standard has a defined
+  pattern if such a host emerges. See "Current adoption" section.
 ---
 
 # Mode 4 — AI-builder hosts (visible structured block + host-AI instructions)
 
-> **For hosts where an in-host AI re-styles your page on every save.** Gamma, Tome, Beautiful.AI, Framer AI, Wix ADI, GoDaddy AI Site Builder. The page is owned by the host's AI as much as by you, so the data has to survive its rewrites *and* be findable by external reading agents.
+> **Status — speculative pattern, no current host implements it.** This mode was originally designed for Gamma. After fact-checking in April 2026, Gamma turned out to have no body-HTML primitive at all (no custom HTML widget, no `<head>` injection, no `<script>` block — see [`hosts/gamma.md`](../hosts/gamma.md)), so it cannot run Mode 4 either. No other major host today combines (a) a visible body-HTML widget and (b) an in-host AI that aggressively rewrites pages on save. The pattern below is preserved as a defined, valid design — *if* a host with both properties emerges, this is how to publish on it. **Today, you should not use this mode.** Use Mode 1, 2, or — for Gamma users specifically — the [`hosts/gamma.md`](../hosts/gamma.md) Cloudflare Worker recipe.
 
-## Why this mode exists
+## Current adoption
 
-A "normal" host (Squarespace, Wix without ADI, Webflow, raw HTML) treats your HTML as authoritative — what you paste is what gets served. The new generation of AI-builder hosts work differently: every save runs a model that rewrites the page for visual coherence. A `<script type="application/agentic-profile+json">` tag (Mode 2) often gets stripped because the host's AI sees it as cruft. A `<div hidden>` (Mode 3) often gets unhidden, restyled, deleted, or re-summarised in prose.
+| Host | Has body-HTML widget? | Runs AI rewrites on save? | Mode 4 fit? |
+| --- | --- | --- | --- |
+| Gamma | **No** | Yes | No — use [Cloudflare Worker on custom domain](../hosts/gamma.md) |
+| Tome | No | Yes | No |
+| Beautiful.AI | No | Yes | No |
+| Framer (with AI) | Yes | Light, mostly opt-in | Use [Mode 2](./02-script-embed.md) — Framer accepts typed `<script>` blocks |
+| Wix ADI | Yes (via Premium HTML widget) | No (Wix ADI is a generator, not a per-save rewriter) | Use [Mode 2 (Wix recipe)](../hosts/wix.md) |
+| Notion (Super.so / Potion) | Yes (via embed code blocks) | No | Use [Mode 2 (Notion recipe)](../hosts/notion.md) |
+| WordPress with an AI page-builder plugin (Elementor AI, Divi AI) | Yes | Plugin-dependent; usually opt-in per element | Use [Mode 2 (WordPress recipe)](../hosts/wordpress.md) |
 
-Mode 4 turns the constraint into the solution: the data lives in a **visible** block whose markup *intentionally tells the host's AI to leave it alone*. The block is structured enough that an external reading agent can parse it; the embedded instructions persuade the local rewrite-AI to preserve the content while restyling presentation only.
+Result: every host that *can* host body HTML can also host Mode 2, which is byte-exact and machine-parseable. Every host that runs aggressive AI rewrites on save is also too restrictive for body HTML at all. Mode 4 sits in an empty intersection.
 
-## When to use it
+## Why this mode exists at all
 
-Use mode 4 if **all** of the following are true:
+A "normal" host treats HTML as authoritative — what you paste is what gets served. A hypothetical AI-builder host where every save runs a rewriter over the visible body HTML would strip `<script type="application/agentic-profile+json">` (Mode 2) as cruft, unhide `<div hidden>` (Mode 3) as visual noise, and re-summarise prose. Mode 4 turns that constraint into the solution: the data lives in a **visible** structured block whose markup *intentionally tells the host's AI to leave it alone*. The block is structured enough that an external reading agent can parse it; the embedded instructions persuade the local rewriter to preserve content while restyling presentation.
 
-- Your host runs an AI that rewrites your page on every edit/save (Gamma, Tome, Beautiful.AI, Framer AI, Wix ADI, GoDaddy AI Builder, Notion AI surfaces, Carrd's upcoming AI compose).
-- You confirmed `<script type="application/agentic-profile+json">` (Mode 2) gets stripped or mangled across edits.
-- You confirmed `<div hidden>` (Mode 3) gets unhidden or rewritten.
-- The host *does* let you embed a visible HTML block (table, definition list, or arbitrary HTML widget).
+If such a host emerges, the spec is ready. As of April 2026, it hasn't.
 
-If your AI-builder host has a "well-known files" or "code injection" panel that survives AI rewrites, prefer Mode 1 or Mode 2 via that panel — Mode 4 has a soft warning attached and isn't as clean.
+## When you would use it (if a fitting host existed)
+
+Use Mode 4 only if **all** of these are true:
+
+- Your host runs an AI that rewrites your page on every save *and* you can demonstrate that Mode 2 (`<script type="application/agentic-profile+json">`) gets stripped or mangled across edits.
+- You can demonstrate that Mode 3 (`<div hidden>` XML) gets unhidden or rewritten.
+- The host **does** let you embed a visible HTML block (table, definition list, or arbitrary HTML widget) with `id` and `data-*` attributes preserved across saves.
+- You have no way to put a Cloudflare Worker (or equivalent) in front of the host to serve `/.well-known/agentic-profile.json` directly.
+
+If any of those is false, use a lower-numbered mode.
 
 ## The pattern
 
@@ -93,7 +111,7 @@ Notes on the markup:
 - The visible heading and `<small>` note are part of the contract — they are the human-readable signal to the host's AI to preserve the block. Don't remove them.
 - The HTML comment is doubly belt-and-braces: many host AIs do read comments and will respect a polite, specific instruction.
 
-If the host doesn't allow `<table>` (some Carrd-style builders), use a `<dl>`:
+If the host doesn't allow `<table>`, use a `<dl>`:
 
 ```html
 <dl id="agentic-profile" data-format="html-dl" data-version="0.1.0">
@@ -102,14 +120,6 @@ If the host doesn't allow `<table>` (some Carrd-style builders), use a `<dl>`:
   <!-- ... -->
 </dl>
 ```
-
-Optionally add a Mode 2 `<script>` block alongside, on the chance the host's AI leaves it alone. The directory will pick whichever mode it finds first.
-
-## Why a visible block works where hidden ones don't
-
-AI page-builders are tuned to remove invisible cruft (comments, hidden divs, unknown script types) because it usually *is* cruft. They are tuned to preserve visible, structured, captioned content because removing it visibly degrades the page. The polite explanation in the `<small>` note also gives a multimodal model an unambiguous reason to leave the block alone — it can read the instruction.
-
-This is empirically what the [Gamma feedback in our quarantine](https://github.com/yqup/agentic-first/blob/main/docs/feedback.md) reported in April 2026 — `<head>` injection wasn't an option, hidden blocks got rewritten, but a visible "About this company (machine-readable)" section survived edit cycles.
 
 ## Discovery surface
 
@@ -123,15 +133,14 @@ A reading agent will:
 
 ## Soft warning
 
-Like Mode 3, the directory tags Mode 4 submissions with `discovery_method: ai-builder-block` and a soft warning. Reading agents that demand strong evidence (institutional investors, regulated buyers) may treat a Mode 4 profile as lower-trust than a Mode 1 one — the publisher hasn't proved control of the well-known surface. This is honest signalling, not a defect. If your trust posture matters more than your hosting choice, move to Mode 1 (e.g. via a Cloudflare Worker in front of the host).
+If a host ever supports it, the directory will tag Mode 4 submissions with `discovery_method: ai-builder-block` and a soft warning. Reading agents that demand strong evidence (institutional investors, regulated buyers) may treat a Mode 4 profile as lower-trust than a Mode 1 one — the publisher hasn't proved control of the well-known surface. This is honest signalling, not a defect.
 
-## Validate
+## Validate (if a host that supports this pattern emerges)
 
 ```bash
 # 1. Block is present and the data-format attribute is set
 curl -sSL https://your-domain.example/ \
   | grep -E -A 30 'id="agentic-profile"[[:space:]]+data-format="html-'
-# Expect: the table/dl markup, your company name, the dot-path keys
 
 # 2. Submit
 curl -sS -X POST https://directory.agentic-first.co/mcp \
@@ -143,18 +152,13 @@ curl -sS -X POST https://directory.agentic-first.co/mcp \
 # Expect: {"ok": true, ...} with warnings[] containing "discovery_method: ai-builder-block"
 ```
 
-## Common problems
+## History
 
-| Symptom | Cause | Fix |
-| --- | --- | --- |
-| Block disappeared after the next AI edit | The host's AI didn't read the instruction note | Make the `<small>` note more prominent (full-size paragraph). Add the HTML comment if you'd dropped it. Re-paste. |
-| Values changed (e.g. headcount band rewritten as "small team") | Host AI paraphrased anyway | Add stricter instruction; consider Mode 1 via Cloudflare Worker as a robust escape. |
-| Style looks broken on first publish | The host's AI hasn't restyled it yet — that's expected | Trigger one AI restyle. The visible block is meant to be styled by the host. |
-| Reading agent reports "no profile found" | The `id="agentic-profile"` or `data-format="html-table"` attribute got stripped | Re-paste with attributes intact. Some hosts strip unrecognised `data-*` attributes — try `data-format="html-table"` again with the host's "raw HTML" widget instead of the WYSIWYG one. |
+- **April 2026:** Mode 4 added with Gamma cited as the canonical host. Subsequent fact-check confirmed Gamma has no body-HTML primitive (no custom HTML widget, no `<head>` injection, no `<script>` survival), so it cannot run Mode 4. Mode 4 demoted to "speculative" with no current host. Gamma users redirected to [`hosts/gamma.md`](../hosts/gamma.md).
 
 ## Cross-references
 
-- [Mode 1 (file)](./01-file-well-known.md) — preferred whenever a Cloudflare Worker is an option on top of the AI-builder host.
-- [Mode 2 (script embed)](./02-script-embed.md) — try first; many AI-builder hosts respect typed `<script>` blocks even if you have to re-paste occasionally.
-- [Gamma host recipe](../hosts/gamma.md) — the canonical Mode 4 host.
-- [Notion (via Super.so / Potion / Fruition) recipe](../hosts/notion.md) — partially Mode 2, partially Mode 4 depending on the wrapper.
+- [Mode 1 (file)](./01-file-well-known.md) — preferred whenever DNS / Cloudflare Worker is available; this is the right path for current AI-builder users.
+- [Mode 2 (script embed)](./02-script-embed.md) — preferred whenever the host accepts a typed `<script>` block; this covers every body-HTML host today.
+- [Mode 3 (hidden block)](./03-hidden-block.md) — preferred when the host strips `<script>` but allows arbitrary `<div>` content.
+- [Gamma host recipe](../hosts/gamma.md) — the host that motivated Mode 4 but cannot actually use it.
