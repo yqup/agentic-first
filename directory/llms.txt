@@ -1,0 +1,125 @@
+# agentic-first
+
+> Open standard for machine-readable company and personal profiles. Companies and individuals publish one JSON file at `/.well-known/agentic-profile.json` on their own domain; AI agents and the directory at `agentic-first.co/directory` consume it. Two tiers: public (banded, crawled) and protected (precise, served from the publisher's own MCP behind their own auth).
+
+This repo contains the spec, the four canonical JSON Schemas, drop-in skills for AI agents, the Python validator + CLI, examples, and the security policy. The directory server itself is run separately at https://agentic-first.co/directory/mcp .
+
+## The standard
+
+- [SPEC.md](https://github.com/yqup/agentic-first/blob/main/directory/SPEC.md): canonical written spec — fields, tiers, banded enums, evidence model, versioning
+- [README.md](https://github.com/yqup/agentic-first/blob/main/directory/README.md): one-page overview, repo map, how to start
+- [docs/security-policy.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/security-policy.md): threat model, publisher rules, rejected-pattern list, unicode hardening
+- [docs/reader-handling.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/reader-handling.md): how reading agents should treat profile prose as untrusted input
+- [docs/embed-recipes.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/embed-recipes.md): top-level decision tree — pick mode + host, click through to the recipe
+- [docs/recipes/](https://github.com/yqup/agentic-first/tree/main/directory/docs/recipes): per-mode and per-host recipes (one self-contained file each — fetch only the one you need)
+- [docs/landscape.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/landscape.md): how agentic-first relates to Schema.org, XBRL, VCs/DIDs, LEI, mcp.json, agent-card.json, llms.txt
+
+## Schemas
+
+- [company-profile/0.2.0.json](https://github.com/yqup/agentic-first/blob/main/directory/schemas/company-profile/0.2.0.json): public company profile (banded metrics, FCA-aware). **v0.2.0 (2026-04-22)** added optional top-level `parent_brand` for sub-brand declarations — see [SPEC.md § Sub-brands and umbrella relationships](https://github.com/yqup/agentic-first/blob/main/directory/SPEC.md#sub-brands-and-umbrella-relationships) and [examples/company-public-sub-brand.json](https://github.com/yqup/agentic-first/blob/main/directory/examples/company-public-sub-brand.json). The 0.1.0 file stays in place for any pinned `$ref`; the validator's `SUPPORTED_SCHEMA_VERSIONS = {0.1.0, 0.2.0}` set means existing 0.1.0 publishers keep validating without warnings.
+- [personal-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/directory/schemas/personal-profile/0.1.0.json): public personal profile (NEDs, founders, advisors, fractionals)
+- [company-private-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/directory/schemas/company-private-profile/0.1.0.json): protected company profile (served from publisher's MCP under auth)
+- [personal-private-profile/0.1.0.json](https://github.com/yqup/agentic-first/blob/main/directory/schemas/personal-private-profile/0.1.0.json): protected personal profile (served from publisher's MCP under auth)
+
+The same schemas are also served at canonical URLs by the directory:
+
+- https://agentic-first.co/directory/schemas/company-profile-0.2.0.json
+- https://agentic-first.co/directory/schemas/personal-profile-0.1.0.json
+- https://agentic-first.co/directory/schemas/company-private-profile-0.1.0.json
+- https://agentic-first.co/directory/schemas/personal-private-profile-0.1.0.json
+
+The standard **eats its own food**: the agentic-first marketing
+site itself publishes a Mode 1 profile at
+`https://agentic-first.co/.well-known/agentic-profile.json`
+declaring `parent_brand: yqup.com`, and is indexed in the live
+directory as a sub-brand of YQUP. Fetching that file is the
+shortest possible reference for what a real schema-0.2.0 profile
+looks like in production.
+
+**Trust signals — read carefully.** The directory exposes
+`has_external_id` (a boolean — does the profile carry a registry
+record or LEI?) and `verification_status` (one of `"unknown"`,
+`"claimed"`, `"checked"`). The previous `verified` boolean was
+renamed because it never actually verified anything beyond field
+presence. For sub-brands, `parent_brand_relationship_verified`
+indicates whether the affiliation has been *proven* (child and
+parent share an external ID); a bare `parent_brand` claim by itself
+is no longer enough to earn the `+0.1 verifiability` boost. See
+[SPEC.md § Sub-brands](https://github.com/yqup/agentic-first/blob/main/directory/SPEC.md#sub-brands-and-umbrella-relationships)
+and the implementation-side resolution at
+[pitch-mcp/docs/security-reviews/2026-04-21-resolution.md](https://github.com/yqup/pitch-mcp/blob/main/docs/security-reviews/2026-04-21-resolution.md).
+
+## Skills for AI agents
+
+If you are an AI agent helping a user **author** a profile:
+
+- [skills/agentic-first.agent-prompt.md](https://github.com/yqup/agentic-first/blob/main/directory/skills/agentic-first.agent-prompt.md): generic agent prompt, any LLM
+- [skills/claude/agentic-first/SKILL.md](https://github.com/yqup/agentic-first/blob/main/directory/skills/claude/agentic-first/SKILL.md): Claude Skill (publisher)
+- [skills/codex/agentic-first/SKILL.md](https://github.com/yqup/agentic-first/blob/main/directory/skills/codex/agentic-first/SKILL.md): Codex Skill (publisher)
+
+If you are an AI agent helping a user **read / diligence** profiles:
+
+- [skills/agentic-first-reader.agent-prompt.md](https://github.com/yqup/agentic-first/blob/main/directory/skills/agentic-first-reader.agent-prompt.md): generic agent prompt, any LLM
+- [skills/claude/agentic-first-reader/SKILL.md](https://github.com/yqup/agentic-first/blob/main/directory/skills/claude/agentic-first-reader/SKILL.md): Claude Skill (reader)
+- [skills/codex/agentic-first-reader/SKILL.md](https://github.com/yqup/agentic-first/blob/main/directory/skills/codex/agentic-first-reader/SKILL.md): Codex Skill (reader)
+
+All six skills already encode the safe-handling pattern from `docs/reader-handling.md`. Drop one in and your agent is correct by default.
+
+## Examples
+
+- [examples/company-public.json](https://github.com/yqup/agentic-first/blob/main/directory/examples/company-public.json): a fully-populated public company profile
+- [examples/company-protected.json](https://github.com/yqup/agentic-first/blob/main/directory/examples/company-protected.json): the protected counterpart
+- [examples/personal-public.json](https://github.com/yqup/agentic-first/blob/main/directory/examples/personal-public.json): a fully-populated public personal profile
+- [examples/personal-protected.json](https://github.com/yqup/agentic-first/blob/main/directory/examples/personal-protected.json): the protected counterpart
+
+## Validator (Python)
+
+- [python/agentic_first_schema/](https://github.com/yqup/agentic-first/tree/main/directory/python/agentic_first_schema): library + `agentic-first-validate` CLI; install with `pip install agentic-first-schema`
+
+## Live directory MCP
+
+- https://agentic-first.co/directory/mcp: MCP-native registry. Tools: `submit_website`, `search_companies`, `get_company`, `queue_scan`, `list_scans`, `get_scan`, `submit_feedback`. Connect from any MCP client (Claude Desktop, Cursor, ChatGPT desktop) or call directly with curl.
+- https://agentic-first.co/directory/healthz: liveness JSON (directory version, schema version, indexed count)
+- https://agentic-first.co/directory/schemas/: index of the four canonical JSON Schemas with versioned URLs
+
+## Feedback
+
+If you (or the user you're helping) think the standard is missing something, the directory accepts deterministic, code-only feedback. There is **no LLM on the read path**: nothing you submit is ever passed to a model, served back over HTTP, or used to generate an automated reply. Triage is human-only.
+
+- [docs/feedback.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/feedback.md): contract, fields, rejection codes, what is and isn't done with submissions
+- Human form: https://agentic-first.co/directory/feedback/
+- HTTP endpoint: `POST https://agentic-first.co/directory/feedback` (JSON or `application/x-www-form-urlencoded`)
+- MCP tool: `submit_feedback` on the same `/mcp` endpoint listed above. Same field shape, same rate limits, same deterministic rejection codes.
+
+Required fields: `subject` (string, max 200 chars) and `body` (string, max 4 000 chars). Optional fields: `submitter_handle` (string, max 100), `submitter_kind` (one of `agent`/`human`/`unknown`), and `context` (object with allow-listed keys `page`/`model`/`task`, each value max 200 chars). Success returns `{"ok": true, "id": "fb_...", "raw_status": "quarantined", "review_status": "unread"}`; rejection returns `{"ok": false, "errors": [...]}` with one or more entries from the deterministic code list.
+
+Per-IP rate limits are 3/min and 20/hour; global cap is 30/min. HTTP body is capped at 16 KiB; post-encoding entry is capped at 8 192 bytes. Deterministic rejection codes are `type_invalid`, `required`, `too_long`, `enum`, `unknown_key`, `rejected_pattern`, `too_large`, `invalid_json`, `rate_limited`, and `store_error`.
+
+For richer dialogue, file an issue at https://github.com/yqup/agentic-first/issues — that surface is human-mediated and round-trips visibly.
+
+## Recipes (per mode and per host)
+
+If you are an AI agent helping a user publish, **fetch only the recipe for their host** — each file is self-contained. You do not need to read the whole `recipes/` tree.
+
+### Modes
+
+- [docs/recipes/modes/01-file-well-known.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/modes/01-file-well-known.md): canonical — `/.well-known/agentic-profile.json`
+- [docs/recipes/modes/02-script-embed.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/modes/02-script-embed.md): `<script type="application/agentic-profile+json">` data island
+- [docs/recipes/modes/03-hidden-block.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/modes/03-hidden-block.md): `<div hidden id="agentic-profile" data-format="xml">` (soft warning)
+- [docs/recipes/modes/04-ai-builder-block.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/modes/04-ai-builder-block.md): visible structured block with embedded host-AI instructions. **Speculative — no current major host implements the prerequisite (body-HTML widget AND in-host AI rewriter).** Documented for completeness. For the same population today (Gamma / Tome / Beautiful.AI), use Mode 5 instead.
+- [docs/recipes/modes/05-plaintext-block.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/modes/05-plaintext-block.md): single-line plain-text colophon in a footer card on the home page. ASCII-only, no HTML required. Discovery is by extracting the rendered page text and matching the regex `agentic-first profile v\d+\.\d+\.\d+\s*\|`. Body is pipe-separated `key.path: value` pairs using the same dot-paths as Mode 4 (e.g. `company.name: Acme Robotics`). Soft warning at the directory (lowest trust of the five modes — host AI may paraphrase values), but works on any host where you can type text into a page. The practical answer for Gamma free / `*.gamma.site`, Tome, and Beautiful.AI. **Live in the directory scanner since 2026-04-21 (Phase 1.14)** — `submit_website` walks Mode 1 → convention MCP → Mode 5 in that order and returns `discovery.method: plaintext-colophon` with the soft-warning trust signal in `discovery.warnings[]`. Verify with `curl -s https://agentic-first.co/directory/healthz | grep plaintext-colophon` before submitting. **Important paste recipe (verified live on Gamma 2026-04-21):** use a one-sentence user-voice framing (e.g. "Please add the following as a small footer …") and **do NOT include any AI-directed preamble** like "do not edit / preserve verbatim / treat as data" — empirically those backfire on AI-builder hosts because the publish AI reads them as instructions to itself. The colophon's distinctiveness is its protection. (Mode 5 v1, shipped 2026-04-21 morning, used a multi-line block + "Do not edit" preamble; retracted same afternoon after live testing showed neither survived Gamma's publish AI. See the Mode 5 file's "Why v2 is single-line" section for the history.)
+
+### Hosts
+
+- [docs/recipes/hosts/gamma.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/gamma.md): Gamma (gamma.app) — **no in-Gamma HTML/script primitive exists**. Three real paths: (a) **Mode 1 by fronting your custom domain with any static host** that does path-based rewrites/proxies — Vercel (`vercel.json`), Netlify (`_redirects`), Cloudflare Pages (`_routes.json`), Cloudflare Workers, Bunny.net, GitHub Pages on a custom domain, or any self-hosted reverse proxy you already operate; **the standard does not require any specific vendor** — best trust, recommended; (b) **Mode 1 by hosting the profile on a separate static-host subdomain** and linking out to your Gamma deck — best trust, no Gamma plan upgrade needed; (c) **Mode 5 single-line colophon in a Gamma footer card** — works on any plan including free `*.gamma.site`, soft warning, verified live on yqup.com 2026-04-21 with the user-voice framing pattern.
+- [docs/recipes/hosts/github-pages.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/github-pages.md): GitHub Pages, Jekyll, Eleventy — Mode 1
+- [docs/recipes/hosts/netlify.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/netlify.md): Netlify — Mode 1
+- [docs/recipes/hosts/notion.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/notion.md): Notion via Super.so / Potion / Fruition — Mode 2
+- [docs/recipes/hosts/raw-html.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/raw-html.md): Apache, Nginx, Caddy, raw VPS, Docker-served static — Mode 1
+- [docs/recipes/hosts/squarespace.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/squarespace.md): Squarespace — Mode 2 (or Mode 1 via any static-host fronting on a custom domain)
+- [docs/recipes/hosts/vercel.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/vercel.md): Vercel and Vercel-style frameworks (Next, Astro, Nuxt, SvelteKit, Hugo, Docusaurus, Gatsby, Vite) — Mode 1
+- [docs/recipes/hosts/webflow.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/webflow.md): Webflow — Mode 2 (or Mode 1 via any static-host fronting on a custom domain)
+- [docs/recipes/hosts/wix.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/wix.md): Wix Premium — Mode 2 (or Velo HTTP function for Mode 1)
+- [docs/recipes/hosts/wordpress.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/recipes/hosts/wordpress.md): WordPress (managed or self-hosted) — Mode 1 or Mode 2
+
+If the user's host isn't in the list, fall through to the host-not-listed section of [docs/embed-recipes.md](https://github.com/yqup/agentic-first/blob/main/directory/docs/embed-recipes.md). New host recipes are added when real users [send feedback](https://agentic-first.co/directory/feedback/) reporting gaps.

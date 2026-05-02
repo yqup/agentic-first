@@ -4,8 +4,8 @@ Two workflows.
 
 ## `ci.yml` - run on every push and PR
 
-- Parses every file in `schemas/` and `examples/` as JSON.
-- Installs the `agentic-first-schema` package on Python 3.10-3.13.
+- Parses every file in `directory/schemas/` and `directory/examples/` as JSON.
+- Installs the `agentic-first-schema` package on Python 3.11-3.13.
 - Runs `agentic-first-validate --help`.
 - Runs `agentic-first-validate <file>` against every example profile.
 - Runs `agentic-first-validate -` against an example via stdin.

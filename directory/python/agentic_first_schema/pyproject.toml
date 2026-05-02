@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-first-schema"
+version = "0.2.0"
+description = "Canonical agentic-first profile schemas, validator, and `agentic-first-validate` CLI."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+    { name = "agentic-first contributors" },
+]
+keywords = ["agentic-first", "ai-agents", "schema", "validator", "json-schema", "investment-profile"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Intended Audience :: Developers",
+]
+dependencies = [
+    "jsonschema>=4.21",
+    "rfc3987>=1.3.8",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[project.urls]
+Homepage = "https://agentic-first.co/directory/"
+Repository = "https://github.com/yqup/agentic-first"
+Issues = "https://github.com/yqup/agentic-first/issues"
+
+[project.scripts]
+"agentic-first-validate" = "agentic_first_schema.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+agentic_first_schema = ["schemas/*.json"]
