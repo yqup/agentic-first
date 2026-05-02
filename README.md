@@ -27,6 +27,8 @@ The directory is the open profile standard and validator for companies and peopl
 - Schemas: [`directory/schemas/`](./directory/schemas/)
 - Examples: [`directory/examples/`](./directory/examples/)
 - Python validator: [`directory/python/agentic_first_schema/`](./directory/python/agentic_first_schema/)
+- Migration notes: [`MIGRATION.md`](./MIGRATION.md)
+- Routing plan: [`ROUTING.md`](./ROUTING.md)
 
 Target public routes:
 

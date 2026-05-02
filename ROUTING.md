@@ -2,6 +2,8 @@
 
 This repo is prepared for Agentic First as the umbrella site and Directory as a sub-path product.
 
+See [`MIGRATION.md`](./MIGRATION.md) for what changed in the repo, what was tested, and what was observed on Annie during deployment discovery.
+
 ## Canonical Routes
 
 - `https://agentic-first.co/` - umbrella site
