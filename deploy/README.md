@@ -1,11 +1,26 @@
-# Deployment Handoff
+# Deployment
 
-Agentic First does **not** deploy directly to Ani from this repo.
+Agentic First may self-deploy only by publishing an immutable artifact
+or image and invoking the existing app-specific deployment helper.
 
-When a change needs deploying, produce a deployable artifact plus a
-single copy-paste message for Tony to send to Annie. Do not SSH into
-Ani, request server privileges, edit Caddy, change DNS, inspect secrets,
-or touch anything outside Agentic First.
+Self-deploy does **not** grant SSH, sudo, Docker socket, Caddy, DNS,
+secret, permission, or cross-app access. If the app-specific helper is
+not available, stop at the artifact plus deployment request and ask the
+server-side operator to apply it.
+
+Any new hostname, route, port, secret, Caddy, DNS, privileged container,
+or cross-app change requires Tony/top-level approval before deployment.
+Do not touch anything outside the existing Agentic First app surface.
+
+The current Ani gate accepts only:
+
+```bash
+ssh -i ~/.ssh/agentic-first-deploy_ed25519 -o IdentitiesOnly=yes cursor@ani \
+  'deploy <release-id> <sha256>'
+```
+
+This is a forced-command deploy key, not normal SSH. It can stage only a
+published top-level static release for `agentic-first`.
 
 ## Files
 
@@ -14,10 +29,45 @@ or touch anything outside Agentic First.
 - `deploy/releases/*.tar.gz` - immutable release archives.
 - `deploy/releases/*.sha256` - checksum files for release archives.
 
+## Deployment Records
+
+Use a handoff message when a server-side operator must review/apply the
+release or when the change needs Tony/top-level approval. Return exactly
+one message, with no commentary before or after it. The
+message must begin:
+
+```text
+Annie, please review this Agentic First deployment request.
+```
+
+For approved self-deploys through the app-specific helper, record the
+same fields in the deployment receipt instead of asking Annie to deploy:
+
+- release id
+- source repo and commit SHA
+- artifact URL or image digest
+- checksum/digest
+- complete `deploy-request.yaml`
+- smoke tests and results
+- rollback target
+
+Ani writes server-side deploy receipts under:
+
+```text
+/srv/deploy-state/agentic-first/receipts/<release-id>.yaml
+```
+
+Current live release:
+
+```text
+agentic-first-20260502T113843Z
+389be824744cc0dee0d0cf32ebf07396a3546a88f6e6b14c3c697532e292055c
+```
+
 ## Required Handoff Message
 
-Return exactly one message, with no commentary before or after it. The
-message must begin:
+When a handoff is needed, return exactly one message, with no commentary
+before or after it. The message must begin:
 
 ```text
 Annie, please review this Agentic First deployment request.
@@ -64,12 +114,24 @@ and excluding `.git/`, local OS files, generated release archives, and
 The release archive, checksum, and `deploy-request.yaml` are the source
 of truth for the server-side deployment agent.
 
+## Link Checks
+
+Run `python3 deploy/check-homepage-links.py --root www` before packaging a
+homepage change. The checker parses `www/index.html`, verifies local
+static assets, and performs HTTP checks for public links such as
+Tonywood.org URLs. Do not publish a release with known broken homepage
+links.
+
 ## Artifact Delivery Precondition
 
 Prefer publishing the release archive and checksum as GitHub release
 assets, then naming those immutable download URLs in `deploy-request.yaml`.
 The deploy operator should download those assets, verify the exact SHA256,
 and stop without deploying if the download or verification fails.
+
+Checksum files may contain the original local build path. Always verify the
+downloaded tarball digest directly as well as confirming the checksum file
+contains the expected SHA256.
 
 If GitHub release assets are not used, `deploy-request.yaml` must separate
 upload delivery from deployment verification. `upload-agentic-first` can

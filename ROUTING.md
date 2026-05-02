@@ -5,6 +5,18 @@ sub-path product owned by the sibling `pitch-mcp` repo.
 
 See [`MIGRATION.md`](./MIGRATION.md) for what changed in the repo, what was tested, and what was observed on Annie during deployment discovery.
 
+## Current Production Shape
+
+- `https://agentic-first.co/` serves the static `www/` tree from this repo.
+- `https://agentic-first.co/directory/*` is reverse-proxied by Caddy to
+  `pitch-mcp` on `127.0.0.1:4101`.
+- `https://agentic-first.co/directory/mcp` is the Directory MCP endpoint.
+  It must remain proxied, not redirected, so POST method, headers, and body
+  are preserved.
+- `https://directory.agentic-first.co/*` remains a separate Directory route.
+- `agent-first.co` and `www.agent-first.co` redirect to the canonical
+  `agentic-first.co` host.
+
 ## Canonical Routes
 
 - `https://agentic-first.co/` - umbrella site
@@ -30,9 +42,10 @@ Keep these legacy paths available during migration:
 - `https://directory.agentic-first.co/schemas/*`
 - `https://directory.agentic-first.co/feedback`
 
-Recommended first step: proxy legacy requests to the new `/directory/*` routes, preserving method, headers, and body.
-
-Recommended second step: after access logs show legacy usage is quiet, redirect safe GET routes. Keep `/mcp` proxied longer unless MCP client redirect compatibility has been tested.
+Proxy legacy requests while compatibility is still needed, preserving method,
+headers, and body. Redirect only safe GET routes after access logs show legacy
+usage is quiet. Keep `/mcp` proxied longer unless MCP client redirect
+compatibility has been tested.
 
 ## Deployment Guardrails
 
@@ -42,3 +55,5 @@ Recommended second step: after access logs show legacy usage is quiet, redirect 
 - Do not remove old routes without checking logs.
 - Do not redirect POST endpoints until clients are known to preserve method and body correctly.
 - Do not change DNS or production routing from this repo alone.
+- The Agentic First self-deploy gate may update only the top-level static
+  release. It must not edit Caddy, DNS, `/directory/*`, or `pitch-mcp`.

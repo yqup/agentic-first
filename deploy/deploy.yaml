@@ -33,6 +33,7 @@ artifact:
     - www/
     - deploy/deploy.yaml
     - deploy/README.md
+    - deploy/check-homepage-links.py
   exclude:
     - .git/
     - .DS_Store

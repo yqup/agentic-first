@@ -12,14 +12,42 @@ This repo owns the top-level Agentic First site (`/`) and route map only.
 schemas, validator package, examples, skills, adoption docs, and static
 Directory pages.
 
-## What Changed
+## 2026-05-02 Production State
+
+The migration is live on Ani:
+
+- Current top-level static release: `agentic-first-20260502T113843Z`.
+- Artifact SHA256:
+  `389be824744cc0dee0d0cf32ebf07396a3546a88f6e6b14c3c697532e292055c`.
+- `https://agentic-first.co/` serves the top-level Agentic First page from
+  this repo's `www/` tree.
+- `https://agentic-first.co/directory/` serves the Directory product from
+  `pitch-mcp`.
+- `https://agentic-first.co/directory/mcp` is the Directory MCP endpoint.
+- `https://directory.agentic-first.co/` remains separate.
+- `agent-first.co`, `www.agent-first.co`, and `www.agentic-first.co` redirect
+  to the canonical `agentic-first.co` host.
+
+Top-level static releases can now be deployed through the app-specific Ani
+forced-command gate. The gate accepts only `deploy <release-id> <sha256>` and
+updates only `/srv/apps/agentic-first/current`. It does not grant normal SSH,
+sudo, Docker, Caddy, DNS, secrets, ports, containers, or cross-app access.
+
+Homepage releases must pass `deploy/check-homepage-links.py` before packaging.
+This was added after a broken `https://www.tonywood.org/research/` link was
+found and replaced with `https://www.tonywood.org/writing/`.
+
+## Original Repo Restructure
 
 - The root of the repo now represents the broader Agentic First concept.
-- The existing profile standard, examples, schemas, docs, skills, and Python validator moved under `directory/`.
-- Root `README.md` now explains the umbrella idea and points humans into `directory/`.
-- Root `llms.txt` now gives agents the umbrella route map and the directory entry points.
+- The existing profile standard, examples, schemas, docs, skills, and Python
+  validator were first moved under `directory/`, then into the sibling
+  `pitch-mcp` repo.
+- Root `README.md` now explains the umbrella idea and points humans into
+  `/directory/`.
+- Root `llms.txt` gives agents the umbrella route map and Directory entry
+  points.
 - `ROUTING.md` records the intended public route shape and migration guardrails.
-- GitHub Actions were updated to use the moved paths under `directory/`.
 - Directory docs and skills were updated to prefer `https://agentic-first.co/directory/...`.
 - Legacy compatibility is explicitly preserved for `https://directory.agentic-first.co/...`.
 
@@ -64,7 +92,7 @@ Known package warning:
 
 - Setuptools emits a license metadata deprecation warning during build. It does not fail the build, but should be cleaned up before the February 2027 deadline mentioned by setuptools.
 
-## Annie Deploy Findings
+## Early Annie Deploy Findings
 
 During the deployment check, the local SSH alias `ani` was confirmed to connect to the live VPS.
 
@@ -86,7 +114,7 @@ Observed running services:
 - `pitch-mcp` bound locally on `127.0.0.1:4101`
 - Caddy serving the public HTTPS routes
 
-Observed DNS/HTTP state at the time of the check:
+Observed DNS/HTTP state at the time of the early check:
 
 - `https://www.agentic-first.co/` returned 200.
 - `https://directory.agentic-first.co/healthz` returned 200.
@@ -94,7 +122,8 @@ Observed DNS/HTTP state at the time of the check:
 - `agent-first.co` pointed at Annie but TLS was not configured correctly.
 - `www.agent-first.co` did not resolve.
 
-Re-check DNS and HTTP before acting on these observations, because deployment may have happened separately through Cursor after this note was written.
+These observations are historical. The current production state is recorded
+above.
 
 ## Production Safety Notes
 
@@ -104,11 +133,12 @@ Re-check DNS and HTTP before acting on these observations, because deployment ma
 - Validate Caddy before reload.
 - Smoke-test both new and legacy routes after reload.
 - Keep access logs under review before retiring legacy routes.
+- The top-level Agentic First deploy gate is allowed only for existing static
+  site releases. Route, Directory, Caddy, DNS, secret, port, container, and
+  cross-app changes still require Tony/top-level approval.
 
-## Suggested Next Steps
+## Remaining Next Steps
 
-1. Confirm the current deployed state from Annie and public DNS.
-2. If Cursor has already deployed the static site, compare it against this repo before making further edits.
-3. Add `/directory/*` routes in Caddy while preserving `directory.agentic-first.co/*`.
-4. Fix DNS/TLS for `agentic-first.co`, `agent-first.co`, and `www.agent-first.co` if those domains remain part of the canonical plan.
-5. Add real pytest coverage for the Python validator package.
+1. Commit the source and documentation changes once Tony is happy.
+2. Keep link checks in the packaging path for homepage edits.
+3. Add product-specific tests in `pitch-mcp` when Directory behaviour changes.

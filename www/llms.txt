@@ -10,9 +10,10 @@ Alternate domain:
 
 ## What This Repo Owns
 
-This repo owns the top-level Agentic First umbrella site and route map.
-It does not own the Directory implementation or Directory standard
-internals anymore.
+This repo owns the top-level Agentic First orientation site and route map.
+It introduces Agentic First as a way to make organisations legible to
+agents, then routes users into the Directory product and Tony Wood's
+writing on agentic systems, governance, and operations.
 
 ## Product Areas
 
@@ -25,3 +26,5 @@ internals anymore.
 - README: https://github.com/yqup/agentic-first/blob/main/README.md
 - Routing notes: https://github.com/yqup/agentic-first/blob/main/ROUTING.md
 - Directory repo: https://github.com/yqup/pitch-mcp
+- Tony Wood writing: https://www.tonywood.org/writing/
+- Agentic-first website playbook: https://www.tonywood.org/white-papers/stop-paying-the-data-tax-the-agentic-first-website-playbook-leaders-are-quietly-switching-to/

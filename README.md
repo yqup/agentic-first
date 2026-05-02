@@ -47,6 +47,18 @@ This repo should stay small. Product-specific standards, schemas,
 validators, services, and adoption docs should live with their product
 repos and be mounted into the public site by route.
 
-Deployments are handoff-only. See [`deploy/README.md`](./deploy/README.md)
-for the required Annie message format and the rule that Agentic First
-does not request SSH, sudo, Docker, Caddy, DNS, or secrets.
+Top-level static releases may self-deploy only through the app-specific
+Ani deployment gate after publishing an immutable GitHub release archive.
+That gate is not normal SSH; it accepts only `deploy <release-id>
+<sha256>` and can update only the existing `agentic-first` static site.
+
+Any change to `/directory/*`, `pitch-mcp`, Caddy, DNS, public routes,
+ports, secrets, containers, or another app still needs Tony/top-level
+approval and an operator handoff. See [`deploy/README.md`](./deploy/README.md)
+for the deployment contract and handoff format.
+
+Before packaging homepage changes, run the bundled link checker:
+
+```bash
+python3 deploy/check-homepage-links.py --root www
+```

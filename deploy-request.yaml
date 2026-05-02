@@ -13,43 +13,44 @@ source:
   note: The release archive is the immutable source of truth for this request and includes local changes not represented by the commit alone.
 
 artifact:
-  version: agentic-first-20260502T110137Z
-  uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T110137Z/agentic-first-20260502T110137Z.tar.gz
-  local_path: deploy/releases/agentic-first-20260502T110137Z.tar.gz
+  version: agentic-first-20260502T113843Z
+  uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T113843Z/agentic-first-20260502T113843Z.tar.gz
+  local_path: deploy/releases/agentic-first-20260502T113843Z.tar.gz
   type: release_archive
   format: tar.gz
-  sha256: 39c20650136d3e93430ca00b4687bd7b11f413ed5e8c61cae2a27e81f83c9997
-  checksum_uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T110137Z/agentic-first-20260502T110137Z.sha256
-  checksum_file: deploy/releases/agentic-first-20260502T110137Z.sha256
-  build_timestamp: "2026-05-02T11:01:37Z"
+  sha256: 389be824744cc0dee0d0cf32ebf07396a3546a88f6e6b14c3c697532e292055c
+  checksum_uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T113843Z/agentic-first-20260502T113843Z.sha256
+  checksum_file: deploy/releases/agentic-first-20260502T113843Z.sha256
+  build_timestamp: "2026-05-02T11:38:43Z"
   build_command: >-
-    COPYFILE_DISABLE=1 tar --format ustar -czf deploy/releases/agentic-first-20260502T110137Z.tar.gz
+    COPYFILE_DISABLE=1 tar --format ustar -czf deploy/releases/agentic-first-20260502T113843Z.tar.gz
     -C .. agentic-first/README.md agentic-first/ROUTING.md
     agentic-first/MIGRATION.md agentic-first/LICENSE agentic-first/llms.txt
     agentic-first/www agentic-first/deploy/deploy.yaml
-    agentic-first/deploy/README.md && shasum -a 256
-    deploy/releases/agentic-first-20260502T110137Z.tar.gz >
-    deploy/releases/agentic-first-20260502T110137Z.sha256
+    agentic-first/deploy/README.md agentic-first/deploy/check-homepage-links.py
+    && shasum -a 256
+    deploy/releases/agentic-first-20260502T113843Z.tar.gz >
+    deploy/releases/agentic-first-20260502T113843Z.sha256
 
 preconditions:
   artifact_download:
     required: true
     source: github_release_asset
     required_downloads:
-      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T110137Z/agentic-first-20260502T110137Z.tar.gz
-        name: agentic-first-20260502T110137Z.tar.gz
-        sha256: 39c20650136d3e93430ca00b4687bd7b11f413ed5e8c61cae2a27e81f83c9997
-      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T110137Z/agentic-first-20260502T110137Z.sha256
-        name: agentic-first-20260502T110137Z.sha256
-        contains: 39c20650136d3e93430ca00b4687bd7b11f413ed5e8c61cae2a27e81f83c9997
+      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T113843Z/agentic-first-20260502T113843Z.tar.gz
+        name: agentic-first-20260502T113843Z.tar.gz
+        sha256: 389be824744cc0dee0d0cf32ebf07396a3546a88f6e6b14c3c697532e292055c
+      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T113843Z/agentic-first-20260502T113843Z.sha256
+        name: agentic-first-20260502T113843Z.sha256
+        contains: 389be824744cc0dee0d0cf32ebf07396a3546a88f6e6b14c3c697532e292055c
     stop_if_download_fails: true
     stop_if_checksum_fails: true
     note: Download the release assets from GitHub, verify SHA256 before inspection or staging, and stop without deploying if the download or checksum verification fails.
   public_routing_approval:
     required: false
-    deferred: true
+    deferred: false
     stop_if_not_approved: true
-    note: No Caddy or DNS change is requested in this artifact handoff. Public routing remains deferred and must not be changed without a separate explicit Tony approval.
+    note: No Caddy or DNS change is requested. Existing public routing already serves this app and must not be changed without a separate explicit Tony approval.
 
 runtime:
   type: static_site
@@ -80,11 +81,22 @@ health_check:
 smoke_tests:
   - name: artifact_checksum
     action: verify_sha256
-    file: downloaded agentic-first-20260502T110137Z.tar.gz
-    sha256: 39c20650136d3e93430ca00b4687bd7b11f413ed5e8c61cae2a27e81f83c9997
+    file: downloaded agentic-first-20260502T113843Z.tar.gz
+    sha256: 389be824744cc0dee0d0cf32ebf07396a3546a88f6e6b14c3c697532e292055c
   - name: deployed_home_file
     action: assert_file_exists
     path: /srv/apps/agentic-first/current/www/index.html
+  - name: deployed_home_message
+    action: assert_file_contains
+    path: /srv/apps/agentic-first/current/www/index.html
+    contains: treating your website as a source of truth
+  - name: deployed_tonywood_link
+    action: assert_file_contains
+    path: /srv/apps/agentic-first/current/www/index.html
+    contains: https://www.tonywood.org/writing/
+  - name: homepage_link_check
+    action: run_command
+    command: python3 deploy/check-homepage-links.py --root www --base-url https://agentic-first.co
   - name: deployed_health_file
     action: assert_file_contains
     path: /srv/apps/agentic-first/current/www/healthz
@@ -120,8 +132,8 @@ rollback_plan:
 
 caddy_route_request:
   required: false
-  deferred: true
-  reason: No Caddy or DNS change is requested in this artifact handoff.
+  deferred: false
+  reason: No Caddy or DNS change is requested. Existing public routes remain unchanged.
   constraints:
     - This package does not edit Caddy and does not require Caddy/admin/root access from the packaging agent.
     - Route changes must not be applied from this request; they require a separate explicit Tony approval.
