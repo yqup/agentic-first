@@ -4,6 +4,14 @@ Date: 2026-05-02
 
 This note records the restructure from a directory-only repository into an Agentic First umbrella repository with Directory as the first product area.
 
+## 2026-05-02 Follow-up: Repo Split
+
+The Directory internals have now moved to the sibling `pitch-mcp` repo.
+This repo owns the top-level Agentic First site (`/`) and route map only.
+`pitch-mcp` owns `/directory/*`, including the Directory MCP service,
+schemas, validator package, examples, skills, adoption docs, and static
+Directory pages.
+
 ## What Changed
 
 - The root of the repo now represents the broader Agentic First concept.

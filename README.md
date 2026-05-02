@@ -1,47 +1,37 @@
 # Agentic First
 
-Agentic First is an operating stance for organisations preparing for a world where agents read, reason, and act alongside humans.
+Agentic First is an operating stance for organisations preparing for a
+world where agents read, reason, and act alongside humans.
 
-The practical idea is simple: humans should set intent, judgement, trust boundaries, and approval points. Agents should be able to find clean, source-owned information and use well-governed interfaces without scraping, guessing, or copying stale data between systems.
+The practical idea is simple: humans set intent, judgement, trust
+boundaries, and approval points. Agents find clean, source-owned
+information and use well-governed interfaces without scraping, guessing,
+or copying stale data between systems.
 
-The first implementation in this repo is the Agentic First Directory, now kept under [`directory/`](./directory/).
+This repo now owns the **top-level Agentic First site and route map**.
+The Directory product, standard, schemas, validator, examples, skills,
+MCP service, and Directory static pages live in the sibling
+[`pitch-mcp`](https://github.com/yqup/pitch-mcp) repo.
 
-## Why this exists
+## Routes
 
-Websites were built for human browsing. Agentic workflows need something more durable:
+- `https://agentic-first.co/` - umbrella site for the broader stance.
+- `https://agentic-first.co/directory/` - Directory product area, served from `pitch-mcp`.
+- `https://agentic-first.co/directory/mcp` - Directory MCP endpoint, served from `pitch-mcp`.
+- `https://agent-first.co/*` - memorable alternate domain; redirects to the same path on `agentic-first.co`.
 
-- public facts that are structured and machine-readable
-- sensitive facts behind explicit authentication and audit trails
-- clear provenance for material claims
-- stable interfaces agents can call safely
-- human review where stakes are high
+Keep `https://directory.agentic-first.co/mcp` available during the
+migration. Proxying is safer than redirecting for MCP clients until
+client compatibility is confirmed.
 
-Agentic First is not "automate everything." It is a way to make organisations legible to agents while keeping accountability with people.
+## Repo Layout
 
-## Directory
-
-The directory is the open profile standard and validator for companies and people who want to publish agent-readable facts from their own domain.
-
-- Directory docs: [`directory/README.md`](./directory/README.md)
-- Full standard: [`directory/SPEC.md`](./directory/SPEC.md)
-- Schemas: [`directory/schemas/`](./directory/schemas/)
-- Examples: [`directory/examples/`](./directory/examples/)
-- Python validator: [`directory/python/agentic_first_schema/`](./directory/python/agentic_first_schema/)
-- Migration notes: [`MIGRATION.md`](./MIGRATION.md)
-- Routing plan: [`ROUTING.md`](./ROUTING.md)
-
-Target public routes:
-
-- `https://agentic-first.co/` - Agentic First umbrella site
-- `https://agentic-first.co/directory/` - Directory product and standard
-- `https://agentic-first.co/directory/mcp` - Directory MCP endpoint
-
-Legacy compatibility:
-
-- `https://agent-first.co/*` should redirect to `https://agentic-first.co/*`
-- `https://directory.agentic-first.co/mcp` should proxy or redirect to `https://agentic-first.co/directory/mcp`
-
-For MCP clients, proxying the legacy endpoint first is safer than an immediate redirect because some clients do not follow HTTP redirects reliably.
+- `www/` - top-level static site for `agentic-first.co`.
+- `www/llms.txt` - machine-readable index for agents.
+- `deploy/` - deployment contract, release archives, and handoff rules.
+- `deploy-request.yaml` - current release request for Annie/Kody/Codex.
+- `ROUTING.md` - canonical route plan and migration guardrails.
+- `MIGRATION.md` - notes from the first restructure and deployment discovery.
 
 ## Source Material
 
@@ -53,6 +43,10 @@ The broader Agentic First framing is developed in Tony Wood's writing:
 
 ## Operational Notes
 
-This repo prepares the content, standard, schemas, skills, and packaging for the new structure. DNS, redirects, and MCP proxying must be applied in the deployed routing layer after confirming the target environment.
+This repo should stay small. Product-specific standards, schemas,
+validators, services, and adoption docs should live with their product
+repos and be mounted into the public site by route.
 
-Do not remove the legacy directory endpoint until access logs show it is quiet.
+Deployments are handoff-only. See [`deploy/README.md`](./deploy/README.md)
+for the required Annie message format and the rule that Agentic First
+does not request SSH, sudo, Docker, Caddy, DNS, or secrets.

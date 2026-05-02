@@ -1,0 +1,137 @@
+schema_version: 1
+request_type: deploy
+
+app:
+  name: agentic-first
+  target_environment: ani
+
+source:
+  repo: https://github.com/yqup/agentic-first
+  branch: main
+  commit_sha: 9f9dfaa4ee4985ebe3d9a8bd8a96bb304c12a6a3
+  source_tree_state: dirty
+  note: The release archive is the immutable source of truth for this request and includes local changes not represented by the commit alone.
+
+artifact:
+  version: agentic-first-20260502T110137Z
+  uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T110137Z/agentic-first-20260502T110137Z.tar.gz
+  local_path: deploy/releases/agentic-first-20260502T110137Z.tar.gz
+  type: release_archive
+  format: tar.gz
+  sha256: 39c20650136d3e93430ca00b4687bd7b11f413ed5e8c61cae2a27e81f83c9997
+  checksum_uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T110137Z/agentic-first-20260502T110137Z.sha256
+  checksum_file: deploy/releases/agentic-first-20260502T110137Z.sha256
+  build_timestamp: "2026-05-02T11:01:37Z"
+  build_command: >-
+    COPYFILE_DISABLE=1 tar --format ustar -czf deploy/releases/agentic-first-20260502T110137Z.tar.gz
+    -C .. agentic-first/README.md agentic-first/ROUTING.md
+    agentic-first/MIGRATION.md agentic-first/LICENSE agentic-first/llms.txt
+    agentic-first/www agentic-first/deploy/deploy.yaml
+    agentic-first/deploy/README.md && shasum -a 256
+    deploy/releases/agentic-first-20260502T110137Z.tar.gz >
+    deploy/releases/agentic-first-20260502T110137Z.sha256
+
+preconditions:
+  artifact_download:
+    required: true
+    source: github_release_asset
+    required_downloads:
+      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T110137Z/agentic-first-20260502T110137Z.tar.gz
+        name: agentic-first-20260502T110137Z.tar.gz
+        sha256: 39c20650136d3e93430ca00b4687bd7b11f413ed5e8c61cae2a27e81f83c9997
+      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260502T110137Z/agentic-first-20260502T110137Z.sha256
+        name: agentic-first-20260502T110137Z.sha256
+        contains: 39c20650136d3e93430ca00b4687bd7b11f413ed5e8c61cae2a27e81f83c9997
+    stop_if_download_fails: true
+    stop_if_checksum_fails: true
+    note: Download the release assets from GitHub, verify SHA256 before inspection or staging, and stop without deploying if the download or checksum verification fails.
+  public_routing_approval:
+    required: false
+    deferred: true
+    stop_if_not_approved: true
+    note: No Caddy or DNS change is requested in this artifact handoff. Public routing remains deferred and must not be changed without a separate explicit Tony approval.
+
+runtime:
+  type: static_site
+  service_name: agentic-first
+  runtime_user: app-agentic-first
+  upload_user: upload-agentic-first
+  install_root: /srv/apps/agentic-first
+  deploy_inbox: /srv/deploy-inbox/agentic-first
+  upload_inbox: /srv/deploy-inbox/agentic-first/incoming
+  artifact_verification_dir: /srv/deploy-inbox/agentic-first
+  deploy_state: /srv/deploy-state/agentic-first
+  document_root: www
+  requested_ports: []
+  bind_policy: 127.0.0.1-only
+
+environment:
+  required_names: []
+
+secrets:
+  required_names: []
+
+health_check:
+  path: /healthz
+  url_when_routed: https://agentic-first.co/healthz
+  expected_status: 200
+  expected_body_contains: '"status":"ok"'
+
+smoke_tests:
+  - name: artifact_checksum
+    action: verify_sha256
+    file: downloaded agentic-first-20260502T110137Z.tar.gz
+    sha256: 39c20650136d3e93430ca00b4687bd7b11f413ed5e8c61cae2a27e81f83c9997
+  - name: deployed_home_file
+    action: assert_file_exists
+    path: /srv/apps/agentic-first/current/www/index.html
+  - name: deployed_health_file
+    action: assert_file_contains
+    path: /srv/apps/agentic-first/current/www/healthz
+    contains: '"app":"agentic-first"'
+  - name: public_home
+    method: GET
+    url: https://agentic-first.co/
+    expected_status: 200
+    expected_body_contains: Agentic First
+    run_only_if_route_is_available: true
+  - name: public_machine_index
+    method: GET
+    url: https://agentic-first.co/llms.txt
+    expected_status: 200
+    expected_body_contains: Directory product
+    run_only_if_route_is_available: true
+  - name: public_health
+    method: GET
+    url: https://agentic-first.co/healthz
+    expected_status: 200
+    expected_body_contains: '"status":"ok"'
+    run_only_if_route_is_available: true
+
+rollback_plan:
+  strategy: release_symlink
+  previous_release_source: /srv/deploy-state/agentic-first/current-release.yaml
+  steps:
+    - Read /srv/deploy-state/agentic-first/current-release.yaml to identify the previous release.
+    - Repoint /srv/apps/agentic-first/current to the previous release directory using the app-owned deployment mechanism.
+    - Re-run the file-level smoke tests and public smoke tests if the route is available.
+  data_migrations: none
+  secrets_changed: false
+
+caddy_route_request:
+  required: false
+  deferred: true
+  reason: No Caddy or DNS change is requested in this artifact handoff.
+  constraints:
+    - This package does not edit Caddy and does not require Caddy/admin/root access from the packaging agent.
+    - Route changes must not be applied from this request; they require a separate explicit Tony approval.
+    - Do not serve /directory/* from this app; that path is reserved for the Directory product.
+  requested_routes: []
+
+risk_flags:
+  data_migration: false
+  new_secrets: false
+  caddy_change: false
+  privileged_container: false
+  host_mounts: false
+  downtime_expected: false

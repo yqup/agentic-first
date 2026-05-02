@@ -1,0 +1,27 @@
+# Agentic First
+
+Canonical site:
+
+- https://agentic-first.co/
+
+Alternate domain:
+
+- https://agent-first.co/ redirects to https://agentic-first.co/
+
+## What This Repo Owns
+
+This repo owns the top-level Agentic First umbrella site and route map.
+It does not own the Directory implementation or Directory standard
+internals anymore.
+
+## Product Areas
+
+- Directory product: https://agentic-first.co/directory/
+- Directory MCP: https://agentic-first.co/directory/mcp
+- Directory source: https://github.com/yqup/pitch-mcp
+
+## Source Material
+
+- README: https://github.com/yqup/agentic-first/blob/main/README.md
+- Routing notes: https://github.com/yqup/agentic-first/blob/main/ROUTING.md
+- Directory repo: https://github.com/yqup/pitch-mcp

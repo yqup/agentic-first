@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 720" role="img" aria-labelledby="title desc">
+  <title id="title">Agentic First route map</title>
+  <desc id="desc">A simple route map showing people, agents, public facts, protected interfaces, and approval points.</desc>
+  <rect width="920" height="720" fill="#fbfbf7"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M170 520 C260 440 300 302 450 300 C604 298 654 176 754 116" stroke="#244f86" stroke-width="12"/>
+    <path d="M164 200 C270 242 306 386 452 390 C614 394 640 510 766 548" stroke="#1f6f4a" stroke-width="12"/>
+    <path d="M170 520 C316 536 380 474 450 390" stroke="#9f3f36" stroke-width="12"/>
+  </g>
+  <g font-family="Inter, Arial, sans-serif" fill="#141414">
+    <g transform="translate(80 132)">
+      <rect width="190" height="108" rx="8" fill="#fff" stroke="#d9ded7" stroke-width="3"/>
+      <text x="24" y="45" font-size="25" font-weight="700">Humans</text>
+      <text x="24" y="76" font-size="18" fill="#5a5f66">intent + judgement</text>
+    </g>
+    <g transform="translate(96 472)">
+      <rect width="190" height="108" rx="8" fill="#fff" stroke="#d9ded7" stroke-width="3"/>
+      <text x="24" y="45" font-size="25" font-weight="700">Agents</text>
+      <text x="24" y="76" font-size="18" fill="#5a5f66">read + act</text>
+    </g>
+    <g transform="translate(358 248)">
+      <rect width="218" height="108" rx="8" fill="#fff" stroke="#d9ded7" stroke-width="3"/>
+      <text x="24" y="45" font-size="25" font-weight="700">Public Facts</text>
+      <text x="24" y="76" font-size="18" fill="#5a5f66">source-owned</text>
+    </g>
+    <g transform="translate(358 436)">
+      <rect width="218" height="108" rx="8" fill="#fff" stroke="#d9ded7" stroke-width="3"/>
+      <text x="24" y="45" font-size="25" font-weight="700">Approvals</text>
+      <text x="24" y="76" font-size="18" fill="#5a5f66">clear boundaries</text>
+    </g>
+    <g transform="translate(650 88)">
+      <rect width="196" height="108" rx="8" fill="#fff" stroke="#d9ded7" stroke-width="3"/>
+      <text x="24" y="45" font-size="25" font-weight="700">Directory</text>
+      <text x="24" y="76" font-size="18" fill="#5a5f66">open profile MCP</text>
+    </g>
+    <g transform="translate(650 500)">
+      <rect width="196" height="108" rx="8" fill="#fff" stroke="#d9ded7" stroke-width="3"/>
+      <text x="24" y="45" font-size="25" font-weight="700">Protected</text>
+      <text x="24" y="76" font-size="18" fill="#5a5f66">owned interfaces</text>
+    </g>
+  </g>
+</svg>

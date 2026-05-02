@@ -1,0 +1,85 @@
+schema_version: 1
+
+app:
+  name: agentic-first
+  owner: yqup
+  description: Top-level Agentic First umbrella static site.
+
+source:
+  repo: https://github.com/yqup/agentic-first
+  branch: main
+
+server_identities:
+  runtime_user: app-agentic-first
+  upload_user: upload-agentic-first
+
+server_paths:
+  app_root: /srv/apps/agentic-first
+  deploy_inbox: /srv/deploy-inbox/agentic-first
+  upload_inbox: /srv/deploy-inbox/agentic-first/incoming
+  artifact_verification_dir: /srv/deploy-inbox/agentic-first
+  deploy_state: /srv/deploy-state/agentic-first
+
+artifact:
+  type: release_archive
+  format: tar.gz
+  package_root: agentic-first
+  include:
+    - README.md
+    - ROUTING.md
+    - MIGRATION.md
+    - LICENSE
+    - llms.txt
+    - www/
+    - deploy/deploy.yaml
+    - deploy/README.md
+  exclude:
+    - .git/
+    - .DS_Store
+    - deploy/releases/
+    - deploy-request.yaml
+
+runtime:
+  type: static_site
+  service_name: agentic-first
+  document_root: www
+  requested_ports: []
+  bind_policy: 127.0.0.1-only
+  secrets_required: []
+
+health_check:
+  type: http
+  path: /healthz
+  expected_status: 200
+  expected_body_contains: '"status":"ok"'
+
+smoke_tests:
+  - name: top_level_home
+    method: GET
+    path: /
+    expected_status: 200
+    expected_body_contains: Agentic First
+  - name: machine_index
+    method: GET
+    path: /llms.txt
+    expected_status: 200
+    expected_body_contains: Directory product
+  - name: well_known_profile
+    method: GET
+    path: /.well-known/agentic-profile.json
+    expected_status: 200
+    expected_body_contains: '"profile_kind": "company"'
+  - name: health
+    method: GET
+    path: /healthz
+    expected_status: 200
+    expected_body_contains: '"app":"agentic-first"'
+
+rollback:
+  strategy: release_symlink
+  state_file: /srv/deploy-state/agentic-first/current-release.yaml
+  instructions: Restore the previous release directory recorded in deploy state and repoint the app-owned current symlink. No database migration or secret rotation is part of this release.
+
+public_route_contract:
+  managed_by_app_package: false
+  note: This app package does not edit Caddy or expose routes. Any public route change must be reviewed and applied by the server-side deployment agent.

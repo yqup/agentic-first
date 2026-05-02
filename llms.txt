@@ -1,6 +1,8 @@
 # Agentic First
 
-> Umbrella site and open-source materials for the Agentic First operating stance: make organisations legible to agents while keeping human judgement, approval, and accountability explicit.
+> Umbrella site and route map for the Agentic First operating stance:
+> make organisations legible to agents while keeping judgement,
+> approval, and accountability with people.
 
 Canonical site:
 
@@ -8,30 +10,25 @@ Canonical site:
 
 Alternate domain:
 
-- https://agent-first.co/ should redirect to https://agentic-first.co/
+- https://agent-first.co/ redirects to https://agentic-first.co/
 
 ## Main Routes
 
 - `/` - Agentic First overview and framing
-- `/directory/` - Agentic First Directory product, profile standard, schemas, validator, and publishing guidance
+- `/directory/` - Agentic First Directory product area
 - `/directory/mcp` - Directory MCP endpoint
-- `/directory/schemas/` - canonical profile schemas
-- `/directory/feedback` - directory feedback endpoint or form
+- `/directory/schemas/` - canonical Directory profile schemas
+- `/directory/feedback` - Directory feedback endpoint
 
-## Repository Layout
+## Source Repositories
 
-- `README.md` - umbrella concept and route model
-- `directory/README.md` - directory overview
-- `directory/SPEC.md` - full profile standard
-- `directory/schemas/` - versioned JSON Schemas
-- `directory/examples/` - example public and protected profiles
-- `directory/docs/` - publishing, reader, security, feedback, and host recipes
-- `directory/skills/` - drop-in skills for agentic-first publishing and reading
-- `directory/python/agentic_first_schema/` - Python validator and CLI
+- Top-level site: https://github.com/yqup/agentic-first
+- Directory product and operational code: https://github.com/yqup/pitch-mcp
 
 ## Concept
 
-Agentic First means designing public information and private access paths so agents can read, verify, and act safely.
+Agentic First means designing public information and private access
+paths so agents can read, verify, and act safely.
 
 Use this distinction:
 
@@ -41,7 +38,7 @@ Use this distinction:
 
 ## Directory Compatibility
 
-The old public MCP endpoint was:
+The legacy public MCP endpoint is:
 
 - https://directory.agentic-first.co/mcp
 
@@ -49,12 +46,5 @@ The target endpoint is:
 
 - https://agentic-first.co/directory/mcp
 
-Keep the legacy endpoint available during migration. Proxying is safer than redirecting for MCP clients until client compatibility is confirmed.
-
-## Source Context
-
-For the broader Agentic First argument, read:
-
-- https://www.tonywood.org/white-papers/stop-paying-the-data-tax-the-agentic-first-website-playbook-leaders-are-quietly-switching-to/
-- https://www.tonywood.org/writing/why-your-company-website-should-become-an-ai-readable-data-room-and-not-another-brochure-my-words-cleaned/
-- https://www.tonywood.org/writing/your-business-is-about-to-enter-the-api-desert-agent-first-is-the-new-survival-skill/
+Keep the legacy endpoint available during migration. Proxying is safer
+than redirecting for MCP clients until client compatibility is confirmed.

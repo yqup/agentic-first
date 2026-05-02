@@ -1,6 +1,7 @@
 # Routing Migration
 
-This repo is prepared for Agentic First as the umbrella site and Directory as a sub-path product.
+This repo owns Agentic First as the umbrella site. The Directory is a
+sub-path product owned by the sibling `pitch-mcp` repo.
 
 See [`MIGRATION.md`](./MIGRATION.md) for what changed in the repo, what was tested, and what was observed on Annie during deployment discovery.
 
@@ -36,6 +37,8 @@ Recommended second step: after access logs show legacy usage is quiet, redirect 
 ## Deployment Guardrails
 
 - Confirm the routing layer before changing production: Caddy, Cloudflare, Vercel, or another host.
+- Serve `/` from this repo's `www/` tree.
+- Serve `/directory/*` from `pitch-mcp`.
 - Do not remove old routes without checking logs.
 - Do not redirect POST endpoints until clients are known to preserve method and body correctly.
 - Do not change DNS or production routing from this repo alone.

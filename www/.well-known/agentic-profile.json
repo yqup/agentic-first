@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-02T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "parent_brand": "yqup.com",
+  "company": {
+    "name": "Agentic First",
+    "website": "https://agentic-first.co",
+    "jurisdiction": "GB",
+    "industry": ["ai-agents", "web-standards", "knowledge-infrastructure"],
+    "tagline": "Make your organisation legible to agents."
+  },
+  "links": {
+    "website": "https://agentic-first.co/",
+    "github": "https://github.com/yqup/agentic-first",
+    "directory": "https://agentic-first.co/directory/"
+  },
+  "contact": {
+    "preferred_channel": "form",
+    "form_url": "https://www.tonywood.org/contact/"
+  }
+}
