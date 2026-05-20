@@ -64,7 +64,7 @@ smoke_tests:
     method: GET
     path: /llms.txt
     expected_status: 200
-    expected_body_contains: Agentic First tools directory
+    expected_body_contains: Agentic First route map
   - name: favicon
     method: GET
     path: /favicon.svg
