@@ -26,6 +26,7 @@ artifact:
   package_root: agentic-first
   include:
     - README.md
+    - BRAND-GUIDELINES.md
     - ROUTING.md
     - MIGRATION.md
     - LICENSE

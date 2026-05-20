@@ -28,6 +28,7 @@ Alternate domain:
 
 - Top-level site: https://github.com/yqup/agentic-first
 - Companies and Tool Directory product code: https://github.com/yqup/pitch-mcp
+- Brand guidelines: https://github.com/yqup/agentic-first/blob/main/BRAND-GUIDELINES.md
 
 ## Concept
 

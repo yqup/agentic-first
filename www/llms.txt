@@ -32,6 +32,7 @@ agents into two deliberately separate areas:
 ## Source Material
 
 - README: https://github.com/yqup/agentic-first/blob/main/README.md
+- Brand guidelines: https://github.com/yqup/agentic-first/blob/main/BRAND-GUIDELINES.md
 - Routing notes: https://github.com/yqup/agentic-first/blob/main/ROUTING.md
 - Directory repo: https://github.com/yqup/pitch-mcp
 - Tony Wood writing: https://www.tonywood.org/writing/

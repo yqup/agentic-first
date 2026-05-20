@@ -37,6 +37,7 @@ client compatibility is confirmed.
 
 ## Repo Layout
 
+- `BRAND-GUIDELINES.md` - visual system and Pitch implementation handoff.
 - `www/` - top-level static site for `agentic-first.co`.
 - `www/llms.txt` - machine-readable index for agents.
 - `deploy/` - deployment contract, release archives, and handoff rules.
