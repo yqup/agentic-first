@@ -10,18 +10,21 @@ Alternate domain:
 
 ## What This Repo Owns
 
-This repo owns the top-level Agentic First orientation site and route map.
-It introduces Agentic First as a way to make organisations legible to
-agents, then routes users into the company/profile directory, the Tool
-Directory, and Tony Wood's writing on agentic systems, governance, and
-operations.
+This repo owns the top-level Agentic First tools directory and route map.
+It routes users and agents into two deliberately separate areas:
+
+- Companies: a source-owned profile mechanism and live MCP service where
+  companies and people store public information on their own domain so agents
+  can find, verify, and use the right facts.
+- Directory: a catalog of Agentic First tools, standards, runtimes, protocols,
+  and practical operating patterns.
 
 ## Product Areas
 
-- Company/profile directory: https://agentic-first.co/companies/
+- Companies: https://agentic-first.co/companies/
 - Company/profile MCP: https://agentic-first.co/companies/mcp
 - Company/profile machine index: https://agentic-first.co/companies/llms.txt
-- Agentics Tool Directory: https://agentic-first.co/directory/
+- Directory: https://agentic-first.co/directory/
 - Tool Directory machine index: https://agentic-first.co/directory/llms.txt
 - Product source: https://github.com/yqup/pitch-mcp
 

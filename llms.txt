@@ -1,8 +1,8 @@
 # Agentic First
 
-> Umbrella site and route map for the Agentic First operating stance:
-> make organisations legible to agents while keeping judgement,
-> approval, and accountability with people.
+> Top-level directory of Agentic First tools:
+> public surfaces that help companies, people, and agents publish,
+> discover, verify, and use source-owned information.
 
 Canonical site:
 
@@ -14,7 +14,7 @@ Alternate domain:
 
 ## Main Routes
 
-- `/` - Agentic First overview and framing
+- `/` - Agentic First tools directory and route map
 - `/companies/` - company/person profile directory and publishing overview
 - `/companies/mcp` - company/profile MCP endpoint
 - `/companies/healthz` - company/profile health endpoint
@@ -31,8 +31,9 @@ Alternate domain:
 
 ## Concept
 
-Agentic First means designing public information and private access
-paths so agents can read, verify, and act safely.
+Agentic First means designing public information and private access paths so
+agents can read, verify, and act safely. The top-level site is the directory
+of the available Agentic First tools.
 
 Use this distinction:
 
@@ -43,8 +44,8 @@ Use this distinction:
 ## Product Surfaces
 
 Use `/companies/` when the task concerns source-owned profiles about
-companies or people, schema validation, submissions, scans, feedback, or
-the public MCP tools.
+companies or people: publishing/storing company information online, schema
+validation, submissions, scans, feedback, or the public MCP tools.
 
 Use `/directory/` when the task concerns the Agentics Tool Directory:
 tools, standards, runtimes, protocols, and operations surfaces for

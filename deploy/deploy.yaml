@@ -59,12 +59,12 @@ smoke_tests:
     method: GET
     path: /
     expected_status: 200
-    expected_body_contains: Agentic First
+    expected_body_contains: Agentic First tools
   - name: machine_index
     method: GET
     path: /llms.txt
     expected_status: 200
-    expected_body_contains: Company/profile directory
+    expected_body_contains: Agentic First tools directory
   - name: favicon
     method: GET
     path: /favicon.svg
@@ -89,7 +89,7 @@ smoke_tests:
     method: GET
     path: /healthz
     expected_status: 200
-    expected_body_contains: '"app":"agentic-first"'
+    expected_body_contains: '"version":"2026-05-20"'
 
 rollback:
   strategy: release_symlink
