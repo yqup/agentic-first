@@ -65,6 +65,11 @@ smoke_tests:
     path: /llms.txt
     expected_status: 200
     expected_body_contains: Company/profile directory
+  - name: favicon
+    method: GET
+    path: /favicon.svg
+    expected_status: 200
+    expected_body_contains: Agentic First
   - name: company_directory_link
     method: GET
     path: /

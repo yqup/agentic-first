@@ -18,5 +18,8 @@ https://agentic-first.co/directory/
 `/companies/` is the company/person profile directory. `/directory/` is the
 Agentics Tool Directory.
 
+The favicon is `favicon.svg` at the web root so browsers can load it from
+`https://agentic-first.co/favicon.svg`.
+
 `agent-first.co` is the memorable alternate domain and should redirect
 to `agentic-first.co`.
