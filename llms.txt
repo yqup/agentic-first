@@ -15,15 +15,19 @@ Alternate domain:
 ## Main Routes
 
 - `/` - Agentic First overview and framing
-- `/directory/` - Agentic First Directory product area
-- `/directory/mcp` - Directory MCP endpoint
-- `/directory/schemas/` - canonical Directory profile schemas
-- `/directory/feedback` - Directory feedback endpoint
+- `/companies/` - company/person profile directory and publishing overview
+- `/companies/mcp` - company/profile MCP endpoint
+- `/companies/healthz` - company/profile health endpoint
+- `/companies/schemas/` - canonical company/profile schemas
+- `/companies/feedback` - company/profile feedback endpoint
+- `/companies/llms.txt` - machine index for the company/profile directory
+- `/directory/` - Agentics Tool Directory seed catalog
+- `/directory/llms.txt` - machine index for the Tool Directory
 
 ## Source Repositories
 
 - Top-level site: https://github.com/yqup/agentic-first
-- Directory product and operational code: https://github.com/yqup/pitch-mcp
+- Companies and Tool Directory product code: https://github.com/yqup/pitch-mcp
 
 ## Concept
 
@@ -36,7 +40,17 @@ Use this distinction:
 - Agents read structured information, perform bounded work, and escalate where approval is required.
 - Organisations publish source-owned facts instead of relying only on third-party profiles or scraped pages.
 
-## Directory Compatibility
+## Product Surfaces
+
+Use `/companies/` when the task concerns source-owned profiles about
+companies or people, schema validation, submissions, scans, feedback, or
+the public MCP tools.
+
+Use `/directory/` when the task concerns the Agentics Tool Directory:
+tools, standards, runtimes, protocols, and operations surfaces for
+agent-native work.
+
+## Legacy Company/Profile Compatibility
 
 The legacy public MCP endpoint is:
 
@@ -44,7 +58,7 @@ The legacy public MCP endpoint is:
 
 The target endpoint is:
 
-- https://agentic-first.co/directory/mcp
+- https://agentic-first.co/companies/mcp
 
 Keep the legacy endpoint available during migration. Proxying is safer
 than redirecting for MCP clients until client compatibility is confirmed.

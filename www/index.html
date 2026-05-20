@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Agentic First</title>
-  <meta name="description" content="Agentic First: make your organisation legible to agents.">
+  <meta name="description" content="Agentic First: make your organisation legible to agents through source-owned company profiles and tool directories.">
   <meta property="og:title" content="Agentic First">
-  <meta property="og:description" content="Make your organisation legible to agents.">
+  <meta property="og:description" content="Make your organisation legible to agents through source-owned company profiles and tool directories.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://agentic-first.co/">
   <link rel="stylesheet" href="/static/css/site.css">
@@ -19,13 +19,40 @@
       <h1 id="title">Make your organisation legible to agents.</h1>
       <p class="intro">
         Agentic first means treating your website as a source of truth, not a brochure.
-        Publish what agents can safely read. Keep the rest behind governed access.
-        Make ownership, provenance, and next steps clear.
+        Publish what agents can safely read, route company and tool discovery to the
+        right directory, and keep the rest behind governed access.
       </p>
       <div class="actions" aria-label="Primary links">
-        <a class="button primary" href="/directory/">Open the Directory</a>
-        <a class="button" href="https://www.tonywood.org/writing/">Read Tony's writing</a>
+        <a class="button primary" href="/companies/">Open the Company Directory</a>
+        <a class="button" href="/directory/">Open the Tool Directory</a>
       </div>
+    </section>
+
+    <section class="routes" aria-labelledby="routes-title">
+      <div class="route-copy">
+        <p class="eyebrow">Public route map</p>
+        <h2 id="routes-title">One stance, two directories.</h2>
+        <p>
+          Agentic First now separates company/person profiles from the
+          catalog of agent-native tools. Agents get clearer entry points;
+          organisations keep provenance, ownership, and review boundaries visible.
+        </p>
+      </div>
+      <div class="route-grid" aria-label="Agentic First public directories">
+        <a class="route-card companies" href="/companies/">
+          <span>Companies</span>
+          <h3>Company/profile directory</h3>
+          <p>Source-owned public profiles, schemas, submission guidance, and the live MCP surface.</p>
+        </a>
+        <a class="route-card tools" href="/directory/">
+          <span>Tools</span>
+          <h3>Agentics tool directory</h3>
+          <p>A seed catalog for tools, standards, runtimes, protocols, and operations surfaces.</p>
+        </a>
+      </div>
+      <figure class="route-map">
+        <img src="/static/img/agentic-first-map.svg" alt="Route map connecting humans, agents, source-owned facts, company profiles, tool directories, and governed approvals.">
+      </figure>
     </section>
 
     <section class="notes" aria-label="What agentic first means">
@@ -47,6 +74,8 @@
     </section>
 
     <footer class="footer">
+      <a href="/companies/">Company directory</a>
+      <a href="/directory/">Tool directory</a>
       <a href="https://www.tonywood.org/white-papers/stop-paying-the-data-tax-the-agentic-first-website-playbook-leaders-are-quietly-switching-to/">Agentic-first website playbook</a>
       <a href="https://www.tonywood.org/writing/why-your-company-website-should-become-an-ai-readable-data-room-and-not-another-brochure-my-words-cleaned/">AI-readable data room essay</a>
     </footer>

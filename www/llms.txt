@@ -12,14 +12,18 @@ Alternate domain:
 
 This repo owns the top-level Agentic First orientation site and route map.
 It introduces Agentic First as a way to make organisations legible to
-agents, then routes users into the Directory product and Tony Wood's
-writing on agentic systems, governance, and operations.
+agents, then routes users into the company/profile directory, the Tool
+Directory, and Tony Wood's writing on agentic systems, governance, and
+operations.
 
 ## Product Areas
 
-- Directory product: https://agentic-first.co/directory/
-- Directory MCP: https://agentic-first.co/directory/mcp
-- Directory source: https://github.com/yqup/pitch-mcp
+- Company/profile directory: https://agentic-first.co/companies/
+- Company/profile MCP: https://agentic-first.co/companies/mcp
+- Company/profile machine index: https://agentic-first.co/companies/llms.txt
+- Agentics Tool Directory: https://agentic-first.co/directory/
+- Tool Directory machine index: https://agentic-first.co/directory/llms.txt
+- Product source: https://github.com/yqup/pitch-mcp
 
 ## Source Material
 

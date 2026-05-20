@@ -9,15 +9,24 @@ information and use well-governed interfaces without scraping, guessing,
 or copying stale data between systems.
 
 This repo now owns the **top-level Agentic First site and route map**.
-The Directory product, standard, schemas, validator, examples, skills,
-MCP service, and Directory static pages live in the sibling
-[`pitch-mcp`](https://github.com/yqup/pitch-mcp) repo.
+The product surfaces live in the sibling
+[`pitch-mcp`](https://github.com/yqup/pitch-mcp) repo:
+
+- **Companies** at `/companies/` - source-owned company/person profiles,
+  schemas, validation, examples, skills, feedback, health, and MCP.
+- **Directory** at `/directory/` - the Agentics Tool Directory seed catalog
+  for tools, standards, runtimes, protocols, and operations surfaces.
 
 ## Routes
 
 - `https://agentic-first.co/` - umbrella site for the broader stance.
-- `https://agentic-first.co/directory/` - Directory product area, served from `pitch-mcp`.
-- `https://agentic-first.co/directory/mcp` - Directory MCP endpoint, served from `pitch-mcp`.
+- `https://agentic-first.co/companies/` - company/profile directory, served from `pitch-mcp`.
+- `https://agentic-first.co/companies/mcp` - company/profile MCP endpoint, served from `pitch-mcp`.
+- `https://agentic-first.co/companies/healthz` - company/profile health endpoint, served from `pitch-mcp`.
+- `https://agentic-first.co/companies/schemas/` - company/profile schemas, served from `pitch-mcp`.
+- `https://agentic-first.co/companies/feedback` - company/profile feedback endpoint, served from `pitch-mcp`.
+- `https://agentic-first.co/directory/` - Agentics Tool Directory, served from `pitch-mcp`.
+- `https://agentic-first.co/directory/llms.txt` - Tool Directory machine index, served from `pitch-mcp`.
 - `https://agent-first.co/*` - memorable alternate domain; redirects to the same path on `agentic-first.co`.
 
 Keep `https://directory.agentic-first.co/mcp` available during the
@@ -52,8 +61,8 @@ Ani deployment gate after publishing an immutable GitHub release archive.
 That gate is not normal SSH; it accepts only `deploy <release-id>
 <sha256>` and can update only the existing `agentic-first` static site.
 
-Any change to `/directory/*`, `pitch-mcp`, Caddy, DNS, public routes,
-ports, secrets, containers, or another app still needs Tony/top-level
+Any change to `/companies/*`, `/directory/*`, `pitch-mcp`, Caddy, DNS,
+public routes, ports, secrets, containers, or another app still needs Tony/top-level
 approval and an operator handoff. See [`deploy/README.md`](./deploy/README.md)
 for the deployment contract and handoff format.
 

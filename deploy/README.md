@@ -101,8 +101,8 @@ The message must include:
 
 Do not include secret values, `.env` contents, or instructions requiring
 server admin access. Do not ask Annie to touch anything outside Agentic
-First. Do not route `/directory/*` to this app; that path belongs to the
-Directory product.
+First. Do not route `/companies/*` or `/directory/*` to this app; those
+paths belong to `pitch-mcp`.
 
 ## Packaging Rules
 

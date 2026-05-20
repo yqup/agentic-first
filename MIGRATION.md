@@ -8,22 +8,45 @@ This note records the restructure from a directory-only repository into an Agent
 
 The Directory internals have now moved to the sibling `pitch-mcp` repo.
 This repo owns the top-level Agentic First site (`/`) and route map only.
-`pitch-mcp` owns `/directory/*`, including the Directory MCP service,
-schemas, validator package, examples, skills, adoption docs, and static
-Directory pages.
+At that point, `pitch-mcp` owned `/directory/*`, including the Directory MCP
+service, schemas, validator package, examples, skills, adoption docs, and
+static Directory pages. The 2026-05-20 follow-up below records the later
+split into `/companies/*` and `/directory/*`.
+
+## 2026-05-20 Follow-up: Companies and Tool Directory Split
+
+The public `pitch-mcp` surface now separates two meanings that were
+previously collapsed into "Directory":
+
+- `https://agentic-first.co/companies/` is the company/person profile
+  directory, including the MCP endpoint, health check, schemas, feedback,
+  publishing guides, examples, and skills.
+- `https://agentic-first.co/directory/` is the Agentics Tool Directory,
+  a seed catalog for tools, standards, runtimes, protocols, and operations
+  surfaces.
+
+The legacy host `https://directory.agentic-first.co/` still belongs to the
+company/profile directory compatibility story. The newer Tool Directory is
+canonical only under `/directory/` on `agentic-first.co`.
+
+The top-level `agentic-first` static site now points humans and agents to
+both surfaces. It still must not edit Caddy, DNS, `pitch-mcp`, or any
+runtime paths; it only publishes the umbrella page and route map.
 
 ## 2026-05-02 Production State
 
-The migration is live on Ani:
+The first migration was live on Ani at the time:
 
 - Current top-level static release: `agentic-first-20260502T113843Z`.
 - Artifact SHA256:
   `389be824744cc0dee0d0cf32ebf07396a3546a88f6e6b14c3c697532e292055c`.
 - `https://agentic-first.co/` serves the top-level Agentic First page from
   this repo's `www/` tree.
-- `https://agentic-first.co/directory/` serves the Directory product from
-  `pitch-mcp`.
-- `https://agentic-first.co/directory/mcp` is the Directory MCP endpoint.
+- `https://agentic-first.co/directory/` served the then-combined Directory
+  product from `pitch-mcp`.
+- `https://agentic-first.co/directory/mcp` was the then-current Directory MCP
+  endpoint. The 2026-05-20 split supersedes this with
+  `https://agentic-first.co/companies/mcp`.
 - `https://directory.agentic-first.co/` remains separate.
 - `agent-first.co`, `www.agent-first.co`, and `www.agentic-first.co` redirect
   to the canonical `agentic-first.co` host.
@@ -51,16 +74,18 @@ found and replaced with `https://www.tonywood.org/writing/`.
 - Directory docs and skills were updated to prefer `https://agentic-first.co/directory/...`.
 - Legacy compatibility is explicitly preserved for `https://directory.agentic-first.co/...`.
 
-## Intended Public Shape
+## Current Intended Public Shape
 
 Canonical umbrella routes:
 
 - `https://agentic-first.co/`
+- `https://agentic-first.co/companies/`
+- `https://agentic-first.co/companies/mcp`
+- `https://agentic-first.co/companies/healthz`
+- `https://agentic-first.co/companies/schemas/*`
+- `https://agentic-first.co/companies/feedback`
 - `https://agentic-first.co/directory/`
-- `https://agentic-first.co/directory/mcp`
-- `https://agentic-first.co/directory/healthz`
-- `https://agentic-first.co/directory/schemas/*`
-- `https://agentic-first.co/directory/feedback`
+- `https://agentic-first.co/directory/llms.txt`
 
 Legacy routes to keep during migration:
 

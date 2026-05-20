@@ -1,6 +1,6 @@
 {
   "schema_version": "0.2.0",
-  "updated_at": "2026-05-02T00:00:00Z",
+  "updated_at": "2026-05-20T00:00:00Z",
   "profile_kind": "company",
   "tier": "public",
   "parent_brand": "yqup.com",
@@ -14,7 +14,9 @@
   "links": {
     "website": "https://agentic-first.co/",
     "github": "https://github.com/yqup/agentic-first",
-    "directory": "https://agentic-first.co/directory/"
+    "companies": "https://agentic-first.co/companies/",
+    "directory": "https://agentic-first.co/directory/",
+    "tool_directory": "https://agentic-first.co/directory/"
   },
   "contact": {
     "preferred_channel": "form",

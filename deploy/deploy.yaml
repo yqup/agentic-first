@@ -64,7 +64,17 @@ smoke_tests:
     method: GET
     path: /llms.txt
     expected_status: 200
-    expected_body_contains: Directory product
+    expected_body_contains: Company/profile directory
+  - name: company_directory_link
+    method: GET
+    path: /
+    expected_status: 200
+    expected_body_contains: /companies/
+  - name: tool_directory_link
+    method: GET
+    path: /
+    expected_status: 200
+    expected_body_contains: /directory/
   - name: well_known_profile
     method: GET
     path: /.well-known/agentic-profile.json
