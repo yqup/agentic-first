@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "trackerUrl": "https://YOUR-MATOMO-SUBDOMAIN.matomo.cloud/matomo.php",
+  "scriptUrl": "https://YOUR-MATOMO-SUBDOMAIN.matomo.cloud/matomo.js",
+  "siteId": "AGENTIC_FIRST_SITE_ID",
+  "hostnames": [
+    "agentic-first.co"
+  ]
+}

@@ -25,3 +25,11 @@ The favicon is `favicon.svg` at the web root so browsers can load it from
 
 `agent-first.co` is the memorable alternate domain and should redirect
 to `agentic-first.co`.
+# Analytics
+
+`/static/js/matomo-loader.js` is the cookieless Matomo bootstrap for the public
+homepage. The checked-in `/matomo-config.json` enables Matomo Cloud site ID `2`
+using only public tracker settings. Keep Matomo API tokens outside git.
+
+The loader calls `disableCookies` before `trackPageView` and does not apply to
+MCP/API-only routes.
