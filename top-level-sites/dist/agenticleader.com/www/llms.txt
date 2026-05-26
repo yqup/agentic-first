@@ -4,10 +4,9 @@ Canonical website: https://agenticleader.com/
 Agentic profile: https://agenticleader.com/.well-known/agentic-profile.json
 Health check: https://agenticleader.com/healthz
 
-The human-facing design for this site is still served from Gamma through
-the per-site local container. The owned domain also serves this local
-agentic-first profile so agents can discover the right facts without
-scraping the Gamma page.
+The human-facing design for this site is ingested from Gamma into the
+per-site local container. The owned domain also serves this local agentic-first
+profile so agents can discover the right facts without scraping the Gamma page.
 
 ```json
 {

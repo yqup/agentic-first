@@ -1,0 +1,60 @@
+(() => {
+  const currentScript = document.currentScript;
+  const configUrl = currentScript?.dataset.config || "/matomo-config.json";
+
+  function cleanUrl(value) {
+    if (!value || typeof value !== "string") return "";
+    try {
+      const url = new URL(value, window.location.href);
+      if (url.protocol !== "https:") return "";
+      return url.href;
+    } catch {
+      return "";
+    }
+  }
+
+  function matomoScriptUrl(config, trackerUrl) {
+    const explicit = cleanUrl(config.scriptUrl);
+    if (explicit) return explicit;
+    try {
+      const url = new URL(trackerUrl);
+      url.pathname = url.pathname.replace(/matomo\.php$/, "matomo.js");
+      return url.href;
+    } catch {
+      return "";
+    }
+  }
+
+  function allowedHost(config) {
+    const hostnames = Array.isArray(config.hostnames)
+      ? config.hostnames.map((host) => String(host).trim().toLowerCase()).filter(Boolean)
+      : [];
+    return hostnames.length === 0 || hostnames.includes(window.location.hostname.toLowerCase());
+  }
+
+  function enableMatomo(config) {
+    if (!config || config.enabled === false || !allowedHost(config)) return;
+    const trackerUrl = cleanUrl(config.trackerUrl);
+    const siteId = String(config.siteId || "").trim();
+    if (!trackerUrl || !siteId) return;
+
+    window._paq = window._paq || [];
+    window._paq.push(["setTrackerUrl", trackerUrl]);
+    window._paq.push(["setSiteId", siteId]);
+    window._paq.push(["disableCookies"]);
+    window._paq.push(["trackPageView"]);
+    window._paq.push(["enableLinkTracking"]);
+
+    const scriptUrl = matomoScriptUrl(config, trackerUrl);
+    if (!scriptUrl) return;
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = scriptUrl;
+    document.head.appendChild(script);
+  }
+
+  fetch(configUrl, { cache: "no-store", credentials: "omit" })
+    .then((response) => (response.ok ? response.json() : null))
+    .then(enableMatomo)
+    .catch(() => {});
+})();

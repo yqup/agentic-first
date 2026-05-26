@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "trackerUrl": "https://tonywood.matomo.cloud/matomo.php",
+  "scriptUrl": "https://tonywood.matomo.cloud/matomo.js",
+  "siteId": "12",
+  "hostnames": [
+    "dilijenz.com",
+    "www.dilijenz.com"
+  ]
+}

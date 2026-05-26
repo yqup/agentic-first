@@ -21,7 +21,7 @@
 		file_server
 	}
 
-	@local_assets path /llms.txt /robots.txt /favicon.svg
+	@local_assets path /llms.txt /robots.txt /favicon.svg /matomo-config.json /static/*
 	handle @local_assets {
 		file_server
 	}

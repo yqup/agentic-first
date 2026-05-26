@@ -1,4 +1,5 @@
 import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { request as httpsRequest } from "node:https";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -8,6 +9,10 @@ const distDir = path.join(__dirname, "dist");
 const edgeCaddyDir = path.join(__dirname, "infra", "caddy", "sites");
 const serverRoot = "/srv/apps/top-level-sites/current";
 const gammaOrigin = "https://sites.gamma.app";
+const matomoTrackerUrl = "https://tonywood.matomo.cloud/matomo.php";
+const matomoScriptUrl = "https://tonywood.matomo.cloud/matomo.js";
+const matomoLoaderPath = "/static/js/matomo-loader.js";
+const nodeServerPort = 8080;
 const updatedAt = "2026-05-26T00:00:00Z";
 const firstPort = 8211;
 
@@ -29,11 +34,16 @@ for (const site of sites) {
   const siteRoot = path.join(distDir, site.domain);
   const wwwRoot = path.join(siteRoot, "www");
   const wellKnownDir = path.join(wwwRoot, ".well-known");
+  const staticJsDir = path.join(wwwRoot, "static", "js");
 
   await mkdir(wellKnownDir, { recursive: true });
+  await mkdir(staticJsDir, { recursive: true });
 
   const profile = profileFor(site);
   await writeFile(path.join(siteRoot, "Caddyfile"), containerCaddyFor(site), "utf8");
+  await writeFile(path.join(wwwRoot, "server.mjs"), nodeServerFor(site), "utf8");
+  await writeFile(path.join(wwwRoot, "matomo-config.json"), `${JSON.stringify(matomoConfigFor(site), null, 2)}\n`, "utf8");
+  await writeFile(path.join(staticJsDir, "matomo-loader.js"), matomoLoaderSource(), "utf8");
   await writeFile(path.join(wwwRoot, "favicon.svg"), faviconFor(site), "utf8");
   await writeFile(path.join(wwwRoot, "healthz"), healthFor(site), "utf8");
   await writeFile(path.join(wwwRoot, "llms.txt"), llmsFor(site, profile), "utf8");
@@ -44,6 +54,9 @@ for (const site of sites) {
   }
   if (site.mode === "country") {
     await writeFile(path.join(wwwRoot, "index.html"), countryPageFor(site), "utf8");
+  }
+  if (site.mode === "gamma") {
+    await writeFile(path.join(wwwRoot, "index.html"), await gammaSnapshotPageFor(site), "utf8");
   }
   for (const hostPage of site.host_holding_pages || []) {
     const hostRoot = path.join(wwwRoot, "hosts", hostPage.host);
@@ -72,6 +85,7 @@ for (const site of sites) {
     local_port: site.port,
     local_preview: `http://127.0.0.1:${site.port}/`,
     gamma_origin: site.mode === "gamma" ? gammaOrigin : null,
+    matomo_site_id: site.matomo_site_id || null,
     document_root: `${serverRoot}/dist/${site.domain}/www`,
     container_caddyfile: `${serverRoot}/dist/${site.domain}/Caddyfile`,
     profile: `https://${site.domain}/.well-known/agentic-profile.json`,
@@ -124,21 +138,99 @@ async function copySiteAssets(site, wwwRoot) {
   }
 }
 
+function matomoConfigFor(site) {
+  return {
+    enabled: Boolean(site.matomo_site_id),
+    trackerUrl: matomoTrackerUrl,
+    scriptUrl: matomoScriptUrl,
+    siteId: String(site.matomo_site_id || ""),
+    hostnames: [site.domain, `www.${site.domain}`],
+  };
+}
+
+function matomoScriptTagFor(site) {
+  if (!site.matomo_site_id) return "";
+  return `  <script defer src="${matomoLoaderPath}"></script>\n`;
+}
+
+function matomoLoaderSource() {
+  return `(() => {
+  const currentScript = document.currentScript;
+  const configUrl = currentScript?.dataset.config || "/matomo-config.json";
+
+  function cleanUrl(value) {
+    if (!value || typeof value !== "string") return "";
+    try {
+      const url = new URL(value, window.location.href);
+      if (url.protocol !== "https:") return "";
+      return url.href;
+    } catch {
+      return "";
+    }
+  }
+
+  function matomoScriptUrl(config, trackerUrl) {
+    const explicit = cleanUrl(config.scriptUrl);
+    if (explicit) return explicit;
+    try {
+      const url = new URL(trackerUrl);
+      url.pathname = url.pathname.replace(/matomo\\.php$/, "matomo.js");
+      return url.href;
+    } catch {
+      return "";
+    }
+  }
+
+  function allowedHost(config) {
+    const hostnames = Array.isArray(config.hostnames)
+      ? config.hostnames.map((host) => String(host).trim().toLowerCase()).filter(Boolean)
+      : [];
+    return hostnames.length === 0 || hostnames.includes(window.location.hostname.toLowerCase());
+  }
+
+  function enableMatomo(config) {
+    if (!config || config.enabled === false || !allowedHost(config)) return;
+    const trackerUrl = cleanUrl(config.trackerUrl);
+    const siteId = String(config.siteId || "").trim();
+    if (!trackerUrl || !siteId) return;
+
+    window._paq = window._paq || [];
+    window._paq.push(["setTrackerUrl", trackerUrl]);
+    window._paq.push(["setSiteId", siteId]);
+    window._paq.push(["disableCookies"]);
+    window._paq.push(["trackPageView"]);
+    window._paq.push(["enableLinkTracking"]);
+
+    const scriptUrl = matomoScriptUrl(config, trackerUrl);
+    if (!scriptUrl) return;
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = scriptUrl;
+    document.head.appendChild(script);
+  }
+
+  fetch(configUrl, { cache: "no-store", credentials: "omit" })
+    .then((response) => (response.ok ? response.json() : null))
+    .then(enableMatomo)
+    .catch(() => {});
+})();
+`;
+}
+
 function composeFor(items) {
   const services = items
     .map((site) => `  ${site.service}:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-${site.service}
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
-      - "127.0.0.1:${site.port}:8080"
+      - "127.0.0.1:${site.port}:${nodeServerPort}"
     volumes:
       - ./dist/${site.domain}/www:/srv/site:ro
-      - ./dist/${site.domain}/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 `)
     .join("\n");
@@ -152,20 +244,13 @@ ${services}`;
 function containerCaddyFor(site) {
   const hostHandlers = hostHoldingHandlersFor(site);
   const hostHandlerBlock = hostHandlers ? `\n\t${hostHandlers}\n` : "";
-  const pageHandler = site.mode === "holding" || site.mode === "country"
+  const pageHandler = site.mode === "holding" || site.mode === "country" || site.mode === "gamma"
     ? `handle {
 		try_files {path} /index.html
 		file_server
 	}`
     : `handle {
-		reverse_proxy ${gammaOrigin} {
-			header_up Host ${site.domain}
-			header_up X-Forwarded-Host {http.request.host}
-			header_up X-Real-IP {http.request.remote.host}
-			transport http {
-				tls_server_name sites.gamma.app
-			}
-		}
+		respond "unsupported site mode" 500
 	}`;
 
   return `{
@@ -191,7 +276,7 @@ function containerCaddyFor(site) {
 		file_server
 	}
 
-	@local_assets path /llms.txt /robots.txt /favicon.svg
+	@local_assets path /llms.txt /robots.txt /favicon.svg /matomo-config.json /static/*
 	handle @local_assets {
 		file_server
 	}
@@ -203,6 +288,278 @@ function containerCaddyFor(site) {
 
 ${hostHandlerBlock}
 	${pageHandler}
+}
+`;
+}
+
+function nodeServerFor(site) {
+  const serverConfig = {
+    domain: site.domain,
+    mode: site.mode,
+    gammaOrigin,
+    matomoLoaderPath,
+    analyticsTag: matomoScriptTagFor(site).trim(),
+    hostHoldingPages: site.host_holding_pages || [],
+  };
+
+  return `import { createReadStream } from "node:fs";
+import { readFile, stat } from "node:fs/promises";
+import { createServer } from "node:http";
+import { request as httpsRequest } from "node:https";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const config = ${JSON.stringify(serverConfig, null, 2)};
+const root = path.dirname(fileURLToPath(import.meta.url));
+const listenPort = Number(process.env.PORT || ${nodeServerPort});
+const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
+const localPageMode = config.mode === "holding" || config.mode === "country" || config.mode === "gamma";
+
+const contentTypes = new Map([
+  [".css", "text/css; charset=utf-8"],
+  [".gif", "image/gif"],
+  [".html", "text/html; charset=utf-8"],
+  [".ico", "image/x-icon"],
+  [".jpeg", "image/jpeg"],
+  [".jpg", "image/jpeg"],
+  [".js", "text/javascript; charset=utf-8"],
+  [".json", "application/json; charset=utf-8"],
+  [".png", "image/png"],
+  [".svg", "image/svg+xml; charset=utf-8"],
+  [".txt", "text/plain; charset=utf-8"],
+  [".webp", "image/webp"],
+]);
+
+const server = createServer(async (req, res) => {
+  try {
+    await routeRequest(req, res);
+  } catch (error) {
+    console.error("request_error", error);
+    if (!res.headersSent) {
+      res.writeHead(500, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
+    }
+    res.end("internal server error\\n");
+  }
+});
+
+server.listen(listenPort, "0.0.0.0", () => {
+  console.log("site_server_ready domain=" + config.domain + " mode=" + config.mode + " port=" + listenPort);
+});
+
+async function routeRequest(req, res) {
+  const url = new URL(req.url || "/", "http://" + (req.headers.host || config.domain));
+  const pathname = url.pathname;
+
+  if (isLocalStaticPath(pathname)) {
+    const served = await serveLocalFile(req, res, pathname);
+    if (!served) notFound(res);
+    return;
+  }
+
+  const requestHost = hostOnly(req.headers.host || "");
+  if (hostHoldingHosts.has(requestHost)) {
+    await serveLocalFile(req, res, "/hosts/" + requestHost + "/index.html", "no-store");
+    return;
+  }
+
+  if (localPageMode) {
+    await serveLocalFile(req, res, "/index.html", "no-store");
+    return;
+  }
+
+  await proxyGamma(req, res);
+}
+
+function isLocalStaticPath(pathname) {
+  return pathname === "/healthz"
+    || pathname === "/llms.txt"
+    || pathname === "/robots.txt"
+    || pathname === "/favicon.svg"
+    || pathname === "/matomo-config.json"
+    || pathname.startsWith("/.well-known/")
+    || pathname.startsWith("/assets/")
+    || pathname.startsWith("/static/");
+}
+
+async function serveLocalFile(req, res, requestPath, cacheControl = "public, max-age=300") {
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    methodNotAllowed(res);
+    return true;
+  }
+
+  const filePath = safeLocalPath(requestPath);
+  if (!filePath) return false;
+
+  let info;
+  try {
+    info = await stat(filePath);
+  } catch {
+    return false;
+  }
+  if (!info.isFile()) return false;
+
+  const headers = {
+    "content-type": contentTypeFor(filePath),
+    "content-length": String(info.size),
+    "cache-control": requestPath === "/healthz" ? "no-store" : cacheControl,
+  };
+
+  res.writeHead(200, headers);
+  if (req.method === "HEAD") {
+    res.end();
+    return true;
+  }
+
+  createReadStream(filePath).on("error", () => {
+    if (!res.headersSent) res.writeHead(500);
+    res.end();
+  }).pipe(res);
+  return true;
+}
+
+function safeLocalPath(requestPath) {
+  let decoded;
+  try {
+    decoded = decodeURIComponent(requestPath);
+  } catch {
+    return "";
+  }
+
+  const normalized = path.posix.normalize(decoded).replace(/^\\/+/, "");
+  const filePath = path.join(root, normalized);
+  const relativePath = path.relative(root, filePath);
+  if (relativePath.startsWith("..") || path.isAbsolute(relativePath)) return "";
+  return filePath;
+}
+
+function contentTypeFor(filePath) {
+  return contentTypes.get(path.extname(filePath).toLowerCase()) || "application/octet-stream";
+}
+
+function hostOnly(value) {
+  return String(value).split(":")[0].trim().toLowerCase();
+}
+
+function methodNotAllowed(res) {
+  res.writeHead(405, {
+    "content-type": "text/plain; charset=utf-8",
+    "allow": "GET, HEAD",
+    "cache-control": "no-store",
+  });
+  res.end("method not allowed\\n");
+}
+
+function notFound(res) {
+  res.writeHead(404, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
+  res.end("not found\\n");
+}
+
+function proxyGamma(req, res) {
+  return new Promise((resolve) => {
+    const upstreamUrl = new URL(req.url || "/", config.gammaOrigin);
+    const upstreamReq = httpsRequest({
+      protocol: upstreamUrl.protocol,
+      hostname: upstreamUrl.hostname,
+      port: upstreamUrl.port || 443,
+      method: req.method,
+      path: upstreamUrl.pathname + upstreamUrl.search,
+      servername: upstreamUrl.hostname,
+      headers: upstreamHeaders(req),
+    }, (upstreamRes) => {
+      const statusCode = upstreamRes.statusCode || 502;
+      const headers = responseHeaders(upstreamRes.headers);
+      const contentType = String(upstreamRes.headers["content-type"] || "");
+      const canInject = Boolean(config.analyticsTag)
+        && req.method !== "HEAD"
+        && contentType.toLowerCase().includes("text/html");
+
+      if (!canInject) {
+        res.writeHead(statusCode, headers);
+        if (req.method === "HEAD") {
+          res.end();
+          resolve();
+          return;
+        }
+        upstreamRes.pipe(res);
+        upstreamRes.on("end", resolve);
+        return;
+      }
+
+      const chunks = [];
+      upstreamRes.on("data", (chunk) => chunks.push(chunk));
+      upstreamRes.on("end", () => {
+        const html = Buffer.concat(chunks).toString("utf8");
+        const body = Buffer.from(injectAnalytics(html), "utf8");
+        headers["content-type"] = contentType || "text/html; charset=utf-8";
+        headers["content-length"] = String(body.length);
+        delete headers["content-security-policy"];
+        res.writeHead(statusCode, headers);
+        res.end(body);
+        resolve();
+      });
+    });
+
+    upstreamReq.on("error", (error) => {
+      console.error("gamma_proxy_error", error);
+      if (!res.headersSent) {
+        res.writeHead(502, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
+      }
+      res.end("bad gateway\\n");
+      resolve();
+    });
+
+    req.pipe(upstreamReq);
+  });
+}
+
+function upstreamHeaders(req) {
+  const headers = { ...req.headers };
+  for (const name of [
+    "accept-encoding",
+    "connection",
+    "host",
+    "keep-alive",
+    "proxy-authenticate",
+    "proxy-authorization",
+    "te",
+    "trailer",
+    "transfer-encoding",
+    "upgrade",
+  ]) {
+    delete headers[name];
+  }
+  headers.host = config.domain;
+  headers["accept-encoding"] = "identity";
+  headers["x-forwarded-host"] = req.headers.host || config.domain;
+  return headers;
+}
+
+function responseHeaders(source) {
+  const headers = { ...source };
+  for (const name of [
+    "content-encoding",
+    "content-length",
+    "connection",
+    "keep-alive",
+    "proxy-authenticate",
+    "proxy-authorization",
+    "te",
+    "trailer",
+    "transfer-encoding",
+    "upgrade",
+  ]) {
+    delete headers[name];
+  }
+  headers["x-top-level-sites-container"] = "node";
+  return headers;
+}
+
+function injectAnalytics(html) {
+  if (!config.analyticsTag || html.includes(config.matomoLoaderPath)) return html;
+  if (/<\\/head\\s*>/i.test(html)) {
+    return html.replace(/<\\/head\\s*>/i, config.analyticsTag + "\\n</head>");
+  }
+  return config.analyticsTag + "\\n" + html;
 }
 `;
 }
@@ -226,7 +583,7 @@ function edgeCaddyFor(site) {
     ? "Normal pages are served by the per-site static holding-page container."
     : site.mode === "country"
       ? "Normal pages are served by the per-site English-country static container."
-    : "Normal pages are handled by the per-site container, which proxies to Gamma.";
+    : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
 
   return `# Edge route for ${site.domain}.
 # Generated by top-level-sites/build-sites.mjs. Review before applying on ANI.
@@ -285,10 +642,9 @@ can discover the right facts before the full public site is launched.`
 board-and-operations feel. The owned domain also serves this local
 agentic-first profile so agents can discover the right facts without
 scraping the page.`
-    : `The human-facing design for this site is still served from Gamma through
-the per-site local container. The owned domain also serves this local
-agentic-first profile so agents can discover the right facts without
-scraping the Gamma page.`;
+    : `The human-facing design for this site is ingested from Gamma into the
+per-site local container. The owned domain also serves this local agentic-first
+profile so agents can discover the right facts without scraping the Gamma page.`;
 
   return `# ${site.name}
 
@@ -316,10 +672,62 @@ function healthFor(site) {
         : "gamma-fronting-container",
     updated_at: updatedAt,
     agentic_profile: "/.well-known/agentic-profile.json",
+    matomo_site_id: site.matomo_site_id || null,
   };
 
   if (site.mode === "gamma") health.gamma_origin = gammaOrigin;
   return `${JSON.stringify(health)}\n`;
+}
+
+async function gammaSnapshotPageFor(site) {
+  const html = await fetchGammaHtml(site);
+  return injectMatomoScriptTag(html, site);
+}
+
+function fetchGammaHtml(site) {
+  return new Promise((resolve, reject) => {
+    const target = new URL(gammaOrigin);
+    const req = httpsRequest({
+      protocol: target.protocol,
+      hostname: target.hostname,
+      port: target.port || 443,
+      method: "GET",
+      path: "/",
+      servername: target.hostname,
+      headers: {
+        accept: "text/html,application/xhtml+xml",
+        "accept-encoding": "identity",
+        host: site.domain,
+        "user-agent": "top-level-sites-build/1.0",
+      },
+    }, (res) => {
+      const chunks = [];
+      res.on("data", (chunk) => chunks.push(chunk));
+      res.on("end", () => {
+        const statusCode = res.statusCode || 0;
+        if (statusCode < 200 || statusCode >= 300) {
+          reject(new Error(`Gamma snapshot failed for ${site.domain}: HTTP ${statusCode}`));
+          return;
+        }
+        resolve(Buffer.concat(chunks).toString("utf8"));
+      });
+    });
+
+    req.setTimeout(15000, () => {
+      req.destroy(new Error(`Gamma snapshot timed out for ${site.domain}`));
+    });
+    req.on("error", reject);
+    req.end();
+  });
+}
+
+function injectMatomoScriptTag(html, site) {
+  const tag = matomoScriptTagFor(site).trim();
+  if (!tag || html.includes(matomoLoaderPath)) return html;
+  if (/<\/head\s*>/i.test(html)) {
+    return html.replace(/<\/head\s*>/i, `${tag}\n</head>`);
+  }
+  return `${tag}\n${html}`;
 }
 
 function holdingPageFor(site) {
@@ -337,6 +745,7 @@ function holdingPageFor(site) {
   <title>${escapeHtml(site.title || site.name)}</title>
   <meta name="description" content="${escapeHtml(site.summary)}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${matomoScriptTagFor(site)}  <style>
   <style>
     :root {
       color-scheme: light;
@@ -615,6 +1024,7 @@ function countryPageFor(site) {
   <meta name="description" content="${escapeHtml(site.summary)}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="${escapeHtml(heroImage)}">
+${matomoScriptTagFor(site)}  <style>
   <style>
     :root {
       color-scheme: light;
@@ -1117,6 +1527,7 @@ function logoHoldingPageFor(site, page) {
   <title>${escapeHtml(title)}</title>
   <meta name="robots" content="noindex, follow">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${matomoScriptTagFor(site)}  <style>
   <style>
     :root {
       color-scheme: light;

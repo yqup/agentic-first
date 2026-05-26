@@ -2,6 +2,10 @@
 
 This directory contains the privileged installer for the top-level site
 containers, including Gamma-fronting sites and static holding pages.
+The generated compose file runs a tiny Node server per site. The currently
+installed ANI gate may still write the older Caddy container compose, so the
+generated Caddyfiles also serve local ingested Gamma snapshots with the
+cookieless Matomo loader already inserted.
 
 The normal Codex SSH identity on ANI cannot run Docker or write Caddy
 routes. Use a root/provider console or an approved root deploy gate.
@@ -56,6 +60,8 @@ The installer:
 - extracts to `/srv/apps/top-level-sites/releases/<release-id>`
 - updates `/srv/apps/top-level-sites/current`
 - starts one container per site on `127.0.0.1:8211` through `8220`
+- serves `/matomo-config.json` and `/static/js/matomo-loader.js` for site IDs
+  `5` through `14`
 - installs `/etc/caddy/sites/<domain>.caddy` with backups
 - validates and reloads Caddy
 - writes a receipt under `/srv/deploy-state/top-level-sites/receipts/`

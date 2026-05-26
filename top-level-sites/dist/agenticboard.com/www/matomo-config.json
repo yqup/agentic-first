@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "trackerUrl": "https://tonywood.matomo.cloud/matomo.php",
+  "scriptUrl": "https://tonywood.matomo.cloud/matomo.js",
+  "siteId": "11",
+  "hostnames": [
+    "agenticboard.com",
+    "www.agenticboard.com"
+  ]
+}

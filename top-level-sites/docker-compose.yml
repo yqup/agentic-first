@@ -2,151 +2,141 @@ name: top-level-sites
 
 services:
   yqup_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-yqup_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8211:8080"
     volumes:
       - ./dist/yqup.com/www:/srv/site:ro
-      - ./dist/yqup.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 
   snaxk_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-snaxk_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8212:8080"
     volumes:
       - ./dist/snaxk.com/www:/srv/site:ro
-      - ./dist/snaxk.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 
   my_agentic_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-my_agentic_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8213:8080"
     volumes:
       - ./dist/my-agentic.com/www:/srv/site:ro
-      - ./dist/my-agentic.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 
   chiefagenticofficer_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-chiefagenticofficer_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8214:8080"
     volumes:
       - ./dist/chiefagenticofficer.com/www:/srv/site:ro
-      - ./dist/chiefagenticofficer.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 
   agenticleader_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-agenticleader_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8215:8080"
     volumes:
       - ./dist/agenticleader.com/www:/srv/site:ro
-      - ./dist/agenticleader.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 
   aiperations_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-aiperations_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8216:8080"
     volumes:
       - ./dist/aiperations.com/www:/srv/site:ro
-      - ./dist/aiperations.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 
   agenticboard_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-agenticboard_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8217:8080"
     volumes:
       - ./dist/agenticboard.com/www:/srv/site:ro
-      - ./dist/agenticboard.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 
   dilijenz_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-dilijenz_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8218:8080"
     volumes:
       - ./dist/dilijenz.com/www:/srv/site:ro
-      - ./dist/dilijenz.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 
   syndesy_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-syndesy_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8219:8080"
     volumes:
       - ./dist/syndesy.com/www:/srv/site:ro
-      - ./dist/syndesy.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
 
   orchistra_com:
-    image: caddy:2.8.4-alpine
+    image: node:20-alpine
     container_name: site-orchistra_com
     restart: unless-stopped
     read_only: true
+    user: node
+    command: ["node", "/srv/site/server.mjs"]
     ports:
       - "127.0.0.1:8220:8080"
     volumes:
       - ./dist/orchistra.com/www:/srv/site:ro
-      - ./dist/orchistra.com/Caddyfile:/etc/caddy/Caddyfile:ro
     tmpfs:
-      - /config
-      - /data
       - /tmp
