@@ -8,6 +8,16 @@ routes. Use a root/provider console or an approved root deploy gate.
 
 ## Staged Layout
 
+Build the archive on AKAAR with:
+
+```bash
+cd /Users/tonywood/agentic-first/agentic-first
+top-level-sites/deploy/package-release.sh
+```
+
+The packaging helper disables macOS extended attributes so GNU tar on ANI does
+not print `LIBARCHIVE.xattr.com.apple.provenance` warnings while extracting.
+
 Upload these to ANI:
 
 ```text

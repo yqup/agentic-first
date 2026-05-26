@@ -72,7 +72,7 @@ ln -sfn "${RELEASE_DIR}" "${CURRENT_LINK}"
 
 say "Start per-site containers"
 cd "${CURRENT_LINK}"
-docker compose up -d --remove-orphans
+docker compose up -d --force-recreate --remove-orphans
 
 say "Smoke loopback containers"
 for i in "${!DOMAINS[@]}"; do
