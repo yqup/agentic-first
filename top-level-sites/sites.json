@@ -234,15 +234,20 @@
       {
         "source": "assets/dilijenz-logo-trans.png",
         "target": "assets/dilijenz-logo-trans.png"
+      },
+      {
+        "source": "assets/dilijenz-logo-lockup.png",
+        "target": "assets/dilijenz-logo-lockup.png"
       }
     ],
     "host_holding_pages": [
       {
         "host": "www.dilijenz.com",
         "title": "Dilijenz - Hard a work",
-        "logo_image": "/assets/dilijenz-logo-trans.png",
+        "logo_image": "/assets/dilijenz-logo-lockup.png",
         "logo_alt": "Dilijenz Boards Made Simple",
         "show_logo_text": false,
+        "show_note": false,
         "message": "Hard a work",
         "note": "The public page is being prepared.",
         "surface": "#f6f8ff",

@@ -1094,17 +1094,20 @@ function logoHoldingPageFor(site, page) {
   const logoText = page.logo_text || site.name.toUpperCase();
   const logoImage = page.logo_image;
   const logoAlt = page.logo_alt || `${site.name} logo`;
+  const surface = page.surface || "#f6f8ff";
+  const ink = page.text || "#151733";
+  const muted = page.muted || "#697087";
+  const accent = page.accent || site.accent;
+  const theme = page.theme || site.theme;
   const logoElement = logoImage
     ? `<img src="${escapeHtml(logoImage)}" alt="${escapeHtml(logoAlt)}">`
     : dilijenzMarkSvg(theme, accent);
   const wordmarkElement = page.show_logo_text === false
     ? ""
     : `\n        <div class="wordmark">${escapeHtml(logoText)}</div>`;
-  const surface = page.surface || "#f6f8ff";
-  const ink = page.text || "#151733";
-  const muted = page.muted || "#697087";
-  const accent = page.accent || site.accent;
-  const theme = page.theme || site.theme;
+  const noteElement = page.show_note === false
+    ? ""
+    : `\n      <p class="small">${escapeHtml(page.note || "The public page is being prepared.")}</p>`;
 
   return `<!doctype html>
 <html lang="en">
@@ -1122,7 +1125,6 @@ function logoHoldingPageFor(site, page) {
       --surface: ${surface};
       --theme: ${theme};
       --accent: ${accent};
-      --line: rgba(21, 23, 51, 0.12);
     }
 
     * {
@@ -1139,32 +1141,27 @@ function logoHoldingPageFor(site, page) {
       min-height: 100vh;
       display: grid;
       place-items: center;
-      padding: 28px;
+      padding: 32px;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.38)),
-        radial-gradient(circle at 72% 18%, rgba(108,124,255,0.18), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.32)),
+        radial-gradient(circle at 76% 18%, rgba(108, 124, 255, 0.16), transparent 34%),
         var(--surface);
       letter-spacing: 0;
     }
 
     main {
-      width: min(100%, 640px);
-      min-height: min(620px, calc(100vh - 56px));
+      width: min(100%, 460px);
       display: grid;
       place-items: center;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.72);
-      box-shadow: 0 28px 80px rgba(21, 23, 51, 0.12);
     }
 
     .lockup {
       display: grid;
       justify-items: center;
-      gap: 22px;
-      padding: 40px 24px;
+      gap: 18px;
+      padding: 20px 0;
       text-align: center;
     }
 
@@ -1180,7 +1177,7 @@ function logoHoldingPageFor(site, page) {
     }
 
     .logo-mark.has-image {
-      width: min(72vw, 260px);
+      width: min(62vw, 220px);
       height: auto;
       aspect-ratio: auto;
     }
@@ -1201,9 +1198,9 @@ function logoHoldingPageFor(site, page) {
     }
 
     .message {
-      margin: 0;
+      margin: 6px 0 0;
       color: var(--ink);
-      font-size: clamp(22px, 5vw, 36px);
+      font-size: clamp(24px, 4vw, 34px);
       line-height: 1.1;
       font-weight: 780;
       letter-spacing: 0;
@@ -1226,8 +1223,7 @@ function logoHoldingPageFor(site, page) {
           ${logoElement}
         </div>${wordmarkElement}
       </div>
-      <p class="message" id="holding-message">${escapeHtml(message)}</p>
-      <p class="small">${escapeHtml(page.note || "The public page is being prepared.")}</p>
+      <p class="message" id="holding-message">${escapeHtml(message)}</p>${noteElement}
     </section>
   </main>
 </body>
