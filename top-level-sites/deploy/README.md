@@ -35,6 +35,21 @@ sha256sum -c top-level-sites-<timestamp>.sha256
 bash install-on-ani.sh top-level-sites-<timestamp> "$PWD/top-level-sites-<timestamp>.tar.gz"
 ```
 
+## Run Through ANI Deploy Gate
+
+Once the `top-level-sites` deploy gate is installed on ANI, a local machine can
+upload the archive/checksum to `/home/ani-cursor/top-level-sites-staging/`, then
+trigger the server-side gate with:
+
+```bash
+ssh top-level-sites-deploy-ani deploy top-level-sites-<timestamp> <sha256>
+```
+
+The gate is root-owned on ANI, checksum-verifies the staged archive, recreates
+the per-site containers, installs the Caddy route fragments, validates/reloads
+Caddy, and writes the server-side receipt. It does not execute scripts from the
+writable staging directory.
+
 The installer:
 
 - host-checks ANI (`srv1339660`)
