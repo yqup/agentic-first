@@ -1,0 +1,37 @@
+# Syndesy
+
+Canonical website: https://syndesy.com/
+Agentic profile: https://syndesy.com/.well-known/agentic-profile.json
+Health check: https://syndesy.com/healthz
+
+The human-facing page is a local static holding page for Syndesy.
+The owned domain also serves this local agentic-first profile so agents
+can discover the right facts before the full public site is launched.
+
+```json
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "Syndesy",
+    "website": "https://syndesy.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "agentic-ai",
+      "systems-integration",
+      "workflow-design"
+    ],
+    "tagline": "Connected systems, clearer work.",
+    "summary": "Syndesy is being prepared as a focused space for connecting context, teams, and intelligent systems into practical operating flows."
+  },
+  "links": {
+    "website": "https://syndesy.com"
+  },
+  "contact": {
+    "preferred_channel": "email",
+    "email": "hello@my-agentic.com"
+  }
+}
+```

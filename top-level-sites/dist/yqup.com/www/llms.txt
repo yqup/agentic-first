@@ -1,0 +1,38 @@
+# YQUP
+
+Canonical website: https://yqup.com/
+Agentic profile: https://yqup.com/.well-known/agentic-profile.json
+Health check: https://yqup.com/healthz
+
+The human-facing design for this site is still served from Gamma through
+the per-site local container. The owned domain also serves this local
+agentic-first profile so agents can discover the right facts without
+scraping the Gamma page.
+
+```json
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "YQUP",
+    "website": "https://yqup.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "ai-governance",
+      "board-advisory",
+      "agentic-ai"
+    ],
+    "tagline": "AI is not the problem. Lack of clarity is.",
+    "summary": "YQUP helps CEOs and boards see what is really happening in AI and agentic work, then decide what to do next."
+  },
+  "links": {
+    "website": "https://yqup.com"
+  },
+  "contact": {
+    "preferred_channel": "form",
+    "form_url": "https://yqup.com/"
+  }
+}
+```

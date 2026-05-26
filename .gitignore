@@ -6,6 +6,8 @@ __pycache__/
 *.egg
 build/
 dist/
+!top-level-sites/dist/
+!top-level-sites/dist/**
 .eggs/
 .pytest_cache/
 .mypy_cache/
@@ -25,3 +27,10 @@ env/
 .idea/
 .vscode/
 *.swp
+
+# Local browser verification artifacts
+.playwright-cli/
+output/
+
+# Top-level site release bundles are staged on Ani and recorded in ops receipts.
+top-level-sites/deploy/releases/

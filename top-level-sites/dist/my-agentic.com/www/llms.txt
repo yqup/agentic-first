@@ -1,0 +1,37 @@
+# My Agentic
+
+Canonical website: https://my-agentic.com/
+Agentic profile: https://my-agentic.com/.well-known/agentic-profile.json
+Health check: https://my-agentic.com/healthz
+
+The human-facing design for this site is still served from Gamma through
+the per-site local container. The owned domain also serves this local
+agentic-first profile so agents can discover the right facts without
+scraping the Gamma page.
+
+```json
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "My Agentic",
+    "website": "https://my-agentic.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "agentic-ai",
+      "long-running-agents",
+      "ai-operations"
+    ],
+    "tagline": "Work for long-lived agentics.",
+    "summary": "A public home for Tony Wood's practical work on long-lived agentic systems that stay useful, bounded, and reviewable."
+  },
+  "links": {
+    "website": "https://my-agentic.com"
+  },
+  "contact": {
+    "preferred_channel": "none"
+  }
+}
+```

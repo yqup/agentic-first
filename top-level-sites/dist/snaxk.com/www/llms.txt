@@ -1,0 +1,37 @@
+# SNAXK
+
+Canonical website: https://snaxk.com/
+Agentic profile: https://snaxk.com/.well-known/agentic-profile.json
+Health check: https://snaxk.com/healthz
+
+The human-facing design for this site is still served from Gamma through
+the per-site local container. The owned domain also serves this local
+agentic-first profile so agents can discover the right facts without
+scraping the Gamma page.
+
+```json
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "SNAXK",
+    "website": "https://snaxk.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "agentic-ai",
+      "evaluation",
+      "decision-support"
+    ],
+    "tagline": "Judgement for long-running agents.",
+    "summary": "SNAXK is a practical research and product space for judgement, evaluation, and decision support in long-running agentic systems."
+  },
+  "links": {
+    "website": "https://snaxk.com"
+  },
+  "contact": {
+    "preferred_channel": "none"
+  }
+}
+```

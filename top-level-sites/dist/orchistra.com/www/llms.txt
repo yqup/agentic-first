@@ -1,0 +1,39 @@
+# Orchistra
+
+Canonical website: https://orchistra.com/
+Agentic profile: https://orchistra.com/.well-known/agentic-profile.json
+Health check: https://orchistra.com/healthz
+
+The human-facing page is a local static page with an English country
+board-and-operations feel. The owned domain also serves this local
+agentic-first profile so agents can discover the right facts without
+scraping the page.
+
+```json
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "Orchistra",
+    "website": "https://orchistra.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "agentic-ai",
+      "orchestration",
+      "operations",
+      "governance"
+    ],
+    "tagline": "Shepherds of agentic sheep.",
+    "summary": "Orchistra helps leaders shepherd agentic work: clear intent, useful boundaries, reviewable memory, and an operating rhythm for flocks of AI agents."
+  },
+  "links": {
+    "website": "https://orchistra.com"
+  },
+  "contact": {
+    "preferred_channel": "email",
+    "email": "hello@my-agentic.com"
+  }
+}
+```

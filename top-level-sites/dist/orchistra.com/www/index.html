@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orchistra | Shepherds of Agentic Sheep</title>
+  <meta name="description" content="Orchistra helps leaders shepherd agentic work: clear intent, useful boundaries, reviewable memory, and an operating rhythm for flocks of AI agents.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="https://www.tonywood.org/assets/countryside-hero.jpg">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #09152b;
+      --ink-soft: #34405a;
+      --chalk: #fbfaf4;
+      --paper: #f3efe2;
+      --stone: #d8cfb8;
+      --field: #31583f;
+      --hedge: #163d2c;
+      --gold: #b88a32;
+      --earth: #6f4d23;
+      --plum: #653a56;
+      --line: rgba(9, 21, 43, 0.16);
+      --shadow: 0 18px 48px rgba(9, 21, 43, 0.12);
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--chalk);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.62;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.18em;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 14px clamp(18px, 4vw, 52px);
+      background: rgba(251, 250, 244, 0.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 840;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--chalk);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 4px 18px;
+      max-width: 100%;
+      color: var(--ink-soft);
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    nav a {
+      text-decoration: none;
+    }
+
+    .hero {
+      min-height: 78vh;
+      display: flex;
+      align-items: end;
+      padding: clamp(72px, 10vw, 132px) clamp(20px, 6vw, 88px);
+      color: var(--chalk);
+      background-image:
+        linear-gradient(90deg, rgba(9, 21, 43, 0.92), rgba(9, 21, 43, 0.58), rgba(9, 21, 43, 0.16)),
+        url("https://www.tonywood.org/assets/countryside-hero.jpg");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-inner {
+      max-width: 950px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--plum);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero .eyebrow {
+      color: #f4dba8;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.05;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    h1 {
+      max-width: 980px;
+      margin-bottom: 24px;
+      font-family: var(--serif);
+      font-size: clamp(46px, 7vw, 92px);
+      font-weight: 700;
+    }
+
+    h2 {
+      max-width: 920px;
+      margin-bottom: 18px;
+      font-family: var(--serif);
+      font-size: clamp(32px, 4vw, 54px);
+      font-weight: 700;
+    }
+
+    h3 {
+      margin-bottom: 12px;
+      font-size: 22px;
+      line-height: 1.18;
+    }
+
+    .hero-copy {
+      max-width: 740px;
+      margin: 0;
+      color: rgba(251, 250, 244, 0.9);
+      font-size: clamp(19px, 2vw, 24px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border: 1px solid currentColor;
+      color: inherit;
+      font-weight: 820;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--chalk);
+      color: var(--ink);
+    }
+
+    .button.secondary {
+      color: var(--chalk);
+    }
+
+    .proof-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .proof-strip span {
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 18px 22px;
+      border-right: 1px solid var(--line);
+      color: var(--hedge);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .section {
+      padding: clamp(56px, 8vw, 104px) clamp(20px, 6vw, 88px);
+    }
+
+    .section.paper {
+      background: var(--paper);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(280px, 1.08fr);
+      gap: clamp(30px, 6vw, 84px);
+      align-items: start;
+    }
+
+    .lead {
+      max-width: 700px;
+      color: var(--ink-soft);
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.52;
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .route-card,
+    .note-panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: var(--shadow);
+    }
+
+    .route-card {
+      min-height: 234px;
+      padding: 22px;
+      border-top: 6px solid var(--field);
+    }
+
+    .route-card:nth-child(2) {
+      border-top-color: var(--gold);
+    }
+
+    .route-card:nth-child(3) {
+      border-top-color: var(--plum);
+    }
+
+    .route-card span,
+    .note-panel span {
+      display: block;
+      margin-bottom: 28px;
+      color: var(--hedge);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .route-card strong {
+      display: block;
+      color: var(--ink);
+      font-size: 21px;
+      line-height: 1.24;
+    }
+
+    .route-card p,
+    .note-panel p {
+      margin: 14px 0 0;
+      color: var(--ink-soft);
+    }
+
+    .note-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .note-panel {
+      padding: 24px;
+    }
+
+    .tone-band {
+      background: var(--hedge);
+      color: var(--chalk);
+    }
+
+    .tone-band .eyebrow {
+      color: #f4dba8;
+    }
+
+    .tone-band p {
+      max-width: 780px;
+      color: rgba(251, 250, 244, 0.84);
+    }
+
+    .cta {
+      background: var(--ink);
+      color: var(--chalk);
+    }
+
+    .cta-inner {
+      max-width: 880px;
+    }
+
+    .cta p {
+      max-width: 720px;
+      color: rgba(251, 250, 244, 0.84);
+      font-size: 20px;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 32px clamp(20px, 6vw, 88px);
+      border-top: 1px solid var(--line);
+      background: var(--chalk);
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+
+    footer strong {
+      color: var(--ink);
+    }
+
+    @media (max-width: 900px) {
+      .site-header {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+
+      .hero {
+        min-height: 72vh;
+        background-image:
+          linear-gradient(180deg, rgba(9, 21, 43, 0.9), rgba(9, 21, 43, 0.56)),
+          url("https://www.tonywood.org/assets/countryside-hero.jpg");
+      }
+
+      .split,
+      .route-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .route-card {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Orchistra home">
+      <span class="brand-mark">O</span>
+      <span>Orchistra</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#brief">Brief</a>
+      <a href="#work">Work</a>
+      <a href="#cadence">Cadence</a>
+      <a href="#conversation">Conversation</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">English country operations</p>
+        <h1>Shepherds of agentic sheep.</h1>
+        <p class="hero-copy">Orchistra helps leaders shepherd agentic work: clear intent, useful boundaries, reviewable memory, and an operating rhythm for flocks of AI agents.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#brief">Read the field notes</a>
+          <a class="button secondary" href="mailto:hello@my-agentic.com">Start with the flock</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-strip" aria-label="Current work">
+      <span>Shepherds, not spectators</span><span>Agentic flocks</span><span>Clear hedges</span><span>Reviewable memory</span><span>Operating rhythm</span>
+    </section>
+
+    <section class="section split" id="brief">
+      <div>
+        <p class="eyebrow">The CAO brief</p>
+        <h2>When the flock starts moving, someone has to know where it is going.</h2>
+      </div>
+      <div>
+        <p class="lead">TonyWood.org frames the work as turning intent into execution: better decisions, clearer accountability, and systems that stay useful when they meet operational reality. Orchistra applies that same discipline to agentic teams.</p>
+        <p>The metaphor is simple. Agents are useful when they are guided, bounded, counted, and brought back into view. Orchistra is about shepherding the work behind the work, so the flock can move without drifting into the wrong field.</p>
+      </div>
+    </section>
+
+    <section class="section paper" id="work">
+      <p class="eyebrow">Shepherding patterns</p>
+      <h2>From loose agents to a well-kept flock.</h2>
+      <div class="route-grid">
+        <article class="route-card">
+          <span>The field</span>
+          <strong>Set the ground before the flock moves.</strong>
+          <p>Clarify purpose, ownership, permissions, and the edge of the field. Agents need room to work, but they also need hedges.</p>
+        </article><article class="route-card">
+          <span>The signals</span>
+          <strong>Listen for drift before it becomes a chase.</strong>
+          <p>Use triggers, exceptions, and reviewable memory to spot when agentic work needs a human hand, a new boundary, or a change of route.</p>
+        </article><article class="route-card">
+          <span>The return</span>
+          <strong>Bring useful work back into view.</strong>
+          <p>Good orchestration ends in legible outcomes: what changed, what was learned, what needs review, and what should happen next.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section tone-band">
+      <p class="eyebrow">English country, agentic discipline</p>
+      <h2>Good shepherding is quiet, attentive, and practical.</h2>
+      <p>Agentic systems need the same virtues TonyWood.org keeps returning to: clear intent, proper context, useful challenge, known boundaries, and records that let people see what actually happened. The point is not to pen agents in forever. It is to make their movement safe enough to be useful.</p>
+    </section>
+
+    <section class="section split" id="cadence">
+      <div>
+        <p class="eyebrow">Flock cadence</p>
+        <h2>Count them, guide them, and notice when one strays.</h2>
+        <p class="lead">Before an organisation scales agentic work, leaders need to know which agents exist, what they can touch, which signals matter, and how exceptions reach human judgement before small drift becomes operational damage.</p>
+      </div>
+      <div class="note-list">
+        <article class="note-panel">
+          <span>01</span>
+          <h3>Count the flock</h3>
+          <p>Map the agents, automations, prompts, vendors, and side experiments already shaping work.</p>
+        </article><article class="note-panel">
+          <span>02</span>
+          <h3>Set the hedges</h3>
+          <p>Decide what each agent may read, suggest, change, publish, escalate, spend, or stop.</p>
+        </article><article class="note-panel">
+          <span>03</span>
+          <h3>Read the field</h3>
+          <p>Watch for weak signals, stale assumptions, repeated exceptions, and quiet workarounds.</p>
+        </article><article class="note-panel">
+          <span>04</span>
+          <h3>Bring it home</h3>
+          <p>Turn agentic activity into decisions, records, lessons, and a rhythm that leaders can inspect.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section cta" id="conversation">
+      <div class="cta-inner">
+        <p class="eyebrow">Useful first conversation</p>
+        <h2>Start with the flock you already have.</h2>
+        <p>Which agents, automations, vendors, workflows, and quiet experiments are already moving through the business, and who is actually shepherding them?</p>
+        <div class="hero-actions">
+          <a class="button primary" href="mailto:hello@my-agentic.com">Talk about Orchistra</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <strong>Orchistra</strong>
+      <div>orchistra.com</div>
+    </div>
+    <div>Shepherding agentic systems, operating cadence, and practical governance.</div>
+  </footer>
+</body>
+</html>

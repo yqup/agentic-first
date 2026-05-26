@@ -1,0 +1,25 @@
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "Chief Agentic Officer",
+    "website": "https://chiefagenticofficer.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "executive-leadership",
+      "agentic-ai",
+      "operating-model"
+    ],
+    "tagline": "Chief Agentic Officer.",
+    "summary": "A board-level role for turning agentic AI from scattered pilots into accountable operating capability."
+  },
+  "links": {
+    "website": "https://chiefagenticofficer.com"
+  },
+  "contact": {
+    "preferred_channel": "email",
+    "email": "hello@my-agentic.com"
+  }
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "domain": "yqup.com",
+    "service": "yqup_com",
+    "mode": "gamma",
+    "local_port": 8211,
+    "local_preview": "http://127.0.0.1:8211/",
+    "gamma_origin": "https://sites.gamma.app",
+    "document_root": "/srv/apps/top-level-sites/current/dist/yqup.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/yqup.com/Caddyfile",
+    "profile": "https://yqup.com/.well-known/agentic-profile.json",
+    "healthz": "https://yqup.com/healthz"
+  },
+  {
+    "domain": "snaxk.com",
+    "service": "snaxk_com",
+    "mode": "gamma",
+    "local_port": 8212,
+    "local_preview": "http://127.0.0.1:8212/",
+    "gamma_origin": "https://sites.gamma.app",
+    "document_root": "/srv/apps/top-level-sites/current/dist/snaxk.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/snaxk.com/Caddyfile",
+    "profile": "https://snaxk.com/.well-known/agentic-profile.json",
+    "healthz": "https://snaxk.com/healthz"
+  },
+  {
+    "domain": "my-agentic.com",
+    "service": "my_agentic_com",
+    "mode": "gamma",
+    "local_port": 8213,
+    "local_preview": "http://127.0.0.1:8213/",
+    "gamma_origin": "https://sites.gamma.app",
+    "document_root": "/srv/apps/top-level-sites/current/dist/my-agentic.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/my-agentic.com/Caddyfile",
+    "profile": "https://my-agentic.com/.well-known/agentic-profile.json",
+    "healthz": "https://my-agentic.com/healthz"
+  },
+  {
+    "domain": "chiefagenticofficer.com",
+    "service": "chiefagenticofficer_com",
+    "mode": "country",
+    "local_port": 8214,
+    "local_preview": "http://127.0.0.1:8214/",
+    "gamma_origin": null,
+    "document_root": "/srv/apps/top-level-sites/current/dist/chiefagenticofficer.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/chiefagenticofficer.com/Caddyfile",
+    "profile": "https://chiefagenticofficer.com/.well-known/agentic-profile.json",
+    "healthz": "https://chiefagenticofficer.com/healthz"
+  },
+  {
+    "domain": "agenticleader.com",
+    "service": "agenticleader_com",
+    "mode": "gamma",
+    "local_port": 8215,
+    "local_preview": "http://127.0.0.1:8215/",
+    "gamma_origin": "https://sites.gamma.app",
+    "document_root": "/srv/apps/top-level-sites/current/dist/agenticleader.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/agenticleader.com/Caddyfile",
+    "profile": "https://agenticleader.com/.well-known/agentic-profile.json",
+    "healthz": "https://agenticleader.com/healthz"
+  },
+  {
+    "domain": "aiperations.com",
+    "service": "aiperations_com",
+    "mode": "gamma",
+    "local_port": 8216,
+    "local_preview": "http://127.0.0.1:8216/",
+    "gamma_origin": "https://sites.gamma.app",
+    "document_root": "/srv/apps/top-level-sites/current/dist/aiperations.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/aiperations.com/Caddyfile",
+    "profile": "https://aiperations.com/.well-known/agentic-profile.json",
+    "healthz": "https://aiperations.com/healthz"
+  },
+  {
+    "domain": "agenticboard.com",
+    "service": "agenticboard_com",
+    "mode": "gamma",
+    "local_port": 8217,
+    "local_preview": "http://127.0.0.1:8217/",
+    "gamma_origin": "https://sites.gamma.app",
+    "document_root": "/srv/apps/top-level-sites/current/dist/agenticboard.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/agenticboard.com/Caddyfile",
+    "profile": "https://agenticboard.com/.well-known/agentic-profile.json",
+    "healthz": "https://agenticboard.com/healthz"
+  },
+  {
+    "domain": "dilijenz.com",
+    "service": "dilijenz_com",
+    "mode": "gamma",
+    "local_port": 8218,
+    "local_preview": "http://127.0.0.1:8218/",
+    "gamma_origin": "https://sites.gamma.app",
+    "document_root": "/srv/apps/top-level-sites/current/dist/dilijenz.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/dilijenz.com/Caddyfile",
+    "profile": "https://dilijenz.com/.well-known/agentic-profile.json",
+    "healthz": "https://dilijenz.com/healthz"
+  },
+  {
+    "domain": "syndesy.com",
+    "service": "syndesy_com",
+    "mode": "holding",
+    "local_port": 8219,
+    "local_preview": "http://127.0.0.1:8219/",
+    "gamma_origin": null,
+    "document_root": "/srv/apps/top-level-sites/current/dist/syndesy.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/syndesy.com/Caddyfile",
+    "profile": "https://syndesy.com/.well-known/agentic-profile.json",
+    "healthz": "https://syndesy.com/healthz"
+  },
+  {
+    "domain": "orchistra.com",
+    "service": "orchistra_com",
+    "mode": "country",
+    "local_port": 8220,
+    "local_preview": "http://127.0.0.1:8220/",
+    "gamma_origin": null,
+    "document_root": "/srv/apps/top-level-sites/current/dist/orchistra.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/orchistra.com/Caddyfile",
+    "profile": "https://orchistra.com/.well-known/agentic-profile.json",
+    "healthz": "https://orchistra.com/healthz"
+  }
+]

@@ -1,0 +1,45 @@
+{
+	admin off
+	auto_https off
+}
+
+:8080 {
+	root * /srv/site
+	encode zstd gzip
+
+	@agentic_profile path /.well-known/agentic-profile.json
+	handle @agentic_profile {
+		header Content-Type "application/json; charset=utf-8"
+		header Cache-Control "public, max-age=300"
+		file_server
+	}
+
+	@health path /healthz
+	handle @health {
+		header Content-Type "application/json; charset=utf-8"
+		header Cache-Control "no-store"
+		file_server
+	}
+
+	@local_assets path /llms.txt /robots.txt /favicon.svg
+	handle @local_assets {
+		file_server
+	}
+
+	@site_assets path /assets/*
+	handle @site_assets {
+		file_server
+	}
+
+
+	handle {
+		reverse_proxy https://sites.gamma.app {
+			header_up Host agenticboard.com
+			header_up X-Forwarded-Host {http.request.host}
+			header_up X-Real-IP {http.request.remote.host}
+			transport http {
+				tls_server_name sites.gamma.app
+			}
+		}
+	}
+}

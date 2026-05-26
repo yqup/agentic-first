@@ -1,0 +1,42 @@
+{
+  "jsonrpc": "2.0",
+  "id": "top-level-sites-2026-05-26",
+  "method": "tools/call",
+  "params": {
+    "name": "queue_scan",
+    "arguments": {
+      "targets": [
+        {
+          "domain": "yqup.com"
+        },
+        {
+          "domain": "snaxk.com"
+        },
+        {
+          "domain": "my-agentic.com"
+        },
+        {
+          "domain": "chiefagenticofficer.com"
+        },
+        {
+          "domain": "agenticleader.com"
+        },
+        {
+          "domain": "aiperations.com"
+        },
+        {
+          "domain": "agenticboard.com"
+        },
+        {
+          "domain": "dilijenz.com"
+        },
+        {
+          "domain": "syndesy.com"
+        },
+        {
+          "domain": "orchistra.com"
+        }
+      ]
+    }
+  }
+}

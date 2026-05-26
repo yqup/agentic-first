@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "Agentic Board",
+    "website": "https://agenticboard.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "board-governance",
+      "agentic-ai",
+      "advisory"
+    ],
+    "tagline": "Empowering agentic board members.",
+    "summary": "Agentic Board is a space for boards, advisors, and governance leaders adapting to AI-agent-enabled organisations."
+  },
+  "links": {
+    "website": "https://agenticboard.com"
+  },
+  "contact": {
+    "preferred_channel": "none"
+  }
+}

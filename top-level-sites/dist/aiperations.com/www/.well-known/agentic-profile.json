@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "AI Operations Excellence",
+    "website": "https://aiperations.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "ai-operations",
+      "automation",
+      "operational-excellence"
+    ],
+    "tagline": "Transforming operations with AI.",
+    "summary": "AI Operations Excellence focuses on practical operating discipline for moving AI from isolated pilots into repeatable business workflows."
+  },
+  "links": {
+    "website": "https://aiperations.com"
+  },
+  "contact": {
+    "preferred_channel": "none"
+  }
+}

@@ -1,0 +1,38 @@
+# Chief Agentic Officer
+
+Canonical website: https://chiefagenticofficer.com/
+Agentic profile: https://chiefagenticofficer.com/.well-known/agentic-profile.json
+Health check: https://chiefagenticofficer.com/healthz
+
+The human-facing page is a local static page with an English country
+board-and-operations feel. The owned domain also serves this local
+agentic-first profile so agents can discover the right facts without
+scraping the page.
+
+```json
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "Chief Agentic Officer",
+    "website": "https://chiefagenticofficer.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "executive-leadership",
+      "agentic-ai",
+      "operating-model"
+    ],
+    "tagline": "Chief Agentic Officer.",
+    "summary": "A board-level role for turning agentic AI from scattered pilots into accountable operating capability."
+  },
+  "links": {
+    "website": "https://chiefagenticofficer.com"
+  },
+  "contact": {
+    "preferred_channel": "email",
+    "email": "hello@my-agentic.com"
+  }
+}
+```

@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "Agentic Leader Community",
+    "website": "https://agenticleader.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "community",
+      "agentic-ai",
+      "leadership"
+    ],
+    "tagline": "Build, share, and evolve multi-agent crews together.",
+    "summary": "A community space for leaders working with collaborative AI systems, multi-agent crews, and agentic operating models."
+  },
+  "links": {
+    "website": "https://agenticleader.com"
+  },
+  "contact": {
+    "preferred_channel": "none"
+  }
+}

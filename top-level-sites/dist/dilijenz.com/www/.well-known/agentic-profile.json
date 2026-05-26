@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-05-26T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "company": {
+    "name": "Dilijenz",
+    "website": "https://dilijenz.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "due-diligence",
+      "board-governance",
+      "workflow-automation"
+    ],
+    "tagline": "Boards made simple.",
+    "summary": "Dilijenz automates standard checks, organises vital data, and highlights gaps or risks for due diligence and board governance."
+  },
+  "links": {
+    "website": "https://dilijenz.com"
+  },
+  "contact": {
+    "preferred_channel": "none"
+  }
+}
