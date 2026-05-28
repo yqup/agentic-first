@@ -11,7 +11,8 @@ const config = {
   "gammaOrigin": "https://sites.gamma.app",
   "matomoLoaderPath": "/static/js/matomo-loader.js",
   "analyticsTag": "<script defer src=\"/static/js/matomo-loader.js\"></script>",
-  "hostHoldingPages": []
+  "hostHoldingPages": [],
+  "redirectWwwToApex": false
 };
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || 8080);
@@ -52,6 +53,12 @@ server.listen(listenPort, "0.0.0.0", () => {
 async function routeRequest(req, res) {
   const url = new URL(req.url || "/", "http://" + (req.headers.host || config.domain));
   const pathname = url.pathname;
+  const requestHost = hostOnly(req.headers.host || "");
+
+  if (config.redirectWwwToApex && requestHost === "www." + hostOnly(config.domain)) {
+    redirectToApex(req, res, url);
+    return;
+  }
 
   if (isLocalStaticPath(pathname)) {
     const served = await serveLocalFile(req, res, pathname);
@@ -59,7 +66,6 @@ async function routeRequest(req, res) {
     return;
   }
 
-  const requestHost = hostOnly(req.headers.host || "");
   if (hostHoldingHosts.has(requestHost)) {
     await serveLocalFile(req, res, "/hosts/" + requestHost + "/index.html", "no-store");
     return;
@@ -141,6 +147,18 @@ function contentTypeFor(filePath) {
 
 function hostOnly(value) {
   return String(value).split(":")[0].trim().toLowerCase();
+}
+
+function redirectToApex(req, res, url) {
+  res.writeHead(308, {
+    "location": "https://" + config.domain + url.pathname + url.search,
+    "cache-control": "public, max-age=300",
+  });
+  if (req.method === "HEAD") {
+    res.end();
+    return;
+  }
+  res.end("redirecting to https://" + config.domain + url.pathname + url.search + "\n");
 }
 
 function methodNotAllowed(res) {

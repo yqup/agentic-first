@@ -252,6 +252,7 @@
     "theme": "#26324c",
     "accent": "#6c7cff",
     "matomo_site_id": "12",
+    "redirect_www_to_apex": true,
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/o3tkd1y98pmk9vh/hnpihaoztc3ck0e/slide/FW_sbRlCwf5WyL_SDuJM2iIcELM",
     "assets": [
       {
@@ -261,23 +262,6 @@
       {
         "source": "assets/dilijenz-logo-lockup.png",
         "target": "assets/dilijenz-logo-lockup.png"
-      }
-    ],
-    "host_holding_pages": [
-      {
-        "host": "www.dilijenz.com",
-        "title": "Dilijenz - Hard a work",
-        "logo_image": "/assets/dilijenz-logo-lockup.png",
-        "logo_alt": "Dilijenz Boards Made Simple",
-        "show_logo_text": false,
-        "show_note": false,
-        "message": "Hard a work",
-        "note": "The public page is being prepared.",
-        "surface": "#f6f8ff",
-        "theme": "#26324c",
-        "accent": "#6c7cff",
-        "text": "#151733",
-        "muted": "#697087"
       }
     ],
     "sections": [

@@ -7,6 +7,10 @@
 	root * /srv/site
 	encode zstd gzip
 
+	@www_apex_redirect host www.dilijenz.com
+	redir @www_apex_redirect https://dilijenz.com{uri} permanent
+
+
 	@agentic_profile path /.well-known/agentic-profile.json
 	handle @agentic_profile {
 		header Content-Type "application/json; charset=utf-8"
@@ -31,13 +35,6 @@
 		file_server
 	}
 
-
-	@host_holding_0 host www.dilijenz.com
-	handle @host_holding_0 {
-		root * /srv/site/hosts/www.dilijenz.com
-		try_files {path} /index.html
-		file_server
-	}
 
 	handle {
 		try_files {path} /index.html

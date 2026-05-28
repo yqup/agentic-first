@@ -11,23 +11,8 @@ const config = {
   "gammaOrigin": "https://sites.gamma.app",
   "matomoLoaderPath": "/static/js/matomo-loader.js",
   "analyticsTag": "<script defer src=\"/static/js/matomo-loader.js\"></script>",
-  "hostHoldingPages": [
-    {
-      "host": "www.dilijenz.com",
-      "title": "Dilijenz - Hard a work",
-      "logo_image": "/assets/dilijenz-logo-lockup.png",
-      "logo_alt": "Dilijenz Boards Made Simple",
-      "show_logo_text": false,
-      "show_note": false,
-      "message": "Hard a work",
-      "note": "The public page is being prepared.",
-      "surface": "#f6f8ff",
-      "theme": "#26324c",
-      "accent": "#6c7cff",
-      "text": "#151733",
-      "muted": "#697087"
-    }
-  ]
+  "hostHoldingPages": [],
+  "redirectWwwToApex": true
 };
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || 8080);
@@ -68,6 +53,12 @@ server.listen(listenPort, "0.0.0.0", () => {
 async function routeRequest(req, res) {
   const url = new URL(req.url || "/", "http://" + (req.headers.host || config.domain));
   const pathname = url.pathname;
+  const requestHost = hostOnly(req.headers.host || "");
+
+  if (config.redirectWwwToApex && requestHost === "www." + hostOnly(config.domain)) {
+    redirectToApex(req, res, url);
+    return;
+  }
 
   if (isLocalStaticPath(pathname)) {
     const served = await serveLocalFile(req, res, pathname);
@@ -75,7 +66,6 @@ async function routeRequest(req, res) {
     return;
   }
 
-  const requestHost = hostOnly(req.headers.host || "");
   if (hostHoldingHosts.has(requestHost)) {
     await serveLocalFile(req, res, "/hosts/" + requestHost + "/index.html", "no-store");
     return;
@@ -157,6 +147,18 @@ function contentTypeFor(filePath) {
 
 function hostOnly(value) {
   return String(value).split(":")[0].trim().toLowerCase();
+}
+
+function redirectToApex(req, res, url) {
+  res.writeHead(308, {
+    "location": "https://" + config.domain + url.pathname + url.search,
+    "cache-control": "public, max-age=300",
+  });
+  if (req.method === "HEAD") {
+    res.end();
+    return;
+  }
+  res.end("redirecting to https://" + config.domain + url.pathname + url.search + "\n");
 }
 
 function methodNotAllowed(res) {
