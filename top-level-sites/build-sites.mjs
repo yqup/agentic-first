@@ -62,6 +62,9 @@ for (const site of sites) {
   if (site.mode === "cao") {
     await writeFile(path.join(wwwRoot, "index.html"), chiefAgenticOfficerPageFor(site), "utf8");
   }
+  if (site.mode === "agentics_home") {
+    await writeFile(path.join(wwwRoot, "index.html"), agenticsHomePageFor(site), "utf8");
+  }
   if (site.mode === "orchistra") {
     await writeFile(path.join(wwwRoot, "index.html"), orchistraPageFor(site), "utf8");
   }
@@ -228,7 +231,7 @@ function matomoLoaderSource() {
 }
 
 function isLocalPageMode(mode) {
-  return ["holding", "country", "cao", "orchistra", "gamma"].includes(mode);
+  return ["holding", "country", "cao", "agentics_home", "orchistra", "gamma"].includes(mode);
 }
 
 function composeFor(items) {
@@ -335,7 +338,7 @@ const config = ${JSON.stringify(serverConfig, null, 2)};
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || ${nodeServerPort});
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
-const localPageMode = ["holding", "country", "cao", "orchistra", "gamma"].includes(config.mode);
+const localPageMode = ["holding", "country", "cao", "agentics_home", "orchistra", "gamma"].includes(config.mode);
 
 const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],
@@ -624,9 +627,11 @@ function edgeCaddyFor(site) {
       ? "Normal pages are served by the per-site English-country static container."
       : site.mode === "cao"
         ? "Normal pages are served by the per-site bespoke Chief Agentic Officer container."
-      : site.mode === "orchistra"
-        ? "Normal pages are served by the per-site bespoke Orchistra container."
-        : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
+        : site.mode === "agentics_home"
+          ? "Normal pages are served by the per-site My Agentic home container."
+          : site.mode === "orchistra"
+            ? "Normal pages are served by the per-site bespoke Orchistra container."
+            : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
   const hostBlock = site.redirect_www_to_apex
     ? `${site.domain} {
 	encode zstd gzip
@@ -737,12 +742,17 @@ scraping the page.`
 with a board-mandate and operating-control treatment. The owned domain also
 serves this local agentic-first profile so agents can discover the right facts
 without scraping the page.`
-      : site.mode === "orchistra"
-        ? `The human-facing page is a local static Orchistra page with a
+        : site.mode === "agentics_home"
+          ? `The human-facing page is a local static My Agentic home page for
+agentics that need stable URLs, readable profiles, owners, boundaries, and
+status. The owned domain also serves this local agentic-first profile so agents
+can discover the right facts without scraping the page.`
+          : site.mode === "orchistra"
+            ? `The human-facing page is a local static Orchistra page with a
 field-map orchestration treatment. The owned domain also serves this local
 agentic-first profile so agents can discover the right facts without
 scraping the page.`
-    : `The human-facing design for this site is ingested from Gamma into the
+            : `The human-facing design for this site is ingested from Gamma into the
 per-site local container. The owned domain also serves this local agentic-first
 profile so agents can discover the right facts without scraping the Gamma page.`;
 
@@ -771,9 +781,11 @@ function healthFor(site) {
         ? "static-country-container"
         : site.mode === "cao"
           ? "static-cao-container"
-        : site.mode === "orchistra"
-          ? "static-orchistra-container"
-          : "gamma-fronting-container",
+          : site.mode === "agentics_home"
+            ? "static-agentics-home-container"
+            : site.mode === "orchistra"
+              ? "static-orchistra-container"
+              : "gamma-fronting-container",
     updated_at: updatedAt,
     agentic_profile: "/.well-known/agentic-profile.json",
     matomo_site_id: site.matomo_site_id || null,
@@ -2319,6 +2331,659 @@ function caoMandateSvg() {
     <text x="552" y="462">decisions</text>
   </g>
 </svg>`;
+}
+
+function agenticsHomePageFor(site) {
+  const title = site.title || "My Agentic";
+  const summary = site.summary || "A stable home for agentics that need a URL.";
+  const email = site.contact?.email || "hello@my-agentic.com";
+  const rooms = [
+    {
+      path: "/agentics/research",
+      name: "Research",
+      state: "reserved",
+      body: "For agentics that gather signals, compare notes, and keep their sources readable.",
+    },
+    {
+      path: "/agentics/boardroom",
+      name: "Boardroom",
+      state: "reserved",
+      body: "For agentics that prepare governance, cadence, and decision support.",
+    },
+    {
+      path: "/agentics/diligence",
+      name: "Diligence",
+      state: "reserved",
+      body: "For agentics that organise checks, evidence, and gaps without losing context.",
+    },
+    {
+      path: "/agentics/operations",
+      name: "Operations",
+      state: "reserved",
+      body: "For agentics that watch workflows, handoffs, and status across practical work.",
+    },
+  ];
+  const rules = [
+    {
+      title: "Stable URL",
+      body: "Each agentic gets a public address that can be referenced by people, agents, and systems.",
+    },
+    {
+      title: "Readable profile",
+      body: "Purpose, owner, contact, permissions, inputs, outputs, and escalation stay visible.",
+    },
+    {
+      title: "Clear boundary",
+      body: "A home page says what the agentic can touch, what it cannot touch, and when it stops.",
+    },
+    {
+      title: "Status surface",
+      body: "A simple health note makes it clear whether the agentic is active, paused, or retired.",
+    },
+  ];
+  const contract = ["identity", "purpose", "owner", "permissions", "boundaries", "status", "handoff"];
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(summary)}">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${matomoScriptTagFor(site)}  <style>
+    :root {
+      color-scheme: light;
+      --ink: #182623;
+      --muted: #60706a;
+      --paper: #f7f4ec;
+      --panel: #fffdf8;
+      --line: #d8d0bf;
+      --blue: #4f87a6;
+      --clay: #985d52;
+      --night: #10201d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 40px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 253, 248, 0.94);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 820;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--night);
+      color: #fffdf8;
+      font-size: 13px;
+      font-weight: 860;
+      line-height: 1;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      color: #43504b;
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    nav a {
+      text-decoration: none;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+      gap: 48px;
+      align-items: center;
+      min-height: calc(100vh - 72px);
+      padding: 56px 40px 44px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-copy {
+      max-width: 820px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--clay);
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 820;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 12ch;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 74px;
+      line-height: 0.96;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 690px;
+      margin: 24px 0 0;
+      color: #4e5d58;
+      font-size: 21px;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border: 1px solid var(--night);
+      border-radius: 6px;
+      background: var(--night);
+      color: #fffdf8;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--night);
+    }
+
+    .registry-panel {
+      border: 1px solid #bfc8bd;
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 18px 48px rgba(16, 32, 29, 0.10);
+      overflow: hidden;
+    }
+
+    .registry-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: #f1eadb;
+      font-size: 13px;
+      font-weight: 820;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .registry-map {
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .address {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffaf0;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 820;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    code {
+      display: block;
+      overflow-wrap: anywhere;
+      color: #182623;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .status-line {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+      background: var(--night);
+      color: #fffdf8;
+    }
+
+    .status-line div {
+      min-height: 74px;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      padding: 14px 16px;
+      border-right: 1px solid rgba(255, 253, 248, 0.18);
+    }
+
+    .status-line div:last-child {
+      border-right: 0;
+    }
+
+    .status-line strong {
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .status-line span {
+      color: #cfd8d1;
+      font-size: 12px;
+      font-weight: 740;
+    }
+
+    .band {
+      padding: 58px 40px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 42px;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .rules {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .rule,
+    .room {
+      min-height: 176px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .rule .num {
+      color: var(--blue);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      font-weight: 820;
+    }
+
+    h3 {
+      margin: 18px 0 8px;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .rule p,
+    .room p,
+    .profile-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .rooms {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .room {
+      min-height: 152px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .room-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .room h3 {
+      margin: 0;
+    }
+
+    .pill {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #e3eadf;
+      color: #42533d;
+      font-size: 12px;
+      font-weight: 820;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .room code {
+      color: var(--clay);
+    }
+
+    .profile-band {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(360px, 1fr);
+      gap: 28px;
+      align-items: start;
+      background: #eef0e5;
+    }
+
+    .profile-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .profile-list li {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid #cbd1c2;
+      border-radius: 8px;
+      background: #fffdf8;
+      font-weight: 780;
+    }
+
+    .cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 30px 40px;
+      background: var(--night);
+      color: #fffdf8;
+    }
+
+    .cta p {
+      margin: 0;
+      color: #d5ddd6;
+      line-height: 1.5;
+    }
+
+    .cta strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #fffdf8;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .cta .button {
+      border-color: #fffdf8;
+      background: #fffdf8;
+      color: var(--night);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 980px) {
+      .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px 22px;
+      }
+
+      nav {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .hero,
+      .profile-band {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 44px 22px;
+      }
+
+      h1 {
+        font-size: 52px;
+      }
+
+      .lede {
+        font-size: 19px;
+      }
+
+      .band {
+        padding: 44px 22px;
+      }
+
+      .rules {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .cta {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 28px 22px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .brand {
+        font-size: 16px;
+      }
+
+      nav {
+        gap: 14px;
+        font-size: 13px;
+      }
+
+      h1 {
+        font-size: 40px;
+      }
+
+      h2 {
+        font-size: 32px;
+      }
+
+      .actions,
+      .button {
+        width: 100%;
+      }
+
+      .rules,
+      .rooms,
+      .profile-list,
+      .status-line {
+        grid-template-columns: 1fr;
+      }
+
+      .status-line div,
+      .status-line div:last-child {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 253, 248, 0.18);
+      }
+
+      .status-line div:last-child {
+        border-bottom: 0;
+      }
+
+      .address {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="My Agentic home">
+      <span class="brand-mark">MA</span>
+      <span>my-agentic.com</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#rooms">Rooms</a>
+      <a href="#profile">Profiles</a>
+      <a href="#request">Request</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">${escapeHtml(site.eyebrow || "URL homes for agentics")}</p>
+        <h1 id="page-title">${escapeHtml(site.heading || "A home for agentics that need a URL.")}</h1>
+        <p class="lede">${escapeHtml(summary)}</p>
+        <div class="actions">
+          <a class="button" href="mailto:${escapeHtml(email)}?subject=Agentic%20URL%20request">Request an agentic URL</a>
+          <a class="button secondary" href="/.well-known/agentic-profile.json">View site profile</a>
+        </div>
+      </div>
+
+      <aside class="registry-panel" aria-label="Agentic address map">
+        <div class="registry-top">
+          <span>Address book</span>
+          <span>active</span>
+        </div>
+        <div class="registry-map">
+          <div class="address">
+            <span class="label">Home</span>
+            <code>https://my-agentic.com/</code>
+          </div>
+          <div class="address">
+            <span class="label">Agentic</span>
+            <code>https://my-agentic.com/agentics/{name}</code>
+          </div>
+          <div class="address">
+            <span class="label">Profile</span>
+            <code>/.well-known/agentic-profile.json</code>
+          </div>
+          <div class="address">
+            <span class="label">Status</span>
+            <code>/status/{name}</code>
+          </div>
+        </div>
+        <div class="status-line" aria-label="Registry status">
+          <div><strong>URL</strong><span>stable public address</span></div>
+          <div><strong>Profile</strong><span>readable purpose</span></div>
+          <div><strong>Boundary</strong><span>visible limits</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="band" aria-labelledby="rules-title">
+      <div class="section-head">
+        <p class="eyebrow">House rules</p>
+        <h2 id="rules-title">A URL is not just a link. It is a little room with responsibilities.</h2>
+        <p>Every agentic that lives here should be legible enough for a human to inspect and stable enough for another system to reference.</p>
+      </div>
+      <div class="rules">
+        ${rules.map((rule, index) => `<article class="rule">
+          <span class="num">${String(index + 1).padStart(2, "0")}</span>
+          <h3>${escapeHtml(rule.title)}</h3>
+          <p>${escapeHtml(rule.body)}</p>
+        </article>`).join("\n        ")}
+      </div>
+    </section>
+
+    <section class="band" id="rooms" aria-labelledby="rooms-title">
+      <div class="section-head">
+        <p class="eyebrow">Reserved rooms</p>
+        <h2 id="rooms-title">Places for agentics to live when they need a public handle.</h2>
+        <p>These rooms are starter addresses. Each can grow into a profile, status page, handoff surface, or full working home.</p>
+      </div>
+      <div class="rooms">
+        ${rooms.map((room) => `<article class="room">
+          <div class="room-top">
+            <h3>${escapeHtml(room.name)}</h3>
+            <span class="pill">${escapeHtml(room.state)}</span>
+          </div>
+          <code>${escapeHtml(room.path)}</code>
+          <p>${escapeHtml(room.body)}</p>
+        </article>`).join("\n        ")}
+      </div>
+    </section>
+
+    <section class="band profile-band" id="profile" aria-labelledby="profile-title">
+      <div class="profile-copy">
+        <p class="eyebrow">Profile shape</p>
+        <h2 id="profile-title">Each agentic gets a small public contract.</h2>
+        <p>A useful home page says what the agentic is, why it exists, who owns it, what it can touch, and how it hands work back when judgement is needed.</p>
+      </div>
+      <ul class="profile-list" aria-label="Agentic profile fields">
+        ${contract.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n        ")}
+      </ul>
+    </section>
+
+    <section class="cta" id="request" aria-label="Request an agentic URL">
+      <p><strong>Need a URL for one of your agentics?</strong> Give it a stable room, a readable profile, and a place other systems can point to.</p>
+      <a class="button" href="mailto:${escapeHtml(email)}?subject=Agentic%20URL%20request">Request a room</a>
+    </section>
+  </main>
+</body>
+</html>`;
 }
 
 function orchistraPageFor(site) {

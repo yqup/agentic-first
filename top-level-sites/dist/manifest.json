@@ -28,10 +28,10 @@
   {
     "domain": "my-agentic.com",
     "service": "my_agentic_com",
-    "mode": "gamma",
+    "mode": "agentics_home",
     "local_port": 8213,
     "local_preview": "http://127.0.0.1:8213/",
-    "gamma_origin": "https://sites.gamma.app",
+    "gamma_origin": null,
     "matomo_site_id": "7",
     "document_root": "/srv/apps/top-level-sites/current/dist/my-agentic.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/my-agentic.com/Caddyfile",

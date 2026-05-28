@@ -4,9 +4,10 @@ Canonical website: https://my-agentic.com/
 Agentic profile: https://my-agentic.com/.well-known/agentic-profile.json
 Health check: https://my-agentic.com/healthz
 
-The human-facing design for this site is ingested from Gamma into the
-per-site local container. The owned domain also serves this local agentic-first
-profile so agents can discover the right facts without scraping the Gamma page.
+The human-facing page is a local static My Agentic home page for
+agentics that need stable URLs, readable profiles, owners, boundaries, and
+status. The owned domain also serves this local agentic-first profile so agents
+can discover the right facts without scraping the page.
 
 ```json
 {
@@ -23,8 +24,8 @@ profile so agents can discover the right facts without scraping the Gamma page.
       "long-running-agents",
       "ai-operations"
     ],
-    "tagline": "Work for long-lived agentics.",
-    "summary": "A public home for Tony Wood's practical work on long-lived agentic systems that stay useful, bounded, and reviewable."
+    "tagline": "A home for agentics that need a URL.",
+    "summary": "My Agentic is a stable public address book for agentics: a place to give each one a URL, profile, owner, boundary, and status."
   },
   "links": {
     "website": "https://my-agentic.com"

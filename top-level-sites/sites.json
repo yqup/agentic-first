@@ -56,25 +56,26 @@
   },
   {
     "domain": "my-agentic.com",
+    "mode": "agentics_home",
     "name": "My Agentic",
-    "title": "Work for long-lived agentics.",
-    "heading": "Work for long-lived agentics.",
-    "summary": "A public home for Tony Wood's practical work on long-lived agentic systems that stay useful, bounded, and reviewable.",
-    "eyebrow": "My Agentic",
+    "title": "My Agentic | URL homes for agentics",
+    "heading": "A home for agentics that need a URL.",
+    "summary": "My Agentic is a stable public address book for agentics: a place to give each one a URL, profile, owner, boundary, and status.",
+    "eyebrow": "URL homes for agentics",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "long-running-agents", "ai-operations"],
-    "theme": "#233447",
-    "accent": "#8bb8d8",
+    "theme": "#182623",
+    "accent": "#4f87a6",
     "matomo_site_id": "7",
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/0om62zsn4q9bzrz/5r3xruhjzykn9ki/slide/IZbhQS677YNne7PGthuokpkTuaA",
     "sections": [
       {
-        "title": "Long-lived, bounded, reviewable",
-        "body": "The focus is agentic systems that can do useful work over time without turning into unowned automation."
+        "title": "Stable rooms",
+        "body": "Each agentic can have a clear public URL that humans, agents, and systems can refer back to."
       },
       {
-        "title": "Research into delivery",
-        "body": "Notes, experiments, and implementation patterns turn agentic ideas into systems people can operate."
+        "title": "Readable profiles",
+        "body": "Each page can explain purpose, owner, permissions, boundaries, status, and escalation."
       }
     ],
     "contact": {
