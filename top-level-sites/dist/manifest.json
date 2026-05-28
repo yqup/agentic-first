@@ -119,7 +119,7 @@
   {
     "domain": "orchistra.com",
     "service": "orchistra_com",
-    "mode": "country",
+    "mode": "orchistra",
     "local_port": 8220,
     "local_preview": "http://127.0.0.1:8220/",
     "gamma_origin": null,

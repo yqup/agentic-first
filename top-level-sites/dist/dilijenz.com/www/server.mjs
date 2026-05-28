@@ -32,7 +32,7 @@ const config = {
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || 8080);
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
-const localPageMode = config.mode === "holding" || config.mode === "country" || config.mode === "gamma";
+const localPageMode = ["holding", "country", "orchistra", "gamma"].includes(config.mode);
 
 const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],

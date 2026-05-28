@@ -3,27 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Orchistra | Shepherds of Agentic Sheep</title>
-  <meta name="description" content="Orchistra helps leaders shepherd agentic work: clear intent, useful boundaries, reviewable memory, and an operating rhythm for flocks of AI agents.">
+  <title>Orchistra | Shepherds of agentic systems</title>
+  <meta name="description" content="A living field map for agentic work: see what is moving, set useful boundaries, read the weak signals, and bring outcomes back into judgement.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preload" as="image" href="https://www.tonywood.org/assets/countryside-hero.jpg">
   <script defer src="/static/js/matomo-loader.js"></script>
-  <style>
   <style>
     :root {
       color-scheme: light;
-      --ink: #09152b;
-      --ink-soft: #34405a;
-      --chalk: #fbfaf4;
-      --paper: #f3efe2;
-      --stone: #d8cfb8;
-      --field: #31583f;
-      --hedge: #163d2c;
-      --gold: #b88a32;
-      --earth: #6f4d23;
-      --plum: #653a56;
-      --line: rgba(9, 21, 43, 0.16);
-      --shadow: 0 18px 48px rgba(9, 21, 43, 0.12);
+      --ink: #10221f;
+      --ink-soft: #40534f;
+      --paper: #f7f2e6;
+      --mist: #e7efe9;
+      --field: #2f6f5f;
+      --hedge: #163a32;
+      --signal: #e05d45;
+      --gold: #d8a13a;
+      --violet: #7b6ad8;
+      --sky: #92c7d6;
+      --white: #fffdf7;
+      --line: rgba(16, 34, 31, 0.16);
+      --shadow: 0 20px 54px rgba(16, 34, 31, 0.13);
       --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --serif: Georgia, "Times New Roman", serif;
     }
@@ -33,17 +32,18 @@
     }
 
     html {
+      scroll-behavior: smooth;
       overflow-x: hidden;
     }
 
     body {
       margin: 0;
       overflow-x: hidden;
-      background: var(--chalk);
+      background: var(--paper);
       color: var(--ink);
       font-family: var(--sans);
       font-size: 17px;
-      line-height: 1.62;
+      line-height: 1.58;
       letter-spacing: 0;
     }
 
@@ -54,51 +54,46 @@
     }
 
     .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      min-height: 72px;
+      min-height: 68px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
-      padding: 14px clamp(18px, 4vw, 52px);
-      background: rgba(251, 250, 244, 0.94);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(12px);
+      gap: 28px;
+      padding: 14px 40px;
+      border-bottom: 1px solid rgba(255, 253, 247, 0.22);
+      background: var(--hedge);
+      color: var(--white);
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      color: var(--ink);
-      font-weight: 840;
+      gap: 12px;
+      font-weight: 860;
       text-decoration: none;
     }
 
     .brand-mark {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       display: grid;
       place-items: center;
-      border: 1px solid var(--ink);
-      background: var(--ink);
-      color: var(--chalk);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0;
+      border: 1px solid rgba(255, 253, 247, 0.72);
+      background: var(--paper);
+      color: var(--hedge);
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
     }
 
     nav {
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-end;
-      gap: 4px 18px;
-      max-width: 100%;
-      color: var(--ink-soft);
+      gap: 8px 22px;
       font-size: 14px;
-      font-weight: 760;
+      font-weight: 780;
     }
 
     nav a {
@@ -106,33 +101,55 @@
     }
 
     .hero {
-      min-height: 78vh;
-      display: flex;
+      position: relative;
+      min-height: 82svh;
+      display: grid;
       align-items: end;
-      padding: clamp(72px, 10vw, 132px) clamp(20px, 6vw, 88px);
-      color: var(--chalk);
-      background-image:
-        linear-gradient(90deg, rgba(9, 21, 43, 0.92), rgba(9, 21, 43, 0.58), rgba(9, 21, 43, 0.16)),
-        url("https://www.tonywood.org/assets/countryside-hero.jpg");
-      background-size: cover;
-      background-position: center;
+      padding: 72px 40px 48px;
+      overflow: hidden;
+      background: var(--hedge);
+      color: var(--white);
+      isolation: isolate;
+    }
+
+    .map-stage {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(180deg, rgba(22, 58, 50, 0.12), rgba(22, 58, 50, 0.74)),
+        linear-gradient(120deg, #214d43 0%, #2f6f5f 46%, #d8a13a 100%);
+    }
+
+    .map-stage svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(90deg, rgba(16, 34, 31, 0.92), rgba(16, 34, 31, 0.52) 48%, rgba(16, 34, 31, 0.12));
     }
 
     .hero-inner {
-      max-width: 950px;
+      width: min(100%, 980px);
     }
 
     .eyebrow {
-      margin: 0 0 12px;
-      color: var(--plum);
-      font-size: 12px;
+      margin: 0 0 14px;
+      color: var(--signal);
+      font-size: 13px;
       font-weight: 900;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     .hero .eyebrow {
-      color: #f4dba8;
+      color: #ffd083;
     }
 
     h1,
@@ -145,41 +162,44 @@
     h1,
     h2,
     h3 {
-      line-height: 1.05;
       letter-spacing: 0;
       overflow-wrap: anywhere;
     }
 
     h1 {
-      max-width: 980px;
-      margin-bottom: 24px;
+      max-width: 10ch;
+      margin-bottom: 22px;
       font-family: var(--serif);
-      font-size: clamp(46px, 7vw, 92px);
+      font-size: 96px;
+      line-height: 0.94;
       font-weight: 700;
     }
 
     h2 {
-      max-width: 920px;
+      max-width: 900px;
       margin-bottom: 18px;
       font-family: var(--serif);
-      font-size: clamp(32px, 4vw, 54px);
+      font-size: 52px;
+      line-height: 1.02;
       font-weight: 700;
     }
 
     h3 {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       font-size: 22px;
       line-height: 1.18;
     }
 
     .hero-copy {
-      max-width: 740px;
+      max-width: 680px;
       margin: 0;
-      color: rgba(251, 250, 244, 0.9);
-      font-size: clamp(19px, 2vw, 24px);
+      color: rgba(255, 253, 247, 0.88);
+      font-size: 22px;
+      line-height: 1.46;
     }
 
-    .hero-actions {
+    .hero-actions,
+    .cta-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
@@ -193,32 +213,33 @@
       justify-content: center;
       padding: 12px 18px;
       border: 1px solid currentColor;
-      color: inherit;
+      border-radius: 4px;
       font-weight: 820;
       text-decoration: none;
     }
 
     .button.primary {
-      background: var(--chalk);
+      background: var(--white);
       color: var(--ink);
+      border-color: var(--white);
     }
 
     .button.secondary {
-      color: var(--chalk);
+      color: var(--white);
     }
 
-    .proof-strip {
+    .signal-strip {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       border-bottom: 1px solid var(--line);
-      background: var(--paper);
+      background: var(--white);
     }
 
-    .proof-strip span {
-      min-height: 60px;
+    .signal-strip span {
+      min-height: 68px;
       display: flex;
       align-items: center;
-      padding: 18px 22px;
+      padding: 18px 24px;
       border-right: 1px solid var(--line);
       color: var(--hedge);
       font-size: 14px;
@@ -226,72 +247,98 @@
     }
 
     .section {
-      padding: clamp(56px, 8vw, 104px) clamp(20px, 6vw, 88px);
+      padding: 84px 40px;
     }
 
-    .section.paper {
-      background: var(--paper);
+    .section-inner {
+      width: min(100%, 1180px);
+      margin: 0 auto;
     }
 
-    .split {
+    .intro {
       display: grid;
-      grid-template-columns: minmax(0, 0.92fr) minmax(280px, 1.08fr);
-      gap: clamp(30px, 6vw, 84px);
+      grid-template-columns: minmax(0, 0.86fr) minmax(320px, 1.14fr);
+      gap: 64px;
       align-items: start;
     }
 
     .lead {
-      max-width: 700px;
+      max-width: 720px;
       color: var(--ink-soft);
-      font-size: clamp(18px, 2vw, 22px);
-      line-height: 1.52;
+      font-size: 22px;
+      line-height: 1.5;
+    }
+
+    .field-diagram {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--mist);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .field-diagram svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 1.42;
+    }
+
+    .work-band {
+      background: var(--mist);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
     }
 
     .route-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 30px;
+      gap: 16px;
+      margin-top: 32px;
     }
 
     .route-card,
     .note-panel {
       min-width: 0;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.78);
+      border-radius: 8px;
+      background: var(--white);
       box-shadow: var(--shadow);
     }
 
     .route-card {
-      min-height: 234px;
-      padding: 22px;
-      border-top: 6px solid var(--field);
+      min-height: 260px;
+      display: grid;
+      align-content: space-between;
+      padding: 24px;
+      border-top: 7px solid var(--field);
     }
 
     .route-card:nth-child(2) {
-      border-top-color: var(--gold);
+      border-top-color: var(--signal);
     }
 
     .route-card:nth-child(3) {
-      border-top-color: var(--plum);
+      border-top-color: var(--violet);
     }
 
     .route-card span,
     .note-panel span {
       display: block;
-      margin-bottom: 28px;
-      color: var(--hedge);
-      font-size: 13px;
+      margin-bottom: 24px;
+      color: var(--field);
+      font-size: 12px;
       font-weight: 900;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     .route-card strong {
       display: block;
       color: var(--ink);
-      font-size: 21px;
-      line-height: 1.24;
+      font-size: 23px;
+      line-height: 1.18;
     }
 
     .route-card p,
@@ -300,42 +347,63 @@
       color: var(--ink-soft);
     }
 
+    .cadence {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
+      gap: 54px;
+      align-items: start;
+    }
+
     .note-list {
       display: grid;
-      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
     }
 
     .note-panel {
+      min-height: 210px;
       padding: 24px;
     }
 
-    .tone-band {
+    .quote-band {
       background: var(--hedge);
-      color: var(--chalk);
+      color: var(--white);
     }
 
-    .tone-band .eyebrow {
-      color: #f4dba8;
+    .quote-band .eyebrow {
+      color: #ffd083;
     }
 
-    .tone-band p {
-      max-width: 780px;
-      color: rgba(251, 250, 244, 0.84);
+    .quote-band p {
+      max-width: 820px;
+      color: rgba(255, 253, 247, 0.84);
+      font-size: 22px;
+      line-height: 1.52;
     }
 
     .cta {
-      background: var(--ink);
-      color: var(--chalk);
+      background: var(--paper);
     }
 
-    .cta-inner {
-      max-width: 880px;
+    .cta-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 32px;
+      align-items: end;
+      padding: 34px 0 0;
+      border-top: 1px solid var(--line);
     }
 
-    .cta p {
+    .cta-panel p {
       max-width: 720px;
-      color: rgba(251, 250, 244, 0.84);
+      color: var(--ink-soft);
       font-size: 20px;
+    }
+
+    .cta .button.primary {
+      background: var(--hedge);
+      color: var(--white);
+      border-color: var(--hedge);
     }
 
     footer {
@@ -343,9 +411,9 @@
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 24px;
-      padding: 32px clamp(20px, 6vw, 88px);
+      padding: 30px 40px;
       border-top: 1px solid var(--line);
-      background: var(--chalk);
+      background: var(--white);
       color: var(--ink-soft);
       font-size: 14px;
     }
@@ -354,11 +422,36 @@
       color: var(--ink);
     }
 
-    @media (max-width: 900px) {
+    @media (prefers-reduced-motion: no-preference) {
+      .route-line {
+        stroke-dasharray: 10 14;
+        animation: drift 16s linear infinite;
+      }
+
+      .pulse {
+        transform-origin: center;
+        animation: pulse 4s ease-in-out infinite;
+      }
+    }
+
+    @keyframes drift {
+      to {
+        stroke-dashoffset: -240;
+      }
+    }
+
+    @keyframes pulse {
+      50% {
+        opacity: 0.44;
+        transform: scale(1.14);
+      }
+    }
+
+    @media (max-width: 980px) {
       .site-header {
-        position: static;
         align-items: flex-start;
         flex-direction: column;
+        padding: 14px 22px;
       }
 
       nav {
@@ -366,19 +459,61 @@
       }
 
       .hero {
-        min-height: 72vh;
-        background-image:
-          linear-gradient(180deg, rgba(9, 21, 43, 0.9), rgba(9, 21, 43, 0.56)),
-          url("https://www.tonywood.org/assets/countryside-hero.jpg");
+        min-height: 80svh;
+        padding: 60px 22px 38px;
       }
 
-      .split,
-      .route-grid {
+      h1 {
+        font-size: 64px;
+      }
+
+      h2 {
+        font-size: 40px;
+      }
+
+      .hero-copy,
+      .lead,
+      .quote-band p {
+        font-size: 19px;
+      }
+
+      .signal-strip,
+      .intro,
+      .route-grid,
+      .cadence,
+      .note-list,
+      .cta-panel {
         grid-template-columns: 1fr;
       }
 
-      .route-card {
+      .section {
+        padding: 64px 22px;
+      }
+
+      .route-card,
+      .note-panel {
         min-height: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      h1 {
+        font-size: 48px;
+      }
+
+      h2 {
+        font-size: 34px;
+      }
+
+      .hero-copy,
+      .lead,
+      .cta-panel p,
+      .quote-band p {
+        font-size: 18px;
+      }
+
+      .button {
+        width: 100%;
       }
     }
   </style>
@@ -390,7 +525,7 @@
       <span>Orchistra</span>
     </a>
     <nav aria-label="Primary navigation">
-      <a href="#brief">Brief</a>
+      <a href="#map">Map</a>
       <a href="#work">Work</a>
       <a href="#cadence">Cadence</a>
       <a href="#conversation">Conversation</a>
@@ -398,92 +533,137 @@
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="map-stage" aria-hidden="true">
+        <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="900" fill="#214d43"/>
+  <path d="M0 620C184 524 302 572 470 494c150-69 237-185 402-164 168 21 257 169 568 74v496H0Z" fill="#f7f2e6" opacity=".18"/>
+  <path d="M0 706c188-52 279-18 430-72 180-65 279-180 466-126 170 49 320 34 544-80v472H0Z" fill="#92c7d6" opacity=".18"/>
+  <path d="M42 760C238 646 346 706 526 604c174-99 240-230 438-181 157 39 296 19 438-64" fill="none" stroke="#fffdf7" stroke-opacity=".48" stroke-width="3"/>
+  <path class="route-line" d="M130 650C310 548 464 650 616 538c152-112 282-151 451-86 94 36 160 23 249-32" fill="none" stroke="#ffd083" stroke-width="5" stroke-linecap="round"/>
+  <path class="route-line" d="M258 760c80-108 178-116 294-86 118 31 189 8 248-64 86-105 191-124 326-64" fill="none" stroke="#e05d45" stroke-width="4" stroke-linecap="round" opacity=".82"/>
+  <g fill="#fffdf7">
+    <circle cx="248" cy="612" r="8"/>
+    <circle cx="282" cy="632" r="6"/>
+    <circle cx="310" cy="596" r="7"/>
+    <circle cx="722" cy="510" r="7"/>
+    <circle cx="755" cy="538" r="6"/>
+    <circle cx="790" cy="496" r="8"/>
+    <circle cx="1095" cy="472" r="7"/>
+    <circle cx="1134" cy="494" r="6"/>
+    <circle cx="1170" cy="456" r="8"/>
+  </g>
+  <g fill="#10221f" opacity=".72">
+    <circle class="pulse" cx="616" cy="538" r="28"/>
+    <circle class="pulse" cx="1067" cy="452" r="24"/>
+  </g>
+  <g fill="#fffdf7" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="800">
+    <text x="565" y="498">bounds</text>
+    <text x="1030" y="410">signals</text>
+  </g>
+</svg>
+      </div>
       <div class="hero-inner">
-        <p class="eyebrow">English country operations</p>
-        <h1>Shepherds of agentic sheep.</h1>
-        <p class="hero-copy">Orchistra helps leaders shepherd agentic work: clear intent, useful boundaries, reviewable memory, and an operating rhythm for flocks of AI agents.</p>
+        <p class="eyebrow">Shepherds of agentic systems</p>
+        <h1 id="page-title">Orchistra</h1>
+        <p class="hero-copy">A living field map for agentic work: see what is moving, set useful boundaries, read the weak signals, and bring outcomes back into judgement.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#brief">Read the field notes</a>
-          <a class="button secondary" href="mailto:hello@my-agentic.com">Start with the flock</a>
+          <a class="button primary" href="#map">Map the flock</a>
+          <a class="button secondary" href="mailto:hello@my-agentic.com">Start a conversation</a>
         </div>
       </div>
     </section>
 
-    <section class="proof-strip" aria-label="Current work">
-      <span>Shepherds, not spectators</span><span>Agentic flocks</span><span>Clear hedges</span><span>Reviewable memory</span><span>Operating rhythm</span>
+    <section class="signal-strip" aria-label="Operating signals">
+      <span>Intent before motion</span><span>Bounded agents</span><span>Live signals</span><span>Reviewable memory</span>
     </section>
 
-    <section class="section split" id="brief">
-      <div>
-        <p class="eyebrow">The CAO brief</p>
-        <h2>When the flock starts moving, someone has to know where it is going.</h2>
-      </div>
-      <div>
-        <p class="lead">TonyWood.org frames the work as turning intent into execution: better decisions, clearer accountability, and systems that stay useful when they meet operational reality. Orchistra applies that same discipline to agentic teams.</p>
-        <p>The metaphor is simple. Agents are useful when they are guided, bounded, counted, and brought back into view. Orchistra is about shepherding the work behind the work, so the flock can move without drifting into the wrong field.</p>
-      </div>
-    </section>
-
-    <section class="section paper" id="work">
-      <p class="eyebrow">Shepherding patterns</p>
-      <h2>From loose agents to a well-kept flock.</h2>
-      <div class="route-grid">
-        <article class="route-card">
-          <span>The field</span>
-          <strong>Set the ground before the flock moves.</strong>
-          <p>Clarify purpose, ownership, permissions, and the edge of the field. Agents need room to work, but they also need hedges.</p>
-        </article><article class="route-card">
-          <span>The signals</span>
-          <strong>Listen for drift before it becomes a chase.</strong>
-          <p>Use triggers, exceptions, and reviewable memory to spot when agentic work needs a human hand, a new boundary, or a change of route.</p>
-        </article><article class="route-card">
-          <span>The return</span>
-          <strong>Bring useful work back into view.</strong>
-          <p>Good orchestration ends in legible outcomes: what changed, what was learned, what needs review, and what should happen next.</p>
-        </article>
+    <section class="section" id="map">
+      <div class="section-inner intro">
+        <div>
+          <p class="eyebrow">Field map</p>
+          <h2>A clearer way to see agentic work in motion.</h2>
+        </div>
+        <div>
+          <p class="lead">Orchistra gives leaders a practical map of the agents, automations, vendors, prompts, permissions, and workarounds already moving through the business.</p>
+          <p>It is less command centre, more attentive field craft: count what exists, set the hedges, watch for drift, and make sure useful work returns as records, decisions, and learning.</p>
+        </div>
       </div>
     </section>
 
-    <section class="section tone-band">
-      <p class="eyebrow">English country, agentic discipline</p>
-      <h2>Good shepherding is quiet, attentive, and practical.</h2>
-      <p>Agentic systems need the same virtues TonyWood.org keeps returning to: clear intent, proper context, useful challenge, known boundaries, and records that let people see what actually happened. The point is not to pen agents in forever. It is to make their movement safe enough to be useful.</p>
+    <section class="section work-band" id="work">
+      <div class="section-inner">
+        <p class="eyebrow">Shepherding patterns</p>
+        <h2>From loose agents to a visible operating field.</h2>
+        <div class="route-grid">
+          <article class="route-card">
+            <div>
+              <span>Count</span>
+              <strong>Know what is already moving.</strong>
+            </div>
+            <p>Map agents, automations, vendor tools, prompts, permissions, and side experiments before they become invisible infrastructure.</p>
+          </article><article class="route-card">
+            <div>
+              <span>Bound</span>
+              <strong>Give autonomy a visible edge.</strong>
+            </div>
+            <p>Set what each system can read, suggest, change, publish, spend, escalate, stop, and remember.</p>
+          </article><article class="route-card">
+            <div>
+              <span>Return</span>
+              <strong>Bring the work back into judgement.</strong>
+            </div>
+            <p>Turn agent activity into records, decisions, exceptions, lessons, and next actions that leaders can inspect.</p>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section class="section split" id="cadence">
-      <div>
-        <p class="eyebrow">Flock cadence</p>
-        <h2>Count them, guide them, and notice when one strays.</h2>
-        <p class="lead">Before an organisation scales agentic work, leaders need to know which agents exist, what they can touch, which signals matter, and how exceptions reach human judgement before small drift becomes operational damage.</p>
+    <section class="section quote-band">
+      <div class="section-inner">
+        <p class="eyebrow">Operating temperament</p>
+        <h2>Quiet enough to notice drift. Sharp enough to intervene.</h2>
+        <p>Agentic systems do not need theatre. They need a rhythm that makes motion legible: what changed, what crossed a boundary, what looks odd, and what needs human judgement before small drift becomes operational damage.</p>
       </div>
-      <div class="note-list">
-        <article class="note-panel">
-          <span>01</span>
-          <h3>Count the flock</h3>
-          <p>Map the agents, automations, prompts, vendors, and side experiments already shaping work.</p>
-        </article><article class="note-panel">
-          <span>02</span>
-          <h3>Set the hedges</h3>
-          <p>Decide what each agent may read, suggest, change, publish, escalate, spend, or stop.</p>
-        </article><article class="note-panel">
-          <span>03</span>
-          <h3>Read the field</h3>
-          <p>Watch for weak signals, stale assumptions, repeated exceptions, and quiet workarounds.</p>
-        </article><article class="note-panel">
-          <span>04</span>
-          <h3>Bring it home</h3>
-          <p>Turn agentic activity into decisions, records, lessons, and a rhythm that leaders can inspect.</p>
-        </article>
+    </section>
+
+    <section class="section" id="cadence">
+      <div class="section-inner cadence">
+        <div>
+          <p class="eyebrow">Flock cadence</p>
+          <h2>Count, guide, notice, return.</h2>
+          <p class="lead">Before an organisation scales agentic work, leaders need a recurring rhythm for what exists, what changed, what crossed a boundary, and what needs judgement.</p>
+        </div>
+        <div class="note-list">
+          <article class="note-panel">
+            <span>01</span>
+            <h3>Count the flock</h3>
+            <p>Map the agents, automations, prompts, vendors, and side experiments already shaping work.</p>
+          </article><article class="note-panel">
+            <span>02</span>
+            <h3>Set the hedges</h3>
+            <p>Decide what each agent may read, suggest, change, publish, escalate, spend, or stop.</p>
+          </article><article class="note-panel">
+            <span>03</span>
+            <h3>Read the field</h3>
+            <p>Watch for weak signals, stale assumptions, repeated exceptions, and quiet workarounds.</p>
+          </article><article class="note-panel">
+            <span>04</span>
+            <h3>Bring it home</h3>
+            <p>Turn agentic activity into decisions, records, lessons, and a rhythm that leaders can inspect.</p>
+          </article>
+        </div>
       </div>
     </section>
 
     <section class="section cta" id="conversation">
-      <div class="cta-inner">
-        <p class="eyebrow">Useful first conversation</p>
-        <h2>Start with the flock you already have.</h2>
-        <p>Which agents, automations, vendors, workflows, and quiet experiments are already moving through the business, and who is actually shepherding them?</p>
-        <div class="hero-actions">
+      <div class="section-inner cta-panel">
+        <div>
+          <p class="eyebrow">Useful first conversation</p>
+          <h2>Start with the work already moving.</h2>
+          <p>Which agents, automations, vendor workflows, and quiet experiments are already shaping decisions, and who is actually shepherding them?</p>
+        </div>
+        <div class="cta-actions">
           <a class="button primary" href="mailto:hello@my-agentic.com">Talk about Orchistra</a>
         </div>
       </div>
@@ -495,7 +675,7 @@
       <strong>Orchistra</strong>
       <div>orchistra.com</div>
     </div>
-    <div>Shepherding agentic systems, operating cadence, and practical governance.</div>
+    <div>Field maps, operating cadence, and practical governance for agentic systems.</div>
   </footer>
 </body>
 </html>
