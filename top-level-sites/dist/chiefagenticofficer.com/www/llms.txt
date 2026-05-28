@@ -4,10 +4,10 @@ Canonical website: https://chiefagenticofficer.com/
 Agentic profile: https://chiefagenticofficer.com/.well-known/agentic-profile.json
 Health check: https://chiefagenticofficer.com/healthz
 
-The human-facing page is a local static page with an English country
-board-and-operations feel. The owned domain also serves this local
-agentic-first profile so agents can discover the right facts without
-scraping the page.
+The human-facing page is a local static Chief Agentic Officer page
+with a board-mandate and operating-control treatment. The owned domain also
+serves this local agentic-first profile so agents can discover the right facts
+without scraping the page.
 
 ```json
 {
@@ -24,8 +24,8 @@ scraping the page.
       "agentic-ai",
       "operating-model"
     ],
-    "tagline": "Chief Agentic Officer.",
-    "summary": "A board-level role for turning agentic AI from scattered pilots into accountable operating capability."
+    "tagline": "Chief Agentic Officer",
+    "summary": "The board-level operating role for agentic AI: ownership, boundaries, assurance, value, and human judgement in one accountable mandate."
   },
   "links": {
     "website": "https://chiefagenticofficer.com"

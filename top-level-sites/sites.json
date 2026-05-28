@@ -83,60 +83,75 @@
   },
   {
     "domain": "chiefagenticofficer.com",
-    "mode": "country",
+    "mode": "cao",
     "name": "Chief Agentic Officer",
-    "title": "Chief Agentic Officer | Leadership for agentic work",
-    "heading": "Chief Agentic Officer.",
-    "summary": "A board-level role for turning agentic AI from scattered pilots into accountable operating capability.",
-    "eyebrow": "Board & Operations",
+    "title": "Chief Agentic Officer | Board mandate for agentic work",
+    "heading": "Chief Agentic Officer",
+    "summary": "The board-level operating role for agentic AI: ownership, boundaries, assurance, value, and human judgement in one accountable mandate.",
+    "eyebrow": "Board mandate for agentic work",
     "jurisdiction": "GB",
     "industry": ["executive-leadership", "agentic-ai", "operating-model"],
-    "theme": "#09152b",
-    "accent": "#b88a32",
+    "theme": "#202726",
+    "accent": "#8f342d",
     "matomo_site_id": "8",
     "hero_image": "https://www.tonywood.org/assets/countryside-hero.jpg",
-    "brief_title": "Agentic work needs ownership after the pilot.",
-    "brief": "The Chief Agentic Officer connects board intent, operating reality, governance, and AI-enabled delivery. The role exists because agentic systems need visible ownership once the excitement of the demo has passed.",
-    "brief_support": "This is not a job title for buying tools. It is an operating model for deciding where agents should be trusted, where they must be bounded, and how human judgement stays in the loop without slowing useful work to a crawl.",
+    "primary_action_label": "Read the mandate",
+    "secondary_action_label": "Start a conversation",
+    "brief_eyebrow": "The mandate",
+    "brief_title": "Agentic AI needs an accountable operating owner.",
+    "brief": "The Chief Agentic Officer turns board ambition into a governed operating system for agentic work.",
+    "brief_support": "The role connects strategy, permissions, assurance, escalation, value, and human judgement so agentic systems can do useful work without becoming unowned automation.",
     "proof": [
-      "Board intent",
-      "Operating cadence",
-      "Risk and assurance",
-      "Agentic systems",
-      "Useful adoption"
+      "Mandate",
+      "Control",
+      "Cadence",
+      "Assurance"
     ],
+    "work_eyebrow": "Role architecture",
+    "work_title": "From AI pilots to accountable capability.",
+    "tone_eyebrow": "Operating posture",
+    "tone_title": "Firm boundaries. Useful autonomy. Visible judgement.",
+    "tone_body": "The CAO is not a ceremonial title. It is the person or function that knows which agentic systems exist, what they can touch, when they stop, and how exceptions reach human judgement.",
+    "cadence_eyebrow": "Board rhythm",
+    "cadence_title": "A weekly rhythm for agentic work.",
+    "cadence_body": "Make agentic work legible to executives: current estate, trust boundaries, incidents, value, lessons, and decisions needed.",
+    "cta_eyebrow": "Useful first conversation",
+    "cta_title": "Start with the systems already shaping work.",
+    "cta_body": "Which agents, pilots, vendor promises, and shadow workflows already need ownership, boundaries, and review?",
+    "cta_button_label": "Talk about the CAO role",
+    "footer_tagline": "Board-level ownership for agentic systems, governance, and operating cadence.",
     "sections": [
       {
-        "title": "Intent",
-        "heading": "Turn board ambition into a usable mandate.",
-        "body": "Clarify the problems agentic systems are meant to solve, the appetite for risk, and the decisions that should remain human."
+        "title": "Mandate",
+        "heading": "Turn board intent into operating authority.",
+        "body": "Clarify the problems agentic systems should solve, the risk appetite, the executive owner, and the decisions that remain human."
       },
       {
         "title": "Control",
-        "heading": "Make boundaries inspectable before scale.",
-        "body": "Define permissions, stop conditions, escalation paths, evidence trails, and review points so agents can work without becoming unowned automation."
+        "heading": "Make trust boundaries inspectable.",
+        "body": "Define permissions, stop conditions, escalation paths, evidence trails, spending limits, publishing rights, and review points before scale."
       },
       {
-        "title": "Rhythm",
-        "heading": "Build a cadence the organisation can live with.",
-        "body": "Move from isolated pilots to a steady operating rhythm: weekly review, visible ownership, useful metrics, and decisions that travel cleanly from boardroom to delivery."
+        "title": "Assurance",
+        "heading": "Show the work without slowing it down.",
+        "body": "Create a cadence for exceptions, outcomes, lessons, incidents, value, and the choices that need to travel from delivery back to the board."
       }
     ],
     "operating_notes": [
       {
         "label": "01",
-        "title": "Map the current AI estate",
-        "body": "Find the pilots, shadow workflows, vendor promises, and quiet automations already shaping work."
+        "title": "Map the estate",
+        "body": "Find the pilots, shadow workflows, vendor promises, automations, and agentic systems already influencing work."
       },
       {
         "label": "02",
-        "title": "Set trust boundaries",
-        "body": "Decide what agents may read, suggest, change, spend, publish, escalate, or stop."
+        "title": "Set the controls",
+        "body": "Decide what agents may read, suggest, change, spend, publish, escalate, remember, or stop."
       },
       {
         "label": "03",
-        "title": "Create reviewable memory",
-        "body": "Keep enough record of context, decisions, and exceptions for leaders to inspect the work after the fact."
+        "title": "Report the judgement",
+        "body": "Keep enough record of context, exceptions, outcomes, and decisions for leaders to inspect the work after the fact."
       }
     ],
     "contact": {

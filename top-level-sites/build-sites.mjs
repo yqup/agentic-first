@@ -55,6 +55,9 @@ for (const site of sites) {
   if (site.mode === "country") {
     await writeFile(path.join(wwwRoot, "index.html"), countryPageFor(site), "utf8");
   }
+  if (site.mode === "cao") {
+    await writeFile(path.join(wwwRoot, "index.html"), chiefAgenticOfficerPageFor(site), "utf8");
+  }
   if (site.mode === "orchistra") {
     await writeFile(path.join(wwwRoot, "index.html"), orchistraPageFor(site), "utf8");
   }
@@ -221,7 +224,7 @@ function matomoLoaderSource() {
 }
 
 function isLocalPageMode(mode) {
-  return ["holding", "country", "orchistra", "gamma"].includes(mode);
+  return ["holding", "country", "cao", "orchistra", "gamma"].includes(mode);
 }
 
 function composeFor(items) {
@@ -320,7 +323,7 @@ const config = ${JSON.stringify(serverConfig, null, 2)};
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || ${nodeServerPort});
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
-const localPageMode = ["holding", "country", "orchistra", "gamma"].includes(config.mode);
+const localPageMode = ["holding", "country", "cao", "orchistra", "gamma"].includes(config.mode);
 
 const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],
@@ -590,6 +593,8 @@ function edgeCaddyFor(site) {
     ? "Normal pages are served by the per-site static holding-page container."
     : site.mode === "country"
       ? "Normal pages are served by the per-site English-country static container."
+      : site.mode === "cao"
+        ? "Normal pages are served by the per-site bespoke Chief Agentic Officer container."
       : site.mode === "orchistra"
         ? "Normal pages are served by the per-site bespoke Orchistra container."
         : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
@@ -651,6 +656,11 @@ can discover the right facts before the full public site is launched.`
 board-and-operations feel. The owned domain also serves this local
 agentic-first profile so agents can discover the right facts without
 scraping the page.`
+      : site.mode === "cao"
+        ? `The human-facing page is a local static Chief Agentic Officer page
+with a board-mandate and operating-control treatment. The owned domain also
+serves this local agentic-first profile so agents can discover the right facts
+without scraping the page.`
       : site.mode === "orchistra"
         ? `The human-facing page is a local static Orchistra page with a
 field-map orchestration treatment. The owned domain also serves this local
@@ -683,6 +693,8 @@ function healthFor(site) {
       ? "static-holding-container"
       : site.mode === "country"
         ? "static-country-container"
+        : site.mode === "cao"
+          ? "static-cao-container"
         : site.mode === "orchistra"
           ? "static-orchistra-container"
           : "gamma-fronting-container",
@@ -1510,6 +1522,727 @@ ${matomoScriptTagFor(site)}  <style>
 </body>
 </html>
 `;
+}
+
+function chiefAgenticOfficerPageFor(site) {
+  const proof = site.proof || [
+    "Mandate",
+    "Control",
+    "Cadence",
+    "Assurance",
+  ];
+  const routes = site.routes || site.sections || [];
+  const operatingNotes = site.operating_notes || [];
+  const contactHref = site.contact?.email
+    ? `mailto:${site.contact.email}`
+    : site.contact?.form_url || `https://${site.domain}/`;
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(site.title || site.name)}</title>
+  <meta name="description" content="${escapeHtml(site.summary)}">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${matomoScriptTagFor(site)}  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2521;
+      --ink-soft: #596059;
+      --paper: #f5f0e4;
+      --porcelain: #fffdf7;
+      --sage: #617d66;
+      --sage-dark: #2d4538;
+      --oxblood: #8f342d;
+      --brass: #b9822d;
+      --charcoal: #202726;
+      --line: rgba(31, 37, 33, 0.16);
+      --shadow: 0 22px 64px rgba(31, 37, 33, 0.13);
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.56;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.18em;
+    }
+
+    .site-header {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      padding: 14px 40px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 253, 247, 0.94);
+      color: var(--ink);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 860;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--ink);
+      background: var(--charcoal);
+      color: var(--porcelain);
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px 22px;
+      color: var(--ink-soft);
+      font-size: 14px;
+      font-weight: 780;
+    }
+
+    nav a {
+      text-decoration: none;
+    }
+
+    .hero {
+      min-height: 82svh;
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+      gap: 40px;
+      align-items: stretch;
+      padding: 44px 40px 0;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(110deg, rgba(255, 253, 247, 0.94), rgba(245, 240, 228, 0.72)),
+        linear-gradient(180deg, #fffdf7, #eadfca);
+    }
+
+    .hero-copy-wrap {
+      align-self: end;
+      padding: 56px 0 64px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--oxblood);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    h1 {
+      max-width: 11ch;
+      margin-bottom: 24px;
+      font-family: var(--serif);
+      font-size: 84px;
+      line-height: 0.96;
+      font-weight: 700;
+    }
+
+    h2 {
+      max-width: 900px;
+      margin-bottom: 18px;
+      font-family: var(--serif);
+      font-size: 50px;
+      line-height: 1.04;
+      font-weight: 700;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+      line-height: 1.18;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 22px;
+      line-height: 1.46;
+    }
+
+    .hero-actions,
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border: 1px solid currentColor;
+      border-radius: 4px;
+      font-weight: 820;
+      text-decoration: none;
+    }
+
+    .button.primary {
+      background: var(--charcoal);
+      color: var(--porcelain);
+      border-color: var(--charcoal);
+    }
+
+    .button.secondary {
+      color: var(--charcoal);
+    }
+
+    .mandate-panel {
+      align-self: end;
+      min-height: 620px;
+      display: grid;
+      align-items: end;
+      padding: 28px 0 44px;
+    }
+
+    .mandate-card {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid rgba(31, 37, 33, 0.24);
+      border-radius: 8px 8px 0 0;
+      background: var(--porcelain);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .mandate-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0 24%, rgba(31, 37, 33, 0.06) 24% 24.3%, transparent 24.3% 50%, rgba(31, 37, 33, 0.05) 50% 50.3%, transparent 50.3% 76%, rgba(31, 37, 33, 0.05) 76% 76.3%, transparent 76.3%),
+        linear-gradient(180deg, transparent 0 18%, rgba(31, 37, 33, 0.06) 18% 18.4%, transparent 18.4% 43%, rgba(31, 37, 33, 0.05) 43% 43.4%, transparent 43.4% 70%, rgba(31, 37, 33, 0.05) 70% 70.4%, transparent 70.4%);
+      pointer-events: none;
+    }
+
+    .mandate-title {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .mandate-svg {
+      position: absolute;
+      inset: 76px 20px 24px;
+    }
+
+    .mandate-svg svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+      background: var(--charcoal);
+      color: var(--porcelain);
+    }
+
+    .metric-strip span {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      padding: 18px 24px;
+      border-right: 1px solid rgba(255, 253, 247, 0.18);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .section {
+      padding: 84px 40px;
+    }
+
+    .section-inner {
+      width: min(100%, 1180px);
+      margin: 0 auto;
+    }
+
+    .brief {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(320px, 1.14fr);
+      gap: 64px;
+      align-items: start;
+    }
+
+    .lead {
+      max-width: 740px;
+      color: var(--ink-soft);
+      font-size: 22px;
+      line-height: 1.5;
+    }
+
+    .work-band {
+      background: var(--porcelain);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .route-card,
+    .note-panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffaf0;
+      box-shadow: var(--shadow);
+    }
+
+    .route-card {
+      min-height: 250px;
+      display: grid;
+      align-content: space-between;
+      padding: 24px;
+      border-top: 7px solid var(--brass);
+    }
+
+    .route-card:nth-child(2) {
+      border-top-color: var(--oxblood);
+    }
+
+    .route-card:nth-child(3) {
+      border-top-color: var(--sage);
+    }
+
+    .route-card span,
+    .note-panel span {
+      display: block;
+      margin-bottom: 24px;
+      color: var(--oxblood);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .route-card strong {
+      display: block;
+      color: var(--ink);
+      font-size: 23px;
+      line-height: 1.18;
+    }
+
+    .route-card p,
+    .note-panel p {
+      margin: 14px 0 0;
+      color: var(--ink-soft);
+    }
+
+    .control-band {
+      background: var(--charcoal);
+      color: var(--porcelain);
+    }
+
+    .control-band .eyebrow {
+      color: #f0bd65;
+    }
+
+    .control-band p {
+      max-width: 820px;
+      color: rgba(255, 253, 247, 0.82);
+      font-size: 22px;
+      line-height: 1.52;
+    }
+
+    .cadence {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
+      gap: 54px;
+      align-items: start;
+    }
+
+    .note-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .note-panel {
+      min-height: 220px;
+      padding: 24px;
+    }
+
+    .cta {
+      background: var(--paper);
+    }
+
+    .cta-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 32px;
+      align-items: end;
+      padding: 34px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .cta-panel p {
+      max-width: 740px;
+      color: var(--ink-soft);
+      font-size: 20px;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 30px 40px;
+      border-top: 1px solid var(--line);
+      background: var(--porcelain);
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+
+    footer strong {
+      color: var(--ink);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .signal-line {
+        stroke-dasharray: 9 13;
+        animation: mandateDrift 18s linear infinite;
+      }
+
+      .decision-node {
+        transform-origin: center;
+        animation: decisionPulse 4.6s ease-in-out infinite;
+      }
+    }
+
+    @keyframes mandateDrift {
+      to {
+        stroke-dashoffset: -220;
+      }
+    }
+
+    @keyframes decisionPulse {
+      50% {
+        opacity: 0.58;
+        transform: scale(1.08);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 22px;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+
+      .hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding: 48px 22px 0;
+      }
+
+      .hero-copy-wrap {
+        padding: 36px 0 34px;
+      }
+
+      .mandate-panel {
+        min-height: auto;
+        padding: 0 0 22px;
+      }
+
+      .mandate-card {
+        min-height: 300px;
+      }
+
+      h1 {
+        font-size: 58px;
+      }
+
+      h2 {
+        font-size: 38px;
+      }
+
+      .hero-copy,
+      .lead,
+      .control-band p {
+        font-size: 19px;
+      }
+
+      .metric-strip,
+      .brief,
+      .route-grid,
+      .cadence,
+      .note-list,
+      .cta-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 64px 22px;
+      }
+
+      .route-card,
+      .note-panel {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      h1 {
+        font-size: 44px;
+      }
+
+      h2 {
+        font-size: 32px;
+      }
+
+      .hero-copy,
+      .lead,
+      .cta-panel p,
+      .control-band p {
+        font-size: 18px;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .mandate-card {
+        min-height: 220px;
+      }
+
+      .mandate-svg {
+        inset: 66px 12px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
+      <span class="brand-mark">CAO</span>
+      <span>${escapeHtml(site.name)}</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#mandate">Mandate</a>
+      <a href="#work">Work</a>
+      <a href="#cadence">Cadence</a>
+      <a href="#conversation">Conversation</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy-wrap">
+        <p class="eyebrow">${escapeHtml(site.eyebrow || "Board mandate for agentic work")}</p>
+        <h1 id="page-title">${escapeHtml(site.heading || site.name)}</h1>
+        <p class="hero-copy">${escapeHtml(site.summary)}</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#mandate">${escapeHtml(site.primary_action_label || "Read the mandate")}</a>
+          <a class="button secondary" href="${escapeHtml(contactHref)}">${escapeHtml(site.secondary_action_label || "Start the conversation")}</a>
+        </div>
+      </div>
+
+      <aside class="mandate-panel" aria-label="Mandate map">
+        <div class="mandate-card">
+          <div class="mandate-title">
+            <span>Agentic operating mandate</span>
+            <span>CAO</span>
+          </div>
+          <div class="mandate-svg" aria-hidden="true">
+            ${caoMandateSvg()}
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="metric-strip" aria-label="Chief Agentic Officer concerns">
+      ${proof.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+    </section>
+
+    <section class="section" id="mandate">
+      <div class="section-inner brief">
+        <div>
+          <p class="eyebrow">${escapeHtml(site.brief_eyebrow || "The mandate")}</p>
+          <h2>${escapeHtml(site.brief_title || "Agentic AI needs an accountable operating owner.")}</h2>
+        </div>
+        <div>
+          <p class="lead">${escapeHtml(site.brief || "The Chief Agentic Officer turns board ambition into a governed operating system for agentic work.")}</p>
+          <p>${escapeHtml(site.brief_support || "The role connects strategy, permissions, assurance, escalation, value, and human judgement so agentic systems can do useful work without becoming unowned automation.")}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section work-band" id="work">
+      <div class="section-inner">
+        <p class="eyebrow">${escapeHtml(site.work_eyebrow || "Where the role helps")}</p>
+        <h2>${escapeHtml(site.work_title || "From pilots to accountable capability.")}</h2>
+        <div class="route-grid">
+          ${routes.map((route) => `<article class="route-card">
+            <div>
+              <span>${escapeHtml(route.title)}</span>
+              <strong>${escapeHtml(route.heading || route.title)}</strong>
+            </div>
+            <p>${escapeHtml(route.body)}</p>
+          </article>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section control-band">
+      <div class="section-inner">
+        <p class="eyebrow">${escapeHtml(site.tone_eyebrow || "Operating posture")}</p>
+        <h2>${escapeHtml(site.tone_title || "Firm boundaries. Useful autonomy. Visible judgement.")}</h2>
+        <p>${escapeHtml(site.tone_body || "The CAO is not a ceremonial title. It is the person or function that knows which agentic systems exist, what they can touch, when they stop, and how exceptions reach human judgement.")}</p>
+      </div>
+    </section>
+
+    <section class="section" id="cadence">
+      <div class="section-inner cadence">
+        <div>
+          <p class="eyebrow">${escapeHtml(site.cadence_eyebrow || "Operating cadence")}</p>
+          <h2>${escapeHtml(site.cadence_title || "A weekly rhythm for agentic work.")}</h2>
+          <p class="lead">${escapeHtml(site.cadence_body || "Make agentic work legible to executives: current estate, trust boundaries, incidents, value, lessons, and decisions needed.")}</p>
+        </div>
+        <div class="note-list">
+          ${operatingNotes.map((note) => `<article class="note-panel">
+            <span>${escapeHtml(note.label)}</span>
+            <h3>${escapeHtml(note.title)}</h3>
+            <p>${escapeHtml(note.body)}</p>
+          </article>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta" id="conversation">
+      <div class="section-inner cta-panel">
+        <div>
+          <p class="eyebrow">${escapeHtml(site.cta_eyebrow || "Useful first conversation")}</p>
+          <h2>${escapeHtml(site.cta_title || "Start with the systems already shaping work.")}</h2>
+          <p>${escapeHtml(site.cta_body || "Which agents, pilots, vendor promises, and shadow workflows already need ownership, boundaries, and review?")}</p>
+        </div>
+        <div class="cta-actions">
+          <a class="button primary" href="${escapeHtml(contactHref)}">${escapeHtml(site.cta_button_label || "Talk about the CAO role")}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <strong>${escapeHtml(site.name)}</strong>
+      <div>${escapeHtml(site.domain)}</div>
+    </div>
+    <div>${escapeHtml(site.footer_tagline || "Board-level ownership for agentic systems, governance, and operating cadence.")}</div>
+  </footer>
+</body>
+</html>
+`;
+}
+
+function caoMandateSvg() {
+  return `<svg viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="520" fill="#fffdf7"/>
+  <g stroke="#1f2521" stroke-opacity=".12" stroke-width="1">
+    <path d="M92 80v380M248 80v380M404 80v380M560 80v380"/>
+    <path d="M60 132h600M60 234h600M60 336h600M60 438h600"/>
+  </g>
+  <path d="M84 392C154 292 234 300 318 230c95-79 166-110 290-62" fill="none" stroke="#b9822d" stroke-width="6" stroke-linecap="round"/>
+  <path class="signal-line" d="M94 180c70 48 127 56 194 24 68-33 126-20 184 42 43 46 90 60 152 33" fill="none" stroke="#8f342d" stroke-width="4" stroke-linecap="round"/>
+  <path class="signal-line" d="M110 430c64-38 116-46 176-21 72 30 144 11 215-59 50-49 90-68 143-56" fill="none" stroke="#617d66" stroke-width="4" stroke-linecap="round" opacity=".88"/>
+  <g fill="#1f2521">
+    <circle cx="84" cy="392" r="7"/>
+    <circle cx="318" cy="230" r="7"/>
+    <circle cx="608" cy="168" r="7"/>
+  </g>
+  <g class="decision-node" fill="#8f342d" opacity=".72">
+    <circle cx="318" cy="230" r="32"/>
+    <circle cx="472" cy="246" r="24"/>
+  </g>
+  <g fill="#fffdf7" font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="18">
+    <text x="288" y="236">OWN</text>
+    <text x="446" y="252">STOP</text>
+  </g>
+  <g fill="#1f2521" font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="15">
+    <text x="74" y="114">Intent</text>
+    <text x="230" y="114">Boundaries</text>
+    <text x="386" y="114">Assurance</text>
+    <text x="542" y="114">Value</text>
+  </g>
+  <g fill="#596059" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="800">
+    <text x="76" y="462">estate map</text>
+    <text x="238" y="462">permissions</text>
+    <text x="392" y="462">exceptions</text>
+    <text x="552" y="462">decisions</text>
+  </g>
+</svg>`;
 }
 
 function orchistraPageFor(site) {

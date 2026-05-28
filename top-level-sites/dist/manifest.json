@@ -41,7 +41,7 @@
   {
     "domain": "chiefagenticofficer.com",
     "service": "chiefagenticofficer_com",
-    "mode": "country",
+    "mode": "cao",
     "local_port": 8214,
     "local_preview": "http://127.0.0.1:8214/",
     "gamma_origin": null,
