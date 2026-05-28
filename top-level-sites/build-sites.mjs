@@ -65,6 +65,9 @@ for (const site of sites) {
   if (site.mode === "agentics_home") {
     await writeFile(path.join(wwwRoot, "index.html"), agenticsHomePageFor(site), "utf8");
   }
+  if (site.mode === "ai_ops") {
+    await writeFile(path.join(wwwRoot, "index.html"), aiOperationsPageFor(site), "utf8");
+  }
   if (site.mode === "orchistra") {
     await writeFile(path.join(wwwRoot, "index.html"), orchistraPageFor(site), "utf8");
   }
@@ -231,7 +234,7 @@ function matomoLoaderSource() {
 }
 
 function isLocalPageMode(mode) {
-  return ["holding", "country", "cao", "agentics_home", "orchistra", "gamma"].includes(mode);
+  return ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "gamma"].includes(mode);
 }
 
 function composeFor(items) {
@@ -338,7 +341,7 @@ const config = ${JSON.stringify(serverConfig, null, 2)};
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || ${nodeServerPort});
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
-const localPageMode = ["holding", "country", "cao", "agentics_home", "orchistra", "gamma"].includes(config.mode);
+const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "gamma"].includes(config.mode);
 
 const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],
@@ -629,9 +632,11 @@ function edgeCaddyFor(site) {
         ? "Normal pages are served by the per-site bespoke Chief Agentic Officer container."
         : site.mode === "agentics_home"
           ? "Normal pages are served by the per-site My Agentic home container."
-          : site.mode === "orchistra"
-            ? "Normal pages are served by the per-site bespoke Orchistra container."
-            : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
+          : site.mode === "ai_ops"
+            ? "Normal pages are served by the per-site AIperations operations container."
+            : site.mode === "orchistra"
+              ? "Normal pages are served by the per-site bespoke Orchistra container."
+              : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
   const hostBlock = site.redirect_www_to_apex
     ? `${site.domain} {
 	encode zstd gzip
@@ -747,12 +752,17 @@ without scraping the page.`
 agentics that need stable URLs, readable profiles, owners, boundaries, and
 status. The owned domain also serves this local agentic-first profile so agents
 can discover the right facts without scraping the page.`
-          : site.mode === "orchistra"
-            ? `The human-facing page is a local static Orchistra page with a
+          : site.mode === "ai_ops"
+            ? `The human-facing page is a local static AIperations page about
+the operating discipline required to turn AI pilots into adopted, measurable,
+governed work. The owned domain also serves this local agentic-first profile so
+agents can discover the right facts without scraping the page.`
+            : site.mode === "orchistra"
+              ? `The human-facing page is a local static Orchistra page with a
 field-map orchestration treatment. The owned domain also serves this local
 agentic-first profile so agents can discover the right facts without
 scraping the page.`
-            : `The human-facing design for this site is ingested from Gamma into the
+              : `The human-facing design for this site is ingested from Gamma into the
 per-site local container. The owned domain also serves this local agentic-first
 profile so agents can discover the right facts without scraping the Gamma page.`;
 
@@ -783,9 +793,11 @@ function healthFor(site) {
           ? "static-cao-container"
           : site.mode === "agentics_home"
             ? "static-agentics-home-container"
-            : site.mode === "orchistra"
-              ? "static-orchistra-container"
-              : "gamma-fronting-container",
+            : site.mode === "ai_ops"
+              ? "static-ai-operations-container"
+              : site.mode === "orchistra"
+                ? "static-orchistra-container"
+                : "gamma-fronting-container",
     updated_at: updatedAt,
     agentic_profile: "/.well-known/agentic-profile.json",
     matomo_site_id: site.matomo_site_id || null,
@@ -2331,6 +2343,778 @@ function caoMandateSvg() {
     <text x="552" y="462">decisions</text>
   </g>
 </svg>`;
+}
+
+function aiOperationsPageFor(site) {
+  const title = site.title || "AIperations";
+  const summary = site.summary || "Practical operating discipline for AI in real work.";
+  const email = site.contact?.email || "hello@aiperations.com";
+  const contactHref = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("AI operations review")}`;
+  const principles = [
+    {
+      k: "01",
+      title: "Owner",
+      body: "A named business owner carries value after go-live. The technical owner should not be the only accountable person.",
+    },
+    {
+      k: "02",
+      title: "Workflow",
+      body: "The real work changes. Roles, handoffs, exceptions, training, support, and manager time are designed before scale.",
+    },
+    {
+      k: "03",
+      title: "Gate",
+      body: "Pilots pass through a release gate that checks value, data, controls, adoption, escalation, and stop conditions.",
+    },
+    {
+      k: "04",
+      title: "Evidence",
+      body: "Usage, overrides, incidents, resistance, cycle time, quality, and benefit movement are reviewed on a fixed cadence.",
+    },
+  ];
+  const loops = [
+    {
+      label: "Before the pilot",
+      title: "Define the operating bet.",
+      body: "What business KPI should move, who owns it, and what current workflow will change?",
+    },
+    {
+      label: "Before go-live",
+      title: "Separate build from benefit.",
+      body: "Set the technical owner, business owner, RACI, decision rights, training plan, and escalation route.",
+    },
+    {
+      label: "After launch",
+      title: "Manage the adoption curve.",
+      body: "Review at 30, 90, 180, and 365 days. Tune, scale, pause, redesign, or stop with evidence.",
+    },
+  ];
+  const checks = [
+    "Baseline and target KPI",
+    "Business owner for 6-12 months",
+    "Workflow redesign agreed",
+    "Manager capacity protected",
+    "Human validation rules",
+    "Incident and override logging",
+    "Training tied to real work",
+    "Stop or redesign criteria",
+  ];
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(summary)}">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${matomoScriptTagFor(site)}  <style>
+    :root {
+      color-scheme: light;
+      --ink: #152925;
+      --muted: #5e6d67;
+      --paper: #f6f2e8;
+      --panel: #fffdf7;
+      --line: #d9d0bf;
+      --green: #17312f;
+      --blue: #527f95;
+      --orange: #d97745;
+      --gold: #d5aa4a;
+      --rose: #a95858;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 40px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 253, 247, 0.96);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 840;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: #fffdf7;
+      background: var(--green);
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 880;
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+      color: #41514c;
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    nav a {
+      text-decoration: none;
+    }
+
+    .hero {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 540px);
+      gap: 52px;
+      align-items: center;
+      padding: 58px 40px 46px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-copy {
+      max-width: 780px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--orange);
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 12ch;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 70px;
+      line-height: 0.96;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 660px;
+      margin: 24px 0 0;
+      color: #40524c;
+      font-size: 21px;
+      line-height: 1.52;
+      font-weight: 520;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      border-radius: 7px;
+      border: 1px solid var(--green);
+      background: var(--green);
+      color: #fffdf7;
+      font-weight: 820;
+      text-decoration: none;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--green);
+    }
+
+    .ops-board {
+      border: 1px solid #c8beaa;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--panel);
+      box-shadow: 0 24px 60px rgba(21, 41, 37, 0.12);
+    }
+
+    .board-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 58px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      background: #ede5d5;
+      font-size: 13px;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .board-top span:last-child {
+      color: var(--rose);
+    }
+
+    .board-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .flow-step {
+      min-height: 120px;
+      padding: 18px;
+      border-right: 1px solid var(--line);
+      display: grid;
+      align-content: space-between;
+      gap: 18px;
+    }
+
+    .flow-step:last-child {
+      border-right: 0;
+    }
+
+    .flow-step strong {
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .flow-step span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+      font-weight: 760;
+      text-transform: uppercase;
+    }
+
+    .flow-step:nth-child(1) {
+      border-top: 6px solid var(--blue);
+    }
+
+    .flow-step:nth-child(2) {
+      border-top: 6px solid var(--gold);
+    }
+
+    .flow-step:nth-child(3) {
+      border-top: 6px solid var(--orange);
+    }
+
+    .flow-step:nth-child(4) {
+      border-top: 6px solid var(--green);
+    }
+
+    .board-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--green);
+      color: #fffdf7;
+    }
+
+    .metric {
+      min-height: 86px;
+      padding: 17px;
+      border-right: 1px solid rgba(255, 253, 247, 0.18);
+    }
+
+    .metric:last-child {
+      border-right: 0;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 6px;
+      color: rgba(255, 253, 247, 0.74);
+      font-size: 12px;
+      line-height: 1.25;
+      font-weight: 760;
+    }
+
+    .section {
+      padding: 72px 40px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
+      gap: 56px;
+      align-items: start;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 46px;
+      line-height: 1.02;
+      font-weight: 740;
+      letter-spacing: 0;
+    }
+
+    .section-copy {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.58;
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .principle-card,
+    .loop-card {
+      min-height: 190px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .principle-card .number {
+      display: inline-flex;
+      width: 40px;
+      height: 28px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: #e7d7bb;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 860;
+    }
+
+    .principle-card h3,
+    .loop-card h3 {
+      margin: 18px 0 0;
+      font-size: 22px;
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+
+    .principle-card p,
+    .loop-card p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.52;
+    }
+
+    .rhythm {
+      background: #fffaf0;
+    }
+
+    .loop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .loop-label {
+      color: var(--orange);
+      font-size: 12px;
+      font-weight: 860;
+      text-transform: uppercase;
+    }
+
+    .check-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+      gap: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .check-copy {
+      padding: 32px;
+      background: var(--green);
+      color: #fffdf7;
+    }
+
+    .check-copy h2 {
+      color: #fffdf7;
+      font-size: 40px;
+    }
+
+    .check-copy p {
+      color: rgba(255, 253, 247, 0.76);
+    }
+
+    .checks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checks li {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      color: #273b36;
+      font-weight: 760;
+    }
+
+    .checks li:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .checks li:nth-last-child(-n + 2) {
+      border-bottom: 0;
+    }
+
+    .check-dot {
+      width: 12px;
+      height: 12px;
+      flex: 0 0 12px;
+      border-radius: 4px;
+      background: var(--orange);
+    }
+
+    .cta {
+      padding: 64px 40px;
+      background: var(--green);
+      color: #fffdf7;
+    }
+
+    .cta-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .cta h2 {
+      max-width: 680px;
+      color: #fffdf7;
+    }
+
+    .cta p {
+      max-width: 620px;
+      color: rgba(255, 253, 247, 0.75);
+    }
+
+    .cta .button {
+      flex: 0 0 auto;
+      border-color: #fffdf7;
+      background: #fffdf7;
+      color: var(--green);
+    }
+
+    footer {
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: #63716c;
+      font-size: 13px;
+      font-weight: 700;
+      background: var(--paper);
+    }
+
+    @media (max-width: 980px) {
+      .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 116px;
+        padding: 16px 22px;
+      }
+
+      nav {
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding: 48px 22px 44px;
+      }
+
+      h1 {
+        max-width: 13ch;
+        font-size: 48px;
+      }
+
+      .lede {
+        font-size: 19px;
+      }
+
+      .section {
+        padding: 56px 22px;
+      }
+
+      .split,
+      .check-panel,
+      .cta-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .split,
+      .cta-inner {
+        display: grid;
+        gap: 30px;
+      }
+
+      .principles,
+      .loop-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .check-copy h2,
+      h2 {
+        font-size: 36px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      h1 {
+        font-size: 43px;
+      }
+
+      .actions,
+      .button {
+        width: 100%;
+      }
+
+      .ops-board {
+        border-radius: 8px;
+      }
+
+      .board-flow,
+      .board-metrics,
+      .checks {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-step,
+      .metric,
+      .checks li,
+      .checks li:nth-child(2n),
+      .checks li:nth-last-child(-n + 2) {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .metric {
+        border-color: rgba(255, 253, 247, 0.18);
+      }
+
+      .flow-step:last-child,
+      .metric:last-child,
+      .checks li:last-child {
+        border-bottom: 0;
+      }
+
+      .board-top {
+        min-height: 64px;
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .principle-card,
+      .loop-card,
+      .check-copy {
+        padding: 22px;
+      }
+
+      footer {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 24px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="AIperations home">
+      <span class="brand-mark">AO</span>
+      <span>AIperations</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#discipline">Discipline</a>
+      <a href="#rhythm">Rhythm</a>
+      <a href="#gate">Gate</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">${escapeHtml(site.eyebrow || "AI operations")}</p>
+        <h1 id="page-title">${escapeHtml(site.heading || "Turn AI pilots into operating outcomes.")}</h1>
+        <p class="lede">${escapeHtml(summary)}</p>
+        <div class="actions">
+          <a class="button" href="${escapeHtml(contactHref)}">Review an AI workflow</a>
+          <a class="button secondary" href="/.well-known/agentic-profile.json">View site profile</a>
+        </div>
+      </div>
+
+      <aside class="ops-board" aria-label="AI operations release board">
+        <div class="board-top">
+          <span>Prototype to production</span>
+          <span>Operational discipline</span>
+        </div>
+        <div class="board-flow">
+          <div class="flow-step">
+            <span>Outcome</span>
+            <strong>Baseline, target, owner</strong>
+          </div>
+          <div class="flow-step">
+            <span>Model</span>
+            <strong>Workflow, roles, controls</strong>
+          </div>
+          <div class="flow-step">
+            <span>Launch</span>
+            <strong>Gate, training, escalation</strong>
+          </div>
+          <div class="flow-step">
+            <span>Realise</span>
+            <strong>30 / 90 / 180 / 365 review</strong>
+          </div>
+        </div>
+        <div class="board-metrics">
+          <div class="metric">
+            <strong>Value</strong>
+            <span>measured against baseline</span>
+          </div>
+          <div class="metric">
+            <strong>Trust</strong>
+            <span>visible controls and overrides</span>
+          </div>
+          <div class="metric">
+            <strong>Adoption</strong>
+            <span>managed after go-live</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="discipline">
+      <div class="section-inner split">
+        <div>
+          <p class="eyebrow">The discipline</p>
+          <h2>AI work becomes real when operations can absorb it.</h2>
+          <p class="section-copy">The prototype answers whether the system can do something useful. AI operations answers whether the organisation can own it, trust it, improve it, and measure it inside real work.</p>
+        </div>
+        <div class="principles">
+          ${principles.map((item) => `<article class="principle-card">
+            <span class="number">${escapeHtml(item.k)}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section rhythm" id="rhythm">
+      <div class="section-inner">
+        <p class="eyebrow">Operating rhythm</p>
+        <h2>From promising demo to managed value.</h2>
+        <p class="section-copy">Keep the page simple: one workflow, one owner, one release gate, one review rhythm. Then learn in public enough for the next initiative to get sharper.</p>
+        <div class="loop-grid">
+          ${loops.map((item) => `<article class="loop-card">
+            <span class="loop-label">${escapeHtml(item.label)}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gate">
+      <div class="section-inner check-panel">
+        <div class="check-copy">
+          <p class="eyebrow">Release gate</p>
+          <h2>Do not scale a demo. Scale an operating model.</h2>
+          <p class="section-copy">A simple gate makes the hidden work visible before AI is declared production-ready.</p>
+        </div>
+        <ul class="checks" aria-label="AI operations release gate checklist">
+          ${checks.map((item) => `<li><span class="check-dot" aria-hidden="true"></span><span>${escapeHtml(item)}</span></li>`).join("\n          ")}
+        </ul>
+      </div>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-title">
+      <div class="cta-inner">
+        <div>
+          <p class="eyebrow">Start small</p>
+          <h2 id="cta-title">Pick one AI workflow and make the operating model visible.</h2>
+          <p class="section-copy">Best first use: a pilot that has already impressed people technically but has not yet proved ownership, adoption, controls, or measurable value.</p>
+        </div>
+        <a class="button" href="${escapeHtml(contactHref)}">Review an AI workflow</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>AIperations</span>
+    <span>AI operations for owners, workflows, gates, and measurable outcomes.</span>
+  </footer>
+</body>
+</html>
+`;
 }
 
 function agenticsHomePageFor(site) {

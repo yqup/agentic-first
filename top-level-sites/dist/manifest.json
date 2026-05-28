@@ -67,10 +67,10 @@
   {
     "domain": "aiperations.com",
     "service": "aiperations_com",
-    "mode": "gamma",
+    "mode": "ai_ops",
     "local_port": 8216,
     "local_preview": "http://127.0.0.1:8216/",
-    "gamma_origin": "https://sites.gamma.app",
+    "gamma_origin": null,
     "matomo_site_id": "10",
     "document_root": "/srv/apps/top-level-sites/current/dist/aiperations.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/aiperations.com/Caddyfile",
