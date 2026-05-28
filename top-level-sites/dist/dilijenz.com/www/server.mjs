@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const config = {
   "domain": "dilijenz.com",
-  "mode": "gamma",
+  "mode": "holding",
   "gammaOrigin": "https://sites.gamma.app",
   "matomoLoaderPath": "/static/js/matomo-loader.js",
   "analyticsTag": "<script defer src=\"/static/js/matomo-loader.js\"></script>",

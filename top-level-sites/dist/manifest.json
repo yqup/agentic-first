@@ -93,10 +93,10 @@
   {
     "domain": "dilijenz.com",
     "service": "dilijenz_com",
-    "mode": "gamma",
+    "mode": "holding",
     "local_port": 8218,
     "local_preview": "http://127.0.0.1:8218/",
-    "gamma_origin": "https://sites.gamma.app",
+    "gamma_origin": null,
     "matomo_site_id": "12",
     "document_root": "/srv/apps/top-level-sites/current/dist/dilijenz.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/dilijenz.com/Caddyfile",

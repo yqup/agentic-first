@@ -242,10 +242,11 @@
   },
   {
     "domain": "dilijenz.com",
+    "mode": "holding",
     "name": "Dilijenz",
-    "title": "Dilijenz Boards made simple",
+    "title": "Dilijenz - Coming soon",
     "heading": "Boards made simple.",
-    "summary": "Dilijenz automates standard checks, organises vital data, and highlights gaps or risks for due diligence and board governance.",
+    "summary": "Dilijenz is preparing a focused public page for simpler board and diligence work.",
     "eyebrow": "Due diligence and boards",
     "jurisdiction": "GB",
     "industry": ["due-diligence", "board-governance", "workflow-automation"],
@@ -253,6 +254,21 @@
     "accent": "#6c7cff",
     "matomo_site_id": "12",
     "redirect_www_to_apex": true,
+    "holding_page": {
+      "template": "logo",
+      "title": "Dilijenz - Coming soon",
+      "eyebrow": "Coming soon",
+      "logo_image": "/assets/dilijenz-logo-lockup.png",
+      "logo_alt": "Dilijenz Boards Made Simple",
+      "show_logo_text": false,
+      "show_note": false,
+      "message": "Hard at work",
+      "surface": "#f6f8ff",
+      "theme": "#26324c",
+      "accent": "#6c7cff",
+      "text": "#151733",
+      "muted": "#697087"
+    },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/o3tkd1y98pmk9vh/hnpihaoztc3ck0e/slide/FW_sbRlCwf5WyL_SDuJM2iIcELM",
     "assets": [
       {

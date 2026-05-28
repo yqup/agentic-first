@@ -4,9 +4,9 @@ Canonical website: https://dilijenz.com/
 Agentic profile: https://dilijenz.com/.well-known/agentic-profile.json
 Health check: https://dilijenz.com/healthz
 
-The human-facing design for this site is ingested from Gamma into the
-per-site local container. The owned domain also serves this local agentic-first
-profile so agents can discover the right facts without scraping the Gamma page.
+The human-facing page is a local static holding page for Dilijenz.
+The owned domain also serves this local agentic-first profile so agents
+can discover the right facts before the full public site is launched.
 
 ```json
 {
@@ -24,7 +24,7 @@ profile so agents can discover the right facts without scraping the Gamma page.
       "workflow-automation"
     ],
     "tagline": "Boards made simple.",
-    "summary": "Dilijenz automates standard checks, organises vital data, and highlights gaps or risks for due diligence and board governance."
+    "summary": "Dilijenz is preparing a focused public page for simpler board and diligence work."
   },
   "links": {
     "website": "https://dilijenz.com"

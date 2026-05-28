@@ -50,7 +50,11 @@ for (const site of sites) {
   await writeFile(path.join(wwwRoot, "robots.txt"), "User-agent: *\nAllow: /\n", "utf8");
   await copySiteAssets(site, wwwRoot);
   if (site.mode === "holding") {
-    await writeFile(path.join(wwwRoot, "index.html"), holdingPageFor(site), "utf8");
+    const holdingPage = site.holding_page || {};
+    const html = holdingPage.template === "logo"
+      ? logoHoldingPageFor(site, { title: site.title, ...holdingPage })
+      : holdingPageFor(site);
+    await writeFile(path.join(wwwRoot, "index.html"), html, "utf8");
   }
   if (site.mode === "country") {
     await writeFile(path.join(wwwRoot, "index.html"), countryPageFor(site), "utf8");
@@ -2994,8 +2998,9 @@ function orchistraHeroSvg() {
 }
 
 function logoHoldingPageFor(site, page) {
-  const message = page.message || "Hard a work";
+  const message = page.message || "Hard at work";
   const title = page.title || `${site.name} - ${message}`;
+  const eyebrow = page.eyebrow || "";
   const logoText = page.logo_text || site.name.toUpperCase();
   const logoImage = page.logo_image;
   const logoAlt = page.logo_alt || `${site.name} logo`;
@@ -3070,6 +3075,16 @@ ${matomoScriptTagFor(site)}  <style>
       text-align: center;
     }
 
+    .eyebrow {
+      margin: 0;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
     .logo {
       display: grid;
       justify-items: center;
@@ -3123,6 +3138,7 @@ ${matomoScriptTagFor(site)}  <style>
 <body>
   <main aria-labelledby="holding-message">
     <section class="lockup">
+      ${eyebrow ? `<p class="eyebrow">${escapeHtml(eyebrow)}</p>` : ""}
       <div class="logo" aria-label="${escapeHtml(site.name)}">
         <div class="logo-mark${logoImage ? " has-image" : ""}">
           ${logoElement}
