@@ -11,6 +11,7 @@ const config = {
   "gammaOrigin": "https://sites.gamma.app",
   "matomoLoaderPath": "/static/js/matomo-loader.js",
   "analyticsTag": "<script defer src=\"/static/js/matomo-loader.js\"></script>",
+  "faviconTag": "<link rel=\"icon\" href=\"/favicon.svg\" type=\"image/svg+xml\">",
   "hostHoldingPages": [],
   "redirectWwwToApex": true
 };
@@ -276,9 +277,25 @@ function responseHeaders(source) {
 }
 
 function injectAnalytics(html) {
-  if (!config.analyticsTag || html.includes(config.matomoLoaderPath)) return html;
-  if (/<\/head\s*>/i.test(html)) {
-    return html.replace(/<\/head\s*>/i, config.analyticsTag + "\n</head>");
+  let next = html;
+  if (config.analyticsTag && !next.includes(config.matomoLoaderPath)) {
+    next = injectBeforeHeadClose(next, config.analyticsTag);
   }
-  return config.analyticsTag + "\n" + html;
+  if (config.faviconTag && !hasFaviconReference(next)) {
+    next = injectBeforeHeadClose(next, config.faviconTag);
+  }
+  return next;
+}
+
+function hasFaviconReference(html) {
+  return /rel=["'][^"']*(?:shortcut\s+)?icon[^"']*["']/i.test(html)
+    || /rel=["']apple-touch-icon["']/i.test(html)
+    || /\/favicon\./i.test(html);
+}
+
+function injectBeforeHeadClose(html, tag) {
+  if (/<\/head\s*>/i.test(html)) {
+    return html.replace(/<\/head\s*>/i, tag + "\n</head>");
+  }
+  return tag + "\n" + html;
 }

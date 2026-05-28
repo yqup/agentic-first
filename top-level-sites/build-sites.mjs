@@ -326,6 +326,7 @@ function nodeServerFor(site) {
     gammaOrigin,
     matomoLoaderPath,
     analyticsTag: matomoScriptTagFor(site).trim(),
+    faviconTag: faviconLinkTagFor(site).trim(),
     hostHoldingPages: site.host_holding_pages || [],
     redirectWwwToApex: Boolean(site.redirect_www_to_apex),
   };
@@ -600,11 +601,27 @@ function responseHeaders(source) {
 }
 
 function injectAnalytics(html) {
-  if (!config.analyticsTag || html.includes(config.matomoLoaderPath)) return html;
-  if (/<\\/head\\s*>/i.test(html)) {
-    return html.replace(/<\\/head\\s*>/i, config.analyticsTag + "\\n</head>");
+  let next = html;
+  if (config.analyticsTag && !next.includes(config.matomoLoaderPath)) {
+    next = injectBeforeHeadClose(next, config.analyticsTag);
   }
-  return config.analyticsTag + "\\n" + html;
+  if (config.faviconTag && !hasFaviconReference(next)) {
+    next = injectBeforeHeadClose(next, config.faviconTag);
+  }
+  return next;
+}
+
+function hasFaviconReference(html) {
+  return /rel=["'][^"']*(?:shortcut\\s+)?icon[^"']*["']/i.test(html)
+    || /rel=["']apple-touch-icon["']/i.test(html)
+    || /\\/favicon\\./i.test(html);
+}
+
+function injectBeforeHeadClose(html, tag) {
+  if (/<\\/head\\s*>/i.test(html)) {
+    return html.replace(/<\\/head\\s*>/i, tag + "\\n</head>");
+  }
+  return tag + "\\n" + html;
 }
 `;
 }
@@ -732,6 +749,10 @@ function faviconFor(site) {
 `;
 }
 
+function faviconLinkTagFor(site) {
+  return `<link rel="icon" href="/favicon.svg" type="image/svg+xml">`;
+}
+
 function llmsFor(site, profile) {
   const servingNote = site.mode === "holding"
     ? `The human-facing page is a local static holding page for ${site.name}.
@@ -809,7 +830,7 @@ function healthFor(site) {
 
 async function gammaSnapshotPageFor(site) {
   const html = await fetchGammaHtml(site);
-  return injectMatomoScriptTag(html, site);
+  return injectFaviconLink(injectMatomoScriptTag(html, site), site);
 }
 
 function fetchGammaHtml(site) {
@@ -856,6 +877,21 @@ function injectMatomoScriptTag(html, site) {
     return html.replace(/<\/head\s*>/i, `${tag}\n</head>`);
   }
   return `${tag}\n${html}`;
+}
+
+function injectFaviconLink(html, site) {
+  if (hasFaviconReference(html)) return html;
+  const tag = faviconLinkTagFor(site).trim();
+  if (/<\/head\s*>/i.test(html)) {
+    return html.replace(/<\/head\s*>/i, `${tag}\n</head>`);
+  }
+  return `${tag}\n${html}`;
+}
+
+function hasFaviconReference(html) {
+  return /rel=["'][^"']*(?:shortcut\s+)?icon[^"']*["']/i.test(html)
+    || /rel=["']apple-touch-icon["']/i.test(html)
+    || /\/favicon\./i.test(html);
 }
 
 function holdingPageFor(site) {
