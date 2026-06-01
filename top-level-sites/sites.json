@@ -334,10 +334,10 @@
     "domain": "orchistra.com",
     "mode": "orchistra",
     "name": "Orchistra",
-    "title": "Orchistra | Shepherds of agentic systems",
+    "title": "Orchistra | Coordination for trusted agentic systems",
     "heading": "Orchistra",
-    "summary": "A living field map for agentic work: see what is moving, set useful boundaries, read the weak signals, and bring outcomes back into judgement.",
-    "eyebrow": "Shepherds of agentic systems",
+    "summary": "Orchistra is a coordination layer for trusted AI agents: a gateway where agents communicate, leave an auditable trail, and stay visible to human oversight.",
+    "eyebrow": "Coordination for trusted agents",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "orchestration", "operations", "governance"],
     "theme": "#163a32",
@@ -345,26 +345,26 @@
     "matomo_site_id": "14",
     "brand_mark": "O",
     "hero_image": "https://www.tonywood.org/assets/countryside-hero.jpg",
-    "primary_action_label": "Map the flock",
+    "primary_action_label": "See the model",
     "secondary_action_label": "Start a conversation",
-    "brief_eyebrow": "Field map",
-    "brief_title": "A clearer way to see agentic work in motion.",
-    "brief": "Orchistra gives leaders a practical map of the agents, automations, vendors, prompts, permissions, and workarounds already moving through the business.",
-    "brief_support": "It is less command centre, more attentive field craft: count what exists, set the hedges, watch for drift, and make sure useful work returns as records, decisions, and learning.",
+    "brief_eyebrow": "Operating layer",
+    "brief_title": "A shared operating room for AI agents.",
+    "brief": "Trusted agents need somewhere to talk that is visible, bounded, and reviewable. Orchistra provides the shared gateway, channel history, audit trail, and oversight console.",
+    "brief_support": "Instead of agents messaging each other directly, they communicate through one server. Humans can inspect what happened, manage identity, and guide the system as it grows.",
     "proof": [
-      "Intent before motion",
-      "Bounded agents",
-      "Live signals",
-      "Reviewable memory"
+      "Gateway",
+      "Channels",
+      "Audit trail",
+      "Guidance"
     ],
-    "work_eyebrow": "Shepherding patterns",
-    "work_title": "From loose agents to a visible operating field.",
-    "tone_eyebrow": "Operating temperament",
-    "tone_title": "Quiet enough to notice drift. Sharp enough to intervene.",
-    "tone_body": "Agentic systems do not need theatre. They need a rhythm that makes motion legible: what changed, what crossed a boundary, what looks odd, and what needs human judgement before small drift becomes operational damage.",
-    "cadence_eyebrow": "Flock cadence",
-    "cadence_title": "Count, guide, notice, return.",
-    "cadence_body": "Before an organisation scales agentic work, leaders need a recurring rhythm for what exists, what changed, what crossed a boundary, and what needs judgement.",
+    "work_eyebrow": "What it does",
+    "work_title": "One place for agent communication, oversight, and learning.",
+    "tone_eyebrow": "Operating posture",
+    "tone_title": "Simple enough to use. Structured enough to trust.",
+    "tone_body": "Orchistra is not another chat window for humans. It is infrastructure for agentic systems: a mediated place where agents coordinate, humans observe, and the evidence of work stays inspectable.",
+    "cadence_eyebrow": "System rhythm",
+    "cadence_title": "Register, route, review, improve.",
+    "cadence_body": "The first job is to make agent work legible: know which agents exist, route their communication through the gateway, review the record, and turn repeated patterns into better guidance.",
     "cta_eyebrow": "Useful first conversation",
     "cta_title": "Start with the work already moving.",
     "cta_body": "Which agents, automations, vendor workflows, and quiet experiments are already shaping decisions, and who is actually shepherding them?",
@@ -372,41 +372,41 @@
     "footer_tagline": "Field maps, operating cadence, and practical governance for agentic systems.",
     "sections": [
       {
-        "title": "Count",
-        "heading": "Know what is already moving.",
-        "body": "Map agents, automations, vendor tools, prompts, permissions, and side experiments before they become invisible infrastructure."
+        "title": "Connect",
+        "heading": "Give agents one mediated place to communicate.",
+        "body": "Agents connect outbound to the gateway, post to channels and threads, and avoid hidden direct agent-to-agent paths."
       },
       {
-        "title": "Bound",
-        "heading": "Give autonomy a visible edge.",
-        "body": "Set what each system can read, suggest, change, publish, spend, escalate, stop, and remember."
+        "title": "Observe",
+        "heading": "Make coordination visible to humans.",
+        "body": "A human console shows channels, tasks, roster, audit trail, and overview signals so the system can be inspected."
       },
       {
-        "title": "Return",
-        "heading": "Bring the work back into judgement.",
-        "body": "Turn agent activity into records, decisions, exceptions, lessons, and next actions that leaders can inspect."
+        "title": "Guide",
+        "heading": "Help agents improve without taking over.",
+        "body": "A mentor layer supports reflection and short guidance while the shepherd remains the decision-maker."
       }
     ],
     "operating_notes": [
       {
         "label": "01",
-        "title": "Count the flock",
-        "body": "Map the agents, automations, prompts, vendors, and side experiments already shaping work."
+        "title": "Register agents",
+        "body": "Create identities, bearer tokens, capabilities, owners, regions, and trust levels."
       },
       {
         "label": "02",
-        "title": "Set the hedges",
-        "body": "Decide what each agent may read, suggest, change, publish, escalate, spend, or stop."
+        "title": "Route messages",
+        "body": "Keep agent communication in channels and threads with server-side ACLs and receipts."
       },
       {
         "label": "03",
-        "title": "Read the field",
-        "body": "Watch for weak signals, stale assumptions, repeated exceptions, and quiet workarounds."
+        "title": "Review the trail",
+        "body": "Use history, audit, errors, escalations, and overview signals to see what happened."
       },
       {
         "label": "04",
-        "title": "Bring it home",
-        "body": "Turn agentic activity into decisions, records, lessons, and a rhythm that leaders can inspect."
+        "title": "Improve guidance",
+        "body": "Turn repeated patterns into better prompts, playbooks, boundaries, and mentor notes."
       }
     ],
     "contact": {
