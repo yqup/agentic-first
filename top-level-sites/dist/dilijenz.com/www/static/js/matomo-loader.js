@@ -45,6 +45,20 @@
     window._paq.push(["trackPageView"]);
     window._paq.push(["enableLinkTracking"]);
 
+    document.addEventListener("click", (event) => {
+      const link = event.target?.closest?.("a[data-funnel-stage]");
+      if (!link) return;
+      const source = link.dataset.funnelSource || window.location.hostname;
+      const campaign = link.dataset.funnelCampaign || "";
+      const content = link.dataset.funnelContent || link.textContent?.trim() || link.href;
+      window._paq.push([
+        "trackEvent",
+        "TonyWood advisory funnel",
+        link.dataset.funnelStage || "source_to_tonywood_advisory",
+        [source, campaign, content].filter(Boolean).join(" | "),
+      ]);
+    });
+
     const scriptUrl = matomoScriptUrl(config, trackerUrl);
     if (!scriptUrl) return;
     const script = document.createElement("script");

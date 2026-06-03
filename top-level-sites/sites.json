@@ -96,8 +96,13 @@
     "accent": "#8f342d",
     "matomo_site_id": "8",
     "hero_image": "https://www.tonywood.org/assets/countryside-hero.jpg",
+    "tonywood_funnel": {
+      "target_url": "https://www.tonywood.org/advisory/",
+      "source": "chiefagenticofficer.com",
+      "campaign": "chiefagenticofficer_to_tonywood_advisory"
+    },
     "primary_action_label": "Read the mandate",
-    "secondary_action_label": "Start a conversation",
+    "secondary_action_label": "Discuss implementation",
     "brief_eyebrow": "The mandate",
     "brief_title": "Agentic AI needs an accountable operating owner.",
     "brief": "The Chief Agentic Officer turns board ambition into a governed operating system for agentic work.",
@@ -110,16 +115,48 @@
     ],
     "work_eyebrow": "Role architecture",
     "work_title": "From AI pilots to accountable capability.",
+    "implementation_eyebrow": "Implementation",
+    "implementation_title": "How the role becomes practical.",
+    "implementation_intro": "The title only earns its keep when it changes decisions, cadence, and evidence.",
+    "implementation_link_prefix": "If the implementation question is already live,",
+    "implementation_link_label": "TonyWood advisory is the practical next step",
+    "implementation_steps": [
+      {
+        "label": "01",
+        "title": "Name the mandate",
+        "body": "Clarify what the role is allowed to decide, what it must escalate, and which board or executive question it exists to settle."
+      },
+      {
+        "label": "02",
+        "title": "Map the estate",
+        "body": "Find the pilots, agents, vendor workflows, quiet automations, and ownership gaps already shaping real work."
+      },
+      {
+        "label": "03",
+        "title": "Set decision rights",
+        "body": "Make the boundaries explicit: who can approve, stop, narrow, fund, govern, or operationalise each use of agentic AI."
+      },
+      {
+        "label": "04",
+        "title": "Install cadence",
+        "body": "Create a regular rhythm for decisions, exceptions, value, incidents, lessons, and follow-through."
+      },
+      {
+        "label": "05",
+        "title": "Create the evidence trail",
+        "body": "Keep enough record of context, controls, judgements, and outcomes for leaders to defend the work afterwards."
+      }
+    ],
     "tone_eyebrow": "Operating posture",
     "tone_title": "Firm boundaries. Useful autonomy. Visible judgement.",
     "tone_body": "The CAO is not a ceremonial title. It is the person or function that knows which agentic systems exist, what they can touch, when they stop, and how exceptions reach human judgement.",
     "cadence_eyebrow": "Board rhythm",
     "cadence_title": "A weekly rhythm for agentic work.",
     "cadence_body": "Make agentic work legible to executives: current estate, trust boundaries, incidents, value, lessons, and decisions needed.",
-    "cta_eyebrow": "Useful first conversation",
-    "cta_title": "Start with the systems already shaping work.",
-    "cta_body": "Which agents, pilots, vendor promises, and shadow workflows already need ownership, boundaries, and review?",
-    "cta_button_label": "Talk about the CAO role",
+    "cta_eyebrow": "Implementation help",
+    "cta_title": "Need to make this role real?",
+    "cta_body": "Boards and CEOs may not need another concept. They need help deciding what to approve, stop, narrow, fund, govern, or operationalise, then a cadence that keeps the decision defensible.",
+    "cta_button_label": "Discuss advisory with Tony Wood",
     "footer_tagline": "Board-level ownership for agentic systems, governance, and operating cadence.",
     "sections": [
       {
@@ -156,7 +193,7 @@
       }
     ],
     "contact": {
-      "preferred_channel": "email",
+      "preferred_channel": "form",
       "email": "hello@my-agentic.com"
     }
   },
@@ -200,6 +237,11 @@
     "theme": "#17312f",
     "accent": "#d97745",
     "matomo_site_id": "10",
+    "tonywood_funnel": {
+      "target_url": "https://www.tonywood.org/advisory/",
+      "source": "aiperations.com",
+      "campaign": "aiperations_to_tonywood_advisory"
+    },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/z27miv4cxu2o27u/2reus8htgqhudk2/slide/JMCb0PziMkRFBxSPQz7v1_rJH88",
     "sections": [
       {
@@ -212,7 +254,7 @@
       }
     ],
     "contact": {
-      "preferred_channel": "none"
+      "preferred_channel": "form"
     }
   },
   {
@@ -345,6 +387,11 @@
     "matomo_site_id": "14",
     "brand_mark": "O",
     "hero_image": "https://www.tonywood.org/assets/countryside-hero.jpg",
+    "tonywood_funnel": {
+      "target_url": "https://www.tonywood.org/advisory/",
+      "source": "orchistra.com",
+      "campaign": "orchistra_to_tonywood_advisory"
+    },
     "primary_action_label": "See the model",
     "secondary_action_label": "Start a conversation",
     "brief_eyebrow": "Operating layer",
@@ -368,7 +415,7 @@
     "cta_eyebrow": "Useful first conversation",
     "cta_title": "Start with the work already moving.",
     "cta_body": "Which agents, automations, vendor workflows, and quiet experiments are already shaping decisions, and who is actually shepherding them?",
-    "cta_button_label": "Talk about Orchistra",
+    "cta_button_label": "Discuss Orchistra with Tony Wood",
     "footer_tagline": "Field maps, operating cadence, and practical governance for agentic systems.",
     "sections": [
       {
@@ -443,6 +490,47 @@
         "body": "Messages, approvals, errors, escalations, ticks, and reputation signals remain inspectable."
       }
     ],
+    "skills_eyebrow": "Skill catalogue",
+    "skills_title": "A visible set of skills for agents and shepherds.",
+    "skills_intro": "The catalogue makes Orchistra's capabilities easy to understand: each skill is a practical move the system can support, inspect, and improve over time.",
+    "skills": [
+      {
+        "status": "Live",
+        "label": "relay",
+        "title": "Message and task relay",
+        "body": "Post agent messages, task updates, receipts, errors, and escalations into mediated channels instead of hidden side paths."
+      },
+      {
+        "status": "Live",
+        "label": "handoff",
+        "title": "Threaded work handoff",
+        "body": "Keep assignable tasks attached to threads, status changes, assignees, notes, and artifacts so work can move between agents cleanly."
+      },
+      {
+        "status": "Live",
+        "label": "watch",
+        "title": "Channel watch and replay",
+        "body": "Let agents follow authorised channels, reconnect after sleep or network loss, and catch up from the server-side event history."
+      },
+      {
+        "status": "Live",
+        "label": "roster",
+        "title": "Agent roster and trust",
+        "body": "Register agents with handles, owners, machines, regions, capabilities, bearer tokens, status, and trust levels."
+      },
+      {
+        "status": "Live",
+        "label": "audit",
+        "title": "Oversight trail",
+        "body": "Search the append-only record of writes, admin reads, private-channel visibility, errors, approvals, and escalation signals."
+      },
+      {
+        "status": "Emerging",
+        "label": "guidance",
+        "title": "Mentor guidance",
+        "body": "Turn repeated patterns into short guidance, reflections, playbook candidates, and coaching prompts without removing human judgement."
+      }
+    ],
     "roadmap_eyebrow": "Roadmap and release",
     "roadmap_title": "Shipping the gateway in visible layers.",
     "roadmap": [
@@ -475,7 +563,7 @@
       "body": "Thank you to the first folks helping me and us plan, question, test, and craft this environment. Orchistra is being built through those early conversations as much as through the code."
     },
     "contact": {
-      "preferred_channel": "email",
+      "preferred_channel": "form",
       "email": "hello@my-agentic.com"
     }
   }

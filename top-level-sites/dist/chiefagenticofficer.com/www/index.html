@@ -358,6 +358,67 @@
       color: var(--ink-soft);
     }
 
+    .implementation-band {
+      background:
+        linear-gradient(180deg, rgba(245, 240, 228, 0.98), rgba(234, 223, 202, 0.72));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .implementation-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(320px, 1.18fr);
+      gap: 54px;
+      align-items: start;
+    }
+
+    .implementation-copy p:last-child {
+      max-width: 720px;
+      margin-bottom: 0;
+      color: var(--ink-soft);
+    }
+
+    .implementation-copy a {
+      color: var(--oxblood);
+      font-weight: 820;
+    }
+
+    .implementation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .implementation-card {
+      min-width: 0;
+      min-height: 260px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 247, 0.74);
+    }
+
+    .implementation-card span {
+      display: block;
+      margin-bottom: 20px;
+      color: var(--brass);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .implementation-card h3 {
+      font-size: 20px;
+    }
+
+    .implementation-card p {
+      margin-bottom: 0;
+      color: var(--ink-soft);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
     .control-band {
       background: var(--charcoal);
       color: var(--porcelain);
@@ -500,6 +561,8 @@
       .metric-strip,
       .brief,
       .route-grid,
+      .implementation-head,
+      .implementation-grid,
       .cadence,
       .note-list,
       .cta-panel {
@@ -511,6 +574,7 @@
       }
 
       .route-card,
+      .implementation-card,
       .note-panel {
         min-height: auto;
       }
@@ -555,6 +619,7 @@
     <nav aria-label="Primary navigation">
       <a href="#mandate">Mandate</a>
       <a href="#work">Work</a>
+      <a href="#implementation">Implement</a>
       <a href="#cadence">Cadence</a>
       <a href="#conversation">Conversation</a>
     </nav>
@@ -568,7 +633,7 @@
         <p class="hero-copy">The board-level operating role for agentic AI: ownership, boundaries, assurance, value, and human judgement in one accountable mandate.</p>
         <div class="hero-actions">
           <a class="button primary" href="#mandate">Read the mandate</a>
-          <a class="button secondary" href="mailto:hello@my-agentic.com">Start a conversation</a>
+          <a class="button secondary" href="https://www.tonywood.org/advisory/?mtm_campaign=chiefagenticofficer_to_tonywood_advisory&amp;mtm_source=chiefagenticofficer.com&amp;mtm_medium=referral&amp;mtm_content=hero_discuss_implementation" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="chiefagenticofficer.com" data-funnel-campaign="chiefagenticofficer_to_tonywood_advisory" data-funnel-content="hero_discuss_implementation">Discuss implementation</a>
         </div>
       </div>
 
@@ -664,6 +729,44 @@
       </div>
     </section>
 
+    <section class="section implementation-band" id="implementation">
+      <div class="section-inner">
+        <div class="implementation-head">
+          <div>
+            <p class="eyebrow">Implementation</p>
+            <h2>How the role becomes practical.</h2>
+          </div>
+          <div class="implementation-copy">
+            <p class="lead">The title only earns its keep when it changes decisions, cadence, and evidence.</p>
+            <p>If the implementation question is already live, <a href="https://www.tonywood.org/advisory/?mtm_campaign=chiefagenticofficer_to_tonywood_advisory&amp;mtm_source=chiefagenticofficer.com&amp;mtm_medium=referral&amp;mtm_content=implementation_inline" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="chiefagenticofficer.com" data-funnel-campaign="chiefagenticofficer_to_tonywood_advisory" data-funnel-content="implementation_inline">TonyWood advisory is the practical next step</a>.</p>
+          </div>
+        </div>
+        <div class="implementation-grid">
+          <article class="implementation-card">
+            <span>01</span>
+            <h3>Name the mandate</h3>
+            <p>Clarify what the role is allowed to decide, what it must escalate, and which board or executive question it exists to settle.</p>
+          </article><article class="implementation-card">
+            <span>02</span>
+            <h3>Map the estate</h3>
+            <p>Find the pilots, agents, vendor workflows, quiet automations, and ownership gaps already shaping real work.</p>
+          </article><article class="implementation-card">
+            <span>03</span>
+            <h3>Set decision rights</h3>
+            <p>Make the boundaries explicit: who can approve, stop, narrow, fund, govern, or operationalise each use of agentic AI.</p>
+          </article><article class="implementation-card">
+            <span>04</span>
+            <h3>Install cadence</h3>
+            <p>Create a regular rhythm for decisions, exceptions, value, incidents, lessons, and follow-through.</p>
+          </article><article class="implementation-card">
+            <span>05</span>
+            <h3>Create the evidence trail</h3>
+            <p>Keep enough record of context, controls, judgements, and outcomes for leaders to defend the work afterwards.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="section control-band">
       <div class="section-inner">
         <p class="eyebrow">Operating posture</p>
@@ -700,12 +803,12 @@
     <section class="section cta" id="conversation">
       <div class="section-inner cta-panel">
         <div>
-          <p class="eyebrow">Useful first conversation</p>
-          <h2>Start with the systems already shaping work.</h2>
-          <p>Which agents, pilots, vendor promises, and shadow workflows already need ownership, boundaries, and review?</p>
+          <p class="eyebrow">Implementation help</p>
+          <h2>Need to make this role real?</h2>
+          <p>Boards and CEOs may not need another concept. They need help deciding what to approve, stop, narrow, fund, govern, or operationalise, then a cadence that keeps the decision defensible.</p>
         </div>
         <div class="cta-actions">
-          <a class="button primary" href="mailto:hello@my-agentic.com">Talk about the CAO role</a>
+          <a class="button primary" href="https://www.tonywood.org/advisory/?mtm_campaign=chiefagenticofficer_to_tonywood_advisory&amp;mtm_source=chiefagenticofficer.com&amp;mtm_medium=referral&amp;mtm_content=final_advisory_cta" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="chiefagenticofficer.com" data-funnel-campaign="chiefagenticofficer_to_tonywood_advisory" data-funnel-content="final_advisory_cta">Discuss advisory with Tony Wood</a>
         </div>
       </div>
     </section>

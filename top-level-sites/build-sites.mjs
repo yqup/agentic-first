@@ -159,7 +159,8 @@ function profileFor(site) {
     },
   };
 
-  if (site.contact?.form_url) profile.contact.form_url = site.contact.form_url;
+  const profileFormUrl = site.contact?.form_url || tonywoodFunnelUrlFor(site, "profile_contact");
+  if (profileFormUrl) profile.contact.form_url = profileFormUrl;
   if (site.contact?.email) profile.contact.email = site.contact.email;
   if (site.contact?.private_mcp) profile.contact.private_mcp = site.contact.private_mcp;
   return profile;
@@ -187,6 +188,44 @@ function matomoConfigFor(site) {
 function matomoScriptTagFor(site) {
   if (!site.matomo_site_id) return "";
   return `  <script defer src="${matomoLoaderPath}"></script>\n`;
+}
+
+function tonywoodFunnelUrlFor(site, content = "cta") {
+  const funnel = site.tonywood_funnel;
+  if (!funnel) return "";
+  const target = funnel.target_url || "https://www.tonywood.org/advisory/";
+  try {
+    const url = new URL(target);
+    const source = funnel.source || site.domain;
+    const campaign = funnel.campaign || `${slugForCampaign(source)}_to_tonywood_advisory`;
+    url.searchParams.set("mtm_campaign", campaign);
+    url.searchParams.set("mtm_source", source);
+    url.searchParams.set("mtm_medium", funnel.medium || "referral");
+    if (content) url.searchParams.set("mtm_content", content);
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
+function funnelAttrsFor(site, content) {
+  if (!site.tonywood_funnel) return "";
+  const source = site.tonywood_funnel.source || site.domain;
+  const campaign = site.tonywood_funnel.campaign || `${slugForCampaign(source)}_to_tonywood_advisory`;
+  return [
+    ["data-funnel-stage", "source_to_tonywood_advisory"],
+    ["data-funnel-source", source],
+    ["data-funnel-campaign", campaign],
+    ["data-funnel-content", content],
+  ].map(([name, value]) => ` ${name}="${escapeHtml(value)}"`).join("");
+}
+
+function slugForCampaign(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "") || "source_site";
 }
 
 function matomoLoaderSource() {
@@ -236,6 +275,20 @@ function matomoLoaderSource() {
     window._paq.push(["disableCookies"]);
     window._paq.push(["trackPageView"]);
     window._paq.push(["enableLinkTracking"]);
+
+    document.addEventListener("click", (event) => {
+      const link = event.target?.closest?.("a[data-funnel-stage]");
+      if (!link) return;
+      const source = link.dataset.funnelSource || window.location.hostname;
+      const campaign = link.dataset.funnelCampaign || "";
+      const content = link.dataset.funnelContent || link.textContent?.trim() || link.href;
+      window._paq.push([
+        "trackEvent",
+        "TonyWood advisory funnel",
+        link.dataset.funnelStage || "source_to_tonywood_advisory",
+        [source, campaign, content].filter(Boolean).join(" | "),
+      ]);
+    });
 
     const scriptUrl = matomoScriptUrl(config, trackerUrl);
     if (!scriptUrl) return;
@@ -1709,9 +1762,39 @@ function chiefAgenticOfficerPageFor(site) {
   ];
   const routes = site.routes || site.sections || [];
   const operatingNotes = site.operating_notes || [];
-  const contactHref = site.contact?.email
-    ? `mailto:${site.contact.email}`
-    : site.contact?.form_url || `https://${site.domain}/`;
+  const implementationSteps = site.implementation_steps || [
+    {
+      label: "01",
+      title: "Name the mandate",
+      body: "Clarify what the role can decide, what it must escalate, and which leadership question it exists to settle.",
+    },
+    {
+      label: "02",
+      title: "Map the estate",
+      body: "Find the pilots, vendor workflows, quiet automations, and ownership gaps already influencing real work.",
+    },
+    {
+      label: "03",
+      title: "Set decision rights",
+      body: "Make the boundaries explicit: who can approve, stop, narrow, fund, govern, or operationalise agentic work.",
+    },
+    {
+      label: "04",
+      title: "Install cadence",
+      body: "Create a regular rhythm for decisions, exceptions, value, incidents, lessons, and follow-through.",
+    },
+    {
+      label: "05",
+      title: "Create the evidence trail",
+      body: "Keep enough record of context, controls, judgements, and outcomes for leaders to defend the work afterwards.",
+    },
+  ];
+  const contactHref = site.contact?.form_url
+    || (site.contact?.email ? `mailto:${site.contact.email}` : `https://${site.domain}/`);
+  const advisoryFallbackHref = site.advisory_url || site.contact?.form_url || contactHref;
+  const heroAdvisoryHref = tonywoodFunnelUrlFor(site, "hero_discuss_implementation") || advisoryFallbackHref;
+  const implementationAdvisoryHref = tonywoodFunnelUrlFor(site, "implementation_inline") || advisoryFallbackHref;
+  const finalAdvisoryHref = tonywoodFunnelUrlFor(site, "final_advisory_cta") || advisoryFallbackHref;
 
   return `<!doctype html>
 <html lang="en">
@@ -2072,6 +2155,67 @@ ${matomoScriptTagFor(site)}  <style>
       color: var(--ink-soft);
     }
 
+    .implementation-band {
+      background:
+        linear-gradient(180deg, rgba(245, 240, 228, 0.98), rgba(234, 223, 202, 0.72));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .implementation-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(320px, 1.18fr);
+      gap: 54px;
+      align-items: start;
+    }
+
+    .implementation-copy p:last-child {
+      max-width: 720px;
+      margin-bottom: 0;
+      color: var(--ink-soft);
+    }
+
+    .implementation-copy a {
+      color: var(--oxblood);
+      font-weight: 820;
+    }
+
+    .implementation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .implementation-card {
+      min-width: 0;
+      min-height: 260px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 247, 0.74);
+    }
+
+    .implementation-card span {
+      display: block;
+      margin-bottom: 20px;
+      color: var(--brass);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .implementation-card h3 {
+      font-size: 20px;
+    }
+
+    .implementation-card p {
+      margin-bottom: 0;
+      color: var(--ink-soft);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
     .control-band {
       background: var(--charcoal);
       color: var(--porcelain);
@@ -2214,6 +2358,8 @@ ${matomoScriptTagFor(site)}  <style>
       .metric-strip,
       .brief,
       .route-grid,
+      .implementation-head,
+      .implementation-grid,
       .cadence,
       .note-list,
       .cta-panel {
@@ -2225,6 +2371,7 @@ ${matomoScriptTagFor(site)}  <style>
       }
 
       .route-card,
+      .implementation-card,
       .note-panel {
         min-height: auto;
       }
@@ -2269,6 +2416,7 @@ ${matomoScriptTagFor(site)}  <style>
     <nav aria-label="Primary navigation">
       <a href="#mandate">Mandate</a>
       <a href="#work">Work</a>
+      <a href="#implementation">Implement</a>
       <a href="#cadence">Cadence</a>
       <a href="#conversation">Conversation</a>
     </nav>
@@ -2282,7 +2430,7 @@ ${matomoScriptTagFor(site)}  <style>
         <p class="hero-copy">${escapeHtml(site.summary)}</p>
         <div class="hero-actions">
           <a class="button primary" href="#mandate">${escapeHtml(site.primary_action_label || "Read the mandate")}</a>
-          <a class="button secondary" href="${escapeHtml(contactHref)}">${escapeHtml(site.secondary_action_label || "Start the conversation")}</a>
+          <a class="button secondary" href="${escapeHtml(heroAdvisoryHref)}"${funnelAttrsFor(site, "hero_discuss_implementation")}>${escapeHtml(site.secondary_action_label || "Start the conversation")}</a>
         </div>
       </div>
 
@@ -2332,6 +2480,28 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
+    <section class="section implementation-band" id="implementation">
+      <div class="section-inner">
+        <div class="implementation-head">
+          <div>
+            <p class="eyebrow">${escapeHtml(site.implementation_eyebrow || "Implementation")}</p>
+            <h2>${escapeHtml(site.implementation_title || "How the role becomes practical.")}</h2>
+          </div>
+          <div class="implementation-copy">
+            <p class="lead">${escapeHtml(site.implementation_intro || "The title only earns its keep when it changes decisions, cadence, and evidence.")}</p>
+            <p>${escapeHtml(site.implementation_link_prefix || "If the implementation question is already live,")} <a href="${escapeHtml(implementationAdvisoryHref)}"${funnelAttrsFor(site, "implementation_inline")}>${escapeHtml(site.implementation_link_label || "TonyWood advisory is the practical next step")}</a>.</p>
+          </div>
+        </div>
+        <div class="implementation-grid">
+          ${implementationSteps.map((step) => `<article class="implementation-card">
+            <span>${escapeHtml(step.label)}</span>
+            <h3>${escapeHtml(step.title)}</h3>
+            <p>${escapeHtml(step.body)}</p>
+          </article>`).join("")}
+        </div>
+      </div>
+    </section>
+
     <section class="section control-band">
       <div class="section-inner">
         <p class="eyebrow">${escapeHtml(site.tone_eyebrow || "Operating posture")}</p>
@@ -2365,7 +2535,7 @@ ${matomoScriptTagFor(site)}  <style>
           <p>${escapeHtml(site.cta_body || "Which agents, pilots, vendor promises, and shadow workflows already need ownership, boundaries, and review?")}</p>
         </div>
         <div class="cta-actions">
-          <a class="button primary" href="${escapeHtml(contactHref)}">${escapeHtml(site.cta_button_label || "Talk about the CAO role")}</a>
+          <a class="button primary" href="${escapeHtml(finalAdvisoryHref)}"${funnelAttrsFor(site, "final_advisory_cta")}>${escapeHtml(site.cta_button_label || "Talk about the CAO role")}</a>
         </div>
       </div>
     </section>
@@ -2425,7 +2595,10 @@ function aiOperationsPageFor(site) {
   const title = site.title || "AIperations";
   const summary = site.summary || "Practical operating discipline for AI in real work.";
   const email = site.contact?.email || "hello@aiperations.com";
-  const contactHref = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("AI operations review")}`;
+  const fallbackContactHref = site.contact?.form_url
+    || `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("AI operations review")}`;
+  const heroReviewHref = tonywoodFunnelUrlFor(site, "hero_review_workflow") || fallbackContactHref;
+  const finalReviewHref = tonywoodFunnelUrlFor(site, "final_review_workflow") || fallbackContactHref;
   const principles = [
     {
       k: "01",
@@ -3082,7 +3255,7 @@ ${matomoScriptTagFor(site)}  <style>
         <h1 id="page-title">${escapeHtml(site.heading || "Turn AI pilots into operating outcomes.")}</h1>
         <p class="lede">${escapeHtml(summary)}</p>
         <div class="actions">
-          <a class="button" href="${escapeHtml(contactHref)}">Review an AI workflow</a>
+          <a class="button" href="${escapeHtml(heroReviewHref)}"${funnelAttrsFor(site, "hero_review_workflow")}>Review an AI workflow</a>
           <a class="button secondary" href="/.well-known/agentic-profile.json">View site profile</a>
         </div>
       </div>
@@ -3179,7 +3352,7 @@ ${matomoScriptTagFor(site)}  <style>
           <h2 id="cta-title">Pick one AI workflow and make the operating model visible.</h2>
           <p class="section-copy">Best first use: a pilot that has already impressed people technically but has not yet proved ownership, adoption, controls, or measurable value.</p>
         </div>
-        <a class="button" href="${escapeHtml(contactHref)}">Review an AI workflow</a>
+        <a class="button" href="${escapeHtml(finalReviewHref)}"${funnelAttrsFor(site, "final_review_workflow")}>Review an AI workflow</a>
       </div>
     </section>
   </main>
@@ -3872,6 +4045,26 @@ function orchistraPageFor(site) {
       body: "Humans can inspect history, activity, errors, escalations, and system changes.",
     },
   ];
+  const skills = site.skills || [
+    {
+      status: "Live",
+      label: "relay",
+      title: "Message and task relay",
+      body: "Post events to channels, manage tasks, and keep receipts visible.",
+    },
+    {
+      status: "Live",
+      label: "watch",
+      title: "Channel watch and replay",
+      body: "Follow authorised channels, reconnect cleanly, and replay missed events.",
+    },
+    {
+      status: "Emerging",
+      label: "guidance",
+      title: "Mentor guidance",
+      body: "Turn repeated patterns into short guidance and playbook candidates.",
+    },
+  ];
   const roadmap = site.roadmap || [
     {
       label: "Now",
@@ -3899,9 +4092,9 @@ function orchistraPageFor(site) {
     title: "To the first people helping shape Orchistra.",
     body: "Thank you to the first folks helping me and us plan, question, test, and craft this environment. Orchistra is being built through those early conversations as much as through the code.",
   };
-  const contactHref = site.contact?.email
-    ? `mailto:${site.contact.email}`
-    : site.contact?.form_url || `https://${site.domain}/`;
+  const fallbackContactHref = site.contact?.form_url
+    || (site.contact?.email ? `mailto:${site.contact.email}` : `https://${site.domain}/`);
+  const conversationHref = tonywoodFunnelUrlFor(site, "final_conversation_cta") || fallbackContactHref;
 
   return `<!doctype html>
 <html lang="en">
@@ -4607,6 +4800,87 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 24px;
     }
 
+    .skills-band {
+      background: var(--night);
+      color: var(--white);
+      border-top: 1px solid var(--line-light);
+      border-bottom: 1px solid var(--line-light);
+    }
+
+    .skills-band .eyebrow {
+      color: #ffd083;
+    }
+
+    .skills-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(320px, 1.22fr);
+      gap: 54px;
+      align-items: end;
+    }
+
+    .skills-head p:not(.eyebrow) {
+      max-width: 720px;
+      margin-bottom: 0;
+      color: rgba(255, 253, 247, 0.82);
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .skill-card {
+      min-width: 0;
+      min-height: 226px;
+      padding: 22px;
+      border: 1px solid rgba(255, 253, 247, 0.18);
+      border-radius: 8px;
+      background: rgba(255, 253, 247, 0.08);
+    }
+
+    .skill-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .skill-label,
+    .skill-status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      color: #ffd083;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .skill-status {
+      padding: 3px 8px;
+      border: 1px solid rgba(146, 199, 214, 0.36);
+      border-radius: 999px;
+      color: var(--sky);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .skill-card h3 {
+      color: var(--white);
+    }
+
+    .skill-card p {
+      margin-bottom: 0;
+      color: rgba(255, 253, 247, 0.78);
+    }
+
     .quote-band {
       background: var(--hedge);
       color: var(--white);
@@ -4780,6 +5054,8 @@ ${matomoScriptTagFor(site)}  <style>
       .cadence,
       .note-list,
       .feature-grid,
+      .skills-head,
+      .skills-grid,
       .roadmap-grid,
       .product-panel-grid,
       .cta-panel {
@@ -4791,6 +5067,7 @@ ${matomoScriptTagFor(site)}  <style>
       }
 
       .route-card,
+      .skill-card,
       .note-panel {
         min-height: auto;
       }
@@ -4836,6 +5113,7 @@ ${matomoScriptTagFor(site)}  <style>
       <a href="#map">Map</a>
       <a href="#work">Work</a>
       <a href="#features">Features</a>
+      <a href="#skills">Skills</a>
       <a href="#cadence">Cadence</a>
       <a href="#roadmap">Roadmap</a>
       <a href="#conversation">Conversation</a>
@@ -4915,6 +5193,28 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
+    <section class="section skills-band" id="skills">
+      <div class="section-inner">
+        <div class="skills-head">
+          <div>
+            <p class="eyebrow">${escapeHtml(site.skills_eyebrow || "Skill catalogue")}</p>
+            <h2>${escapeHtml(site.skills_title || "A visible set of skills for agents and shepherds.")}</h2>
+          </div>
+          <p>${escapeHtml(site.skills_intro || "Each skill is a practical capability the gateway can support, inspect, and improve over time.")}</p>
+        </div>
+        <div class="skills-grid">
+          ${skills.map((skill) => `<article class="skill-card">
+            <div class="skill-meta">
+              <span class="skill-label">${escapeHtml(skill.label)}</span>
+              <span class="skill-status">${escapeHtml(skill.status || "Live")}</span>
+            </div>
+            <h3>${escapeHtml(skill.title)}</h3>
+            <p>${escapeHtml(skill.body)}</p>
+          </article>`).join("")}
+        </div>
+      </div>
+    </section>
+
     <section class="section quote-band">
       <div class="section-inner">
         <p class="eyebrow">${escapeHtml(site.tone_eyebrow || "Operating temperament")}</p>
@@ -4976,7 +5276,7 @@ ${matomoScriptTagFor(site)}  <style>
           <p>${escapeHtml(site.cta_body || "Which agents, automations, and vendor tools are already shaping decisions, and who is shepherding them?")}</p>
         </div>
         <div class="cta-actions">
-          <a class="button primary" href="${escapeHtml(contactHref)}">${escapeHtml(site.cta_button_label || "Talk about Orchistra")}</a>
+          <a class="button primary" href="${escapeHtml(conversationHref)}"${funnelAttrsFor(site, "final_conversation_cta")}>${escapeHtml(site.cta_button_label || "Talk about Orchistra")}</a>
         </div>
       </div>
     </section>
