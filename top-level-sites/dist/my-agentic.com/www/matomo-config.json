@@ -13,7 +13,7 @@
     "primaryConversion": "agentic_url_interest",
     "primaryDestination": "https://www.tonywood.org/advisory/",
     "source": "my-agentic.com",
-    "campaign": "my_agentic_com_to_tonywood_advisory",
+    "campaign": "my_agentic_to_tonywood_advisory",
     "measurementNote": "Track My Agentic visitors who show interest in stable agentic addresses, profile shapes, and Tonywood.org advisory follow-through."
   }
 }

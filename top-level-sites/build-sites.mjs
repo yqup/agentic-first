@@ -60,7 +60,7 @@ for (const site of sites) {
   if (site.mode === "holding") {
     const holdingPage = site.holding_page || {};
     const html = holdingPage.template === "logo"
-      ? logoHoldingPageFor(site, { title: site.title, ...holdingPage })
+      ? injectSourceFunnelStrip(logoHoldingPageFor(site, { title: site.title, ...holdingPage }), site, "logo_holding_advisory_strip")
       : holdingPageFor(site);
     await writeFile(path.join(wwwRoot, "index.html"), html, "utf8");
   }
@@ -229,8 +229,8 @@ function defaultTonywoodFunnelFor(site) {
   return {
     target_url: defaultTonywoodAdvisoryUrl,
     source: site.domain,
-    campaign: `${slugForCampaign(site.domain)}_to_tonywood_advisory`,
-    medium: "referral",
+    campaign: campaignForDestination(site.domain, "tonywood_advisory"),
+    medium: "owned-referral",
   };
 }
 
@@ -245,19 +245,19 @@ function analyticsFor(site) {
     primary_destination: goal.primary_destination || funnel.target_url || defaultTonywoodAdvisoryUrl,
     measurement_note: goal.measurement_note || "Review source-site visits, tracked Tonywood outbound clicks, Tonywood campaign landings, and manually qualified advisory conversations.",
     source,
-    campaign: funnel.campaign || `${slugForCampaign(source)}_to_tonywood_advisory`,
+    campaign: funnel.campaign || campaignForDestination(source, "tonywood_advisory"),
   };
 }
 
-function trackedTonywoodUrlFor(site, target, content = "cta") {
+function trackedTonywoodUrlFor(site, target, content = "cta", campaignOverride = "") {
   const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
   try {
     const url = new URL(target);
     const source = funnel.source || site.domain;
-    const campaign = funnel.campaign || `${slugForCampaign(source)}_to_tonywood_advisory`;
+    const campaign = campaignOverride || funnel.campaign || campaignForDestination(source, "tonywood_advisory");
     url.searchParams.set("mtm_campaign", campaign);
     url.searchParams.set("mtm_source", source);
-    url.searchParams.set("mtm_medium", funnel.medium || "referral");
+    url.searchParams.set("mtm_medium", funnel.medium || "owned-referral");
     if (content) url.searchParams.set("mtm_content", content);
     return url.href;
   } catch {
@@ -270,17 +270,41 @@ function tonywoodFunnelUrlFor(site, content = "cta") {
   return trackedTonywoodUrlFor(site, funnel.target_url || defaultTonywoodAdvisoryUrl, content);
 }
 
+function tonywoodWritingUrlFor(site, target, content = "writing_link") {
+  const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
+  const source = funnel.source || site.domain;
+  return trackedTonywoodUrlFor(site, target, content, campaignForDestination(source, "tonywood_writing"));
+}
+
 function funnelAttrsFor(site, content, stage = "source_to_tonywood_advisory") {
   const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
   const source = funnel.source || site.domain;
-  const campaign = funnel.campaign || `${slugForCampaign(source)}_to_tonywood_advisory`;
+  const destination = stage === "source_to_tonywood_writing" ? "tonywood_writing" : "tonywood_advisory";
+  const campaign = stage === "source_to_tonywood_writing"
+    ? campaignForDestination(source, destination)
+    : funnel.campaign || campaignForDestination(source, destination);
   return [
-    ["data-funnel-category", "TonyWood north star funnel"],
+    ["data-funnel-category", "Source site funnel"],
     ["data-funnel-stage", stage],
     ["data-funnel-source", source],
     ["data-funnel-campaign", campaign],
     ["data-funnel-content", content],
   ].map(([name, value]) => ` ${name}="${escapeHtml(value)}"`).join("");
+}
+
+function campaignForDestination(source, destination) {
+  return `${sourceSlugForCampaign(source)}_to_${destination}`;
+}
+
+function sourceSlugForCampaign(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .replace(/\.[a-z0-9-]+$/, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
 }
 
 function slugForCampaign(value) {
@@ -326,6 +350,19 @@ function matomoLoaderSource() {
     return hostnames.length === 0 || hostnames.includes(window.location.hostname.toLowerCase());
   }
 
+  function shouldDelayNavigation(event, link) {
+    if (event.defaultPrevented || event.button !== 0) return false;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+    if (link.target && link.target.toLowerCase() !== "_self") return false;
+    if (link.hasAttribute("download")) return false;
+    try {
+      const url = new URL(link.href, window.location.href);
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+      return false;
+    }
+  }
+
   function enableMatomo(config) {
     if (!config || config.enabled === false || !allowedHost(config)) return;
     const trackerUrl = cleanUrl(config.trackerUrl);
@@ -342,16 +379,23 @@ function matomoLoaderSource() {
     document.addEventListener("click", (event) => {
       const link = event.target?.closest?.("a[data-funnel-stage]");
       if (!link) return;
+      const href = cleanUrl(link.href);
       const source = link.dataset.funnelSource || window.location.hostname;
       const campaign = link.dataset.funnelCampaign || "";
       const content = link.dataset.funnelContent || link.textContent?.trim() || link.href;
-      const category = link.dataset.funnelCategory || "TonyWood north star funnel";
+      const category = link.dataset.funnelCategory || "Source site funnel";
       window._paq.push([
         "trackEvent",
         category,
         link.dataset.funnelStage || "source_to_tonywood_advisory",
         [source, campaign, content].filter(Boolean).join(" | "),
       ]);
+      if (href) window._paq.push(["trackLink", href, "link"]);
+      if (!shouldDelayNavigation(event, link)) return;
+      event.preventDefault();
+      window.setTimeout(() => {
+        window.location.href = link.href;
+      }, 180);
     });
 
     const scriptUrl = matomoScriptUrl(config, trackerUrl);
@@ -1035,7 +1079,7 @@ async function gammaSnapshotPageFor(site, fallbackHtml) {
     console.warn(`Gamma snapshot unavailable for ${site.domain}; using previous generated snapshot.`);
     html = fallbackHtml;
   }
-  return injectFaviconLink(injectMatomoScriptTag(html, site), site);
+  return injectSourceFunnelStrip(injectFaviconLink(injectMatomoScriptTag(html, site), site), site, "gamma_advisory_strip");
 }
 
 function fetchGammaHtml(site) {
@@ -1091,6 +1135,91 @@ function injectFaviconLink(html, site) {
     return html.replace(/<\/head\s*>/i, `${tag}\n</head>`);
   }
   return `${tag}\n${html}`;
+}
+
+function injectSourceFunnelStrip(html, site, content = "generated_advisory_strip") {
+  if (!site.matomo_site_id || html.includes("tonywood-funnel-strip")) return html;
+  const strip = sourceFunnelStripFor(site, content);
+  if (/<\/body\s*>/i.test(html)) {
+    return html.replace(/<\/body\s*>/i, `${strip}\n</body>`);
+  }
+  return `${html}\n${strip}`;
+}
+
+function sourceFunnelStripFor(site, content) {
+  const href = tonywoodFunnelUrlFor(site, content);
+  if (!href) return "";
+  return `
+<section class="tonywood-funnel-strip" aria-label="TonyWood advisory">
+  <style>
+    .tonywood-funnel-strip {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 2147483000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 12px 14px;
+      border: 1px solid rgba(15, 23, 42, 0.14);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 14px 46px rgba(15, 23, 42, 0.16);
+      color: #111827;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .tonywood-funnel-strip strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .tonywood-funnel-strip span {
+      display: block;
+      margin-top: 3px;
+      color: #4b5563;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .tonywood-funnel-strip a {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      padding: 0 13px;
+      border-radius: 6px;
+      background: #111827;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 760;
+      text-decoration: none;
+    }
+
+    @media (max-width: 680px) {
+      .tonywood-funnel-strip {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .tonywood-funnel-strip a {
+        width: 100%;
+      }
+    }
+  </style>
+  <div>
+    <strong>Make this practical with Tony Wood</strong>
+    <span>Bring the live AI, board, governance, or operating question into an advisory conversation.</span>
+  </div>
+  <a href="${escapeHtml(href)}"${funnelAttrsFor(site, content)}>Discuss advisory</a>
+</section>`;
 }
 
 function hasFaviconReference(html) {
@@ -3448,8 +3577,8 @@ function agenticLeaderPageFor(site) {
   const summary = site.summary || "A practical field guide for learning how to manage agentic workers.";
   const heroImage = site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg";
   const essayUrl = site.secondary_action_url || "https://www.tonywood.org/writing/management-is-the-missing-literacy/";
-  const heroEssayUrl = trackedTonywoodUrlFor(site, essayUrl, "hero_read_essay");
-  const essayNoteUrl = trackedTonywoodUrlFor(site, essayUrl, "essay_note_read_essay");
+  const heroEssayUrl = tonywoodWritingUrlFor(site, essayUrl, "hero_read_essay");
+  const essayNoteUrl = tonywoodWritingUrlFor(site, essayUrl, "essay_note_read_essay");
   const fieldGuide = site.field_guide || [
     { label: "01", title: "Outcome", body: "Name the north star before asking an agent to move." },
     { label: "02", title: "Role", body: "Say what the agentic is doing and what the human owns." },
@@ -4266,7 +4395,7 @@ ${matomoScriptTagFor(site)}  <style>
           <p class="eyebrow">Tony's writing</p>
           <h2>Four pieces behind the field guide.</h2>
           <div class="writing-grid">
-            ${writingLinks.map((link) => `<a class="writing" href="${escapeHtml(trackedTonywoodUrlFor(site, link.url, slugForCampaign(link.title)))}"${funnelAttrsFor(site, slugForCampaign(link.title), "source_to_tonywood_writing")}>
+            ${writingLinks.map((link) => `<a class="writing" href="${escapeHtml(tonywoodWritingUrlFor(site, link.url, slugForCampaign(link.title)))}"${funnelAttrsFor(site, slugForCampaign(link.title), "source_to_tonywood_writing")}>
               <span>Tonywood.org</span>
               <h3>${escapeHtml(link.title)}</h3>
               <p>${escapeHtml(link.body)}</p>

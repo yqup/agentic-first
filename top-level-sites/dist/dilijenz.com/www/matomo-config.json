@@ -13,7 +13,7 @@
     "primaryConversion": "governance_diligence_interest",
     "primaryDestination": "https://www.tonywood.org/advisory/",
     "source": "dilijenz.com",
-    "campaign": "dilijenz_com_to_tonywood_advisory",
+    "campaign": "dilijenz_to_tonywood_advisory",
     "measurementNote": "Track Dilijenz holding-page visits, profile discoveries, and future Tonywood.org advisory movements from governance and diligence messages."
   }
 }

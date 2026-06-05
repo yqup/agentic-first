@@ -31,14 +31,14 @@ profile so agents can discover the right facts without scraping the Gamma page.
   },
   "contact": {
     "preferred_channel": "form",
-    "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=yqup_com_to_tonywood_advisory&mtm_source=yqup.com&mtm_medium=referral&mtm_content=profile_contact"
+    "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=yqup_to_tonywood_advisory&mtm_source=yqup.com&mtm_medium=owned-referral&mtm_content=profile_contact"
   },
   "analytics": {
     "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
     "site_goal": "Create qualified consulting conversations with CEOs and boards who need clarity on AI, governance, and agentic work.",
     "primary_conversion": "qualified_consulting_enquiry",
     "primary_destination": "https://www.tonywood.org/advisory/",
-    "campaign": "yqup_com_to_tonywood_advisory"
+    "campaign": "yqup_to_tonywood_advisory"
   }
 }
 ```

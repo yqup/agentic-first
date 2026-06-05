@@ -20,7 +20,7 @@
   },
   "contact": {
     "preferred_channel": "form",
-    "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=syndesy_com_to_tonywood_advisory&mtm_source=syndesy.com&mtm_medium=referral&mtm_content=profile_contact",
+    "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=syndesy_to_tonywood_advisory&mtm_source=syndesy.com&mtm_medium=owned-referral&mtm_content=profile_contact",
     "email": "hello@my-agentic.com"
   },
   "analytics": {
@@ -28,6 +28,6 @@
     "site_goal": "Create qualified consulting conversations with businesses that need help preparing, evidencing, and telling a capital-raising story.",
     "primary_conversion": "capital_raise_advisory_conversation",
     "primary_destination": "https://www.tonywood.org/advisory/",
-    "campaign": "syndesy_com_to_tonywood_advisory"
+    "campaign": "syndesy_to_tonywood_advisory"
   }
 }

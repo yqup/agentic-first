@@ -20,13 +20,13 @@
   },
   "contact": {
     "preferred_channel": "form",
-    "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=dilijenz_com_to_tonywood_advisory&mtm_source=dilijenz.com&mtm_medium=referral&mtm_content=profile_contact"
+    "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=dilijenz_to_tonywood_advisory&mtm_source=dilijenz.com&mtm_medium=owned-referral&mtm_content=profile_contact"
   },
   "analytics": {
     "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
     "site_goal": "Measure governance and diligence interest around simpler board evidence, routine checks, risk visibility, and ongoing assurance.",
     "primary_conversion": "governance_diligence_interest",
     "primary_destination": "https://www.tonywood.org/advisory/",
-    "campaign": "dilijenz_com_to_tonywood_advisory"
+    "campaign": "dilijenz_to_tonywood_advisory"
   }
 }

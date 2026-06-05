@@ -13,7 +13,7 @@
     "primaryConversion": "judgement_boundary_conversation",
     "primaryDestination": "https://www.tonywood.org/advisory/",
     "source": "snaxk.com",
-    "campaign": "snaxk_com_to_tonywood_advisory",
+    "campaign": "snaxk_to_tonywood_advisory",
     "measurementNote": "Track SNAXK interest as visits and Tonywood.org advisory movements from judgement and boundary language."
   }
 }

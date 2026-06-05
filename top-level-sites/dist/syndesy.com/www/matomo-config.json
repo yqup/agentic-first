@@ -13,7 +13,7 @@
     "primaryConversion": "capital_raise_advisory_conversation",
     "primaryDestination": "https://www.tonywood.org/advisory/",
     "source": "syndesy.com",
-    "campaign": "syndesy_com_to_tonywood_advisory",
+    "campaign": "syndesy_to_tonywood_advisory",
     "measurementNote": "Track Syndesy visits and movements to Tonywood.org advisory from capital, evidence, and investor-readiness language."
   }
 }
