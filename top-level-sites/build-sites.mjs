@@ -2715,7 +2715,10 @@ function snaxkPageFor(site) {
   const lozenge = site.brand_assets?.lozenge || "/assets/snaxk-lozenge.png";
   const logo = site.brand_assets?.logo || "/assets/snaxk-logo.png";
   const milestone = site.research_milestone || "SNAXK 0.10.8";
-  const statusNote = site.status_note || "Currently being tested first as a skill for OpenClaw. Closed-source for now, and still in active research rollout.";
+  const statusNote = site.status_note || "";
+  const statusNoteMarkup = statusNote
+    ? `\n            <p>${escapeHtml(statusNote)}</p>`
+    : "";
   const conversationHref = tonywoodFunnelUrlFor(site, "hero_judgement_boundaries") || defaultTonywoodAdvisoryUrl;
   const finalConversationHref = tonywoodFunnelUrlFor(site, "final_judgement_boundaries") || defaultTonywoodAdvisoryUrl;
   const loop = site.judgement_loop || [
@@ -3327,7 +3330,6 @@ ${matomoScriptTagFor(site)}  <style>
         <div class="research-strip" aria-label="Research status">
           <span>${escapeHtml(milestone)}</span>
           <span>OpenClaw first</span>
-          <span>Closed-source research rollout</span>
         </div>
       </div>
 
@@ -3405,8 +3407,7 @@ ${matomoScriptTagFor(site)}  <style>
           <img src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)} logo">
           <div>
             <p class="eyebrow">Research rollout</p>
-            <h3>${escapeHtml(milestone)}</h3>
-            <p>${escapeHtml(statusNote)}</p>
+            <h3>${escapeHtml(milestone)}</h3>${statusNoteMarkup}
           </div>
         </aside>
       </div>
