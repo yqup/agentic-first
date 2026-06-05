@@ -12,16 +12,23 @@ const gammaOrigin = "https://sites.gamma.app";
 const matomoTrackerUrl = "https://tonywood.matomo.cloud/matomo.php";
 const matomoScriptUrl = "https://tonywood.matomo.cloud/matomo.js";
 const matomoLoaderPath = "/static/js/matomo-loader.js";
+const defaultTonywoodAdvisoryUrl = "https://www.tonywood.org/advisory/";
+const defaultAnalyticsNorthStar = "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.";
 const nodeServerPort = 8080;
 const updatedAt = "2026-05-26T00:00:00Z";
 const firstPort = 8211;
 
-const sites = JSON.parse(await readFile(sitesPath, "utf8")).map((site, index) => ({
-  ...site,
-  mode: site.mode || "gamma",
-  port: site.port || firstPort + index,
-  service: serviceName(site.domain),
-}));
+const sites = JSON.parse(await readFile(sitesPath, "utf8")).map((site, index) => {
+  const enriched = {
+    ...site,
+    mode: site.mode || "gamma",
+    port: site.port || firstPort + index,
+    service: serviceName(site.domain),
+  };
+  enriched.tonywood_funnel = enriched.tonywood_funnel || defaultTonywoodFunnelFor(enriched);
+  enriched.analytics = analyticsFor(enriched);
+  return enriched;
+});
 const previousGammaSnapshots = await loadPreviousGammaSnapshots(sites);
 
 await rm(distDir, { recursive: true, force: true });
@@ -114,6 +121,9 @@ for (const site of sites) {
     container_caddyfile: `${serverRoot}/dist/${site.domain}/Caddyfile`,
     profile: `https://${site.domain}/.well-known/agentic-profile.json`,
     healthz: `https://${site.domain}/healthz`,
+    analytics_north_star: site.analytics.north_star,
+    analytics_site_goal: site.analytics.site_goal,
+    primary_conversion: site.analytics.primary_conversion,
   });
 }
 
@@ -141,6 +151,10 @@ async function loadPreviousGammaSnapshots(items) {
 }
 
 function profileFor(site) {
+  const profileFormUrl = site.contact?.form_url || tonywoodFunnelUrlFor(site, "profile_contact");
+  const preferredChannel = profileFormUrl
+    ? "form"
+    : site.contact?.preferred_channel || "none";
   const profile = {
     schema_version: "0.2.0",
     updated_at: updatedAt,
@@ -158,11 +172,17 @@ function profileFor(site) {
       website: `https://${site.domain}`,
     },
     contact: {
-      preferred_channel: site.contact?.preferred_channel || "none",
+      preferred_channel: preferredChannel,
+    },
+    analytics: {
+      north_star: site.analytics.north_star,
+      site_goal: site.analytics.site_goal,
+      primary_conversion: site.analytics.primary_conversion,
+      primary_destination: site.analytics.primary_destination,
+      campaign: site.analytics.campaign,
     },
   };
 
-  const profileFormUrl = site.contact?.form_url || tonywoodFunnelUrlFor(site, "profile_contact");
   if (profileFormUrl) profile.contact.form_url = profileFormUrl;
   if (site.contact?.email) profile.contact.email = site.contact.email;
   if (site.contact?.private_mcp) profile.contact.private_mcp = site.contact.private_mcp;
@@ -185,6 +205,15 @@ function matomoConfigFor(site) {
     scriptUrl: matomoScriptUrl,
     siteId: String(site.matomo_site_id || ""),
     hostnames: [site.domain, `www.${site.domain}`],
+    northStar: {
+      objective: site.analytics.north_star,
+      siteGoal: site.analytics.site_goal,
+      primaryConversion: site.analytics.primary_conversion,
+      primaryDestination: site.analytics.primary_destination,
+      source: site.analytics.source,
+      campaign: site.analytics.campaign,
+      measurementNote: site.analytics.measurement_note,
+    },
   };
 }
 
@@ -193,10 +222,32 @@ function matomoScriptTagFor(site) {
   return `  <script defer src="${matomoLoaderPath}"></script>\n`;
 }
 
-function tonywoodFunnelUrlFor(site, content = "cta") {
-  const funnel = site.tonywood_funnel;
-  if (!funnel) return "";
-  const target = funnel.target_url || "https://www.tonywood.org/advisory/";
+function defaultTonywoodFunnelFor(site) {
+  return {
+    target_url: defaultTonywoodAdvisoryUrl,
+    source: site.domain,
+    campaign: `${slugForCampaign(site.domain)}_to_tonywood_advisory`,
+    medium: "referral",
+  };
+}
+
+function analyticsFor(site) {
+  const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
+  const goal = site.analytics_goal || {};
+  const source = funnel.source || site.domain;
+  return {
+    north_star: goal.north_star || defaultAnalyticsNorthStar,
+    site_goal: goal.site_goal || site.summary,
+    primary_conversion: goal.primary_conversion || "qualified_tonywood_advisory_conversation",
+    primary_destination: goal.primary_destination || funnel.target_url || defaultTonywoodAdvisoryUrl,
+    measurement_note: goal.measurement_note || "Review source-site visits, tracked Tonywood outbound clicks, Tonywood campaign landings, and manually qualified advisory conversations.",
+    source,
+    campaign: funnel.campaign || `${slugForCampaign(source)}_to_tonywood_advisory`,
+  };
+}
+
+function trackedTonywoodUrlFor(site, target, content = "cta") {
+  const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
   try {
     const url = new URL(target);
     const source = funnel.source || site.domain;
@@ -211,12 +262,18 @@ function tonywoodFunnelUrlFor(site, content = "cta") {
   }
 }
 
-function funnelAttrsFor(site, content) {
-  if (!site.tonywood_funnel) return "";
-  const source = site.tonywood_funnel.source || site.domain;
-  const campaign = site.tonywood_funnel.campaign || `${slugForCampaign(source)}_to_tonywood_advisory`;
+function tonywoodFunnelUrlFor(site, content = "cta") {
+  const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
+  return trackedTonywoodUrlFor(site, funnel.target_url || defaultTonywoodAdvisoryUrl, content);
+}
+
+function funnelAttrsFor(site, content, stage = "source_to_tonywood_advisory") {
+  const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
+  const source = funnel.source || site.domain;
+  const campaign = funnel.campaign || `${slugForCampaign(source)}_to_tonywood_advisory`;
   return [
-    ["data-funnel-stage", "source_to_tonywood_advisory"],
+    ["data-funnel-category", "TonyWood north star funnel"],
+    ["data-funnel-stage", stage],
     ["data-funnel-source", source],
     ["data-funnel-campaign", campaign],
     ["data-funnel-content", content],
@@ -285,9 +342,10 @@ function matomoLoaderSource() {
       const source = link.dataset.funnelSource || window.location.hostname;
       const campaign = link.dataset.funnelCampaign || "";
       const content = link.dataset.funnelContent || link.textContent?.trim() || link.href;
+      const category = link.dataset.funnelCategory || "TonyWood north star funnel";
       window._paq.push([
         "trackEvent",
-        "TonyWood advisory funnel",
+        category,
         link.dataset.funnelStage || "source_to_tonywood_advisory",
         [source, campaign, content].filter(Boolean).join(" | "),
       ]);
@@ -932,6 +990,13 @@ function healthFor(site) {
     updated_at: updatedAt,
     agentic_profile: "/.well-known/agentic-profile.json",
     matomo_site_id: site.matomo_site_id || null,
+    analytics: {
+      north_star: site.analytics.north_star,
+      site_goal: site.analytics.site_goal,
+      primary_conversion: site.analytics.primary_conversion,
+      primary_destination: site.analytics.primary_destination,
+      campaign: site.analytics.campaign,
+    },
   };
 
   if (site.mode === "gamma") health.gamma_origin = gammaOrigin;
@@ -1017,6 +1082,10 @@ function holdingPageFor(site) {
   const surface = site.surface || "#fbfbf8";
   const muted = site.muted || "#667085";
   const actionLabel = site.action_label || "Private preview";
+  const fallbackActionHref = site.contact?.email
+    ? `mailto:${site.contact.email}`
+    : site.contact?.form_url || `mailto:hello@my-agentic.com`;
+  const actionHref = tonywoodFunnelUrlFor(site, "holding_action") || fallbackActionHref;
 
   return `<!doctype html>
 <html lang="en">
@@ -1251,7 +1320,7 @@ ${matomoScriptTagFor(site)}  <style>
         <h1 id="page-title">${escapeHtml(site.heading)}</h1>
         <p class="summary">${escapeHtml(site.summary)}</p>
         <div class="actions">
-          <a class="button" href="mailto:${escapeHtml(site.contact?.email || "hello@my-agentic.com")}">
+          <a class="button" href="${escapeHtml(actionHref)}"${funnelAttrsFor(site, "holding_action")}>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
               <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
@@ -1291,9 +1360,11 @@ function countryPageFor(site) {
   ];
   const routes = site.routes || site.sections || [];
   const operatingNotes = site.operating_notes || [];
-  const contactHref = site.contact?.email
+  const fallbackContactHref = site.contact?.email
     ? `mailto:${site.contact.email}`
     : site.contact?.form_url || `https://${site.domain}/`;
+  const contactHref = tonywoodFunnelUrlFor(site, "country_start_conversation") || fallbackContactHref;
+  const finalContactHref = tonywoodFunnelUrlFor(site, "country_final_conversation") || fallbackContactHref;
 
   return `<!doctype html>
 <html lang="en">
@@ -1700,7 +1771,7 @@ ${matomoScriptTagFor(site)}  <style>
         <p class="hero-copy">${escapeHtml(site.summary)}</p>
         <div class="hero-actions">
           <a class="button primary" href="#brief">${escapeHtml(site.primary_action_label || "Read the brief")}</a>
-          <a class="button secondary" href="${escapeHtml(contactHref)}">${escapeHtml(site.secondary_action_label || "Start a conversation")}</a>
+          <a class="button secondary" href="${escapeHtml(contactHref)}"${funnelAttrsFor(site, "country_start_conversation")}>${escapeHtml(site.secondary_action_label || "Start a conversation")}</a>
         </div>
       </div>
     </section>
@@ -1759,7 +1830,7 @@ ${matomoScriptTagFor(site)}  <style>
         <h2>${escapeHtml(site.cta_title || "Start with the operating question, not the tool.")}</h2>
         <p>${escapeHtml(site.cta_body || "Where should agentic systems be trusted, where should they be bounded, and what would make the board confident that useful work is happening without silent drift?")}</p>
         <div class="hero-actions">
-          <a class="button primary" href="${escapeHtml(contactHref)}">${escapeHtml(site.cta_button_label || "Talk about the CAO role")}</a>
+          <a class="button primary" href="${escapeHtml(finalContactHref)}"${funnelAttrsFor(site, "country_final_conversation")}>${escapeHtml(site.cta_button_label || "Talk about the CAO role")}</a>
         </div>
       </div>
     </section>
@@ -2620,6 +2691,8 @@ function agenticLeaderPageFor(site) {
   const summary = site.summary || "A practical field guide for learning how to manage agentic workers.";
   const heroImage = site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg";
   const essayUrl = site.secondary_action_url || "https://www.tonywood.org/writing/management-is-the-missing-literacy/";
+  const heroEssayUrl = trackedTonywoodUrlFor(site, essayUrl, "hero_read_essay");
+  const essayNoteUrl = trackedTonywoodUrlFor(site, essayUrl, "essay_note_read_essay");
   const fieldGuide = site.field_guide || [
     { label: "01", title: "Outcome", body: "Name the north star before asking an agent to move." },
     { label: "02", title: "Role", body: "Say what the agentic is doing and what the human owns." },
@@ -3157,7 +3230,7 @@ ${matomoScriptTagFor(site)}  <style>
         <p class="lede">${escapeHtml(summary)}</p>
         <div class="actions">
           <a class="button" href="#field-guide">${escapeHtml(site.primary_action_label || "Start with the field guide")}</a>
-          <a class="button secondary" href="${escapeHtml(essayUrl)}">${escapeHtml(site.secondary_action_label || "Read the essay")}</a>
+          <a class="button secondary" href="${escapeHtml(heroEssayUrl)}"${funnelAttrsFor(site, "hero_read_essay", "source_to_tonywood_writing")}>${escapeHtml(site.secondary_action_label || "Read the essay")}</a>
         </div>
       </div>
 
@@ -3249,14 +3322,14 @@ ${matomoScriptTagFor(site)}  <style>
           <h2 id="writing-title">Management is the missing literacy.</h2>
           <p>The canonical essay lives on Tonywood.org and makes the deeper argument: we should teach people how to manage themselves, tools, tasks, attention, risk, evidence, and outcomes.</p>
           <div class="actions">
-            <a class="button" href="${escapeHtml(essayUrl)}">Read the essay</a>
+            <a class="button" href="${escapeHtml(essayNoteUrl)}"${funnelAttrsFor(site, "essay_note_read_essay", "source_to_tonywood_writing")}>Read the essay</a>
           </div>
         </div>
         <div>
           <p class="eyebrow">Tony's writing</p>
           <h2>Four pieces behind the field guide.</h2>
           <div class="writing-grid">
-            ${writingLinks.map((link) => `<a class="writing" href="${escapeHtml(link.url)}">
+            ${writingLinks.map((link) => `<a class="writing" href="${escapeHtml(trackedTonywoodUrlFor(site, link.url, slugForCampaign(link.title)))}"${funnelAttrsFor(site, slugForCampaign(link.title), "source_to_tonywood_writing")}>
               <span>Tonywood.org</span>
               <h3>${escapeHtml(link.title)}</h3>
               <p>${escapeHtml(link.body)}</p>
@@ -4058,6 +4131,9 @@ function agenticsHomePageFor(site) {
   const title = site.title || "My Agentic";
   const summary = site.summary || "A stable home for agentics that need a URL.";
   const email = site.contact?.email || "hello@my-agentic.com";
+  const fallbackRequestHref = `mailto:${email}?subject=Agentic%20URL%20request`;
+  const heroRequestHref = tonywoodFunnelUrlFor(site, "hero_agentic_url_request") || fallbackRequestHref;
+  const finalRequestHref = tonywoodFunnelUrlFor(site, "final_agentic_url_request") || fallbackRequestHref;
   const rooms = [
     {
       path: "/agentics/research",
@@ -4618,7 +4694,7 @@ ${matomoScriptTagFor(site)}  <style>
         <h1 id="page-title">${escapeHtml(site.heading || "A home for agentics that need a URL.")}</h1>
         <p class="lede">${escapeHtml(summary)}</p>
         <div class="actions">
-          <a class="button" href="mailto:${escapeHtml(email)}?subject=Agentic%20URL%20request">Request an agentic URL</a>
+          <a class="button" href="${escapeHtml(heroRequestHref)}"${funnelAttrsFor(site, "hero_agentic_url_request")}>Request an agentic URL</a>
           <a class="button secondary" href="/.well-known/agentic-profile.json">View site profile</a>
         </div>
       </div>
@@ -4700,7 +4776,7 @@ ${matomoScriptTagFor(site)}  <style>
 
     <section class="cta" id="request" aria-label="Request an agentic URL">
       <p><strong>Need a URL for one of your agentics?</strong> Give it a stable room, a readable profile, and a place other systems can point to.</p>
-      <a class="button" href="mailto:${escapeHtml(email)}?subject=Agentic%20URL%20request">Request a room</a>
+      <a class="button" href="${escapeHtml(finalRequestHref)}"${funnelAttrsFor(site, "final_agentic_url_request")}>Request a room</a>
     </section>
   </main>
 </body>

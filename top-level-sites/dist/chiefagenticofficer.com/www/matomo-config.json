@@ -6,5 +6,14 @@
   "hostnames": [
     "chiefagenticofficer.com",
     "www.chiefagenticofficer.com"
-  ]
+  ],
+  "northStar": {
+    "objective": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "siteGoal": "Build demand for Chief Agentic Officer as an accountable role for agentic AI ownership, boundaries, tools, cadence, and board confidence.",
+    "primaryConversion": "cao_role_advisory_conversation",
+    "primaryDestination": "https://www.tonywood.org/advisory/",
+    "source": "chiefagenticofficer.com",
+    "campaign": "chiefagenticofficer_to_tonywood_advisory",
+    "measurementNote": "Track CAO role interest, implementation CTA clicks, and advisory landings from role and mandate language."
+  }
 }

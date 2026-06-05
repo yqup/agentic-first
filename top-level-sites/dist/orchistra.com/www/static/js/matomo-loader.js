@@ -51,9 +51,10 @@
       const source = link.dataset.funnelSource || window.location.hostname;
       const campaign = link.dataset.funnelCampaign || "";
       const content = link.dataset.funnelContent || link.textContent?.trim() || link.href;
+      const category = link.dataset.funnelCategory || "TonyWood north star funnel";
       window._paq.push([
         "trackEvent",
-        "TonyWood advisory funnel",
+        category,
         link.dataset.funnelStage || "source_to_tonywood_advisory",
         [source, campaign, content].filter(Boolean).join(" | "),
       ]);

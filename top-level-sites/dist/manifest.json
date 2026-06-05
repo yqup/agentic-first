@@ -10,7 +10,10 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/yqup.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/yqup.com/Caddyfile",
     "profile": "https://yqup.com/.well-known/agentic-profile.json",
-    "healthz": "https://yqup.com/healthz"
+    "healthz": "https://yqup.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Create qualified consulting conversations with CEOs and boards who need clarity on AI, governance, and agentic work.",
+    "primary_conversion": "qualified_consulting_enquiry"
   },
   {
     "domain": "snaxk.com",
@@ -23,7 +26,10 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/snaxk.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/snaxk.com/Caddyfile",
     "profile": "https://snaxk.com/.well-known/agentic-profile.json",
-    "healthz": "https://snaxk.com/healthz"
+    "healthz": "https://snaxk.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Create qualified conversations about judgement, judgement boundaries, evaluation, and decision support for long-running agentic systems.",
+    "primary_conversion": "judgement_boundary_conversation"
   },
   {
     "domain": "my-agentic.com",
@@ -36,7 +42,10 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/my-agentic.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/my-agentic.com/Caddyfile",
     "profile": "https://my-agentic.com/.well-known/agentic-profile.json",
-    "healthz": "https://my-agentic.com/healthz"
+    "healthz": "https://my-agentic.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Measure qualified interest in agentic URL homes, public profiles, owners, boundaries, and status pages.",
+    "primary_conversion": "agentic_url_interest"
   },
   {
     "domain": "chiefagenticofficer.com",
@@ -49,7 +58,10 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/chiefagenticofficer.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/chiefagenticofficer.com/Caddyfile",
     "profile": "https://chiefagenticofficer.com/.well-known/agentic-profile.json",
-    "healthz": "https://chiefagenticofficer.com/healthz"
+    "healthz": "https://chiefagenticofficer.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Build demand for Chief Agentic Officer as an accountable role for agentic AI ownership, boundaries, tools, cadence, and board confidence.",
+    "primary_conversion": "cao_role_advisory_conversation"
   },
   {
     "domain": "agenticleader.com",
@@ -62,7 +74,10 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/agenticleader.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/agenticleader.com/Caddyfile",
     "profile": "https://agenticleader.com/.well-known/agentic-profile.json",
-    "healthz": "https://agenticleader.com/healthz"
+    "healthz": "https://agenticleader.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Help current and next-generation leaders learn how to work with agentics through outcomes, boundaries, evidence, cadence, attention, escalation, and judgement.",
+    "primary_conversion": "agentic_leadership_learning_progression"
   },
   {
     "domain": "aiperations.com",
@@ -75,7 +90,10 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/aiperations.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/aiperations.com/Caddyfile",
     "profile": "https://aiperations.com/.well-known/agentic-profile.json",
-    "healthz": "https://aiperations.com/healthz"
+    "healthz": "https://aiperations.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Create qualified operations conversations around turning AI pilots into SOP-backed workflows, owners, gates, review cadence, and measurable outcomes.",
+    "primary_conversion": "ai_operations_workflow_review"
   },
   {
     "domain": "agenticboard.com",
@@ -88,7 +106,10 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/agenticboard.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/agenticboard.com/Caddyfile",
     "profile": "https://agenticboard.com/.well-known/agentic-profile.json",
-    "healthz": "https://agenticboard.com/healthz"
+    "healthz": "https://agenticboard.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Create board-level conversations about agentic board members, governance, oversight, assurance, and board-ready practice.",
+    "primary_conversion": "agentic_board_advisory_conversation"
   },
   {
     "domain": "dilijenz.com",
@@ -101,7 +122,10 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/dilijenz.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/dilijenz.com/Caddyfile",
     "profile": "https://dilijenz.com/.well-known/agentic-profile.json",
-    "healthz": "https://dilijenz.com/healthz"
+    "healthz": "https://dilijenz.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Measure governance and diligence interest around simpler board evidence, routine checks, risk visibility, and ongoing assurance.",
+    "primary_conversion": "governance_diligence_interest"
   },
   {
     "domain": "syndesy.com",
@@ -114,7 +138,10 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/syndesy.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/syndesy.com/Caddyfile",
     "profile": "https://syndesy.com/.well-known/agentic-profile.json",
-    "healthz": "https://syndesy.com/healthz"
+    "healthz": "https://syndesy.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Create qualified consulting conversations with businesses that need help preparing, evidencing, and telling a capital-raising story.",
+    "primary_conversion": "capital_raise_advisory_conversation"
   },
   {
     "domain": "orchistra.com",
@@ -127,6 +154,9 @@
     "document_root": "/srv/apps/top-level-sites/current/dist/orchistra.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/orchistra.com/Caddyfile",
     "profile": "https://orchistra.com/.well-known/agentic-profile.json",
-    "healthz": "https://orchistra.com/healthz"
+    "healthz": "https://orchistra.com/healthz",
+    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "analytics_site_goal": "Measure interest in Orchistra as a field map for signals, agent coordination, channel history, audit trail, and human-visible oversight.",
+    "primary_conversion": "agentic_coordination_product_interest"
   }
 ]

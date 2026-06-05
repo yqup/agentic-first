@@ -34,6 +34,13 @@ without scraping the page.
     "preferred_channel": "form",
     "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=chiefagenticofficer_to_tonywood_advisory&mtm_source=chiefagenticofficer.com&mtm_medium=referral&mtm_content=profile_contact",
     "email": "hello@my-agentic.com"
+  },
+  "analytics": {
+    "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "site_goal": "Build demand for Chief Agentic Officer as an accountable role for agentic AI ownership, boundaries, tools, cadence, and board confidence.",
+    "primary_conversion": "cao_role_advisory_conversation",
+    "primary_destination": "https://www.tonywood.org/advisory/",
+    "campaign": "chiefagenticofficer_to_tonywood_advisory"
   }
 }
 ```

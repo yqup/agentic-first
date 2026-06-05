@@ -6,5 +6,14 @@
   "hostnames": [
     "dilijenz.com",
     "www.dilijenz.com"
-  ]
+  ],
+  "northStar": {
+    "objective": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "siteGoal": "Measure governance and diligence interest around simpler board evidence, routine checks, risk visibility, and ongoing assurance.",
+    "primaryConversion": "governance_diligence_interest",
+    "primaryDestination": "https://www.tonywood.org/advisory/",
+    "source": "dilijenz.com",
+    "campaign": "dilijenz_com_to_tonywood_advisory",
+    "measurementNote": "Track Dilijenz holding-page visits, profile discoveries, and future Tonywood.org advisory movements from governance and diligence messages."
+  }
 }

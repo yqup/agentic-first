@@ -6,5 +6,14 @@
   "hostnames": [
     "agenticleader.com",
     "www.agenticleader.com"
-  ]
+  ],
+  "northStar": {
+    "objective": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "siteGoal": "Help current and next-generation leaders learn how to work with agentics through outcomes, boundaries, evidence, cadence, attention, escalation, and judgement.",
+    "primaryConversion": "agentic_leadership_learning_progression",
+    "primaryDestination": "https://www.tonywood.org/advisory/",
+    "source": "agenticleader.com",
+    "campaign": "agenticleader_com_to_tonywood_advisory",
+    "measurementNote": "Track Agentic Leader visits, Tonywood.org writing clicks, resource clicks, and eventual advisory movements from education and management-literacy messages."
+  }
 }

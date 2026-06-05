@@ -11,6 +11,11 @@
     "theme": "#0f172a",
     "accent": "#d8b56d",
     "matomo_site_id": "5",
+    "analytics_goal": {
+      "site_goal": "Create qualified consulting conversations with CEOs and boards who need clarity on AI, governance, and agentic work.",
+      "primary_conversion": "qualified_consulting_enquiry",
+      "measurement_note": "Track YQUP pageviews, profile contact discoveries, and movements to Tonywood.org advisory from consulting and clarity messages."
+    },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/w5cb4nim4hs17oq/5415qe362jaqfkz/slide/grjI7EPE0TIuq1P42_mCpX8pgnU",
     "sections": [
       {
@@ -23,8 +28,7 @@
       }
     ],
     "contact": {
-      "preferred_channel": "form",
-      "form_url": "https://yqup.com/"
+      "preferred_channel": "form"
     }
   },
   {
@@ -39,6 +43,11 @@
     "theme": "#4b2f1b",
     "accent": "#f2b84b",
     "matomo_site_id": "6",
+    "analytics_goal": {
+      "site_goal": "Create qualified conversations about judgement, judgement boundaries, evaluation, and decision support for long-running agentic systems.",
+      "primary_conversion": "judgement_boundary_conversation",
+      "measurement_note": "Track SNAXK interest as visits and Tonywood.org advisory movements from judgement and boundary language."
+    },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/23d6gw7ynyx4pa8/omj3dp3uf69ye5w/slide/LnIqPGkUCPdwci3xovE3sp1Aygo",
     "sections": [
       {
@@ -67,6 +76,11 @@
     "theme": "#182623",
     "accent": "#4f87a6",
     "matomo_site_id": "7",
+    "analytics_goal": {
+      "site_goal": "Measure qualified interest in agentic URL homes, public profiles, owners, boundaries, and status pages.",
+      "primary_conversion": "agentic_url_interest",
+      "measurement_note": "Track My Agentic visitors who show interest in stable agentic addresses, profile shapes, and Tonywood.org advisory follow-through."
+    },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/0om62zsn4q9bzrz/5r3xruhjzykn9ki/slide/IZbhQS677YNne7PGthuokpkTuaA",
     "sections": [
       {
@@ -100,6 +114,11 @@
       "target_url": "https://www.tonywood.org/advisory/",
       "source": "chiefagenticofficer.com",
       "campaign": "chiefagenticofficer_to_tonywood_advisory"
+    },
+    "analytics_goal": {
+      "site_goal": "Build demand for Chief Agentic Officer as an accountable role for agentic AI ownership, boundaries, tools, cadence, and board confidence.",
+      "primary_conversion": "cao_role_advisory_conversation",
+      "measurement_note": "Track CAO role interest, implementation CTA clicks, and advisory landings from role and mandate language."
     },
     "primary_action_label": "Read the mandate",
     "secondary_action_label": "Discuss implementation",
@@ -211,6 +230,11 @@
     "accent": "#b45f3c",
     "matomo_site_id": "9",
     "hero_image": "https://www.tonywood.org/assets/countryside-hero.jpg",
+    "analytics_goal": {
+      "site_goal": "Help current and next-generation leaders learn how to work with agentics through outcomes, boundaries, evidence, cadence, attention, escalation, and judgement.",
+      "primary_conversion": "agentic_leadership_learning_progression",
+      "measurement_note": "Track Agentic Leader visits, Tonywood.org writing clicks, resource clicks, and eventual advisory movements from education and management-literacy messages."
+    },
     "primary_action_label": "Start with the field guide",
     "secondary_action_label": "Read the essay",
     "secondary_action_url": "https://www.tonywood.org/writing/management-is-the-missing-literacy/",
@@ -377,6 +401,11 @@
       "source": "aiperations.com",
       "campaign": "aiperations_to_tonywood_advisory"
     },
+    "analytics_goal": {
+      "site_goal": "Create qualified operations conversations around turning AI pilots into SOP-backed workflows, owners, gates, review cadence, and measurable outcomes.",
+      "primary_conversion": "ai_operations_workflow_review",
+      "measurement_note": "Track AIperations visitors who click workflow-review CTAs and arrive at Tonywood.org advisory with AI operations campaign parameters."
+    },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/z27miv4cxu2o27u/2reus8htgqhudk2/slide/JMCb0PziMkRFBxSPQz7v1_rJH88",
     "sections": [
       {
@@ -404,6 +433,11 @@
     "theme": "#2d241f",
     "accent": "#c99557",
     "matomo_site_id": "11",
+    "analytics_goal": {
+      "site_goal": "Create board-level conversations about agentic board members, governance, oversight, assurance, and board-ready practice.",
+      "primary_conversion": "agentic_board_advisory_conversation",
+      "measurement_note": "Track board-governance interest and movements to Tonywood.org advisory from agentic board language."
+    },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/oqcgc9f48piohh8/slns0lxruhykkpr/slide/99P7HNxXGBiLxWgZIMW-9Rr5664",
     "sections": [
       {
@@ -432,6 +466,11 @@
     "theme": "#26324c",
     "accent": "#6c7cff",
     "matomo_site_id": "12",
+    "analytics_goal": {
+      "site_goal": "Measure governance and diligence interest around simpler board evidence, routine checks, risk visibility, and ongoing assurance.",
+      "primary_conversion": "governance_diligence_interest",
+      "measurement_note": "Track Dilijenz holding-page visits, profile discoveries, and future Tonywood.org advisory movements from governance and diligence messages."
+    },
     "redirect_www_to_apex": true,
     "holding_page": {
       "template": "logo",
@@ -479,13 +518,18 @@
     "name": "Syndesy",
     "title": "Syndesy",
     "heading": "Connected systems, clearer work.",
-    "summary": "Syndesy is being prepared as a focused space for connecting context, teams, and intelligent systems into practical operating flows.",
+    "summary": "Syndesy is being prepared as a consulting space for businesses raising capital: connecting the story, evidence, operating plan, and investor conversation.",
     "eyebrow": "Holding page",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "systems-integration", "workflow-design"],
     "theme": "#154f5f",
     "accent": "#36b7a5",
     "matomo_site_id": "13",
+    "analytics_goal": {
+      "site_goal": "Create qualified consulting conversations with businesses that need help preparing, evidencing, and telling a capital-raising story.",
+      "primary_conversion": "capital_raise_advisory_conversation",
+      "measurement_note": "Track Syndesy visits and movements to Tonywood.org advisory from capital, evidence, and investor-readiness language."
+    },
     "secondary": "#e0b75d",
     "surface": "#f7faf8",
     "text": "#10202a",
@@ -494,12 +538,12 @@
     "note": "The full site is being prepared.",
     "sections": [
       {
-        "title": "Connection with purpose",
-        "body": "Syndesy will focus on the connective tissue between people, systems, decisions, and agentic work."
+        "title": "Connected capital story",
+        "body": "Syndesy will focus on the connective tissue between the business story, evidence, investor questions, and the operating plan behind a raise."
       },
       {
         "title": "Useful before it is loud",
-        "body": "The first public version will stay practical, structured, and easy for both humans and agents to understand."
+        "body": "The first public version will stay practical, structured, and easy for founders, advisors, investors, and agents to understand."
       }
     ],
     "contact": {
@@ -526,6 +570,11 @@
       "target_url": "https://www.tonywood.org/advisory/",
       "source": "orchistra.com",
       "campaign": "orchistra_to_tonywood_advisory"
+    },
+    "analytics_goal": {
+      "site_goal": "Measure interest in Orchistra as a field map for signals, agent coordination, channel history, audit trail, and human-visible oversight.",
+      "primary_conversion": "agentic_coordination_product_interest",
+      "measurement_note": "Track Orchistra visitors who move from signal-map and coordination language into Tonywood.org advisory conversations."
     },
     "primary_action_label": "See the model",
     "secondary_action_label": "Start a conversation",

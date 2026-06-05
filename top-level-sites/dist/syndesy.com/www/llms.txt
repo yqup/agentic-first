@@ -24,14 +24,22 @@ can discover the right facts before the full public site is launched.
       "workflow-design"
     ],
     "tagline": "Connected systems, clearer work.",
-    "summary": "Syndesy is being prepared as a focused space for connecting context, teams, and intelligent systems into practical operating flows."
+    "summary": "Syndesy is being prepared as a consulting space for businesses raising capital: connecting the story, evidence, operating plan, and investor conversation."
   },
   "links": {
     "website": "https://syndesy.com"
   },
   "contact": {
-    "preferred_channel": "email",
+    "preferred_channel": "form",
+    "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=syndesy_com_to_tonywood_advisory&mtm_source=syndesy.com&mtm_medium=referral&mtm_content=profile_contact",
     "email": "hello@my-agentic.com"
+  },
+  "analytics": {
+    "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "site_goal": "Create qualified consulting conversations with businesses that need help preparing, evidencing, and telling a capital-raising story.",
+    "primary_conversion": "capital_raise_advisory_conversation",
+    "primary_destination": "https://www.tonywood.org/advisory/",
+    "campaign": "syndesy_com_to_tonywood_advisory"
   }
 }
 ```

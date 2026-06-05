@@ -6,5 +6,14 @@
   "hostnames": [
     "agenticboard.com",
     "www.agenticboard.com"
-  ]
+  ],
+  "northStar": {
+    "objective": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
+    "siteGoal": "Create board-level conversations about agentic board members, governance, oversight, assurance, and board-ready practice.",
+    "primaryConversion": "agentic_board_advisory_conversation",
+    "primaryDestination": "https://www.tonywood.org/advisory/",
+    "source": "agenticboard.com",
+    "campaign": "agenticboard_com_to_tonywood_advisory",
+    "measurementNote": "Track board-governance interest and movements to Tonywood.org advisory from agentic board language."
+  }
 }
