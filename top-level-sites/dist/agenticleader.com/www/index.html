@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Agentic Leader | Learn to lead agentics</title>
-  <meta name="description" content="A practical field guide for people learning how to manage agentic workers: outcomes, boundaries, evidence, cadence, attention, escalation, and human judgement.">
+  <title>Agentic Leader | Directing is management</title>
+  <meta name="description" content="Directing is management. A practical field guide for leaders learning how to manage agentic workers with evidence, boundaries, cadence, attention, escalation, and human judgement.">
   <link rel="preload" as="image" href="https://www.tonywood.org/assets/countryside-hero.jpg">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script defer src="/static/js/matomo-loader.js"></script>
@@ -79,6 +79,8 @@
 
     nav {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
       gap: 22px;
       font-size: 14px;
       font-weight: 780;
@@ -249,6 +251,9 @@
     }
 
     .map-node span,
+    .loop-card span,
+    .scrutiny-card span,
+    .harness-card span,
     .resource span,
     .writing span {
       color: var(--clay);
@@ -302,6 +307,9 @@
     }
 
     .guide-card,
+    .loop-card,
+    .scrutiny-card,
+    .harness-card,
     .step,
     .resource,
     .writing {
@@ -315,6 +323,53 @@
       padding: 16px;
     }
 
+    .loop-grid,
+    .scrutiny-grid,
+    .harness-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .loop-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .scrutiny-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .harness-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .loop-card,
+    .scrutiny-card,
+    .harness-card {
+      min-height: 188px;
+      padding: 18px;
+    }
+
+    .loop-card {
+      background: #fbf7ea;
+    }
+
+    .scrutiny-card {
+      background: #eef3ed;
+    }
+
+    .harness-card {
+      background: var(--white);
+    }
+
+    .harness-links {
+      margin-top: 42px;
+    }
+
+    .harness-links h3 {
+      margin-top: 0;
+    }
+
     .guide-card span {
       display: block;
       margin-bottom: 34px;
@@ -324,7 +379,17 @@
       font-weight: 840;
     }
 
+    .loop-card span,
+    .scrutiny-card span,
+    .harness-card span {
+      display: block;
+      margin-bottom: 24px;
+    }
+
     .guide-card p,
+    .loop-card p,
+    .scrutiny-card p,
+    .harness-card p,
     .step p,
     .resource p,
     .writing p,
@@ -442,6 +507,12 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
+      .loop-grid,
+      .scrutiny-grid,
+      .harness-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .steps,
       .resources-grid,
       .writing-grid {
@@ -483,6 +554,9 @@
 
       .map-grid,
       .guide-grid,
+      .loop-grid,
+      .scrutiny-grid,
+      .harness-grid,
       .steps,
       .resources-grid,
       .writing-grid {
@@ -508,9 +582,11 @@
     </a>
     <nav aria-label="Primary">
       <a href="#field-guide">Field guide</a>
+      <a href="#judgement">Judgement</a>
+      <a href="#scrutiny">Scrutiny</a>
       <a href="#first-steps">First steps</a>
+      <a href="#harnesses">Harnesses</a>
       <a href="#resources">Resources</a>
-      <a href="#writing">Tony's writing</a>
     </nav>
   </header>
 
@@ -518,11 +594,11 @@
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy">
         <p class="eyebrow">Field guide for agentic leadership</p>
-        <h1 id="page-title">Learn to lead agentics.</h1>
-        <p class="lede">A practical field guide for people learning how to manage agentic workers: outcomes, boundaries, evidence, cadence, attention, escalation, and human judgement.</p>
+        <h1 id="page-title">AI changes work from doing to directing.</h1>
+        <p class="lede">Directing is management. A practical field guide for leaders learning how to manage agentic workers with evidence, boundaries, cadence, attention, escalation, and human judgement.</p>
         <div class="actions">
-          <a class="button" href="#field-guide">Start with the field guide</a>
-          <a class="button secondary" href="https://www.tonywood.org/writing/management-is-the-missing-literacy/?mtm_campaign=agenticleader_com_to_tonywood_advisory&amp;mtm_source=agenticleader.com&amp;mtm_medium=referral&amp;mtm_content=hero_read_essay" data-funnel-category="TonyWood north star funnel" data-funnel-stage="source_to_tonywood_writing" data-funnel-source="agenticleader.com" data-funnel-campaign="agenticleader_com_to_tonywood_advisory" data-funnel-content="hero_read_essay">Read the essay</a>
+          <a class="button" href="#field-guide">Start the operating model</a>
+          <a class="button secondary" href="https://www.tonywood.org/writing/management-is-the-missing-literacy/?mtm_campaign=agenticleader_com_to_tonywood_advisory&amp;mtm_source=agenticleader.com&amp;mtm_medium=referral&amp;mtm_content=hero_read_essay" data-funnel-category="TonyWood north star funnel" data-funnel-stage="source_to_tonywood_writing" data-funnel-source="agenticleader.com" data-funnel-campaign="agenticleader_com_to_tonywood_advisory" data-funnel-content="hero_read_essay">Read the missing literacy essay</a>
         </div>
       </div>
 
@@ -535,32 +611,32 @@
           <article class="map-node">
             <span>01</span>
             <strong>Outcome</strong>
-            <p>Name the north star before asking an agent to move. What result would make the work useful?</p>
+            <p>Name the useful result before asking an agentic worker to move. What outcome would make the work worth doing?</p>
           </article>
           <article class="map-node">
             <span>02</span>
             <strong>Role</strong>
-            <p>Say what the agentic is doing, what the human owns, and who is accountable for the final decision.</p>
+            <p>Say what the agentic worker may do, what the human owns, and who is accountable for the final decision.</p>
           </article>
           <article class="map-node">
             <span>03</span>
             <strong>Boundary</strong>
-            <p>Define what it can read, change, publish, spend, remember, or escalate before autonomy gets wider.</p>
+            <p>Define what it can read, change, publish, spend, remember, and escalate before autonomy gets wider.</p>
           </article>
           <article class="map-node">
             <span>04</span>
             <strong>Evidence</strong>
-            <p>Ask what changed, which sources matter, what is uncertain, and what would make you reject the answer.</p>
+            <p>Ask what supports the answer, how confident you should be, what is missing, and what would change your mind.</p>
           </article>
           <article class="map-node">
             <span>05</span>
             <strong>Cadence</strong>
-            <p>Create a rhythm for review, exceptions, drift, lessons, and decisions that need human judgement.</p>
+            <p>Create a rhythm for review, exceptions, drift, lessons, and decisions that need slower human judgement.</p>
           </article>
           <article class="map-node">
             <span>06</span>
             <strong>Attention</strong>
-            <p>Protect the scarce thing. Decide where attention belongs instead of letting tools and feeds spend it for you.</p>
+            <p>Protect the scarce thing. Decide where attention belongs before tools, feeds, and agents spend it for you.</p>
           </article>
         </div>
       </aside>
@@ -570,11 +646,11 @@
       <div class="section-inner split">
         <div>
           <p class="eyebrow">The shift</p>
-          <h2 id="shift-title">AI changes work from doing to directing.</h2>
+          <h2 id="shift-title">Directing is management.</h2>
         </div>
         <div>
-          <p class="lead">When people use AI well, they are not only producing output. They are setting intent, shaping tasks, judging quality, checking evidence, protecting attention, and staying responsible for what goes out into the world.</p>
-          <p class="lead">That is management. Not management as hierarchy, but management as a human literacy: knowing what good looks like and keeping yourself in the loop.</p>
+          <p class="lead">When people use agentic systems well, they are not only producing output. They are setting intent, shaping tasks, judging quality, checking evidence, protecting attention, and staying responsible for what goes out into the world.</p>
+          <p class="lead">The skill is not magic prompting. It is management as a human literacy: knowing what good looks like, knowing what you do not know, and keeping yourself meaningfully in the loop.</p>
         </div>
       </div>
     </section>
@@ -588,37 +664,102 @@
           <article class="guide-card">
             <span>01</span>
             <h3>Outcome</h3>
-            <p>Name the north star before asking an agent to move. What result would make the work useful?</p>
+            <p>Name the useful result before asking an agentic worker to move. What outcome would make the work worth doing?</p>
           </article>
           <article class="guide-card">
             <span>02</span>
             <h3>Role</h3>
-            <p>Say what the agentic is doing, what the human owns, and who is accountable for the final decision.</p>
+            <p>Say what the agentic worker may do, what the human owns, and who is accountable for the final decision.</p>
           </article>
           <article class="guide-card">
             <span>03</span>
             <h3>Boundary</h3>
-            <p>Define what it can read, change, publish, spend, remember, or escalate before autonomy gets wider.</p>
+            <p>Define what it can read, change, publish, spend, remember, and escalate before autonomy gets wider.</p>
           </article>
           <article class="guide-card">
             <span>04</span>
             <h3>Evidence</h3>
-            <p>Ask what changed, which sources matter, what is uncertain, and what would make you reject the answer.</p>
+            <p>Ask what supports the answer, how confident you should be, what is missing, and what would change your mind.</p>
           </article>
           <article class="guide-card">
             <span>05</span>
             <h3>Cadence</h3>
-            <p>Create a rhythm for review, exceptions, drift, lessons, and decisions that need human judgement.</p>
+            <p>Create a rhythm for review, exceptions, drift, lessons, and decisions that need slower human judgement.</p>
           </article>
           <article class="guide-card">
             <span>06</span>
             <h3>Attention</h3>
-            <p>Protect the scarce thing. Decide where attention belongs instead of letting tools and feeds spend it for you.</p>
+            <p>Protect the scarce thing. Decide where attention belongs before tools, feeds, and agents spend it for you.</p>
           </article>
           <article class="guide-card">
             <span>07</span>
             <h3>Escalation</h3>
             <p>Pause when stakes rise, signals conflict, the pattern is novel, or the decision is not yours to make.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="judgement" aria-labelledby="judgement-title">
+      <div class="section-inner">
+        <p class="eyebrow">Judgement loop</p>
+        <h2 id="judgement-title">Evidence is decision support, not certainty.</h2>
+        <p class="lead">Use this loop before widening autonomy, accepting high-confidence output, or moving from recommendation to decision.</p>
+        <div class="loop-grid">
+          <article class="loop-card">
+            <span>01</span>
+            <h3>Head</h3>
+            <p>What is the evidence, how strong is it, what is missing, and what would change our mind?</p>
+          </article>
+          <article class="loop-card">
+            <span>02</span>
+            <h3>Heart</h3>
+            <p>Who is affected, who has not been heard, and where does fairness matter most?</p>
+          </article>
+          <article class="loop-card">
+            <span>03</span>
+            <h3>Gut</h3>
+            <p>What feels off, which weak signals are present, and what could fail if we are overconfident?</p>
+          </article>
+          <article class="loop-card">
+            <span>04</span>
+            <h3>Spine</h3>
+            <p>Which rules, rights, thresholds, and accountabilities must hold even under pressure?</p>
+          </article>
+          <article class="loop-card">
+            <span>05</span>
+            <h3>Core purpose</h3>
+            <p>What human value, organisational purpose, or public good is this work ultimately meant to serve?</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="scrutiny" aria-labelledby="scrutiny-title">
+      <div class="section-inner">
+        <p class="eyebrow">Decisions under scrutiny</p>
+        <h2 id="scrutiny-title">The larger the consequence, the stronger the evidence and process should be.</h2>
+        <p class="lead">Agentic work speeds up decisions. Leadership is making the uncertainty, accountability, blind spots, and review path visible before speed amplifies weak judgement.</p>
+        <div class="scrutiny-grid">
+          <article class="scrutiny-card">
+            <span>Check</span>
+            <h3>Confidence is not certainty</h3>
+            <p>Treat evidence as decision support. Ask what can be supported, with what confidence, for which decision, under which risks.</p>
+          </article>
+          <article class="scrutiny-card">
+            <span>Check</span>
+            <h3>Power creates blind spots</h3>
+            <p>Build routines for dissent, premortems, stakeholder challenge, and review instead of relying on senior instinct alone.</p>
+          </article>
+          <article class="scrutiny-card">
+            <span>Check</span>
+            <h3>Fair process keeps respect</h3>
+            <p>People may dislike a decision and still respect the process when the reasoning, constraints, and review path are clear.</p>
+          </article>
+          <article class="scrutiny-card">
+            <span>Check</span>
+            <h3>Human in the loop is not enough</h3>
+            <p>Oversight only works when the human has time, context, authority, evidence, and permission to intervene.</p>
           </article>
         </div>
       </div>
@@ -640,24 +781,120 @@
         <div class="steps">
           <article class="step">
             <h3>Define good</h3>
-            <p>Write three signs of a good answer before the agent produces one.</p>
+            <p>Write three signs of a good answer before the agentic worker produces one.</p>
           </article>
           <article class="step">
             <h3>Brief the work</h3>
             <p>Give context, audience, constraints, source expectations, and a clear stopping point.</p>
           </article>
           <article class="step">
-            <h3>Reject generic</h3>
-            <p>Mark down work that could have come from anyone. Add judgement, taste, evidence, and yourself.</p>
+            <h3>Set the boundary</h3>
+            <p>Decide what the agent can read, change, publish, remember, or escalate before the task starts.</p>
+          </article>
+          <article class="step">
+            <h3>Show the evidence</h3>
+            <p>Ask for sources, assumptions, uncertainty, and rejection tests before accepting confident output.</p>
           </article>
           <article class="step">
             <h3>Record judgement</h3>
-            <p>Keep a small trail: what you asked, what you accepted, what you rejected, and why.</p>
+            <p>Keep a small trail: what you asked, what changed your mind, what you rejected, and why.</p>
           </article>
-          <article class="step">
-            <h3>Protect attention</h3>
-            <p>Batch interruptions, review exceptions, and ask whether this signal deserves time.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="harnesses" aria-labelledby="harness-title">
+      <div class="section-inner">
+        <p class="eyebrow">Work harnesses</p>
+        <h2 id="harness-title">Move out of chat and into the harness.</h2>
+        <p class="lead">A chat can produce words. A harness lets an agentic worker see the work, use tools, change files, run checks, create reports, and bring evidence back for review.</p>
+        <div class="harness-grid">
+          <article class="harness-card">
+            <span>01</span>
+            <h3>See the work</h3>
+            <p>Local files, repos, documents, data, and context are available instead of pasted fragments.</p>
           </article>
+          <article class="harness-card">
+            <span>02</span>
+            <h3>Use real tools</h3>
+            <p>Code, scripts, browsers, checks, data tools, and plugins can be used inside the workflow.</p>
+          </article>
+          <article class="harness-card">
+            <span>03</span>
+            <h3>Change the artifact</h3>
+            <p>The agent can update code, reports, pages, documents, and other working outputs.</p>
+          </article>
+          <article class="harness-card">
+            <span>04</span>
+            <h3>Verify as you go</h3>
+            <p>Diffs, tests, previews, screenshots, logs, and smoke checks make quality inspectable.</p>
+          </article>
+          <article class="harness-card">
+            <span>05</span>
+            <h3>Keep the trail</h3>
+            <p>Prompts, decisions, edits, evidence, and results become reviewable management records.</p>
+          </article>
+        </div>
+        <div class="harness-links" aria-labelledby="harness-links-title">
+          <p class="eyebrow">Starter harness links</p>
+          <h3 id="harness-links-title">Places to inspect the pattern.</h3>
+          <p class="lead">The important question is not which logo wins. Ask what work it can see, what tools it can use, what it can change, how it verifies, and what evidence it leaves behind.</p>
+          <div class="resources-grid">
+            <a class="resource" href="https://openai.com/codex/" target="_blank" rel="noreferrer">
+              <span>US / global</span>
+              <h3>OpenAI Codex</h3>
+              <p>Coding agent for real engineering work: repos, edits, reviews, parallel tasks, and shipping workflows.</p>
+              <small>Open official page</small>
+            </a>
+            <a class="resource" href="https://www.anthropic.com/product/claude-code" target="_blank" rel="noreferrer">
+              <span>US / global</span>
+              <h3>Anthropic Claude Code</h3>
+              <p>Agentic coding system that reads codebases, changes files, uses CLI tools, runs tests, and returns code for review.</p>
+              <small>Open official page</small>
+            </a>
+            <a class="resource" href="https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent" target="_blank" rel="noreferrer">
+              <span>US / global</span>
+              <h3>GitHub Copilot cloud agent</h3>
+              <p>Asynchronous GitHub agent with an ephemeral Actions environment for changes, tests, branches, and pull requests.</p>
+              <small>Open official page</small>
+            </a>
+            <a class="resource" href="https://jules.google/" target="_blank" rel="noreferrer">
+              <span>US / global</span>
+              <h3>Google Jules</h3>
+              <p>Async coding agent for GitHub repos that works in a cloud VM, produces diffs, and opens pull requests.</p>
+              <small>Open official page</small>
+            </a>
+            <a class="resource" href="https://www.jetbrains.com/help/ai-assistant/junie-agent.html" target="_blank" rel="noreferrer">
+              <span>Europe / Czech Republic</span>
+              <h3>JetBrains Junie</h3>
+              <p>JetBrains coding agent for IDE and terminal workflows, with project edits, command execution, tests, and approvals.</p>
+              <small>Open official page</small>
+            </a>
+            <a class="resource" href="https://mistral.ai/products/vibe/" target="_blank" rel="noreferrer">
+              <span>Europe / France</span>
+              <h3>Mistral Vibe</h3>
+              <p>European work and code agent for long-horizon tasks, company knowledge, tools, coding, deployment, and data residency options.</p>
+              <small>Open official page</small>
+            </a>
+            <a class="resource" href="https://n8n.io/ai-agents/" target="_blank" rel="noreferrer">
+              <span>Europe / Germany</span>
+              <h3>n8n AI agents</h3>
+              <p>Workflow harness for tool-connected agents, logic, code, integrations, human-in-the-loop guardrails, and self-hosting.</p>
+              <small>Open official page</small>
+            </a>
+            <a class="resource" href="https://dust.tt/" target="_blank" rel="noreferrer">
+              <span>Europe / France</span>
+              <h3>Dust</h3>
+              <p>Multiplayer AI workspace where agents connect to company knowledge, tools, conversations, and team workflows.</p>
+              <small>Open official page</small>
+            </a>
+            <a class="resource" href="https://docs.lovable.dev/introduction/welcome" target="_blank" rel="noreferrer">
+              <span>Europe / Sweden</span>
+              <h3>Lovable</h3>
+              <p>Full-stack AI development platform for turning natural language into editable, deployable web applications.</p>
+              <small>Open official page</small>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -665,67 +902,55 @@
     <section class="section" id="resources" aria-labelledby="resources-title">
       <div class="section-inner">
         <p class="eyebrow">Curated starter resources</p>
-        <h2 id="resources-title">Useful places to begin in your country, school, team, or language.</h2>
-        <p class="lead">This is a starter directory, not a giant database. The point is to help educators, leaders, parents, students, and operators find credible first routes into AI literacy and management literacy.</p>
+        <h2 id="resources-title">Useful places to begin in your country, organisation, school, or team.</h2>
+        <p class="lead">This is a starter map, not a giant database. The point is to help leaders and managers find credible first routes into AI literacy, education guidance, and management literacy.</p>
         <div class="resources-grid">
           <a class="resource" href="https://www.gov.uk/government/publications/understanding-ai-in-education-module-1" target="_blank" rel="noreferrer">
             <span>England</span>
             <h3>DfE: Understanding AI in education</h3>
-            <p>School and college staff</p>
+            <p>Free support materials for school and college staff using AI safely and effectively.</p>
             <small>Open resource</small>
           </a>
-          <a class="resource" href="https://www.unesco.org/en/articles/ai-competency-framework-students?hub=750" target="_blank" rel="noreferrer">
-            <span>Global</span>
-            <h3>UNESCO AI Competency Framework for Students</h3>
-            <p>Curriculum designers and educators</p>
-            <small>Open resource</small>
-          </a>
-          <a class="resource" href="https://www.teachai.org/toolkit-about" target="_blank" rel="noreferrer">
-            <span>Global</span>
-            <h3>TeachAI Guidance for Schools Toolkit</h3>
-            <p>Education leaders</p>
-            <small>Open resource</small>
-          </a>
-          <a class="resource" href="https://www.oecd.org/en/about/projects/pisa-2029-media-and-artificial-intelligence-literacy.html" target="_blank" rel="noreferrer">
-            <span>OECD</span>
-            <h3>OECD PISA 2029 Media and AI Literacy</h3>
-            <p>Policy and assessment teams</p>
+          <a class="resource" href="https://www.gov.scot/news/ai-guidance-for-schools/" target="_blank" rel="noreferrer">
+            <span>Scotland</span>
+            <h3>Scottish AI guidance for schools</h3>
+            <p>National guardrails for safe, ethical AI use while keeping teacher judgement central.</p>
             <small>Open resource</small>
           </a>
           <a class="resource" href="https://digital-strategy.ec.europa.eu/en/policies/ai-talent-skills-and-literacy" target="_blank" rel="noreferrer">
             <span>Europe</span>
             <h3>EU AI literacy and Article 4</h3>
-            <p>Organisations using AI systems</p>
+            <p>AI Act literacy expectations for providers, deployers, staff, and affected contexts.</p>
             <small>Open resource</small>
           </a>
-          <a class="resource" href="https://www.linkedin.com/pulse/right-leading-what-matters-digital-age-leadership-technology-hey/" target="_blank" rel="noreferrer">
+          <a class="resource" href="https://www.unesco.org/en/digital-education/ai-future-learning/competency-frameworks" target="_blank" rel="noreferrer">
             <span>Global</span>
-            <h3>Nancy Hey OBE: But is it right? Leading for what matters in the digital age</h3>
-            <p>Leaders working with technology, facts, values, and ethics</p>
+            <h3>UNESCO AI competency frameworks</h3>
+            <p>Student and teacher competency framing for education systems and curriculum teams.</p>
             <small>Open resource</small>
           </a>
-          <a class="resource" href="https://www.raspberrypi.org/blog/experience-ai-the-story-so-far/" target="_blank" rel="noreferrer">
-            <span>UK and global partners</span>
-            <h3>Raspberry Pi Experience AI</h3>
-            <p>Teachers and young people</p>
+          <a class="resource" href="https://www.oecd.org/en/about/projects/pisa-2029-media-and-artificial-intelligence-literacy.html" target="_blank" rel="noreferrer">
+            <span>OECD</span>
+            <h3>OECD PISA 2029 Media and AI Literacy</h3>
+            <p>Assessment direction for proactive, critical engagement with digital and AI tools.</p>
             <small>Open resource</small>
           </a>
-          <a class="resource" href="https://www.commonsense.org/education/ai-in-schools" target="_blank" rel="noreferrer">
-            <span>US and global</span>
-            <h3>Common Sense AI literacy lessons</h3>
-            <p>Grades 6 to 12 educators</p>
+          <a class="resource" href="https://www.education.gov.au/schooling/announcements/australian-framework-generative-artificial-intelligence-ai-schools" target="_blank" rel="noreferrer">
+            <span>Australia</span>
+            <h3>Australian Framework for Generative AI in Schools</h3>
+            <p>Six principles for responsible and ethical generative AI in school education.</p>
             <small>Open resource</small>
           </a>
-          <a class="resource" href="https://ai4k12.org/" target="_blank" rel="noreferrer">
-            <span>US-origin, globally useful</span>
-            <h3>AI4K12 Five Big Ideas</h3>
-            <p>K-12 standards and curriculum teams</p>
+          <a class="resource" href="https://www.moe.gov.sg/education-in-sg/educational-technology-journey/edtech-masterplan/artificial-intelligence-in-education" target="_blank" rel="noreferrer">
+            <span>Singapore</span>
+            <h3>Singapore MOE: Artificial intelligence in education</h3>
+            <p>Responsible, age-appropriate AI use with agency, inclusivity, fairness, and safety.</p>
             <small>Open resource</small>
           </a>
-          <a class="resource" href="https://course.elementsofai.com/" target="_blank" rel="noreferrer">
-            <span>Multilingual</span>
-            <h3>Elements of AI</h3>
-            <p>Adults and general learners</p>
+          <a class="resource" href="https://www.teachai.org/toolkit" target="_blank" rel="noreferrer">
+            <span>Global</span>
+            <h3>TeachAI Guidance for Schools Toolkit</h3>
+            <p>Toolkit for education leaders creating practical AI guidance and policy.</p>
             <small>Open resource</small>
           </a>
         </div>

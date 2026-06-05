@@ -291,9 +291,9 @@
     "domain": "agenticleader.com",
     "mode": "agentic_leader",
     "name": "Agentic Leader",
-    "title": "Agentic Leader | Learn to lead agentics",
-    "heading": "Learn to lead agentics.",
-    "summary": "A practical field guide for people learning how to manage agentic workers: outcomes, boundaries, evidence, cadence, attention, escalation, and human judgement.",
+    "title": "Agentic Leader | Directing is management",
+    "heading": "AI changes work from doing to directing.",
+    "summary": "Directing is management. A practical field guide for leaders learning how to manage agentic workers with evidence, boundaries, cadence, attention, escalation, and human judgement.",
     "eyebrow": "Field guide for agentic leadership",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "leadership", "education", "management"],
@@ -302,47 +302,47 @@
     "matomo_site_id": "9",
     "hero_image": "https://www.tonywood.org/assets/countryside-hero.jpg",
     "analytics_goal": {
-      "site_goal": "Help current and next-generation leaders learn how to work with agentics through outcomes, boundaries, evidence, cadence, attention, escalation, and judgement.",
+      "site_goal": "Help current and next-generation leaders learn how to manage agentic workers through outcomes, boundaries, evidence, cadence, attention, escalation, and judgement.",
       "primary_conversion": "agentic_leadership_learning_progression",
       "measurement_note": "Track Agentic Leader visits, Tonywood.org writing clicks, resource clicks, and eventual advisory movements from education and management-literacy messages."
     },
-    "primary_action_label": "Start with the field guide",
-    "secondary_action_label": "Read the essay",
+    "primary_action_label": "Start the operating model",
+    "secondary_action_label": "Read the missing literacy essay",
     "secondary_action_url": "https://www.tonywood.org/writing/management-is-the-missing-literacy/",
     "brief_eyebrow": "The shift",
-    "brief_title": "AI changes work from doing to directing.",
-    "brief": "When people use AI well, they are not only producing output. They are setting intent, shaping tasks, judging quality, checking evidence, protecting attention, and staying responsible for what goes out into the world.",
-    "brief_support": "That is management. Not management as hierarchy, but management as a human literacy: knowing what good looks like and keeping yourself in the loop.",
+    "brief_title": "Directing is management.",
+    "brief": "When people use agentic systems well, they are not only producing output. They are setting intent, shaping tasks, judging quality, checking evidence, protecting attention, and staying responsible for what goes out into the world.",
+    "brief_support": "The skill is not magic prompting. It is management as a human literacy: knowing what good looks like, knowing what you do not know, and keeping yourself meaningfully in the loop.",
     "field_guide": [
       {
         "label": "01",
         "title": "Outcome",
-        "body": "Name the north star before asking an agent to move. What result would make the work useful?"
+        "body": "Name the useful result before asking an agentic worker to move. What outcome would make the work worth doing?"
       },
       {
         "label": "02",
         "title": "Role",
-        "body": "Say what the agentic is doing, what the human owns, and who is accountable for the final decision."
+        "body": "Say what the agentic worker may do, what the human owns, and who is accountable for the final decision."
       },
       {
         "label": "03",
         "title": "Boundary",
-        "body": "Define what it can read, change, publish, spend, remember, or escalate before autonomy gets wider."
+        "body": "Define what it can read, change, publish, spend, remember, and escalate before autonomy gets wider."
       },
       {
         "label": "04",
         "title": "Evidence",
-        "body": "Ask what changed, which sources matter, what is uncertain, and what would make you reject the answer."
+        "body": "Ask what supports the answer, how confident you should be, what is missing, and what would change your mind."
       },
       {
         "label": "05",
         "title": "Cadence",
-        "body": "Create a rhythm for review, exceptions, drift, lessons, and decisions that need human judgement."
+        "body": "Create a rhythm for review, exceptions, drift, lessons, and decisions that need slower human judgement."
       },
       {
         "label": "06",
         "title": "Attention",
-        "body": "Protect the scarce thing. Decide where attention belongs instead of letting tools and feeds spend it for you."
+        "body": "Protect the scarce thing. Decide where attention belongs before tools, feeds, and agents spend it for you."
       },
       {
         "label": "07",
@@ -350,88 +350,194 @@
         "body": "Pause when stakes rise, signals conflict, the pattern is novel, or the decision is not yours to make."
       }
     ],
+    "judgement_loop": [
+      {
+        "title": "Head",
+        "body": "What is the evidence, how strong is it, what is missing, and what would change our mind?"
+      },
+      {
+        "title": "Heart",
+        "body": "Who is affected, who has not been heard, and where does fairness matter most?"
+      },
+      {
+        "title": "Gut",
+        "body": "What feels off, which weak signals are present, and what could fail if we are overconfident?"
+      },
+      {
+        "title": "Spine",
+        "body": "Which rules, rights, thresholds, and accountabilities must hold even under pressure?"
+      },
+      {
+        "title": "Core purpose",
+        "body": "What human value, organisational purpose, or public good is this work ultimately meant to serve?"
+      }
+    ],
+    "scrutiny_checks": [
+      {
+        "title": "Confidence is not certainty",
+        "body": "Treat evidence as decision support. Ask what can be supported, with what confidence, for which decision, under which risks."
+      },
+      {
+        "title": "Power creates blind spots",
+        "body": "Build routines for dissent, premortems, stakeholder challenge, and review instead of relying on senior instinct alone."
+      },
+      {
+        "title": "Fair process keeps respect",
+        "body": "People may dislike a decision and still respect the process when the reasoning, constraints, and review path are clear."
+      },
+      {
+        "title": "Human in the loop is not enough",
+        "body": "Oversight only works when the human has time, context, authority, evidence, and permission to intervene."
+      }
+    ],
     "first_steps": [
       {
         "title": "Define good",
-        "body": "Write three signs of a good answer before the agent produces one."
+        "body": "Write three signs of a good answer before the agentic worker produces one."
       },
       {
         "title": "Brief the work",
         "body": "Give context, audience, constraints, source expectations, and a clear stopping point."
       },
       {
-        "title": "Reject generic",
-        "body": "Mark down work that could have come from anyone. Add judgement, taste, evidence, and yourself."
+        "title": "Set the boundary",
+        "body": "Decide what the agent can read, change, publish, remember, or escalate before the task starts."
+      },
+      {
+        "title": "Show the evidence",
+        "body": "Ask for sources, assumptions, uncertainty, and rejection tests before accepting confident output."
       },
       {
         "title": "Record judgement",
-        "body": "Keep a small trail: what you asked, what you accepted, what you rejected, and why."
+        "body": "Keep a small trail: what you asked, what changed your mind, what you rejected, and why."
+      }
+    ],
+    "harness_cards": [
+      {
+        "title": "See the work",
+        "body": "Local files, repos, documents, data, and context are available instead of pasted fragments."
       },
       {
-        "title": "Protect attention",
-        "body": "Batch interruptions, review exceptions, and ask whether this signal deserves time."
+        "title": "Use real tools",
+        "body": "Code, scripts, browsers, checks, data tools, and plugins can be used inside the workflow."
+      },
+      {
+        "title": "Change the artifact",
+        "body": "The agent can update code, reports, pages, documents, and other working outputs."
+      },
+      {
+        "title": "Verify as you go",
+        "body": "Diffs, tests, previews, screenshots, logs, and smoke checks make quality inspectable."
+      },
+      {
+        "title": "Keep the trail",
+        "body": "Prompts, decisions, edits, evidence, and results become reviewable management records."
+      }
+    ],
+    "harness_links": [
+      {
+        "name": "OpenAI Codex",
+        "region": "US / global",
+        "audience": "Coding agent for real engineering work: repos, edits, reviews, parallel tasks, and shipping workflows.",
+        "url": "https://openai.com/codex/"
+      },
+      {
+        "name": "Anthropic Claude Code",
+        "region": "US / global",
+        "audience": "Agentic coding system that reads codebases, changes files, uses CLI tools, runs tests, and returns code for review.",
+        "url": "https://www.anthropic.com/product/claude-code"
+      },
+      {
+        "name": "GitHub Copilot cloud agent",
+        "region": "US / global",
+        "audience": "Asynchronous GitHub agent with an ephemeral Actions environment for changes, tests, branches, and pull requests.",
+        "url": "https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent"
+      },
+      {
+        "name": "Google Jules",
+        "region": "US / global",
+        "audience": "Async coding agent for GitHub repos that works in a cloud VM, produces diffs, and opens pull requests.",
+        "url": "https://jules.google/"
+      },
+      {
+        "name": "JetBrains Junie",
+        "region": "Europe / Czech Republic",
+        "audience": "JetBrains coding agent for IDE and terminal workflows, with project edits, command execution, tests, and approvals.",
+        "url": "https://www.jetbrains.com/help/ai-assistant/junie-agent.html"
+      },
+      {
+        "name": "Mistral Vibe",
+        "region": "Europe / France",
+        "audience": "European work and code agent for long-horizon tasks, company knowledge, tools, coding, deployment, and data residency options.",
+        "url": "https://mistral.ai/products/vibe/"
+      },
+      {
+        "name": "n8n AI agents",
+        "region": "Europe / Germany",
+        "audience": "Workflow harness for tool-connected agents, logic, code, integrations, human-in-the-loop guardrails, and self-hosting.",
+        "url": "https://n8n.io/ai-agents/"
+      },
+      {
+        "name": "Dust",
+        "region": "Europe / France",
+        "audience": "Multiplayer AI workspace where agents connect to company knowledge, tools, conversations, and team workflows.",
+        "url": "https://dust.tt/"
+      },
+      {
+        "name": "Lovable",
+        "region": "Europe / Sweden",
+        "audience": "Full-stack AI development platform for turning natural language into editable, deployable web applications.",
+        "url": "https://docs.lovable.dev/introduction/welcome"
       }
     ],
     "resources": [
       {
         "name": "DfE: Understanding AI in education",
         "region": "England",
-        "audience": "School and college staff",
+        "audience": "Free support materials for school and college staff using AI safely and effectively.",
         "url": "https://www.gov.uk/government/publications/understanding-ai-in-education-module-1"
       },
       {
-        "name": "UNESCO AI Competency Framework for Students",
-        "region": "Global",
-        "audience": "Curriculum designers and educators",
-        "url": "https://www.unesco.org/en/articles/ai-competency-framework-students?hub=750"
-      },
-      {
-        "name": "TeachAI Guidance for Schools Toolkit",
-        "region": "Global",
-        "audience": "Education leaders",
-        "url": "https://www.teachai.org/toolkit-about"
-      },
-      {
-        "name": "OECD PISA 2029 Media and AI Literacy",
-        "region": "OECD",
-        "audience": "Policy and assessment teams",
-        "url": "https://www.oecd.org/en/about/projects/pisa-2029-media-and-artificial-intelligence-literacy.html"
+        "name": "Scottish AI guidance for schools",
+        "region": "Scotland",
+        "audience": "National guardrails for safe, ethical AI use while keeping teacher judgement central.",
+        "url": "https://www.gov.scot/news/ai-guidance-for-schools/"
       },
       {
         "name": "EU AI literacy and Article 4",
         "region": "Europe",
-        "audience": "Organisations using AI systems",
+        "audience": "AI Act literacy expectations for providers, deployers, staff, and affected contexts.",
         "url": "https://digital-strategy.ec.europa.eu/en/policies/ai-talent-skills-and-literacy"
       },
       {
-        "name": "Nancy Hey OBE: But is it right? Leading for what matters in the digital age",
+        "name": "UNESCO AI competency frameworks",
         "region": "Global",
-        "audience": "Leaders working with technology, facts, values, and ethics",
-        "url": "https://www.linkedin.com/pulse/right-leading-what-matters-digital-age-leadership-technology-hey/"
+        "audience": "Student and teacher competency framing for education systems and curriculum teams.",
+        "url": "https://www.unesco.org/en/digital-education/ai-future-learning/competency-frameworks"
       },
       {
-        "name": "Raspberry Pi Experience AI",
-        "region": "UK and global partners",
-        "audience": "Teachers and young people",
-        "url": "https://www.raspberrypi.org/blog/experience-ai-the-story-so-far/"
+        "name": "OECD PISA 2029 Media and AI Literacy",
+        "region": "OECD",
+        "audience": "Assessment direction for proactive, critical engagement with digital and AI tools.",
+        "url": "https://www.oecd.org/en/about/projects/pisa-2029-media-and-artificial-intelligence-literacy.html"
       },
       {
-        "name": "Common Sense AI literacy lessons",
-        "region": "US and global",
-        "audience": "Grades 6 to 12 educators",
-        "url": "https://www.commonsense.org/education/ai-in-schools"
+        "name": "Australian Framework for Generative AI in Schools",
+        "region": "Australia",
+        "audience": "Six principles for responsible and ethical generative AI in school education.",
+        "url": "https://www.education.gov.au/schooling/announcements/australian-framework-generative-artificial-intelligence-ai-schools"
       },
       {
-        "name": "AI4K12 Five Big Ideas",
-        "region": "US-origin, globally useful",
-        "audience": "K-12 standards and curriculum teams",
-        "url": "https://ai4k12.org/"
+        "name": "Singapore MOE: Artificial intelligence in education",
+        "region": "Singapore",
+        "audience": "Responsible, age-appropriate AI use with agency, inclusivity, fairness, and safety.",
+        "url": "https://www.moe.gov.sg/education-in-sg/educational-technology-journey/edtech-masterplan/artificial-intelligence-in-education"
       },
       {
-        "name": "Elements of AI",
-        "region": "Multilingual",
-        "audience": "Adults and general learners",
-        "url": "https://course.elementsofai.com/"
+        "name": "TeachAI Guidance for Schools Toolkit",
+        "region": "Global",
+        "audience": "Toolkit for education leaders creating practical AI guidance and policy.",
+        "url": "https://www.teachai.org/toolkit"
       }
     ],
     "writing_links": [

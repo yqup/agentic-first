@@ -3460,6 +3460,52 @@ function agenticLeaderPageFor(site) {
     { label: "07", title: "Escalation", body: "Pause when stakes rise, signals conflict, or authority is unclear." },
   ];
   const firstSteps = site.first_steps || [];
+  const harnessCards = site.harness_cards || [
+    { title: "See the work", body: "Local files, repos, documents, data, and context are available instead of pasted fragments." },
+    { title: "Use real tools", body: "Code, scripts, browsers, checks, data tools, and plugins can be used inside the workflow." },
+    { title: "Change the artifact", body: "The agent can update code, reports, pages, documents, and other working outputs." },
+    { title: "Verify as you go", body: "Diffs, tests, previews, screenshots, logs, and smoke checks make quality inspectable." },
+    { title: "Keep the trail", body: "Prompts, decisions, edits, evidence, and results become reviewable management records." },
+  ];
+  const harnessLinks = site.harness_links || [
+    {
+      name: "OpenAI Codex",
+      region: "US / global",
+      audience: "Coding agent for real engineering work: repos, edits, reviews, parallel tasks, and shipping workflows.",
+      url: "https://openai.com/codex/",
+    },
+    {
+      name: "Anthropic Claude Code",
+      region: "US / global",
+      audience: "Agentic coding system that reads codebases, changes files, uses CLI tools, runs tests, and returns code for review.",
+      url: "https://www.anthropic.com/product/claude-code",
+    },
+    {
+      name: "JetBrains Junie",
+      region: "Europe / Czech Republic",
+      audience: "JetBrains coding agent for IDE and terminal workflows, with project edits, command execution, tests, and approvals.",
+      url: "https://www.jetbrains.com/help/ai-assistant/junie-agent.html",
+    },
+    {
+      name: "Mistral Vibe",
+      region: "Europe / France",
+      audience: "European work and code agent for long-horizon tasks, company knowledge, tools, coding, deployment, and data residency options.",
+      url: "https://mistral.ai/products/vibe/",
+    },
+  ];
+  const judgementLoop = site.judgement_loop || [
+    { title: "Head", body: "What is the evidence, how strong is it, and what would change our mind?" },
+    { title: "Heart", body: "Who is affected, who has not been heard, and where does fairness matter most?" },
+    { title: "Gut", body: "What feels off, which weak signals are present, and what could fail?" },
+    { title: "Spine", body: "Which rules, rights, thresholds, and accountabilities must hold?" },
+    { title: "Core purpose", body: "What human value, organisational purpose, or public good does this serve?" },
+  ];
+  const scrutinyChecks = site.scrutiny_checks || [
+    { title: "Confidence is not certainty", body: "Treat evidence as decision support, not proof." },
+    { title: "Power creates blind spots", body: "Use dissent and premortems to reveal what senior instinct may miss." },
+    { title: "Fair process keeps respect", body: "People can dislike a decision and still respect how it was made." },
+    { title: "Oversight needs authority", body: "A human in the loop needs time, context, and permission to intervene." },
+  ];
   const resources = site.resources || [];
   const writingLinks = site.writing_links || [];
   const mapLines = fieldGuide.slice(0, 6);
@@ -3544,6 +3590,8 @@ ${matomoScriptTagFor(site)}  <style>
 
     nav {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
       gap: 22px;
       font-size: 14px;
       font-weight: 780;
@@ -3714,6 +3762,9 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .map-node span,
+    .loop-card span,
+    .scrutiny-card span,
+    .harness-card span,
     .resource span,
     .writing span {
       color: var(--clay);
@@ -3767,6 +3818,9 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .guide-card,
+    .loop-card,
+    .scrutiny-card,
+    .harness-card,
     .step,
     .resource,
     .writing {
@@ -3780,6 +3834,53 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 16px;
     }
 
+    .loop-grid,
+    .scrutiny-grid,
+    .harness-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .loop-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .scrutiny-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .harness-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .loop-card,
+    .scrutiny-card,
+    .harness-card {
+      min-height: 188px;
+      padding: 18px;
+    }
+
+    .loop-card {
+      background: #fbf7ea;
+    }
+
+    .scrutiny-card {
+      background: #eef3ed;
+    }
+
+    .harness-card {
+      background: var(--white);
+    }
+
+    .harness-links {
+      margin-top: 42px;
+    }
+
+    .harness-links h3 {
+      margin-top: 0;
+    }
+
     .guide-card span {
       display: block;
       margin-bottom: 34px;
@@ -3789,7 +3890,17 @@ ${matomoScriptTagFor(site)}  <style>
       font-weight: 840;
     }
 
+    .loop-card span,
+    .scrutiny-card span,
+    .harness-card span {
+      display: block;
+      margin-bottom: 24px;
+    }
+
     .guide-card p,
+    .loop-card p,
+    .scrutiny-card p,
+    .harness-card p,
     .step p,
     .resource p,
     .writing p,
@@ -3907,6 +4018,12 @@ ${matomoScriptTagFor(site)}  <style>
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
+      .loop-grid,
+      .scrutiny-grid,
+      .harness-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .steps,
       .resources-grid,
       .writing-grid {
@@ -3948,6 +4065,9 @@ ${matomoScriptTagFor(site)}  <style>
 
       .map-grid,
       .guide-grid,
+      .loop-grid,
+      .scrutiny-grid,
+      .harness-grid,
       .steps,
       .resources-grid,
       .writing-grid {
@@ -3973,9 +4093,11 @@ ${matomoScriptTagFor(site)}  <style>
     </a>
     <nav aria-label="Primary">
       <a href="#field-guide">Field guide</a>
+      <a href="#judgement">Judgement</a>
+      <a href="#scrutiny">Scrutiny</a>
       <a href="#first-steps">First steps</a>
+      <a href="#harnesses">Harnesses</a>
       <a href="#resources">Resources</a>
-      <a href="#writing">Tony's writing</a>
     </nav>
   </header>
 
@@ -4034,6 +4156,36 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
+    <section class="section" id="judgement" aria-labelledby="judgement-title">
+      <div class="section-inner">
+        <p class="eyebrow">Judgement loop</p>
+        <h2 id="judgement-title">Evidence is decision support, not certainty.</h2>
+        <p class="lead">Use this loop before widening autonomy, accepting high-confidence output, or moving from recommendation to decision.</p>
+        <div class="loop-grid">
+          ${judgementLoop.map((item, index) => `<article class="loop-card">
+            <span>${String(index + 1).padStart(2, "0")}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="scrutiny" aria-labelledby="scrutiny-title">
+      <div class="section-inner">
+        <p class="eyebrow">Decisions under scrutiny</p>
+        <h2 id="scrutiny-title">The larger the consequence, the stronger the evidence and process should be.</h2>
+        <p class="lead">Agentic work speeds up decisions. Leadership is making the uncertainty, accountability, blind spots, and review path visible before speed amplifies weak judgement.</p>
+        <div class="scrutiny-grid">
+          ${scrutinyChecks.map((item) => `<article class="scrutiny-card">
+            <span>Check</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
     <section class="section quote-band" aria-labelledby="thinking-title">
       <div class="section-inner quote-panel">
         <p class="eyebrow">Attention and agency</p>
@@ -4056,11 +4208,39 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
+    <section class="section" id="harnesses" aria-labelledby="harness-title">
+      <div class="section-inner">
+        <p class="eyebrow">Work harnesses</p>
+        <h2 id="harness-title">Move out of chat and into the harness.</h2>
+        <p class="lead">A chat can produce words. A harness lets an agentic worker see the work, use tools, change files, run checks, create reports, and bring evidence back for review.</p>
+        <div class="harness-grid">
+          ${harnessCards.map((card, index) => `<article class="harness-card">
+            <span>${String(index + 1).padStart(2, "0")}</span>
+            <h3>${escapeHtml(card.title)}</h3>
+            <p>${escapeHtml(card.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+        <div class="harness-links" aria-labelledby="harness-links-title">
+          <p class="eyebrow">Starter harness links</p>
+          <h3 id="harness-links-title">Places to inspect the pattern.</h3>
+          <p class="lead">The important question is not which logo wins. Ask what work it can see, what tools it can use, what it can change, how it verifies, and what evidence it leaves behind.</p>
+          <div class="resources-grid">
+            ${harnessLinks.map((link) => `<a class="resource" href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer">
+              <span>${escapeHtml(link.region)}</span>
+              <h3>${escapeHtml(link.name)}</h3>
+              <p>${escapeHtml(link.audience)}</p>
+              <small>Open official page</small>
+            </a>`).join("\n            ")}
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="resources" aria-labelledby="resources-title">
       <div class="section-inner">
         <p class="eyebrow">Curated starter resources</p>
-        <h2 id="resources-title">Useful places to begin in your country, school, team, or language.</h2>
-        <p class="lead">This is a starter directory, not a giant database. The point is to help educators, leaders, parents, students, and operators find credible first routes into AI literacy and management literacy.</p>
+        <h2 id="resources-title">Useful places to begin in your country, organisation, school, or team.</h2>
+        <p class="lead">This is a starter map, not a giant database. The point is to help leaders and managers find credible first routes into AI literacy, education guidance, and management literacy.</p>
         <div class="resources-grid">
           ${resources.map((resource) => `<a class="resource" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">
             <span>${escapeHtml(resource.region)}</span>
