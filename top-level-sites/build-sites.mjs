@@ -82,6 +82,9 @@ for (const site of sites) {
   if (site.mode === "agentic_leader") {
     await writeFile(path.join(wwwRoot, "index.html"), agenticLeaderPageFor(site), "utf8");
   }
+  if (site.mode === "snaxk") {
+    await writeFile(path.join(wwwRoot, "index.html"), snaxkPageFor(site), "utf8");
+  }
   if (site.mode === "gamma") {
     await writeFile(
       path.join(wwwRoot, "index.html"),
@@ -368,7 +371,7 @@ function matomoLoaderSource() {
 }
 
 function isLocalPageMode(mode) {
-  return ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "gamma"].includes(mode);
+  return ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "snaxk", "gamma"].includes(mode);
 }
 
 function composeFor(items) {
@@ -476,7 +479,7 @@ const config = ${JSON.stringify(serverConfig, null, 2)};
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || ${nodeServerPort});
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
-const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "gamma"].includes(config.mode);
+const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "snaxk", "gamma"].includes(config.mode);
 
 const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],
@@ -789,7 +792,9 @@ function edgeCaddyFor(site) {
               ? "Normal pages are served by the per-site bespoke Orchistra container."
               : site.mode === "agentic_leader"
                 ? "Normal pages are served by the per-site bespoke Agentic Leader field-guide container."
-                : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
+                : site.mode === "snaxk"
+                  ? "Normal pages are served by the per-site bespoke SNAXK judgement container."
+                  : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
   const hostBlock = site.redirect_www_to_apex
     ? `${site.domain} {
 	encode zstd gzip
@@ -893,6 +898,17 @@ function faviconFor(site) {
 </svg>
 `;
   }
+  if (site.domain === "snaxk.com") {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#4b2f1b"/>
+  <rect x="10" y="13" width="44" height="38" rx="14" fill="#f5cf75"/>
+  <path d="M20 37c3-10 9-16 18-18c5 3 8 8 9 15" fill="none" stroke="#4b2f1b" stroke-width="4" stroke-linecap="round"/>
+  <path d="M20 37c7 3 15 3 24 0" fill="none" stroke="#9b5b25" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="42" cy="27" r="2.5" fill="#4b2f1b"/>
+  <path d="M17 44h30" stroke="#4b2f1b" stroke-width="4" stroke-linecap="round"/>
+</svg>
+`;
+  }
 
   const initials = site.name
     .split(/\s+/)
@@ -949,7 +965,12 @@ guide for learning how to manage agentic workers: outcomes, boundaries,
 evidence, cadence, attention, escalation, and human judgement. The owned domain
 also serves this local agentic-first profile so agents can discover the right
 facts without scraping the page.`
-                : `The human-facing design for this site is ingested from Gamma into the
+                : site.mode === "snaxk"
+                  ? `The human-facing page is a local static SNAXK research page
+about judgement, judgement boundaries, review, and measurement for long-running
+agents. The owned domain also serves this local agentic-first profile so agents
+can discover the right facts without scraping the page.`
+                  : `The human-facing design for this site is ingested from Gamma into the
 per-site local container. The owned domain also serves this local agentic-first
 profile so agents can discover the right facts without scraping the Gamma page.`;
 
@@ -986,7 +1007,9 @@ function healthFor(site) {
                 ? "static-orchistra-container"
                 : site.mode === "agentic_leader"
                   ? "static-agentic-leader-container"
-                  : "gamma-fronting-container",
+                  : site.mode === "snaxk"
+                    ? "static-snaxk-container"
+                    : "gamma-fronting-container",
     updated_at: updatedAt,
     agentic_profile: "/.well-known/agentic-profile.json",
     matomo_site_id: site.matomo_site_id || null,
@@ -2684,6 +2707,739 @@ function caoMandateSvg() {
     <text x="552" y="462">decisions</text>
   </g>
 </svg>`;
+}
+
+function snaxkPageFor(site) {
+  const title = site.title || "SNAXK | Judgement for long-running agents";
+  const summary = site.summary || "SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review.";
+  const lozenge = site.brand_assets?.lozenge || "/assets/snaxk-lozenge.png";
+  const logo = site.brand_assets?.logo || "/assets/snaxk-logo.png";
+  const milestone = site.research_milestone || "SNAXK 0.10.8";
+  const statusNote = site.status_note || "Currently being tested first as a skill for OpenClaw. Closed-source for now, and still in active research rollout.";
+  const conversationHref = tonywoodFunnelUrlFor(site, "hero_judgement_boundaries") || defaultTonywoodAdvisoryUrl;
+  const finalConversationHref = tonywoodFunnelUrlFor(site, "final_judgement_boundaries") || defaultTonywoodAdvisoryUrl;
+  const loop = site.judgement_loop || [
+    { label: "01", title: "Fast heuristic pass", body: "Scan messages, events, and signals before action." },
+    { label: "02", title: "Meaning check", body: "Separate routine noise from work that deserves judgement." },
+    { label: "03", title: "Bounded route", body: "Move triggered cases through clear boundaries and guardrails." },
+    { label: "04", title: "Reflect overnight", body: "Compare, reflect, and wait before changing behaviour." },
+    { label: "05", title: "Reviewed carry-forward", body: "Only reviewed changes become future judgement." },
+  ];
+  const boundaries = site.boundary_checks || [
+    { title: "When to slow down", body: "High consequence, weak evidence, unfamiliar context, or mismatched confidence." },
+    { title: "When to stop", body: "A request crosses permission, privacy, safety, spending, publishing, or accountability boundaries." },
+    { title: "What to share", body: "Judgement includes deciding what is appropriate to reveal, quote, remember, or pass to another system." },
+    { title: "How to adapt", body: "The same action may be right for one person, wrong for another, and unclear until context is reviewed." },
+  ];
+  const measurements = site.measurement_checks || [
+    "Is this safer?",
+    "Is it more understandable to humans?",
+    "Is it better than a simpler alternative?",
+    "Can we measure trustworthiness over time?",
+  ];
+  const sections = site.sections || [
+    {
+      title: "Agents can produce output before they know how to judge it.",
+      body: "Most agent systems are already good at taking a task and producing an answer. The real gap is judgement.",
+    },
+    {
+      title: "The control layer should be lightweight.",
+      body: "SNAXK is testing whether a smaller research skill can help long-running agents notice when to continue, pause, escalate, or change course.",
+    },
+  ];
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(summary)}">
+  <link rel="preload" as="image" href="${escapeHtml(lozenge)}">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${matomoScriptTagFor(site)}  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17120d;
+      --muted: #65584c;
+      --paper: #fff7e8;
+      --cream: #fffdf7;
+      --brown: #4b2f1b;
+      --brown-soft: #76512b;
+      --gold: #f2b84b;
+      --honey: #f6d98d;
+      --sage: #64765c;
+      --mist: #dbe6e0;
+      --line: rgba(75, 47, 27, 0.17);
+      --shadow: rgba(53, 35, 19, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #fffaf0 0, var(--paper) 420px, #f8efe0 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 40px;
+      background: rgba(255, 253, 247, 0.92);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--brown);
+      text-decoration: none;
+      font-weight: 860;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    nav a {
+      text-decoration: none;
+    }
+
+    main {
+      overflow: hidden;
+    }
+
+    .hero {
+      min-height: 690px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+      gap: 42px;
+      align-items: center;
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      padding: 72px 40px 64px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--sage);
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 860;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 11ch;
+      color: var(--brown);
+      font-size: 84px;
+      line-height: 0.95;
+      font-weight: 890;
+    }
+
+    h2 {
+      color: var(--brown);
+      font-size: 46px;
+      line-height: 1.05;
+      font-weight: 850;
+    }
+
+    h3 {
+      color: var(--ink);
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 820;
+    }
+
+    .lede {
+      max-width: 700px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: 21px;
+      line-height: 1.55;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 18px;
+      border: 1px solid var(--brown);
+      border-radius: 6px;
+      background: var(--brown);
+      color: #fffdf7;
+      text-decoration: none;
+      font-weight: 820;
+      white-space: nowrap;
+    }
+
+    .button svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--brown);
+    }
+
+    .research-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .research-strip span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 253, 247, 0.74);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .hero-lab {
+      position: relative;
+      display: grid;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 247, 0.94), rgba(255, 247, 232, 0.92));
+      box-shadow: 0 24px 70px var(--shadow);
+    }
+
+    .lozenge {
+      display: grid;
+      place-items: center;
+      min-height: 230px;
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(246, 217, 141, 0.28), rgba(219, 230, 224, 0.36)),
+        #fffdf7;
+      border: 1px solid rgba(75, 47, 27, 0.12);
+    }
+
+    .lozenge img {
+      width: min(280px, 82%);
+      height: auto;
+      display: block;
+    }
+
+    .lab-copy p,
+    .section-copy p,
+    .step p,
+    .boundary p,
+    .measure-panel p,
+    .status-panel p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.56;
+    }
+
+    .mini-loop {
+      display: grid;
+      gap: 8px;
+      margin: 2px 0 0;
+    }
+
+    .mini-loop span {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 6px;
+      background: #f3ead8;
+      color: var(--brown);
+      font-size: 13px;
+      font-weight: 790;
+    }
+
+    .section {
+      padding: 70px 40px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(420px, 1fr);
+      gap: 44px;
+      align-items: start;
+    }
+
+    .section-copy {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-copy article {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--cream);
+    }
+
+    .loop-band {
+      background: #fffdf7;
+    }
+
+    .loop-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .step {
+      min-height: 230px;
+      display: grid;
+      align-content: start;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff8e7;
+    }
+
+    .step span {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 32px;
+      border-radius: 8px;
+      background: var(--brown);
+      color: #fffdf7;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .boundary-band {
+      background:
+        linear-gradient(180deg, rgba(219, 230, 224, 0.54), rgba(255, 247, 232, 0.7));
+    }
+
+    .boundary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .boundary {
+      min-height: 180px;
+      padding: 18px;
+      border: 1px solid rgba(75, 47, 27, 0.18);
+      border-radius: 8px;
+      background: rgba(255, 253, 247, 0.82);
+    }
+
+    .boundary::before {
+      content: "";
+      display: block;
+      width: 42px;
+      height: 5px;
+      margin-bottom: 28px;
+      border-radius: 999px;
+      background: var(--gold);
+    }
+
+    .measure {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .measure-panel {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--cream);
+    }
+
+    .measure-list {
+      display: grid;
+      gap: 10px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .measure-list li {
+      display: grid;
+      grid-template-columns: 20px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .measure-list li::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      margin-top: 6px;
+      border-radius: 999px;
+      background: var(--sage);
+      box-shadow: 0 0 0 4px rgba(100, 118, 92, 0.15);
+    }
+
+    .status-panel {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 20px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(246, 217, 141, 0.30), rgba(255, 253, 247, 0.92));
+      text-align: center;
+    }
+
+    .status-panel img {
+      width: min(240px, 84%);
+      height: auto;
+      display: block;
+    }
+
+    .cta {
+      background: var(--brown);
+      color: #fffdf7;
+    }
+
+    .cta h2,
+    .cta h3 {
+      color: #fffdf7;
+    }
+
+    .cta .eyebrow {
+      color: var(--honey);
+    }
+
+    .cta p {
+      max-width: 700px;
+      color: rgba(255, 253, 247, 0.82);
+      font-size: 18px;
+      line-height: 1.58;
+    }
+
+    .cta .button {
+      border-color: #fffdf7;
+      background: #fffdf7;
+      color: var(--brown);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 30px 40px;
+      color: rgba(255, 253, 247, 0.74);
+      background: #24150d;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    footer strong {
+      display: block;
+      color: #fffdf7;
+    }
+
+    @media (max-width: 1060px) {
+      .hero,
+      .split,
+      .measure {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 64px;
+      }
+
+      h2 {
+        font-size: 40px;
+      }
+
+      .loop-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .boundary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .site-header {
+        min-height: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px 22px;
+      }
+
+      nav {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .hero,
+      .section {
+        padding: 48px 22px;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      h1 {
+        font-size: 48px;
+      }
+
+      h2 {
+        font-size: 34px;
+      }
+
+      .lede {
+        font-size: 18px;
+      }
+
+      .actions,
+      .button {
+        width: 100%;
+      }
+
+      .hero-lab {
+        padding: 16px;
+      }
+
+      .loop-grid,
+      .boundary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        flex-direction: column;
+        padding: 26px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
+      <img src="${escapeHtml(lozenge)}" alt="">
+      <span>${escapeHtml(site.name)}</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#judgement-loop">Judgement loop</a>
+      <a href="#boundaries">Boundaries</a>
+      <a href="#measurement">Measure</a>
+      <a href="#conversation">Conversation</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">${escapeHtml(site.eyebrow || "SNAXK research")}</p>
+        <h1 id="page-title">${escapeHtml(site.heading || "Judgement for long-running agents.")}</h1>
+        <p class="lede">${escapeHtml(summary)}</p>
+        <div class="actions">
+          <a class="button" href="#judgement-loop">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            ${escapeHtml(site.primary_action_label || "See the judgement loop")}
+          </a>
+          <a class="button secondary" href="${escapeHtml(conversationHref)}"${funnelAttrsFor(site, "hero_judgement_boundaries")}>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
+              <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+            ${escapeHtml(site.secondary_action_label || "Discuss judgement boundaries")}
+          </a>
+        </div>
+        <div class="research-strip" aria-label="Research status">
+          <span>${escapeHtml(milestone)}</span>
+          <span>OpenClaw first</span>
+          <span>Closed-source research rollout</span>
+        </div>
+      </div>
+
+      <aside class="hero-lab" aria-label="SNAXK control layer">
+        <div class="lozenge">
+          <img src="${escapeHtml(lozenge)}" alt="${escapeHtml(site.name)} lozenge">
+        </div>
+        <div class="lab-copy">
+          <p class="eyebrow">Signal before action</p>
+          <h2>Agents can answer before they can judge.</h2>
+          <p>SNAXK sits in the space before action: is anything meaningful happening, is the request bounded, and should the system continue, slow down, stop, or ask for review?</p>
+        </div>
+        <div class="mini-loop" aria-label="Short judgement path">
+          ${loop.slice(0, 3).map((item) => `<span><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.title)}</span>`).join("\n          ")}
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="thesis-title">
+      <div class="section-inner split">
+        <div>
+          <p class="eyebrow">The gap</p>
+          <h2 id="thesis-title">Most agent systems can produce. Fewer know when to pause.</h2>
+          <p class="lede">That is the space SNAXK is operating in: a lightweight layer for better judgement, clearer boundaries, and reviewable change.</p>
+        </div>
+        <div class="section-copy">
+          ${sections.map((section) => `<article>
+            <h3>${escapeHtml(section.title)}</h3>
+            <p>${escapeHtml(section.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section loop-band" id="judgement-loop" aria-labelledby="loop-title">
+      <div class="section-inner">
+        <p class="eyebrow">Judgement loop</p>
+        <h2 id="loop-title">A small loop before long-running agents change course.</h2>
+        <p class="lede">The hypothesis is simple: agents behave better when they do not jump straight from input to action.</p>
+        <div class="loop-grid">
+          ${loop.map((item) => `<article class="step">
+            <span>${escapeHtml(item.label)}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section boundary-band" id="boundaries" aria-labelledby="boundary-title">
+      <div class="section-inner">
+        <p class="eyebrow">Boundary checks</p>
+        <h2 id="boundary-title">The judgement questions are practical.</h2>
+        <p class="lede">Good agentic control is not just a policy document. It is a set of everyday decisions the system can surface and a human can inspect.</p>
+        <div class="boundary-grid">
+          ${boundaries.map((item) => `<article class="boundary">
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="measurement" aria-labelledby="measure-title">
+      <div class="section-inner measure">
+        <div class="measure-panel">
+          <p class="eyebrow">Review and measurement</p>
+          <h2 id="measure-title">Better judgement has to be observable.</h2>
+          <p>SNAXK is useful only if it can be compared with simpler alternatives and if humans can see how the system is changing.</p>
+          <ul class="measure-list">
+            ${measurements.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n            ")}
+          </ul>
+        </div>
+        <aside class="status-panel" aria-label="Research rollout">
+          <img src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)} logo">
+          <div>
+            <p class="eyebrow">Research rollout</p>
+            <h3>${escapeHtml(milestone)}</h3>
+            <p>${escapeHtml(statusNote)}</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section cta" id="conversation">
+      <div class="section-inner">
+        <p class="eyebrow">Useful first conversation</p>
+        <h2>Talk about the judgement boundaries before the agent runs for days.</h2>
+        <p>Where should your agent slow down, stop, adapt, escalate, remember, or refuse to carry a change forward?</p>
+        <div class="actions">
+          <a class="button" href="${escapeHtml(finalConversationHref)}"${funnelAttrsFor(site, "final_judgement_boundaries")}>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
+              <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+            Discuss judgement boundaries
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <strong>${escapeHtml(site.name)}</strong>
+      <div>${escapeHtml(site.domain)}</div>
+    </div>
+    <div>Judgement, boundaries, review, and measurable trust for long-running agents.</div>
+  </footer>
+</body>
+</html>
+`;
 }
 
 function agenticLeaderPageFor(site) {

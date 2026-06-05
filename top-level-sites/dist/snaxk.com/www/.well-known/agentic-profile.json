@@ -13,7 +13,7 @@
       "decision-support"
     ],
     "tagline": "Judgement for long-running agents.",
-    "summary": "SNAXK is a practical research and product space for judgement, evaluation, and decision support in long-running agentic systems."
+    "summary": "SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review."
   },
   "links": {
     "website": "https://snaxk.com"

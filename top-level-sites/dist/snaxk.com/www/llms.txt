@@ -4,9 +4,10 @@ Canonical website: https://snaxk.com/
 Agentic profile: https://snaxk.com/.well-known/agentic-profile.json
 Health check: https://snaxk.com/healthz
 
-The human-facing design for this site is ingested from Gamma into the
-per-site local container. The owned domain also serves this local agentic-first
-profile so agents can discover the right facts without scraping the Gamma page.
+The human-facing page is a local static SNAXK research page
+about judgement, judgement boundaries, review, and measurement for long-running
+agents. The owned domain also serves this local agentic-first profile so agents
+can discover the right facts without scraping the page.
 
 ```json
 {
@@ -24,7 +25,7 @@ profile so agents can discover the right facts without scraping the Gamma page.
       "decision-support"
     ],
     "tagline": "Judgement for long-running agents.",
-    "summary": "SNAXK is a practical research and product space for judgement, evaluation, and decision support in long-running agentic systems."
+    "summary": "SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review."
   },
   "links": {
     "website": "https://snaxk.com"

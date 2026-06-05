@@ -33,10 +33,11 @@
   },
   {
     "domain": "snaxk.com",
+    "mode": "snaxk",
     "name": "SNAXK",
-    "title": "Judgement for long-running agents.",
+    "title": "SNAXK | Judgement for long-running agents",
     "heading": "Judgement for long-running agents.",
-    "summary": "SNAXK is a practical research and product space for judgement, evaluation, and decision support in long-running agentic systems.",
+    "summary": "SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review.",
     "eyebrow": "SNAXK",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "evaluation", "decision-support"],
@@ -48,7 +49,25 @@
       "primary_conversion": "judgement_boundary_conversation",
       "measurement_note": "Track SNAXK interest as visits and Tonywood.org advisory movements from judgement and boundary language."
     },
+    "brand_assets": {
+      "lozenge": "/assets/snaxk-lozenge.png",
+      "logo": "/assets/snaxk-logo.png"
+    },
+    "research_milestone": "SNAXK 0.10.8",
+    "status_note": "Currently being tested first as a skill for OpenClaw. Closed-source for now, and still in active research rollout.",
+    "primary_action_label": "See the judgement loop",
+    "secondary_action_label": "Discuss judgement boundaries",
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/23d6gw7ynyx4pa8/omj3dp3uf69ye5w/slide/LnIqPGkUCPdwci3xovE3sp1Aygo",
+    "assets": [
+      {
+        "source": "assets/snaxk-lozenge.png",
+        "target": "assets/snaxk-lozenge.png"
+      },
+      {
+        "source": "assets/snaxk-logo.png",
+        "target": "assets/snaxk-logo.png"
+      }
+    ],
     "sections": [
       {
         "title": "Longer runs need better judgement",
@@ -58,6 +77,59 @@
         "title": "Built for practical systems",
         "body": "The site is a home for experiments, notes, and tools that keep agentic work inspectable and useful."
       }
+    ],
+    "judgement_loop": [
+      {
+        "label": "01",
+        "title": "Fast heuristic pass",
+        "body": "Scan messages, events, and signals before action. The first pass asks whether anything meaningful is happening."
+      },
+      {
+        "label": "02",
+        "title": "Meaning check",
+        "body": "Separate routine noise from work that is risky, surprising, sensitive, valuable, or likely to affect a human."
+      },
+      {
+        "label": "03",
+        "title": "Bounded route",
+        "body": "Triggered cases move through judgement boundaries: slow down, stop, escalate, adapt, or ask for human review."
+      },
+      {
+        "label": "04",
+        "title": "Reflect overnight",
+        "body": "The system does not carry every reaction forward. It reflects, compares, and waits before changing behaviour."
+      },
+      {
+        "label": "05",
+        "title": "Reviewed carry-forward",
+        "body": "Only changes that survive review become part of the agent's future judgement."
+      }
+    ],
+    "boundary_checks": [
+      {
+        "title": "When to slow down",
+        "body": "High consequence, weak evidence, unfamiliar context, or mismatched confidence."
+      },
+      {
+        "title": "When to stop",
+        "body": "A request crosses permission, privacy, safety, spending, publishing, or accountability boundaries."
+      },
+      {
+        "title": "What to share",
+        "body": "Judgement includes deciding what is appropriate to reveal, quote, remember, or pass to another system."
+      },
+      {
+        "title": "How to adapt",
+        "body": "The same action may be right for one person, wrong for another, and unclear until the context is reviewed."
+      }
+    ],
+    "measurement_checks": [
+      "Is this safer?",
+      "Is it more understandable to humans?",
+      "Is it better than a simpler alternative?",
+      "Can we see when the system becomes too cautious?",
+      "Can we see when the system becomes too permissive?",
+      "Can we measure trustworthiness over time?"
     ],
     "contact": {
       "preferred_channel": "none"
