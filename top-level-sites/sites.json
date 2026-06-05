@@ -199,25 +199,160 @@
   },
   {
     "domain": "agenticleader.com",
-    "name": "Agentic Leader Community",
-    "title": "Agentic Leader Community",
-    "heading": "Build, share, and evolve multi-agent crews together.",
-    "summary": "A community space for leaders working with collaborative AI systems, multi-agent crews, and agentic operating models.",
-    "eyebrow": "Community",
+    "mode": "agentic_leader",
+    "name": "Agentic Leader",
+    "title": "Agentic Leader | Learn to lead agentics",
+    "heading": "Learn to lead agentics.",
+    "summary": "A practical field guide for people learning how to manage agentic workers: outcomes, boundaries, evidence, cadence, attention, escalation, and human judgement.",
+    "eyebrow": "Field guide for agentic leadership",
     "jurisdiction": "GB",
-    "industry": ["community", "agentic-ai", "leadership"],
-    "theme": "#1f2440",
-    "accent": "#6e8dff",
+    "industry": ["agentic-ai", "leadership", "education", "management"],
+    "theme": "#24372f",
+    "accent": "#b45f3c",
     "matomo_site_id": "9",
-    "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/765dvn2it07ezp4/188ir518jl9e5v5/slide/zjqmNBCRlNDdeoEVHbIULnJHwPY",
-    "sections": [
+    "hero_image": "https://www.tonywood.org/assets/countryside-hero.jpg",
+    "primary_action_label": "Start with the field guide",
+    "secondary_action_label": "Read the essay",
+    "secondary_action_url": "https://www.tonywood.org/writing/management-is-the-missing-literacy/",
+    "brief_eyebrow": "The shift",
+    "brief_title": "AI changes work from doing to directing.",
+    "brief": "When people use AI well, they are not only producing output. They are setting intent, shaping tasks, judging quality, checking evidence, protecting attention, and staying responsible for what goes out into the world.",
+    "brief_support": "That is management. Not management as hierarchy, but management as a human literacy: knowing what good looks like and keeping yourself in the loop.",
+    "field_guide": [
       {
-        "title": "A place for operators",
-        "body": "The community is for people building and governing AI-agent teams in the messy middle between experimentation and daily work."
+        "label": "01",
+        "title": "Outcome",
+        "body": "Name the north star before asking an agent to move. What result would make the work useful?"
       },
       {
-        "title": "Shared practice",
-        "body": "Members compare patterns, lessons, operating constraints, and the small choices that make agentic work durable."
+        "label": "02",
+        "title": "Role",
+        "body": "Say what the agentic is doing, what the human owns, and who is accountable for the final decision."
+      },
+      {
+        "label": "03",
+        "title": "Boundary",
+        "body": "Define what it can read, change, publish, spend, remember, or escalate before autonomy gets wider."
+      },
+      {
+        "label": "04",
+        "title": "Evidence",
+        "body": "Ask what changed, which sources matter, what is uncertain, and what would make you reject the answer."
+      },
+      {
+        "label": "05",
+        "title": "Cadence",
+        "body": "Create a rhythm for review, exceptions, drift, lessons, and decisions that need human judgement."
+      },
+      {
+        "label": "06",
+        "title": "Attention",
+        "body": "Protect the scarce thing. Decide where attention belongs instead of letting tools and feeds spend it for you."
+      },
+      {
+        "label": "07",
+        "title": "Escalation",
+        "body": "Pause when stakes rise, signals conflict, the pattern is novel, or the decision is not yours to make."
+      }
+    ],
+    "first_steps": [
+      {
+        "title": "Define good",
+        "body": "Write three signs of a good answer before the agent produces one."
+      },
+      {
+        "title": "Brief the work",
+        "body": "Give context, audience, constraints, source expectations, and a clear stopping point."
+      },
+      {
+        "title": "Reject generic",
+        "body": "Mark down work that could have come from anyone. Add judgement, taste, evidence, and yourself."
+      },
+      {
+        "title": "Record judgement",
+        "body": "Keep a small trail: what you asked, what you accepted, what you rejected, and why."
+      },
+      {
+        "title": "Protect attention",
+        "body": "Batch interruptions, review exceptions, and ask whether this signal deserves time."
+      }
+    ],
+    "resources": [
+      {
+        "name": "DfE: Understanding AI in education",
+        "region": "England",
+        "audience": "School and college staff",
+        "url": "https://www.gov.uk/government/publications/understanding-ai-in-education-module-1"
+      },
+      {
+        "name": "UNESCO AI Competency Framework for Students",
+        "region": "Global",
+        "audience": "Curriculum designers and educators",
+        "url": "https://www.unesco.org/en/articles/ai-competency-framework-students?hub=750"
+      },
+      {
+        "name": "TeachAI Guidance for Schools Toolkit",
+        "region": "Global",
+        "audience": "Education leaders",
+        "url": "https://www.teachai.org/toolkit-about"
+      },
+      {
+        "name": "OECD PISA 2029 Media and AI Literacy",
+        "region": "OECD",
+        "audience": "Policy and assessment teams",
+        "url": "https://www.oecd.org/en/about/projects/pisa-2029-media-and-artificial-intelligence-literacy.html"
+      },
+      {
+        "name": "EU AI literacy and Article 4",
+        "region": "Europe",
+        "audience": "Organisations using AI systems",
+        "url": "https://digital-strategy.ec.europa.eu/en/policies/ai-talent-skills-and-literacy"
+      },
+      {
+        "name": "Raspberry Pi Experience AI",
+        "region": "UK and global partners",
+        "audience": "Teachers and young people",
+        "url": "https://www.raspberrypi.org/blog/experience-ai-the-story-so-far/"
+      },
+      {
+        "name": "Common Sense AI literacy lessons",
+        "region": "US and global",
+        "audience": "Grades 6 to 12 educators",
+        "url": "https://www.commonsense.org/education/ai-in-schools"
+      },
+      {
+        "name": "AI4K12 Five Big Ideas",
+        "region": "US-origin, globally useful",
+        "audience": "K-12 standards and curriculum teams",
+        "url": "https://ai4k12.org/"
+      },
+      {
+        "name": "Elements of AI",
+        "region": "Multilingual",
+        "audience": "Adults and general learners",
+        "url": "https://course.elementsofai.com/"
+      }
+    ],
+    "writing_links": [
+      {
+        "title": "Management Is The Missing Literacy",
+        "body": "The follow-on essay: why AI makes management a general literacy, not a specialist title.",
+        "url": "https://www.tonywood.org/writing/management-is-the-missing-literacy/"
+      },
+      {
+        "title": "We Need To Teach Children How To Manage Agentic Workers",
+        "body": "The classroom argument for teaching attention, delegation, judgement, and interruption management.",
+        "url": "https://www.tonywood.org/writing/we-need-to-teach-children-how-to-manage-agentic-workers/"
+      },
+      {
+        "title": "What I Would Do If I Were at University in 2026",
+        "body": "How students can look for human debt, learn what good looks like, and use AI without outsourcing judgement.",
+        "url": "https://www.tonywood.org/writing/what-i-would-do-if-i-were-at-university-in-2026/"
+      },
+      {
+        "title": "Getting Things Done With Agentic Workers",
+        "body": "A practical note on roles, boundaries, success tests, escalation routes, and evidence trails.",
+        "url": "https://www.tonywood.org/writing/getting-things-done-with-agentic-workers/"
       }
     ],
     "contact": {

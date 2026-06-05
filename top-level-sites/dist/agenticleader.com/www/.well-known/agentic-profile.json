@@ -4,16 +4,17 @@
   "profile_kind": "company",
   "tier": "public",
   "company": {
-    "name": "Agentic Leader Community",
+    "name": "Agentic Leader",
     "website": "https://agenticleader.com",
     "jurisdiction": "GB",
     "industry": [
-      "community",
       "agentic-ai",
-      "leadership"
+      "leadership",
+      "education",
+      "management"
     ],
-    "tagline": "Build, share, and evolve multi-agent crews together.",
-    "summary": "A community space for leaders working with collaborative AI systems, multi-agent crews, and agentic operating models."
+    "tagline": "Learn to lead agentics.",
+    "summary": "A practical field guide for people learning how to manage agentic workers: outcomes, boundaries, evidence, cadence, attention, escalation, and human judgement."
   },
   "links": {
     "website": "https://agenticleader.com"

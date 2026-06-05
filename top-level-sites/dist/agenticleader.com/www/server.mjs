@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const config = {
   "domain": "agenticleader.com",
-  "mode": "gamma",
+  "mode": "agentic_leader",
   "gammaOrigin": "https://sites.gamma.app",
   "matomoLoaderPath": "/static/js/matomo-loader.js",
   "analyticsTag": "<script defer src=\"/static/js/matomo-loader.js\"></script>",
@@ -18,7 +18,7 @@ const config = {
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || 8080);
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
-const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "gamma"].includes(config.mode);
+const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "gamma"].includes(config.mode);
 
 const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],

@@ -72,6 +72,9 @@ for (const site of sites) {
   if (site.mode === "orchistra") {
     await writeFile(path.join(wwwRoot, "index.html"), orchistraPageFor(site), "utf8");
   }
+  if (site.mode === "agentic_leader") {
+    await writeFile(path.join(wwwRoot, "index.html"), agenticLeaderPageFor(site), "utf8");
+  }
   if (site.mode === "gamma") {
     await writeFile(
       path.join(wwwRoot, "index.html"),
@@ -307,7 +310,7 @@ function matomoLoaderSource() {
 }
 
 function isLocalPageMode(mode) {
-  return ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "gamma"].includes(mode);
+  return ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "gamma"].includes(mode);
 }
 
 function composeFor(items) {
@@ -415,7 +418,7 @@ const config = ${JSON.stringify(serverConfig, null, 2)};
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || ${nodeServerPort});
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
-const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "gamma"].includes(config.mode);
+const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "gamma"].includes(config.mode);
 
 const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],
@@ -726,7 +729,9 @@ function edgeCaddyFor(site) {
             ? "Normal pages are served by the per-site AIperations operations container."
             : site.mode === "orchistra"
               ? "Normal pages are served by the per-site bespoke Orchistra container."
-              : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
+              : site.mode === "agentic_leader"
+                ? "Normal pages are served by the per-site bespoke Agentic Leader field-guide container."
+                : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
   const hostBlock = site.redirect_www_to_apex
     ? `${site.domain} {
 	encode zstd gzip
@@ -819,6 +824,17 @@ function faviconFor(site) {
 </svg>
 `;
   }
+  if (site.domain === "agenticleader.com") {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#24372f"/>
+  <path d="M10 46c10-12 22-12 34-24" fill="none" stroke="#f4efe2" stroke-width="4" stroke-linecap="round"/>
+  <path d="M10 46c10-5 20-4 31-1c5 2 9 1 13-3" fill="none" stroke="#8fa787" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="45" cy="20" r="7" fill="#b45f3c"/>
+  <path d="M22 19h16v16H22z" fill="#f4efe2"/>
+  <path d="M26 24h8M26 30h6" stroke="#24372f" stroke-width="2" stroke-linecap="round"/>
+</svg>
+`;
+  }
 
   const initials = site.name
     .split(/\s+/)
@@ -869,7 +885,13 @@ agents can discover the right facts without scraping the page.`
 field-map orchestration treatment. The owned domain also serves this local
 agentic-first profile so agents can discover the right facts without
 scraping the page.`
-              : `The human-facing design for this site is ingested from Gamma into the
+              : site.mode === "agentic_leader"
+                ? `The human-facing page is a local static Agentic Leader field
+guide for learning how to manage agentic workers: outcomes, boundaries,
+evidence, cadence, attention, escalation, and human judgement. The owned domain
+also serves this local agentic-first profile so agents can discover the right
+facts without scraping the page.`
+                : `The human-facing design for this site is ingested from Gamma into the
 per-site local container. The owned domain also serves this local agentic-first
 profile so agents can discover the right facts without scraping the Gamma page.`;
 
@@ -904,7 +926,9 @@ function healthFor(site) {
               ? "static-ai-operations-container"
               : site.mode === "orchistra"
                 ? "static-orchistra-container"
-                : "gamma-fronting-container",
+                : site.mode === "agentic_leader"
+                  ? "static-agentic-leader-container"
+                  : "gamma-fronting-container",
     updated_at: updatedAt,
     agentic_profile: "/.well-known/agentic-profile.json",
     matomo_site_id: site.matomo_site_id || null,
@@ -2589,6 +2613,670 @@ function caoMandateSvg() {
     <text x="552" y="462">decisions</text>
   </g>
 </svg>`;
+}
+
+function agenticLeaderPageFor(site) {
+  const title = site.title || "Agentic Leader | Learn to lead agentics";
+  const summary = site.summary || "A practical field guide for learning how to manage agentic workers.";
+  const heroImage = site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg";
+  const essayUrl = site.secondary_action_url || "https://www.tonywood.org/writing/management-is-the-missing-literacy/";
+  const fieldGuide = site.field_guide || [
+    { label: "01", title: "Outcome", body: "Name the north star before asking an agent to move." },
+    { label: "02", title: "Role", body: "Say what the agentic is doing and what the human owns." },
+    { label: "03", title: "Boundary", body: "Define what it can read, change, publish, spend, remember, or escalate." },
+    { label: "04", title: "Evidence", body: "Ask what changed, what is uncertain, and what would make you reject the answer." },
+    { label: "05", title: "Cadence", body: "Create a rhythm for exceptions, drift, lessons, and human judgement." },
+    { label: "06", title: "Attention", body: "Decide where attention belongs before tools and feeds spend it for you." },
+    { label: "07", title: "Escalation", body: "Pause when stakes rise, signals conflict, or authority is unclear." },
+  ];
+  const firstSteps = site.first_steps || [];
+  const resources = site.resources || [];
+  const writingLinks = site.writing_links || [];
+  const mapLines = fieldGuide.slice(0, 6);
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(summary)}">
+  <link rel="preload" as="image" href="${escapeHtml(heroImage)}">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${matomoScriptTagFor(site)}  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17231e;
+      --muted: #5c6a62;
+      --paper: #f6f2e8;
+      --cream: #fffaf0;
+      --field: #24372f;
+      --field-2: #3f5b4d;
+      --hedge: #8fa787;
+      --clay: #b45f3c;
+      --sky: #d8e5e4;
+      --line: rgba(36, 55, 47, 0.18);
+      --white: #fffdf7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 42px;
+      color: var(--white);
+      background: var(--field);
+      border-bottom: 1px solid rgba(255, 253, 247, 0.18);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 860;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 253, 247, 0.32);
+      border-radius: 8px;
+      background: rgba(255, 253, 247, 0.10);
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+      font-size: 14px;
+      font-weight: 780;
+    }
+
+    nav a {
+      color: rgba(255, 253, 247, 0.86);
+      text-decoration: none;
+    }
+
+    .hero {
+      position: relative;
+      min-height: clamp(620px, 82vh, 760px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+      gap: 42px;
+      align-items: center;
+      padding: 58px 42px 54px;
+      overflow: hidden;
+      color: var(--white);
+      background:
+        linear-gradient(90deg, rgba(23, 35, 30, 0.92) 0%, rgba(23, 35, 30, 0.74) 43%, rgba(23, 35, 30, 0.30) 100%),
+        url("${escapeHtml(heroImage)}") center/cover no-repeat,
+        linear-gradient(135deg, var(--field), var(--sky));
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 120px;
+      background: linear-gradient(0deg, rgba(246, 242, 232, 0.88), transparent);
+      pointer-events: none;
+    }
+
+    .hero-copy,
+    .field-map {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--clay);
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 860;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .hero .eyebrow {
+      color: #f0c9aa;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 11ch;
+      font-size: clamp(48px, 7vw, 84px);
+      line-height: 0.96;
+    }
+
+    h2 {
+      font-size: clamp(34px, 4vw, 54px);
+      line-height: 1.06;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 720px;
+      margin: 24px 0 0;
+      color: rgba(255, 253, 247, 0.86);
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.52;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border: 1px solid var(--white);
+      border-radius: 6px;
+      background: var(--white);
+      color: var(--field);
+      text-decoration: none;
+      font-weight: 840;
+    }
+
+    .button.secondary {
+      background: rgba(255, 253, 247, 0.10);
+      color: var(--white);
+    }
+
+    .field-map {
+      min-height: 430px;
+      padding: 22px;
+      border: 1px solid rgba(255, 253, 247, 0.28);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255, 253, 247, 0.94), rgba(232, 238, 224, 0.92));
+      color: var(--ink);
+      box-shadow: 0 24px 70px rgba(11, 21, 18, 0.28);
+    }
+
+    .map-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 860;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .map-grid {
+      position: relative;
+      min-height: 310px;
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .map-grid::before {
+      content: "";
+      position: absolute;
+      inset: 34px 24px 38px;
+      border: 2px solid rgba(143, 167, 135, 0.72);
+      border-radius: 50%;
+      transform: rotate(-10deg);
+      pointer-events: none;
+    }
+
+    .map-node {
+      position: relative;
+      min-height: 94px;
+      display: grid;
+      align-content: start;
+      gap: 7px;
+      padding: 14px;
+      border: 1px solid rgba(36, 55, 47, 0.16);
+      border-radius: 8px;
+      background: rgba(255, 250, 240, 0.88);
+    }
+
+    .map-node span,
+    .resource span,
+    .writing span {
+      color: var(--clay);
+      font-size: 12px;
+      font-weight: 860;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .map-node strong {
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    .map-node p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .section {
+      padding: 66px 42px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(420px, 1fr);
+      gap: 42px;
+      align-items: start;
+    }
+
+    .lead {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.58;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .guide-card,
+    .step,
+    .resource,
+    .writing {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--cream);
+    }
+
+    .guide-card {
+      min-height: 196px;
+      padding: 16px;
+    }
+
+    .guide-card span {
+      display: block;
+      margin-bottom: 34px;
+      color: var(--field-2);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      font-weight: 840;
+    }
+
+    .guide-card p,
+    .step p,
+    .resource p,
+    .writing p,
+    .essay-note p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .step {
+      min-height: 160px;
+      padding: 18px;
+      background: #fbf7ea;
+    }
+
+    .quote-band {
+      background: var(--field);
+      color: var(--white);
+    }
+
+    .quote-panel {
+      max-width: 920px;
+    }
+
+    .quote-panel h2 {
+      color: var(--white);
+    }
+
+    .quote-panel p {
+      color: rgba(255, 253, 247, 0.82);
+    }
+
+    .resources-grid,
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .resource,
+    .writing {
+      min-height: 180px;
+      display: grid;
+      align-content: start;
+      padding: 18px;
+      text-decoration: none;
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+
+    .resource:hover,
+    .writing:hover {
+      border-color: rgba(180, 95, 60, 0.72);
+      transform: translateY(-2px);
+    }
+
+    .resource h3,
+    .writing h3 {
+      margin-top: 16px;
+    }
+
+    .resource small {
+      display: block;
+      margin-top: 10px;
+      color: #66756d;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .essay-note {
+      padding: 24px;
+      border-left: 4px solid var(--clay);
+      background: #efe7d4;
+    }
+
+    .essay-note h2 {
+      font-size: clamp(30px, 3.5vw, 44px);
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 30px 42px;
+      background: #17231e;
+      color: rgba(255, 253, 247, 0.78);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .footer strong {
+      display: block;
+      color: var(--white);
+    }
+
+    @media (max-width: 1100px) {
+      .hero,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .field-map {
+        min-height: auto;
+      }
+
+      .guide-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .steps,
+      .resources-grid,
+      .writing-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .site-header {
+        min-height: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px 22px;
+      }
+
+      nav {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 48px 22px 42px;
+      }
+
+      .field-map {
+        display: none;
+      }
+
+      .section {
+        padding: 48px 22px;
+      }
+
+      .actions,
+      .button {
+        width: 100%;
+      }
+
+      .map-grid,
+      .guide-grid,
+      .steps,
+      .resources-grid,
+      .writing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .map-grid::before {
+        display: none;
+      }
+
+      .footer {
+        flex-direction: column;
+        padding: 26px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
+      <span class="brand-mark">AL</span>
+      <span>${escapeHtml(site.name)}</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#field-guide">Field guide</a>
+      <a href="#first-steps">First steps</a>
+      <a href="#resources">Resources</a>
+      <a href="#writing">Tony's writing</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">${escapeHtml(site.eyebrow || "Field guide for agentic leadership")}</p>
+        <h1 id="page-title">${escapeHtml(site.heading || "Learn to lead agentics.")}</h1>
+        <p class="lede">${escapeHtml(summary)}</p>
+        <div class="actions">
+          <a class="button" href="#field-guide">${escapeHtml(site.primary_action_label || "Start with the field guide")}</a>
+          <a class="button secondary" href="${escapeHtml(essayUrl)}">${escapeHtml(site.secondary_action_label || "Read the essay")}</a>
+        </div>
+      </div>
+
+      <aside class="field-map" aria-label="Agentic leadership field map">
+        <div class="map-top">
+          <span>Leadership map</span>
+          <span>human judgement on</span>
+        </div>
+        <div class="map-grid">
+          ${mapLines.map((item) => `<article class="map-node">
+            <span>${escapeHtml(item.label)}</span>
+            <strong>${escapeHtml(item.title)}</strong>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="shift-title">
+      <div class="section-inner split">
+        <div>
+          <p class="eyebrow">${escapeHtml(site.brief_eyebrow || "The shift")}</p>
+          <h2 id="shift-title">${escapeHtml(site.brief_title || "AI changes work from doing to directing.")}</h2>
+        </div>
+        <div>
+          <p class="lead">${escapeHtml(site.brief || "When people use AI well, they set intent, shape tasks, judge quality, check evidence, protect attention, and stay responsible for what goes out into the world.")}</p>
+          <p class="lead">${escapeHtml(site.brief_support || "That is management. Not management as hierarchy, but management as a human literacy.")}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="field-guide" aria-labelledby="guide-title">
+      <div class="section-inner">
+        <p class="eyebrow">Field guide</p>
+        <h2 id="guide-title">The seven moves of an agentic leader.</h2>
+        <p class="lead">Use these as a practical check before giving an agentic worker more autonomy, more context, or more trust.</p>
+        <div class="guide-grid">
+          ${fieldGuide.map((item) => `<article class="guide-card">
+            <span>${escapeHtml(item.label)}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section quote-band" aria-labelledby="thinking-title">
+      <div class="section-inner quote-panel">
+        <p class="eyebrow">Attention and agency</p>
+        <h2 id="thinking-title">The work has to contain you.</h2>
+        <p class="lead">If all a person does is click the button and accept what comes back, they are not in the loop. The value is in the judgement: what they asked, what they rejected, what evidence changed their mind, and where they chose to put attention.</p>
+      </div>
+    </section>
+
+    <section class="section" id="first-steps" aria-labelledby="steps-title">
+      <div class="section-inner">
+        <p class="eyebrow">First steps</p>
+        <h2 id="steps-title">Start small, but manage the work properly.</h2>
+        <p class="lead">This is not about banning AI or pretending it is magic. It is about showing people how to use it well enough that their own thinking becomes more visible.</p>
+        <div class="steps">
+          ${firstSteps.map((step) => `<article class="step">
+            <h3>${escapeHtml(step.title)}</h3>
+            <p>${escapeHtml(step.body)}</p>
+          </article>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="resources" aria-labelledby="resources-title">
+      <div class="section-inner">
+        <p class="eyebrow">Curated starter resources</p>
+        <h2 id="resources-title">Useful places to begin in your country, school, team, or language.</h2>
+        <p class="lead">This is a starter directory, not a giant database. The point is to help educators, leaders, parents, students, and operators find credible first routes into AI literacy and management literacy.</p>
+        <div class="resources-grid">
+          ${resources.map((resource) => `<a class="resource" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">
+            <span>${escapeHtml(resource.region)}</span>
+            <h3>${escapeHtml(resource.name)}</h3>
+            <p>${escapeHtml(resource.audience)}</p>
+            <small>Open resource</small>
+          </a>`).join("\n          ")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="writing" aria-labelledby="writing-title">
+      <div class="section-inner split">
+        <div class="essay-note">
+          <p class="eyebrow">Follow-on essay</p>
+          <h2 id="writing-title">Management is the missing literacy.</h2>
+          <p>The canonical essay lives on Tonywood.org and makes the deeper argument: we should teach people how to manage themselves, tools, tasks, attention, risk, evidence, and outcomes.</p>
+          <div class="actions">
+            <a class="button" href="${escapeHtml(essayUrl)}">Read the essay</a>
+          </div>
+        </div>
+        <div>
+          <p class="eyebrow">Tony's writing</p>
+          <h2>Four pieces behind the field guide.</h2>
+          <div class="writing-grid">
+            ${writingLinks.map((link) => `<a class="writing" href="${escapeHtml(link.url)}">
+              <span>Tonywood.org</span>
+              <h3>${escapeHtml(link.title)}</h3>
+              <p>${escapeHtml(link.body)}</p>
+            </a>`).join("\n            ")}
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>${escapeHtml(site.name)}</strong>
+      <div>${escapeHtml(site.domain)}</div>
+    </div>
+    <div>Outcomes, boundaries, evidence, cadence, attention, escalation, and human judgement.</div>
+  </footer>
+</body>
+</html>
+`;
 }
 
 function aiOperationsPageFor(site) {
