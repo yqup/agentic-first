@@ -19,6 +19,11 @@ agents into two deliberately separate areas:
 - Open Tool Directory: a working directory of agent-friendly tools, field
   notes, useful experiments, and things worth tracking.
 
+Compatibility label:
+
+- Agentics Tool Directory is the former machine-readable label for the Open
+  Tool Directory.
+
 The homepage also surfaces a UK / European-company check and a sovereign AI
 shortlist. These homepage sections are practical routing aids and field notes,
 not legal advice, procurement approval, or compliance certification.
