@@ -8,41 +8,41 @@ app:
 source:
   repo: https://github.com/yqup/agentic-first
   branch: main
-  commit_sha: 5fa5c1b9800927a18806a79eecc318eb7e10c42f
+  commit_sha: 057c8be9065c62dc20ff916bda0106deb08d543a
   source_tree_state: clean
   note: The release archive was built from this committed source tree and is the immutable source of truth for this request.
 
 artifact:
-  version: agentic-first-20260520T094841Z
-  uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260520T094841Z/agentic-first-20260520T094841Z.tar.gz
-  local_path: deploy/releases/agentic-first-20260520T094841Z.tar.gz
+  version: agentic-first-20260615T121055Z
+  uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260615T121055Z/agentic-first-20260615T121055Z.tar.gz
+  local_path: deploy/releases/agentic-first-20260615T121055Z.tar.gz
   type: release_archive
   format: tar.gz
-  sha256: 2b4d8a57790a30048ba0a071dc1207e61484be10735176e07101795918292c23
-  checksum_uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260520T094841Z/agentic-first-20260520T094841Z.sha256
-  checksum_file: deploy/releases/agentic-first-20260520T094841Z.sha256
-  build_timestamp: "2026-05-20T09:48:41Z"
+  sha256: ca8f270d6770bb61d779d351de8ce8dd8b7b951d93ff1cffa046bfa2da7e2e44
+  checksum_uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260615T121055Z/agentic-first-20260615T121055Z.sha256
+  checksum_file: deploy/releases/agentic-first-20260615T121055Z.sha256
+  build_timestamp: "2026-06-15T12:10:55Z"
   build_command: >-
-    env COPYFILE_DISABLE=1 tar --format ustar -czf deploy/releases/agentic-first-20260520T094841Z.tar.gz
+    env COPYFILE_DISABLE=1 tar --format ustar --no-xattrs -czf deploy/releases/agentic-first-20260615T121055Z.tar.gz
     -C .. agentic-first/README.md agentic-first/BRAND-GUIDELINES.md agentic-first/ROUTING.md
     agentic-first/MIGRATION.md agentic-first/LICENSE agentic-first/llms.txt
     agentic-first/www agentic-first/deploy/deploy.yaml
     agentic-first/deploy/README.md agentic-first/deploy/check-homepage-links.py
     && shasum -a 256
-    deploy/releases/agentic-first-20260520T094841Z.tar.gz >
-    deploy/releases/agentic-first-20260520T094841Z.sha256
+    deploy/releases/agentic-first-20260615T121055Z.tar.gz >
+    deploy/releases/agentic-first-20260615T121055Z.sha256
 
 preconditions:
   artifact_download:
     required: true
     source: github_release_asset
     required_downloads:
-      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260520T094841Z/agentic-first-20260520T094841Z.tar.gz
-        name: agentic-first-20260520T094841Z.tar.gz
-        sha256: 2b4d8a57790a30048ba0a071dc1207e61484be10735176e07101795918292c23
-      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260520T094841Z/agentic-first-20260520T094841Z.sha256
-        name: agentic-first-20260520T094841Z.sha256
-        contains: 2b4d8a57790a30048ba0a071dc1207e61484be10735176e07101795918292c23
+      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260615T121055Z/agentic-first-20260615T121055Z.tar.gz
+        name: agentic-first-20260615T121055Z.tar.gz
+        sha256: ca8f270d6770bb61d779d351de8ce8dd8b7b951d93ff1cffa046bfa2da7e2e44
+      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260615T121055Z/agentic-first-20260615T121055Z.sha256
+        name: agentic-first-20260615T121055Z.sha256
+        contains: ca8f270d6770bb61d779d351de8ce8dd8b7b951d93ff1cffa046bfa2da7e2e44
     stop_if_download_fails: true
     stop_if_checksum_fails: true
     note: Download the release assets from GitHub, verify SHA256 before inspection or staging, and stop without deploying if the download or checksum verification fails.
@@ -81,15 +81,15 @@ health_check:
 smoke_tests:
   - name: artifact_checksum
     action: verify_sha256
-    file: downloaded agentic-first-20260520T094841Z.tar.gz
-    sha256: 2b4d8a57790a30048ba0a071dc1207e61484be10735176e07101795918292c23
+    file: downloaded agentic-first-20260615T121055Z.tar.gz
+    sha256: ca8f270d6770bb61d779d351de8ce8dd8b7b951d93ff1cffa046bfa2da7e2e44
   - name: deployed_home_file
     action: assert_file_exists
     path: /srv/apps/agentic-first/current/www/index.html
   - name: deployed_home_message
     action: assert_file_contains
     path: /srv/apps/agentic-first/current/www/index.html
-    contains: Agentic First tools
+    contains: Company-first agentic creation
   - name: deployed_company_directory_link
     action: assert_file_contains
     path: /srv/apps/agentic-first/current/www/index.html
@@ -117,7 +117,7 @@ smoke_tests:
     method: GET
     url: https://agentic-first.co/
     expected_status: 200
-    expected_body_contains: Agentic First tools
+    expected_body_contains: Company-first agentic creation
     run_only_if_route_is_available: true
   - name: public_machine_index
     method: GET
