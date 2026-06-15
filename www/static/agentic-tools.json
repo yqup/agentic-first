@@ -1,0 +1,3203 @@
+{
+  "catalog": "agentic-tool-directory",
+  "catalog_version": "0.2.9",
+  "generated_at": "2026-06-15",
+  "status": "seed",
+  "description": "Tony's working directory of agent-operable tools, standards, runtimes, hosted AI and model platforms, communication layers, payment protocols, commerce platforms, CRM/customer systems, web analytics, control planes, and observability surfaces. Entries belong here when agents can use, configure, update, maintain, observe, or control them through documented agentic surfaces, not merely because humans can view them. Six review-recommended entries from the 21 May 2026 validation report are removed pending stronger verification. Data-residency posture was added on 14 June 2026 as conservative field notes, not compliance advice. Treat entries as field notes and leads, not endorsements or a complete public registry.",
+  "inclusion_bar": [
+    "Tools with both a human view and an agentic operating surface, where the agent view is equal to or more powerful than the human view.",
+    "Products agents can configure, update, maintain, observe, or control through documented APIs, MCP servers, CLIs, webhooks, configuration files, SDKs, or equivalent automation surfaces.",
+    "Agent runtimes and harnesses that inspect projects, edit files, run commands, call tools, and execute multi-step workflows.",
+    "Protocols and standards that let agents discover instructions, use tools, communicate with other agents, interact with UIs, or transact safely.",
+    "Hosted AI and model platforms that agents call for inference, tool use, embeddings, multimodal generation, or managed GPU/app execution.",
+    "Control planes, dashboards, bridges, observability tools, session browsers, payment rails, commerce platforms, CRM connectors, web analytics, and usage monitors designed around agentic workflows."
+  ],
+  "entries": [
+    {
+      "slug": "model-context-protocol",
+      "name": "Model Context Protocol",
+      "short_name": "MCP",
+      "category": "protocol",
+      "agent_native_scope": "Connects AI applications and agents to external systems, including tools, data sources, prompts, and workflows.",
+      "summary": "Open standard for connecting AI applications such as Claude, ChatGPT, coding agents, and IDEs to external tools and data.",
+      "primary_url": "https://modelcontextprotocol.io/docs/getting-started/intro",
+      "repo_url": "https://github.com/modelcontextprotocol",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "ChatGPT",
+        "Codex",
+        "Cursor",
+        "VS Code",
+        "many MCP clients"
+      ],
+      "deployment_model": [
+        "local",
+        "remote-http",
+        "stdio"
+      ],
+      "security_notes": "Treat MCP servers as privileged extension surfaces. Review tool descriptions, transports, auth, and filesystem or shell access before enabling.",
+      "source_urls": [
+        "https://modelcontextprotocol.io/docs/getting-started/intro"
+      ],
+      "directory_group": "protocols",
+      "data_residency": {
+        "posture": "implementation-dependent",
+        "label": "Impl. choice",
+        "regions": [
+          "customer-controlled"
+        ],
+        "note": "Open standard; data location depends on the implementation or host.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "agent-client-protocol-registry",
+      "name": "Agent Client Protocol Registry",
+      "short_name": "ACP Registry",
+      "category": "protocol-registry",
+      "agent_native_scope": "Distributes ACP-compatible agents and adapters to clients that speak the Agent Client Protocol.",
+      "summary": "Registry for installing and discovering ACP-compatible coding agents and wrappers.",
+      "primary_url": "https://agentclientprotocol.com/get-started/registry",
+      "repo_url": "https://github.com/zed-industries/agent-client-protocol",
+      "open_source": true,
+      "works_with": [
+        "Codex CLI",
+        "Claude Agent",
+        "Cline",
+        "OpenCode",
+        "Goose",
+        "Gemini CLI",
+        "Cursor",
+        "Kilo"
+      ],
+      "deployment_model": [
+        "local",
+        "editor",
+        "agent-adapter"
+      ],
+      "security_notes": "ACP controls full agent sessions. Review adapters before letting them manage filesystem, shell, or permission flows.",
+      "source_urls": [
+        "https://agentclientprotocol.com/get-started/registry"
+      ],
+      "directory_group": "protocols",
+      "data_residency": {
+        "posture": "implementation-dependent",
+        "label": "Impl. choice",
+        "regions": [
+          "customer-controlled"
+        ],
+        "note": "Open standard; data location depends on the implementation or host.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "agents-md",
+      "name": "AGENTS.md",
+      "category": "instruction-standard",
+      "agent_native_scope": "Provides repository-scoped instructions that coding agents can read before acting.",
+      "summary": "Open Markdown convention for setup commands, code style, tests, security guidance, and project-specific instructions for agents.",
+      "primary_url": "https://agents.md/",
+      "repo_url": "https://github.com/openai/agents.md",
+      "open_source": true,
+      "works_with": [
+        "Codex",
+        "Aider",
+        "Goose",
+        "OpenCode",
+        "Gemini CLI",
+        "Cursor",
+        "Devin",
+        "VS Code"
+      ],
+      "deployment_model": [
+        "repository-file"
+      ],
+      "security_notes": "Instructions should be concise, scoped, and checked into version control. Avoid storing secrets or operational credentials.",
+      "source_urls": [
+        "https://agents.md/"
+      ],
+      "directory_group": "protocols",
+      "data_residency": {
+        "posture": "customer-controlled",
+        "label": "Customer controlled",
+        "regions": [
+          "repository",
+          "customer-controlled"
+        ],
+        "note": "Stored wherever the repository or website owner hosts it.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "agent2agent",
+      "name": "Agent2Agent",
+      "short_name": "A2A",
+      "category": "agent-communication-protocol",
+      "agent_native_scope": "Enables independent agent systems to discover capabilities, communicate, and collaborate.",
+      "summary": "Linux Foundation-hosted open protocol originally contributed by Google for agent-to-agent interoperability.",
+      "primary_url": "https://github.com/a2aproject",
+      "repo_url": "https://github.com/a2aproject",
+      "open_source": true,
+      "works_with": [
+        "A2A-compatible agents",
+        "multi-agent systems"
+      ],
+      "deployment_model": [
+        "remote",
+        "sdk"
+      ],
+      "security_notes": "Agent-to-agent communication needs explicit identity, auth, capability boundaries, and audit logging.",
+      "source_urls": [
+        "https://github.com/a2aproject"
+      ],
+      "directory_group": "protocols",
+      "data_residency": {
+        "posture": "implementation-dependent",
+        "label": "Impl. choice",
+        "regions": [
+          "customer-controlled"
+        ],
+        "note": "Open standard; data location depends on the implementation or host.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "llms-txt",
+      "name": "llms.txt",
+      "category": "llm-readable-site-standard",
+      "agent_native_scope": "Publishes a curated, LLM-readable map of a site's key content so agents can find the right docs, references, and context.",
+      "summary": "Open convention for a site-level /llms.txt file that tells agents what content matters.",
+      "primary_url": "https://llmstxt.org/",
+      "repo_url": null,
+      "open_source": true,
+      "works_with": [
+        "documentation sites",
+        "developer portals",
+        "content-heavy websites",
+        "agents"
+      ],
+      "deployment_model": [
+        "site-file",
+        "plain-text"
+      ],
+      "security_notes": "Keep the file curated and public-safe. Do not include private URLs, secrets, internal prompts, or operational instructions that should not be published.",
+      "source_urls": [
+        "https://llmstxt.org/"
+      ],
+      "directory_group": "protocols",
+      "data_residency": {
+        "posture": "customer-controlled",
+        "label": "Site controlled",
+        "regions": [
+          "website-host"
+        ],
+        "note": "Public file; location follows the site hosting choice.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "website-specification",
+      "name": "The Website Specification",
+      "short_name": "Specification.website",
+      "category": "agent-ready-website-standard",
+      "agent_native_scope": "Gives agents a platform-agnostic website quality spec covering agent readiness, AI discoverability, /llms.txt, Markdown pages, MCP access, accessibility, security, performance, privacy, and resilience.",
+      "summary": "Open website specification and checklist for making sites easier for humans, search engines, and AI agents to inspect and understand.",
+      "primary_url": "https://specification.website/",
+      "repo_url": "https://github.com/jdevalk/specification.website",
+      "open_source": true,
+      "works_with": [
+        "AI agents",
+        "MCP clients",
+        "llms.txt",
+        "Markdown documentation",
+        "website audits"
+      ],
+      "deployment_model": [
+        "website-standard",
+        "checklist",
+        "mcp-server",
+        "llms.txt",
+        "markdown"
+      ],
+      "security_notes": "Use as a public-readiness checklist. When asking agents to audit a site against it, avoid exposing private staging URLs, credentials, analytics, or unpublished operational details.",
+      "source_urls": [
+        "https://specification.website/",
+        "https://specification.website/mcp/",
+        "https://mcp.specification.website/mcp",
+        "https://github.com/jdevalk/specification.website"
+      ],
+      "directory_group": "protocols",
+      "data_residency": {
+        "posture": "implementation-dependent",
+        "label": "Impl. choice",
+        "regions": [
+          "customer-controlled"
+        ],
+        "note": "Open standard; data location depends on the implementation or host.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "ag-ui",
+      "name": "AG-UI",
+      "short_name": "Agent-User Interaction Protocol",
+      "category": "agent-ui-protocol",
+      "agent_native_scope": "Connects agent backends to user-facing applications through standard event streams for chat, state sync, and human-in-the-loop UI.",
+      "summary": "Protocol for wiring agent backends into interactive user interfaces and approval surfaces.",
+      "primary_url": "https://ag-ui.com/",
+      "repo_url": null,
+      "open_source": true,
+      "works_with": [
+        "CopilotKit",
+        "agent apps",
+        "human-in-the-loop interfaces"
+      ],
+      "deployment_model": [
+        "web-app",
+        "event-stream",
+        "sdk"
+      ],
+      "security_notes": "Treat UI events, approvals, and state sync as authority-carrying surfaces. Validate events server-side and log high-impact user approvals.",
+      "source_urls": [
+        "https://ag-ui.com/"
+      ],
+      "directory_group": "protocols",
+      "data_residency": {
+        "posture": "implementation-dependent",
+        "label": "Impl. choice",
+        "regions": [
+          "customer-controlled"
+        ],
+        "note": "Open standard; data location depends on the implementation or host.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "agntcy",
+      "name": "AGNTCY",
+      "short_name": "Internet of Agents",
+      "category": "multi-agent-infrastructure-standard",
+      "agent_native_scope": "Provides open infrastructure patterns for agent discovery, identity, messaging, and observability across vendors.",
+      "summary": "Linux Foundation-backed open infrastructure effort for multi-agent systems and the Internet of Agents.",
+      "primary_url": "https://agntcy.org/",
+      "repo_url": "https://github.com/agntcy",
+      "open_source": true,
+      "works_with": [
+        "multi-agent systems",
+        "enterprise agent platforms"
+      ],
+      "deployment_model": [
+        "open-standard",
+        "sdk",
+        "infrastructure"
+      ],
+      "security_notes": "Discovery, identity, and cross-vendor messaging need strong authentication, audit trails, and clear trust boundaries between organisations.",
+      "source_urls": [
+        "https://agntcy.org/",
+        "https://github.com/agntcy"
+      ],
+      "directory_group": "protocols",
+      "data_residency": {
+        "posture": "implementation-dependent",
+        "label": "Impl. choice",
+        "regions": [
+          "customer-controlled"
+        ],
+        "note": "Open standard; data location depends on the implementation or host.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "agentmail",
+      "name": "AgentMail",
+      "category": "agent-email-infrastructure",
+      "agent_native_scope": "Provides API-first inboxes, threads, attachments, realtime events, skills, and MCP tools for AI agents that need to communicate over email.",
+      "summary": "Email inbox API for AI agents with SDKs, CLI, hosted MCP server, webhooks, WebSockets, custom domains, and semantic search.",
+      "primary_url": "https://www.agentmail.to/",
+      "repo_url": "https://github.com/agentmail-to/agentmail-skills",
+      "open_source": false,
+      "works_with": [
+        "MCP",
+        "Claude",
+        "Claude Code",
+        "Cursor",
+        "Windsurf",
+        "Codex",
+        "OpenClaw",
+        "AgentSkills"
+      ],
+      "deployment_model": [
+        "cloud-api",
+        "hosted-mcp",
+        "sdk",
+        "cli",
+        "webhooks",
+        "websockets"
+      ],
+      "security_notes": "Agent inboxes can contain OTPs, customer data, attachments, and outbound-send authority. Review OAuth/API-key scope, org isolation, retention, webhook verification, and human approval for sensitive sends.",
+      "source_urls": [
+        "https://www.agentmail.to/",
+        "https://docs.agentmail.to/welcome",
+        "https://docs.agentmail.to/integrations/mcp",
+        "https://docs.agentmail.to/integrations/skills",
+        "https://github.com/agentmail-to/agentmail-manufact-mcp",
+        "https://github.com/agentmail-to/agentmail-skills"
+      ],
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "hostinger-agentic-mail",
+      "name": "Hostinger Agentic Mail",
+      "category": "agent-email-infrastructure",
+      "agent_native_scope": "Provides hosted email infrastructure for agents and automation workflows, including webhooks, isolated inboxes, sender controls, and planned API/MCP connectivity.",
+      "summary": "Agent-oriented email layer bundled with Hostinger Business Email for automated sending, receiving, routing, and workflow triggers; API and MCP availability should be checked against the live page before production use.",
+      "primary_url": "https://www.hostinger.com/agentic-mail",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "OpenClaw",
+        "n8n",
+        "Make",
+        "LangChain",
+        "Zapier",
+        "MCP planned"
+      ],
+      "deployment_model": [
+        "hosted-email",
+        "webhooks",
+        "business-email",
+        "planned-api",
+        "planned-mcp"
+      ],
+      "security_notes": "Use isolated inboxes, allow/block lists, domain-level controls, webhook verification, and careful handling of credentials, OTPs, and customer mail. The validation report notes that full API/MCP features were presented as coming soon on the live page, so confirm current availability before relying on them.",
+      "source_urls": [
+        "https://www.hostinger.com/agentic-mail",
+        "https://www.hostinger.com/uk/agentic-mail"
+      ],
+      "directory_note": "API and MCP availability is moving; check the live Hostinger page before production automation.",
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/US choice",
+        "regions": [
+          "Europe",
+          "United States",
+          "global"
+        ],
+        "note": "Hostinger hosting has EU and US regions; confirm email-specific storage before relying on it.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://www.hostinger.com/support/1583267-where-are-hostinger-servers-located/",
+          "https://www.hostinger.com/business-email"
+        ]
+      }
+    },
+    {
+      "slug": "openmail",
+      "name": "OpenMail",
+      "category": "agent-email-infrastructure",
+      "agent_native_scope": "Gives agents dedicated email inboxes with instant inbound handling, sender rules, attachments, CLI setup, and autonomous channel modes.",
+      "summary": "Agent-native email API for one-inbox-per-agent workflows, with webhooks, WebSockets, allow/block rules, attachment parsing, and OpenClaw/Claude Code setup paths.",
+      "primary_url": "https://www.openmail.sh/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "OpenClaw",
+        "Claude Code",
+        "REST API",
+        "WebSockets",
+        "webhooks"
+      ],
+      "deployment_model": [
+        "cloud-api",
+        "cli",
+        "webhooks",
+        "websockets"
+      ],
+      "security_notes": "Dedicated inboxes reduce shared-mailbox blast radius, but inbound email remains a prompt-injection surface. Review sender rules, autonomous reply mode, attachment parsing, retention, and domain reputation controls.",
+      "source_urls": [
+        "https://www.openmail.sh/"
+      ],
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "mails0",
+      "name": "mails0",
+      "category": "agent-email-infrastructure",
+      "agent_native_scope": "Provides hosted or self-hosted agent mailboxes with CLI, Python SDK, MCP server, agent skill docs, scoped keys, and verification-code extraction.",
+      "summary": "Open-source email for agents, designed for signups, OTP/code capture, send/receive, search, and MCP-native usage.",
+      "primary_url": "https://mails0.com/",
+      "repo_url": "https://github.com/Digidai/mails",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "OpenClaw",
+        "MCP",
+        "CLI",
+        "Python"
+      ],
+      "deployment_model": [
+        "hosted-mailbox",
+        "self-hosted",
+        "cloudflare-worker",
+        "cli",
+        "mcp",
+        "sdk"
+      ],
+      "security_notes": "Per-mailbox scoped keys and rate limits are useful guardrails. Review self-hosting configuration, outbound limits, suppression handling, and how verification codes are exposed to agents.",
+      "source_urls": [
+        "https://mails0.com/",
+        "https://github.com/Digidai/mails"
+      ],
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "customer-controlled",
+        "label": "Self-host option",
+        "regions": [
+          "self-hosted",
+          "unknown-hosted"
+        ],
+        "note": "Self-hosting gives region control; hosted mailbox residency still needs vendor confirmation.",
+        "confidence": "medium",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "inboxapi",
+      "name": "InboxAPI",
+      "category": "agent-email-infrastructure",
+      "agent_native_scope": "Gives MCP-compatible coding agents their own personal email address through a local CLI bridge and auto-created account.",
+      "summary": "Personal email for AI agents with send, receive, search, reply, forward, threads, skills, and an MCP stdio proxy.",
+      "primary_url": "https://inboxapi.ai/",
+      "repo_url": "https://github.com/inboxapi/cli",
+      "open_source": true,
+      "works_with": [
+        "Claude",
+        "Claude Code",
+        "OpenCode",
+        "Codex",
+        "Gemini",
+        "MCP"
+      ],
+      "deployment_model": [
+        "cloud-service",
+        "local-cli",
+        "mcp-stdio",
+        "agent-skills"
+      ],
+      "security_notes": "InboxAPI explicitly targets personal agent inboxes, not bulk sending. Review credential storage, auto-update behavior, weekly send limits, owner verification, prompt-injection datamarking, and trust classifications.",
+      "source_urls": [
+        "https://mcpservers.org/servers/inboxapi/cli",
+        "https://github.com/inboxapi/cli"
+      ],
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "a1base",
+      "name": "A1Base",
+      "category": "agent-identity-communications",
+      "agent_native_scope": "Gives agents real-world communication capabilities such as phone numbers, email, messaging platform participation, and shared chat history.",
+      "summary": "API for AI agent identity and communications across email, phone numbers, WhatsApp, Discord, Telegram, and agent collaboration flows.",
+      "primary_url": "https://a1base.com/",
+      "repo_url": "https://github.com/a1base",
+      "open_source": false,
+      "works_with": [
+        "WhatsApp",
+        "Discord",
+        "Telegram",
+        "email",
+        "phone",
+        "messaging APIs"
+      ],
+      "deployment_model": [
+        "cloud-api",
+        "sdk",
+        "messaging-platforms"
+      ],
+      "security_notes": "Docs describe the product as alpha with API keys available through onboarding. Review platform account ownership, spam controls, phone/SMS compliance, message retention, and multi-agent chat history permissions.",
+      "source_urls": [
+        "https://a1base.com/",
+        "https://docs.a1base.com/introduction"
+      ],
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "relaycast",
+      "name": "Relaycast",
+      "category": "agent-messaging-infrastructure",
+      "agent_native_scope": "Provides shared channels, threads, DMs, reactions, files, search, inboxes, realtime events, webhooks, slash commands, and MCP tools for multi-agent systems.",
+      "summary": "Headless Slack for AI agents, with hosted or local messaging infrastructure for agent-to-agent collaboration.",
+      "primary_url": "https://relaycast.dev/",
+      "repo_url": "https://github.com/AgentWorkforce/relaycast",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex CLI",
+        "Gemini CLI",
+        "Aider",
+        "Goose",
+        "OpenClaw",
+        "CrewAI",
+        "LangGraph",
+        "AutoGen",
+        "OpenAI Agents",
+        "MCP"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "local-daemon",
+        "mcp",
+        "cli",
+        "sdk",
+        "webhooks",
+        "websockets"
+      ],
+      "security_notes": "Agent messaging becomes a coordination and authority layer. Review workspace keys, per-agent tokens, local vs hosted mode, webhook HMAC validation, command permissions, file upload handling, and message retention.",
+      "source_urls": [
+        "https://relaycast.dev/",
+        "https://github.com/AgentWorkforce/relaycast"
+      ],
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "customer-controlled",
+        "label": "Local option",
+        "regions": [
+          "local",
+          "unknown-hosted"
+        ],
+        "note": "Local daemon can keep state under operator control; hosted mode needs confirmation.",
+        "confidence": "medium",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "agentdm",
+      "name": "AgentDM",
+      "category": "agent-direct-messaging",
+      "agent_native_scope": "Gives agents @aliases for direct and channel messaging over MCP and A2A, with Slack channel integration and tools for send, read, and delivery status.",
+      "summary": "Agent-to-agent direct messaging platform built around MCP/A2A, cross-model communication, Slack bridging, and early-access hosted infrastructure.",
+      "primary_url": "https://agentdm.ai/",
+      "repo_url": null,
+      "open_source": null,
+      "works_with": [
+        "MCP",
+        "A2A",
+        "Claude",
+        "ChatGPT",
+        "Cursor",
+        "Windsurf",
+        "Slack"
+      ],
+      "deployment_model": [
+        "hosted-messaging",
+        "mcp",
+        "a2a",
+        "slack-bridge",
+        "cli"
+      ],
+      "security_notes": "Review alias ownership, cross-account messaging, Slack binding, message retention, delivery receipts, and which agents can read channel vs direct messages. Early-access limits and guarantees should be validated before production use.",
+      "source_urls": [
+        "https://agentdm.ai/"
+      ],
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "rine",
+      "name": "Rine",
+      "category": "agent-messaging-network",
+      "agent_native_scope": "Provides durable, typed, signed, and encrypted messaging for agents with self-onboarding, proof-of-work registration, agent cards, WebFinger-style handles, and webhooks.",
+      "summary": "Secure messaging network for autonomous agents, positioned as neither email nor chat but typed agent payload delivery.",
+      "primary_url": "https://rine.network/",
+      "repo_url": "https://codeberg.org/rine",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "CLI",
+        "MCP",
+        "n8n",
+        "TypeScript",
+        "Python"
+      ],
+      "deployment_model": [
+        "messaging-network",
+        "cli",
+        "rest-api",
+        "webhooks",
+        "agent-directory"
+      ],
+      "security_notes": "End-to-end encryption and signatures help, but agents still need strict input validation and prompt-injection handling. Review PoW onboarding, handle verification, webhook retry behavior, metadata exposure, and data residency claims.",
+      "source_urls": [
+        "https://rine.network/"
+      ],
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "agentmesh",
+      "name": "AgentMesh",
+      "category": "agent-to-agent-mesh",
+      "agent_native_scope": "Lets agents register capabilities, discover peers, send requests, respond, emit events, and subscribe to updates through a common mesh protocol.",
+      "summary": "Agent-to-agent communication platform and protocol for discovery, request routing, event-driven collaboration, and delegation chains.",
+      "primary_url": "https://agentmesh.ai/",
+      "repo_url": "https://github.com/jeffrschneider/AgentMesh",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "custom agents",
+        "A2A-style workflows"
+      ],
+      "deployment_model": [
+        "mesh-network",
+        "protocol",
+        "event-subscriptions",
+        "agent-registry"
+      ],
+      "security_notes": "A mesh can route authority as well as messages. Review agent identity, capability claims, request authorization, streaming/session boundaries, and inter-organization discovery controls.",
+      "source_urls": [
+        "https://agentmesh.ai/",
+        "https://github.com/jeffrschneider/AgentMesh"
+      ],
+      "directory_group": "communication",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "openai-codex",
+      "name": "OpenAI Codex",
+      "short_name": "Codex",
+      "category": "coding-agent-runtime",
+      "agent_native_scope": "Software engineering agent with CLI, web, automation, MCP, skills, hooks, subagents, and GitHub-oriented workflows.",
+      "summary": "OpenAI's software engineering agent for codebase work, command execution, tests, and repository automation.",
+      "primary_url": "https://developers.openai.com/codex",
+      "repo_url": "https://github.com/openai/codex",
+      "open_source": true,
+      "works_with": [
+        "OpenAI",
+        "GitHub",
+        "MCP",
+        "AGENTS.md"
+      ],
+      "deployment_model": [
+        "terminal",
+        "web",
+        "desktop",
+        "ide",
+        "cloud"
+      ],
+      "security_notes": "Use sandboxing, approval modes, scoped repositories, and careful MCP configuration for file and shell access.",
+      "source_urls": [
+        "https://developers.openai.com/codex"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/US eligible",
+        "regions": [
+          "Europe",
+          "United States",
+          "global"
+        ],
+        "note": "OpenAI documents regional residency for eligible API/ChatGPT customers; verify the exact Codex surface and plan.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://help.openai.com/en/articles/9903489-data-residency-and-inference-residency-for-chatgpt",
+          "https://developers.openai.com/api/docs/guides/your-data"
+        ]
+      }
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "category": "coding-agent-runtime",
+      "agent_native_scope": "Agentic coding tool with MCP, subagents, hooks, worktrees, scheduled prompts, plugins, and external tool integrations.",
+      "summary": "Anthropic's coding agent for reading codebases, editing files, running commands, and coordinating development workflows.",
+      "primary_url": "https://code.claude.com/docs/en/mcp",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "MCP",
+        "Claude",
+        "GitHub",
+        "worktrees",
+        "plugins"
+      ],
+      "deployment_model": [
+        "terminal",
+        "web",
+        "ide"
+      ],
+      "security_notes": "Review MCP servers, hooks, plugins, and project-scoped configuration. Avoid broad auto-approval on untrusted repos.",
+      "source_urls": [
+        "https://code.claude.com/docs/en/mcp"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "us-or-global",
+        "label": "US/global",
+        "regions": [
+          "United States",
+          "global"
+        ],
+        "note": "Anthropic workspace storage is currently US-only; inference can be US-only or global; self-hosted sandboxes stay on customer infrastructure.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://platform.claude.com/docs/en/manage-claude/data-residency"
+        ]
+      }
+    },
+    {
+      "slug": "openclaw",
+      "name": "OpenClaw",
+      "category": "local-agent-orchestrator",
+      "agent_native_scope": "Local-first agent system that can bind Codex and run external coding harnesses through ACP.",
+      "summary": "Open-source personal AI agent/orchestrator with skills, MCP support, and ACP routes for external coding agents.",
+      "primary_url": "https://docs.openclaw.ai/tools/acp-agents",
+      "repo_url": null,
+      "open_source": true,
+      "works_with": [
+        "Codex",
+        "Claude Code",
+        "OpenCode",
+        "Gemini CLI",
+        "Cursor",
+        "ACP",
+        "MCP"
+      ],
+      "deployment_model": [
+        "local",
+        "standalone",
+        "messaging"
+      ],
+      "security_notes": "Do not expose OpenClaw publicly without authentication. Treat skills, plugins, messaging bridges, and shell access as privileged.",
+      "source_urls": [
+        "https://docs.openclaw.ai/tools/acp-agents"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "goose",
+      "name": "Goose",
+      "category": "local-agent-framework",
+      "agent_native_scope": "Local, extensible AI agent for engineering workflows with MCP-based extension.",
+      "summary": "Open-source local-first agent from Block that automates software development tasks and can add MCP servers.",
+      "primary_url": "https://goose-docs.ai/docs/quickstart/",
+      "repo_url": "https://github.com/block/goose",
+      "open_source": true,
+      "works_with": [
+        "MCP",
+        "OpenAI",
+        "Anthropic",
+        "local providers"
+      ],
+      "deployment_model": [
+        "desktop",
+        "terminal",
+        "local"
+      ],
+      "security_notes": "Review configured providers, extensions, and MCP servers. Keep credentials in the OS keychain or equivalent secret store.",
+      "source_urls": [
+        "https://goose-docs.ai/docs/quickstart/"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "kiro",
+      "name": "Kiro",
+      "category": "agentic-development-environment",
+      "agent_native_scope": "Agentic IDE, CLI, and web workflow with specs, steering files, hooks, smart context, and MCP support.",
+      "summary": "Agentic development environment for moving from prompt to spec, code, docs, and tests.",
+      "primary_url": "https://kiro.dev/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "MCP",
+        "GitHub",
+        "Code OSS ecosystem"
+      ],
+      "deployment_model": [
+        "ide",
+        "cli",
+        "web"
+      ],
+      "security_notes": "Use project steering carefully and review MCP connector permissions before connecting private services.",
+      "source_urls": [
+        "https://kiro.dev/"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/US + Web US",
+        "regions": [
+          "Europe",
+          "United States"
+        ],
+        "note": "Kiro IDE enterprise controls can keep GA model traffic in US/EU geographies; Kiro Web preview stores content in US East.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://kiro.dev/blog/enterprise-governance-mcp-and-models/",
+          "https://kiro.dev/docs/web/data-protection/"
+        ]
+      }
+    },
+    {
+      "slug": "codebolt",
+      "name": "Codebolt",
+      "category": "agent-engine",
+      "agent_native_scope": "Agent engine for custom agents, tool calls, memory, plugins, guardrails, and multi-environment execution.",
+      "summary": "Agent-native software engine for building and scaling custom agents from CLI to multi-agent setups.",
+      "primary_url": "https://www.codebolt.ai/",
+      "repo_url": null,
+      "open_source": null,
+      "works_with": [
+        "OpenAI",
+        "Anthropic",
+        "Google",
+        "Mistral",
+        "Ollama",
+        "LM Studio"
+      ],
+      "deployment_model": [
+        "cli",
+        "editor",
+        "tui",
+        "cloud",
+        "headless"
+      ],
+      "security_notes": "Review guardrail, plugin, memory, and environment isolation controls before running autonomous agents at scale. The validation report found the product real but newer, with heavy marketing claims worth testing before relying on them.",
+      "source_urls": [
+        "https://www.codebolt.ai/"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "cursor",
+      "name": "Cursor",
+      "category": "agentic-code-editor",
+      "agent_native_scope": "Reads codebases, edits files across projects, and runs agentic coding workflows inside an editor.",
+      "summary": "Widely used agentic code editor for repository-scale coding work.",
+      "primary_url": "https://cursor.com/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "MCP",
+        "code repositories",
+        "developer workflows"
+      ],
+      "deployment_model": [
+        "desktop",
+        "ide"
+      ],
+      "security_notes": "Review workspace trust, MCP connectors, rules files, telemetry settings, and access to private repositories before broad use.",
+      "source_urls": [
+        "https://cursor.com/"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "cline",
+      "name": "Cline",
+      "category": "coding-agent-runtime",
+      "agent_native_scope": "Plans changes, edits files, runs terminal commands, and can drive browser workflows inside VS Code with approval steps.",
+      "summary": "Open-source VS Code coding agent with explicit human approval around file and shell actions.",
+      "primary_url": "https://github.com/cline/cline",
+      "repo_url": "https://github.com/cline/cline",
+      "open_source": true,
+      "works_with": [
+        "VS Code",
+        "MCP",
+        "browser automation",
+        "terminal commands"
+      ],
+      "deployment_model": [
+        "ide-extension",
+        "local"
+      ],
+      "security_notes": "Keep approval prompts enabled for risky edits and commands. Review MCP servers and browser actions before allowing autonomous runs.",
+      "source_urls": [
+        "https://github.com/cline/cline"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "aider",
+      "name": "Aider",
+      "category": "coding-agent-runtime",
+      "agent_native_scope": "Pair-programs with LLMs in a local git repo, edits files, and can commit changes as work progresses.",
+      "summary": "Established open-source terminal coding assistant for git-based development.",
+      "primary_url": "https://github.com/Aider-AI/aider",
+      "repo_url": "https://github.com/Aider-AI/aider",
+      "open_source": true,
+      "works_with": [
+        "git",
+        "terminal",
+        "OpenAI",
+        "Anthropic",
+        "local providers"
+      ],
+      "deployment_model": [
+        "terminal",
+        "local"
+      ],
+      "security_notes": "Review auto-commit behaviour, repo scope, model/provider configuration, and any shell access before using on sensitive projects.",
+      "source_urls": [
+        "https://github.com/Aider-AI/aider"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "gemini-cli",
+      "name": "Gemini CLI",
+      "category": "coding-agent-runtime",
+      "agent_native_scope": "Inspects projects, edits files, and runs commands as an AI agent directly in the terminal.",
+      "summary": "Google open-source terminal coding agent for local software work.",
+      "primary_url": "https://github.com/google-gemini/gemini-cli",
+      "repo_url": "https://github.com/google-gemini/gemini-cli",
+      "open_source": true,
+      "works_with": [
+        "Gemini",
+        "terminal",
+        "local repositories"
+      ],
+      "deployment_model": [
+        "terminal",
+        "local"
+      ],
+      "security_notes": "Review command permissions, project context, provider credentials, and any configured tools before running on private code.",
+      "source_urls": [
+        "https://github.com/google-gemini/gemini-cli"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "windsurf",
+      "name": "Windsurf",
+      "category": "agentic-development-environment",
+      "agent_native_scope": "Reads repositories, plans multi-file edits, and verifies changes inside an agentic IDE workflow.",
+      "summary": "Commercial agentic IDE built around multi-file coding workflows.",
+      "primary_url": "https://windsurf.com/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "code repositories",
+        "agentic IDE workflows"
+      ],
+      "deployment_model": [
+        "desktop",
+        "ide"
+      ],
+      "security_notes": "Review workspace trust, telemetry, model/provider settings, and any repository or terminal permissions granted to the IDE.",
+      "source_urls": [
+        "https://windsurf.com/"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "amp",
+      "name": "Amp",
+      "category": "coding-agent-runtime",
+      "agent_native_scope": "Plans and executes multi-step coding tasks, edits repositories, and runs tests through CLI or VS Code workflows.",
+      "summary": "Sourcegraph-built coding agent for multi-step software tasks.",
+      "primary_url": "https://ampcode.com/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "CLI",
+        "VS Code",
+        "code repositories"
+      ],
+      "deployment_model": [
+        "terminal",
+        "ide-extension"
+      ],
+      "security_notes": "Review workspace access, command execution settings, provider credentials, and repository boundaries before broad automation.",
+      "source_urls": [
+        "https://ampcode.com/"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "opencode",
+      "name": "OpenCode",
+      "category": "coding-agent-runtime",
+      "agent_native_scope": "Inspects projects, edits files, and runs commands as a provider-agnostic coding agent in the terminal.",
+      "summary": "Open-source terminal coding agent from the SST ecosystem.",
+      "primary_url": "https://opencode.ai/",
+      "repo_url": "https://github.com/sst/opencode",
+      "open_source": true,
+      "works_with": [
+        "terminal",
+        "multiple model providers",
+        "local repositories"
+      ],
+      "deployment_model": [
+        "terminal",
+        "local"
+      ],
+      "security_notes": "Review provider credentials, tool permissions, shell access, and repository boundaries before running autonomous tasks.",
+      "source_urls": [
+        "https://opencode.ai/",
+        "https://github.com/sst/opencode"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "zed",
+      "name": "Zed",
+      "category": "agentic-code-editor",
+      "agent_native_scope": "Provides fast code editing with native agent workflows, external agent support, and MCP server connections.",
+      "summary": "Open-source code editor with growing agentic workflow support.",
+      "primary_url": "https://zed.dev/",
+      "repo_url": "https://github.com/zed-industries/zed",
+      "open_source": true,
+      "works_with": [
+        "MCP",
+        "ACP",
+        "external agents",
+        "code repositories"
+      ],
+      "deployment_model": [
+        "desktop",
+        "ide"
+      ],
+      "security_notes": "Review agent permissions, configured MCP servers, workspace trust, and editor extension settings before connecting private systems.",
+      "source_urls": [
+        "https://zed.dev/",
+        "https://github.com/zed-industries/zed"
+      ],
+      "directory_group": "runtimes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "unknown-hosted"
+        ],
+        "note": "Editor is local; hosted AI/collaboration features need residency confirmation.",
+        "confidence": "medium",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "openacp",
+      "name": "OpenACP",
+      "category": "agent-session-bridge",
+      "agent_native_scope": "Bridges chat and messaging surfaces to ACP-compatible coding-agent sessions with streaming, switching, and approval flows as the project matures.",
+      "summary": "Early self-hosted ACP bridge for controlling AI coding-agent sessions from chat platforms and approval flows.",
+      "primary_url": "https://github.com/Open-ACP/OpenACP",
+      "repo_url": "https://github.com/Open-ACP/OpenACP",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex CLI",
+        "Gemini CLI",
+        "Cursor",
+        "Cline",
+        "Goose",
+        "ACP"
+      ],
+      "deployment_model": [
+        "self-hosted",
+        "daemon",
+        "messaging"
+      ],
+      "security_notes": "High-privilege bridge. Keep bot tokens secret, use permission gates, avoid public exposure, and sandbox production workspaces. The validation report found the repository real but very immature; verify which chat adapters are shipped before relying on them.",
+      "source_urls": [
+        "https://github.com/Open-ACP/OpenACP"
+      ],
+      "directory_note": "Early project; verify shipped chat adapters before relying on Slack or Discord control.",
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "customer-controlled",
+        "label": "Self-host",
+        "regions": [
+          "self-hosted",
+          "customer-controlled"
+        ],
+        "note": "Self-hosted or local deployment lets the operator choose region.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "clideck",
+      "name": "clideck",
+      "category": "local-multi-agent-dashboard",
+      "agent_native_scope": "Local dashboard for running and coordinating multiple CLI coding agents from one browser window.",
+      "summary": "Runs Claude Code, Codex, Gemini CLI, and OpenCode side by side with status, session resume, projects, and local data.",
+      "primary_url": "https://github.com/rustykuntz/clideck",
+      "repo_url": "https://github.com/rustykuntz/clideck",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex",
+        "Gemini CLI",
+        "OpenCode"
+      ],
+      "deployment_model": [
+        "local",
+        "browser-dashboard"
+      ],
+      "security_notes": "Keep the local dashboard bound to localhost unless explicitly hardened. Review mobile relay and encryption settings if enabled.",
+      "source_urls": [
+        "https://github.com/rustykuntz/clideck"
+      ],
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "codex-orchestrator",
+      "name": "Codex Orchestrator",
+      "category": "agent-orchestration",
+      "agent_native_scope": "Claude Code plugin and CLI for spawning Codex agents in tmux sessions and collecting results.",
+      "summary": "Delegates tasks to OpenAI Codex agents via tmux, with status, capture, redirect, and structured job output.",
+      "primary_url": "https://github.com/kingbootoshi/codex-orchestrator",
+      "repo_url": "https://github.com/kingbootoshi/codex-orchestrator",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex",
+        "tmux"
+      ],
+      "deployment_model": [
+        "local",
+        "terminal",
+        "tmux",
+        "claude-plugin"
+      ],
+      "security_notes": "Useful on ROKY for long-running agents. Scope workspaces, avoid unsafe auto-approval, and monitor tmux sessions and logs.",
+      "source_urls": [
+        "https://github.com/kingbootoshi/codex-orchestrator"
+      ],
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "composio-agent-orchestrator",
+      "name": "Composio Agent Orchestrator",
+      "category": "multi-agent-orchestrator",
+      "agent_native_scope": "Runs multiple coding agents across isolated worktrees with dashboard supervision.",
+      "summary": "Platform for spawning and managing parallel AI coding agents such as Claude Code, Codex, Aider, and OpenCode.",
+      "primary_url": "https://github.com/ComposioHQ/agent-orchestrator",
+      "repo_url": "https://github.com/ComposioHQ/agent-orchestrator",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex",
+        "Aider",
+        "OpenCode",
+        "git worktrees"
+      ],
+      "deployment_model": [
+        "local",
+        "dashboard",
+        "worktree"
+      ],
+      "security_notes": "Worktree isolation is useful, but agents still need clear repo boundaries, permission rules, and cleanup/recovery processes.",
+      "source_urls": [
+        "https://github.com/ComposioHQ/agent-orchestrator/blob/main/CLAUDE.md"
+      ],
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "vibe-kanban",
+      "name": "Vibe Kanban",
+      "category": "multi-agent-work-board",
+      "agent_native_scope": "Dispatches board-tracked work across coding agents in isolated workspaces and lets humans review diffs from one UI.",
+      "summary": "Open-source board UI for coordinating multiple coding-agent tasks.",
+      "primary_url": "https://github.com/BloopAI/vibe-kanban",
+      "repo_url": "https://github.com/BloopAI/vibe-kanban",
+      "open_source": true,
+      "works_with": [
+        "coding agents",
+        "git workspaces",
+        "review flows"
+      ],
+      "deployment_model": [
+        "local-dashboard",
+        "worktree"
+      ],
+      "security_notes": "Keep workspace roots scoped, review diffs before merge, and avoid handing high-trust credentials to parallel agents by default.",
+      "source_urls": [
+        "https://github.com/BloopAI/vibe-kanban"
+      ],
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "conductor",
+      "name": "Conductor",
+      "category": "multi-agent-worktree-control-plane",
+      "agent_native_scope": "Runs multiple coding agents in parallel on a Mac, each in its own worktree, with diff review before merge.",
+      "summary": "Mac control plane for coordinating multiple coding agents and worktrees.",
+      "primary_url": "https://conductor.build/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Mac",
+        "coding agents",
+        "git worktrees"
+      ],
+      "deployment_model": [
+        "desktop",
+        "worktree"
+      ],
+      "security_notes": "Review local permissions, worktree cleanup, agent credentials, and merge-review workflow before using on important repositories.",
+      "source_urls": [
+        "https://conductor.build/"
+      ],
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "unknown-hosted"
+        ],
+        "note": "Mac/worktree workflow is local by default; verify any hosted/team sync feature.",
+        "confidence": "medium",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "sculptor",
+      "name": "Sculptor",
+      "category": "multi-agent-container-orchestrator",
+      "agent_native_scope": "Runs multiple coding agents in isolated containers and syncs selected agent work back into the local repo.",
+      "summary": "Open-source container-based multi-agent coding workflow from Imbue.",
+      "primary_url": "https://github.com/imbue-ai/sculptor",
+      "repo_url": "https://github.com/imbue-ai/sculptor",
+      "open_source": true,
+      "works_with": [
+        "containers",
+        "coding agents",
+        "local repositories"
+      ],
+      "deployment_model": [
+        "local",
+        "container",
+        "worktree"
+      ],
+      "security_notes": "Container isolation helps, but review mounted paths, secrets, network access, and sync-back behaviour before trusting results.",
+      "source_urls": [
+        "https://github.com/imbue-ai/sculptor"
+      ],
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "container-use",
+      "name": "container-use",
+      "category": "agent-container-isolation",
+      "agent_native_scope": "Gives each coding agent an isolated container and git branch, with command history and session inspection.",
+      "summary": "Dagger-built MCP server for isolated container sessions per coding agent.",
+      "primary_url": "https://github.com/dagger/container-use",
+      "repo_url": "https://github.com/dagger/container-use",
+      "open_source": true,
+      "works_with": [
+        "MCP",
+        "containers",
+        "git branches",
+        "coding agents"
+      ],
+      "deployment_model": [
+        "mcp",
+        "container",
+        "local"
+      ],
+      "security_notes": "Review container privileges, mounted paths, network access, secret injection, and cleanup of branches and containers.",
+      "source_urls": [
+        "https://github.com/dagger/container-use"
+      ],
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "claude-squad",
+      "name": "Claude Squad",
+      "category": "multi-agent-terminal-manager",
+      "agent_native_scope": "Manages multiple terminal coding agents in isolated tmux sessions and git worktrees, including background runs.",
+      "summary": "Open-source terminal manager for coordinating parallel coding-agent sessions.",
+      "primary_url": "https://github.com/smtg-ai/claude-squad",
+      "repo_url": "https://github.com/smtg-ai/claude-squad",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex",
+        "tmux",
+        "git worktrees"
+      ],
+      "deployment_model": [
+        "terminal",
+        "tmux",
+        "worktree"
+      ],
+      "security_notes": "Background auto-accept modes can be risky. Scope repos, review diffs, watch logs, and avoid broad secrets in shared shells.",
+      "source_urls": [
+        "https://github.com/smtg-ai/claude-squad"
+      ],
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "here-now",
+      "name": "here.now",
+      "category": "agent-web-hosting",
+      "agent_native_scope": "Lets coding agents publish files, folders, prototypes, reports, dashboards, documents, games, and static sites to live URLs in seconds via API, CLI, or the here.now skill.",
+      "summary": "Free instant web hosting and cloud file storage built for AI agents, with no-signup temporary URLs, accounts for permanent sites, custom domains, password protection, and agent-friendly docs.",
+      "primary_url": "https://here.now/",
+      "repo_url": "https://github.com/heredotnow/skill",
+      "open_source": false,
+      "works_with": [
+        "Codex",
+        "Claude Code",
+        "Cursor",
+        "OpenClaw",
+        "Amp",
+        "HTTP-capable agents"
+      ],
+      "deployment_model": [
+        "hosted-static-site",
+        "agent-skill",
+        "api",
+        "cloud-drive",
+        "custom-domain"
+      ],
+      "security_notes": "Anonymous sites are public and temporary by default. Review what the agent publishes before sharing URLs, avoid secrets or private data in uploaded files, use password protection for sensitive previews, and review the install script/skill before running it globally.",
+      "source_urls": [
+        "https://here.now/",
+        "https://here.now/docs",
+        "https://github.com/heredotnow/skill"
+      ],
+      "directory_group": "control-planes",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "agentsview",
+      "name": "AgentsView",
+      "category": "session-browser-analytics",
+      "agent_native_scope": "Local-first browser for past AI coding sessions, search, analytics, and usage reports.",
+      "summary": "Desktop and web app that indexes agent session files locally into SQLite for browsing, search, activity analysis, and cost reporting.",
+      "primary_url": "https://www.agentsview.io/",
+      "repo_url": null,
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex",
+        "Gemini",
+        "Copilot",
+        "Cursor",
+        "OpenCode",
+        "OpenClaw",
+        "Kiro",
+        "Hermes"
+      ],
+      "deployment_model": [
+        "desktop",
+        "local-web",
+        "sqlite"
+      ],
+      "security_notes": "Session histories can contain sensitive prompts, diffs, and tool output. Keep the database local or use explicit team sync controls.",
+      "source_urls": [
+        "https://www.agentsview.io/"
+      ],
+      "directory_group": "monitoring",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "openusage",
+      "name": "OpenUsage",
+      "category": "usage-cost-monitoring",
+      "agent_native_scope": "Local terminal dashboard for tracking spend, quotas, rate limits, models, sessions, MCP usage, and code stats across AI coding tools.",
+      "summary": "Open-source local dashboard for monitoring usage across coding agents and AI API providers.",
+      "primary_url": "https://openusage.sh/",
+      "repo_url": "https://github.com/janekbaraniewski/openusage",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex CLI",
+        "Cursor",
+        "Copilot",
+        "Gemini CLI",
+        "OpenCode",
+        "Ollama",
+        "OpenAI",
+        "Anthropic"
+      ],
+      "deployment_model": [
+        "terminal",
+        "local",
+        "sqlite"
+      ],
+      "security_notes": "Prefer local storage for usage data. Review provider API key discovery and environment-variable handling.",
+      "source_urls": [
+        "https://openusage.sh/"
+      ],
+      "directory_group": "monitoring",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "token-tracker",
+      "name": "Token Tracker",
+      "category": "token-usage-monitoring",
+      "agent_native_scope": "Local-first token dashboard for many coding-agent CLIs, focused on counts, model names, timestamps, and project attribution.",
+      "summary": "Tracks token usage across Claude Code, Codex CLI, OpenClaw, Gemini CLI, OpenCode, Kiro, Hermes, and related tools.",
+      "primary_url": "https://www.tokentracker.cc/",
+      "repo_url": "https://github.com/mm7894215/TokenTracker",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex CLI",
+        "Cursor IDE",
+        "Gemini CLI",
+        "OpenCode",
+        "OpenClaw",
+        "Kiro",
+        "Hermes Agent",
+        "GitHub Copilot"
+      ],
+      "deployment_model": [
+        "local-web",
+        "hooks",
+        "passive-log-reader"
+      ],
+      "security_notes": "Prefer token-count-only collection. Review hook installation and optional cloud sync before enabling. The validation report notes auto-installed hooks and opt-in cloud leaderboard sync.",
+      "source_urls": [
+        "https://www.tokentracker.cc/"
+      ],
+      "directory_note": "Review hook installation and optional cloud sync before enabling.",
+      "directory_group": "monitoring",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local + cloud opt-in",
+        "regions": [
+          "local",
+          "unknown-hosted"
+        ],
+        "note": "Local by default; optional cloud sync/leaderboard needs residency confirmation.",
+        "confidence": "medium",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "ccusage",
+      "name": "ccusage",
+      "category": "token-usage-monitoring",
+      "agent_native_scope": "Analyses local coding-agent CLI usage data for directional token usage, estimated cost, cache creation/read tokens, and daily, weekly, monthly, or per-session reports.",
+      "summary": "Open-source local token and cost tracker for seeing where agentic coding workflows spend tokens, including cache-read and cache-write behaviour.",
+      "primary_url": "https://ccusage.com/",
+      "repo_url": "https://github.com/ryoppippi/ccusage",
+      "open_source": true,
+      "works_with": [
+        "Claude Code",
+        "Codex",
+        "OpenCode",
+        "Amp",
+        "Gemini CLI",
+        "GitHub Copilot CLI",
+        "terminal"
+      ],
+      "deployment_model": [
+        "terminal",
+        "local",
+        "passive-log-reader",
+        "json-output"
+      ],
+      "security_notes": "Runs locally and reads usage files, but those logs can still include project names and sensitive metadata. Keep reports local unless intentionally sharing, and treat cost figures as estimates rather than billing-grade truth.",
+      "source_urls": [
+        "https://ccusage.com/",
+        "https://ccusage.com/guide/",
+        "https://github.com/ryoppippi/ccusage"
+      ],
+      "directory_group": "monitoring",
+      "data_residency": {
+        "posture": "local-default",
+        "label": "Local default",
+        "regions": [
+          "local",
+          "customer-controlled"
+        ],
+        "note": "Runs locally by default; model/provider calls may leave the machine.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "langfuse",
+      "name": "Langfuse",
+      "category": "llm-agent-observability",
+      "agent_native_scope": "Traces, monitors, and evaluates LLM and agent applications end-to-end, including cost, token, latency, and quality signals.",
+      "summary": "Open-source LLMOps and agent observability platform with hosted and self-hosted options.",
+      "primary_url": "https://langfuse.com/",
+      "repo_url": "https://github.com/langfuse/langfuse",
+      "open_source": true,
+      "works_with": [
+        "LLM apps",
+        "agent apps",
+        "OpenTelemetry-style tracing"
+      ],
+      "deployment_model": [
+        "hosted",
+        "self-hosted",
+        "sdk"
+      ],
+      "security_notes": "Traces may include prompts, outputs, tool calls, and customer data. Configure redaction, retention, access controls, and self-hosting where needed.",
+      "source_urls": [
+        "https://langfuse.com/",
+        "https://github.com/langfuse/langfuse"
+      ],
+      "directory_group": "monitoring",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/US/Japan/self-host",
+        "regions": [
+          "Europe",
+          "United States",
+          "Japan",
+          "self-hosted"
+        ],
+        "note": "Langfuse Cloud offers EU, US, Japan, and HIPAA US regions; self-hosting gives full region control.",
+        "confidence": "high",
+        "source_urls": [
+          "https://langfuse.com/security/data-regions",
+          "https://langfuse.com/faq/all/where-is-my-project"
+        ]
+      }
+    },
+    {
+      "slug": "helicone",
+      "name": "Helicone",
+      "category": "llm-agent-observability",
+      "agent_native_scope": "Monitors LLM and agent requests for cost, latency, usage, errors, and gateway-level behaviour.",
+      "summary": "Open-source LLM observability and AI gateway platform.",
+      "primary_url": "https://helicone.ai/",
+      "repo_url": "https://github.com/Helicone/helicone",
+      "open_source": true,
+      "works_with": [
+        "LLM APIs",
+        "agent apps",
+        "AI gateways"
+      ],
+      "deployment_model": [
+        "hosted",
+        "self-hosted",
+        "proxy",
+        "gateway"
+      ],
+      "security_notes": "Proxy and gateway deployment can see request/response bodies. Review redaction, retention, auth, and data residency before routing sensitive traffic.",
+      "source_urls": [
+        "https://helicone.ai/",
+        "https://github.com/Helicone/helicone"
+      ],
+      "directory_group": "monitoring",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/US/self-host",
+        "regions": [
+          "Europe",
+          "United States",
+          "self-hosted"
+        ],
+        "note": "Helicone documents EU and US cloud regions and self-hosting for customer-controlled residency.",
+        "confidence": "high",
+        "source_urls": [
+          "https://docs.helicone.ai/references/data-autonomy",
+          "https://docs.helicone.ai/getting-started/self-host/overview"
+        ]
+      }
+    },
+    {
+      "slug": "arize-phoenix",
+      "name": "Arize Phoenix",
+      "category": "llm-agent-observability",
+      "agent_native_scope": "Traces and evaluates agent and LLM applications locally or self-hosted, surfacing slow, costly, or low-quality spans.",
+      "summary": "Open-source observability and evaluation tool for LLM and agent applications.",
+      "primary_url": "https://github.com/Arize-ai/phoenix",
+      "repo_url": "https://github.com/Arize-ai/phoenix",
+      "open_source": true,
+      "works_with": [
+        "OpenTelemetry",
+        "agent SDKs",
+        "LLM apps"
+      ],
+      "deployment_model": [
+        "local",
+        "self-hosted",
+        "sdk"
+      ],
+      "security_notes": "Trace payloads can include sensitive prompts, outputs, and tool data. Configure redaction and access controls before team use.",
+      "source_urls": [
+        "https://github.com/Arize-ai/phoenix"
+      ],
+      "directory_group": "monitoring",
+      "data_residency": {
+        "posture": "customer-controlled",
+        "label": "Self-host",
+        "regions": [
+          "self-hosted",
+          "customer-controlled"
+        ],
+        "note": "Self-hosted or local deployment lets the operator choose region.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "openllmetry",
+      "name": "OpenLLMetry",
+      "category": "llm-telemetry",
+      "agent_native_scope": "Captures LLM-specific telemetry such as token counts, latency, model versions, errors, and traces on top of OpenTelemetry.",
+      "summary": "Open-source LLM telemetry toolkit maintained by Traceloop.",
+      "primary_url": "https://github.com/traceloop/openllmetry",
+      "repo_url": "https://github.com/traceloop/openllmetry",
+      "open_source": true,
+      "works_with": [
+        "OpenTelemetry",
+        "Python",
+        "TypeScript",
+        "Go",
+        "LLM apps"
+      ],
+      "deployment_model": [
+        "library",
+        "telemetry",
+        "self-hosted"
+      ],
+      "security_notes": "Telemetry exporters can leak prompts, outputs, and metadata. Pin destinations, redact payloads, and restrict exporter credentials.",
+      "source_urls": [
+        "https://github.com/traceloop/openllmetry"
+      ],
+      "directory_group": "monitoring",
+      "data_residency": {
+        "posture": "implementation-dependent",
+        "label": "Impl. choice",
+        "regions": [
+          "customer-controlled"
+        ],
+        "note": "Open standard; data location depends on the implementation or host.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "matomo-mcp-server",
+      "name": "Matomo MCP Server",
+      "short_name": "Matomo",
+      "category": "web-analytics-mcp",
+      "agent_native_scope": "Lets Codex, Claude, ChatGPT, and other MCP-compatible agents query self-hosted Matomo web analytics for traffic trends, campaigns, referrers, pages, conversions, and visitor behaviour.",
+      "summary": "Official Matomo MCP plugin for querying Matomo analytics data from AI agents while keeping the analytics platform self-hosted or Matomo-managed.",
+      "primary_url": "https://matomo.org/faq/how-to/how-to-configure-the-matomo-mcp-server/",
+      "repo_url": null,
+      "open_source": true,
+      "works_with": [
+        "OpenAI Codex",
+        "ChatGPT",
+        "Claude",
+        "Matomo On-Premise",
+        "Matomo Analytics API"
+      ],
+      "deployment_model": [
+        "matomo-plugin",
+        "mcp-server",
+        "self-hosted-analytics",
+        "analytics-api"
+      ],
+      "security_notes": "Use a dedicated read-only Matomo user or token, prefer aggregate/anonymised reports, avoid visitor-level data by default, and treat URLs, referrers, titles, campaigns, search terms, and event metadata as untrusted prompt-injection surfaces.",
+      "source_urls": [
+        "https://matomo.org/faq/how-to/how-to-configure-the-matomo-mcp-server/",
+        "https://matomo.org/matomo-on-premise/"
+      ],
+      "directory_group": "monitoring",
+      "data_residency": {
+        "posture": "europe-or-self-hosted",
+        "label": "EU/self-host",
+        "regions": [
+          "Europe",
+          "self-hosted"
+        ],
+        "note": "Matomo Cloud is EU-hosted; On-Premise lets the operator choose the country/location.",
+        "confidence": "high",
+        "source_urls": [
+          "https://matomo.org/faq/new-to-piwik/data-sovereignty-where-your-analytics-data-is-stored/",
+          "https://matomo.org/matomo-cloud-dpa/subprocessors/"
+        ]
+      }
+    },
+    {
+      "slug": "agent-payments-protocol",
+      "name": "Agent Payments Protocol",
+      "short_name": "AP2",
+      "category": "agent-payment-protocol",
+      "agent_native_scope": "Authorises and verifies agent-initiated payments across merchants, agents, and payment providers.",
+      "summary": "Open protocol for secure agent-initiated commerce and payment authorisation.",
+      "primary_url": "https://ap2-protocol.org/",
+      "repo_url": null,
+      "open_source": true,
+      "works_with": [
+        "A2A",
+        "MCP",
+        "payment providers",
+        "merchant systems"
+      ],
+      "deployment_model": [
+        "open-standard",
+        "commerce-protocol"
+      ],
+      "security_notes": "Payments require explicit human mandates, auditability, identity verification, fraud controls, and careful separation between quote, approval, and settlement.",
+      "source_urls": [
+        "https://ap2-protocol.org/"
+      ],
+      "directory_group": "payments",
+      "data_residency": {
+        "posture": "implementation-dependent",
+        "label": "Impl. choice",
+        "regions": [
+          "customer-controlled"
+        ],
+        "note": "Open standard; data location depends on the implementation or host.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "x402",
+      "name": "x402",
+      "category": "agent-payment-protocol",
+      "agent_native_scope": "Lets agents pay for APIs and web resources over HTTP without traditional account setup or API-key exchange.",
+      "summary": "HTTP-native payment protocol for autonomous API and web-resource access.",
+      "primary_url": "https://x402.org/",
+      "repo_url": null,
+      "open_source": true,
+      "works_with": [
+        "HTTP APIs",
+        "agents",
+        "payment-enabled web resources"
+      ],
+      "deployment_model": [
+        "http-protocol",
+        "payments"
+      ],
+      "security_notes": "Constrain spend, validate requested resources, log every charge, and keep wallet/payment authority away from untrusted prompt inputs.",
+      "source_urls": [
+        "https://x402.org/"
+      ],
+      "directory_group": "payments",
+      "data_residency": {
+        "posture": "implementation-dependent",
+        "label": "Impl. choice",
+        "regions": [
+          "customer-controlled"
+        ],
+        "note": "Open standard; data location depends on the implementation or host.",
+        "confidence": "high",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "stripe-agentic-commerce",
+      "name": "Stripe Agent Toolkit",
+      "short_name": "Stripe agents",
+      "category": "agentic-commerce-payments",
+      "agent_native_scope": "Lets agents and agent frameworks call Stripe APIs, create payment links, work with MCP, and build agentic commerce flows.",
+      "summary": "Stripe tooling for agentic workflows, including the Agent Toolkit, MCP server, AI docs, and agentic commerce guides.",
+      "primary_url": "https://docs.stripe.com/agents",
+      "repo_url": "https://github.com/stripe/agent-toolkit",
+      "open_source": true,
+      "works_with": [
+        "OpenAI Agents SDK",
+        "Vercel AI SDK",
+        "LangChain",
+        "CrewAI",
+        "MCP",
+        "Stripe API"
+      ],
+      "deployment_model": [
+        "sdk",
+        "mcp-server",
+        "hosted-api",
+        "commerce-platform"
+      ],
+      "security_notes": "Use restricted Stripe keys, scoped permissions, explicit human mandates, spending limits, audit logs, and test mode before any live-money workflow.",
+      "source_urls": [
+        "https://docs.stripe.com/agents",
+        "https://docs.stripe.com/agentic-commerce",
+        "https://docs.stripe.com/building-with-ai",
+        "https://github.com/stripe/agent-toolkit"
+      ],
+      "directory_group": "commerce",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Verify vendor",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Stripe documents transfer frameworks, but this pass did not verify a simple EU/US storage choice for agent tooling.",
+        "confidence": "low",
+        "source_urls": [
+          "https://stripe.com/privacy",
+          "https://stripe.com/legal/data-privacy-framework"
+        ]
+      }
+    },
+    {
+      "slug": "shopify-storefront-catalog-mcp",
+      "name": "Shopify Storefront Catalog MCP",
+      "short_name": "Shopify MCP",
+      "category": "ecommerce-catalog-mcp",
+      "agent_native_scope": "Exposes a Shopify merchant catalog to agents so buyers can search and discover products from a single storefront.",
+      "summary": "Official Shopify MCP surface for storefront catalog search and product discovery, aligned with UCP catalog capabilities.",
+      "primary_url": "https://shopify.dev/docs/agents/catalog/storefront-catalog",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "MCP clients",
+        "UCP",
+        "Cursor",
+        "Claude Code",
+        "Shopify stores"
+      ],
+      "deployment_model": [
+        "remote-mcp",
+        "commerce-platform",
+        "merchant-catalog"
+      ],
+      "security_notes": "Catalog discovery is lower risk than checkout, but product metadata, inventory, pricing, and storefront access still need merchant approval and rate limits.",
+      "source_urls": [
+        "https://shopify.dev/docs/agents/catalog/storefront-catalog"
+      ],
+      "directory_group": "commerce",
+      "data_residency": {
+        "posture": "europe-and-global",
+        "label": "Europe + global",
+        "regions": [
+          "Europe",
+          "global"
+        ],
+        "note": "Shopify stores certain merchant/customer personal data in Europe while operating global transfer controls.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://help.shopify.com/en/manual/privacy-and-security/privacy/international-data-transfers/onward-transfers",
+          "https://help.shopify.com/en/manual/privacy-and-security/privacy/international-data-transfers"
+        ]
+      }
+    },
+    {
+      "slug": "paypal-agent-toolkit",
+      "name": "PayPal Agent Toolkit",
+      "short_name": "PayPal agents",
+      "category": "agentic-commerce-payments",
+      "agent_native_scope": "Wraps PayPal APIs for orders, invoices, subscriptions, shipments, transaction details, and disputes in agent-callable tools.",
+      "summary": "PayPal toolkit for integrating PayPal APIs into AI agent workflows across MCP and popular agent frameworks.",
+      "primary_url": "https://docs.paypal.ai/developer/tools/ai/agent-toolkit-quickstart",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "MCP",
+        "OpenAI Agents SDK",
+        "Vercel AI SDK",
+        "LangChain",
+        "CrewAI",
+        "Amazon Bedrock"
+      ],
+      "deployment_model": [
+        "sdk",
+        "mcp-server",
+        "hosted-api",
+        "commerce-platform"
+      ],
+      "security_notes": "PayPal tools can touch live orders, invoices, subscriptions, disputes, and credentials. Use sandbox mode, scoped apps, approvals, and transaction limits.",
+      "source_urls": [
+        "https://docs.paypal.ai/developer/tools/ai/agent-toolkit-quickstart",
+        "https://developer.paypal.com/tools/agent-toolkit/"
+      ],
+      "directory_group": "commerce",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Verify vendor",
+        "regions": [
+          "unknown"
+        ],
+        "note": "PayPal has regional privacy terms, but this pass did not verify a clear EU/US storage selector for the agent toolkit.",
+        "confidence": "low",
+        "source_urls": [
+          "https://www.paypal.com/ie/legalhub/paypal/privacy-full"
+        ]
+      }
+    },
+    {
+      "slug": "visa-intelligent-commerce",
+      "name": "Visa Intelligent Commerce",
+      "short_name": "Visa MCP",
+      "category": "agentic-commerce-network",
+      "agent_native_scope": "Connects AI agents to Visa Intelligent Commerce and Visa Acceptance APIs through MCP and an acceptance agent toolkit.",
+      "summary": "Visa program and pilot developer tooling for trusted agentic commerce, tokenized payments, and payment-enabled agent workflows.",
+      "primary_url": "https://corporate.visa.com/en/sites/visa-perspectives/innovation/visa-mcp-server-agent-acceptance-toolkit.html",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "MCP",
+        "Visa Intelligent Commerce APIs",
+        "Visa Acceptance APIs",
+        "payment providers"
+      ],
+      "deployment_model": [
+        "pilot",
+        "mcp-server",
+        "payment-network",
+        "commerce-platform"
+      ],
+      "security_notes": "Pilot and partner access may apply. Treat as high-trust payment infrastructure: verify eligibility, tokenization, identity, audit, and user consent flows.",
+      "source_urls": [
+        "https://corporate.visa.com/en/sites/visa-perspectives/innovation/visa-mcp-server-agent-acceptance-toolkit.html",
+        "https://corporate.visa.com/en/products/intelligent-commerce.html"
+      ],
+      "directory_group": "commerce",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "mastercard-agent-pay",
+      "name": "Mastercard Agent Pay",
+      "short_name": "Agent Pay",
+      "category": "agentic-payment-network",
+      "agent_native_scope": "Mastercard initiative for agentic payments and commerce flows, including collaboration with Microsoft AI infrastructure.",
+      "summary": "Mastercard agentic payments initiative for enabling trusted AI-agent commerce across the payment value chain.",
+      "primary_url": "https://www.mastercard.com/us/en/news-and-trends/press/2025/april/mastercard-unveils-agent-pay-pioneering-agentic-payments-technology-to-power-commerce-in-the-age-of-ai.html",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Microsoft Azure OpenAI Service",
+        "Microsoft Copilot Studio",
+        "Mastercard payment rails"
+      ],
+      "deployment_model": [
+        "payment-network",
+        "partner-program",
+        "commerce-platform"
+      ],
+      "security_notes": "This is payment-network infrastructure, not a drop-in open-source package. Verify availability, integration route, fraud controls, identity, and user-consent requirements.",
+      "source_urls": [
+        "https://www.mastercard.com/us/en/news-and-trends/press/2025/april/mastercard-unveils-agent-pay-pioneering-agentic-payments-technology-to-power-commerce-in-the-age-of-ai.html"
+      ],
+      "directory_group": "commerce",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "adyen-agentic-commerce",
+      "name": "Adyen Agentic Commerce",
+      "short_name": "Adyen",
+      "category": "agentic-commerce-payments",
+      "agent_native_scope": "Positions Adyen payment infrastructure for agentic commerce, AI-driven payments, and Agent Payments Protocol ecosystem work.",
+      "summary": "Adyen agentic commerce materials and ecosystem participation around AI-led checkout, merchant payments, and AP2 collaboration.",
+      "primary_url": "https://www.adyen.com/en_GB/knowledge-hub/agentic-commerce",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Adyen payments",
+        "AP2 ecosystem",
+        "merchant checkout"
+      ],
+      "deployment_model": [
+        "payment-provider",
+        "commerce-platform",
+        "partner-program"
+      ],
+      "security_notes": "Good strategic signal, but verify concrete APIs, regional availability, and production integration paths before listing as an installable agent tool.",
+      "source_urls": [
+        "https://www.adyen.com/en_GB/knowledge-hub/agentic-commerce"
+      ],
+      "directory_group": "commerce",
+      "data_residency": {
+        "posture": "europe-and-global",
+        "label": "Europe primary",
+        "regions": [
+          "Europe",
+          "United States",
+          "India",
+          "Singapore",
+          "Australia"
+        ],
+        "note": "Adyen says payments processed are stored in Europe and an isolated India environment; systems also run in several regions.",
+        "confidence": "high",
+        "source_urls": [
+          "https://www.adyen.com/infrastructure"
+        ]
+      }
+    },
+    {
+      "slug": "bigcommerce-ai-ready-docs",
+      "name": "BigCommerce AI-ready Developer Docs",
+      "short_name": "BigCommerce",
+      "category": "ecommerce-platform-api",
+      "agent_native_scope": "Gives agents API documentation, llms.txt indexes, and commerce APIs for storefront, catalog, checkout, orders, customers, and integrations.",
+      "summary": "BigCommerce developer docs and APIs are increasingly agent-readable, including llms.txt, page-level Markdown, API runner, and store management APIs.",
+      "primary_url": "https://docs.bigcommerce.com/developer/docs/overview/quick-start",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "BigCommerce APIs",
+        "REST",
+        "GraphQL Storefront API",
+        "LLM-readable docs"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "ecommerce-platform",
+        "docs-for-agents"
+      ],
+      "security_notes": "Not a dedicated agent product. Treat store API credentials as privileged access to catalog, orders, customers, checkout, and settings.",
+      "source_urls": [
+        "https://docs.bigcommerce.com/developer/docs/overview/quick-start"
+      ],
+      "directory_group": "commerce",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Hosted: verify",
+        "regions": [
+          "unknown"
+        ],
+        "note": "Hosted service; no official residency claim verified in this pass.",
+        "confidence": "low",
+        "source_urls": []
+      }
+    },
+    {
+      "slug": "salesforce-agentforce",
+      "name": "Salesforce Agentforce",
+      "short_name": "Agentforce",
+      "category": "crm-agent-platform",
+      "agent_native_scope": "Builds, manages, deploys, and integrates agents over Salesforce CRM, Customer 360, Data Cloud, Flow, Apex, mobile SDKs, and enterprise workflows.",
+      "summary": "Salesforce platform for CRM-native AI agents, with developer APIs, SDKs, architecture guidance, and customer-success workflows.",
+      "primary_url": "https://developer.salesforce.com/docs/ai/agentforce/guide/get-started-agents.html",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Salesforce CRM",
+        "Customer 360",
+        "Data Cloud",
+        "Flow",
+        "Apex",
+        "MCP",
+        "A2A"
+      ],
+      "deployment_model": [
+        "hosted-platform",
+        "crm-platform",
+        "enterprise-agent-platform"
+      ],
+      "security_notes": "Deep CRM access needs strict profile/permission design, data-governance review, audit logging, approvals, and clear human escalation paths.",
+      "source_urls": [
+        "https://developer.salesforce.com/docs/ai/agentforce/guide/get-started-agents.html",
+        "https://architect.salesforce.com/docs/architect/fundamentals/guide/agentic-patterns"
+      ],
+      "directory_group": "crm",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "Region choice",
+        "regions": [
+          "Europe",
+          "United States",
+          "global"
+        ],
+        "note": "Salesforce Hyperforce provides local data storage/residency choices; confirm product and org region.",
+        "confidence": "high",
+        "source_urls": [
+          "https://help.salesforce.com/s/articleView?id=000795008&language=en_US&type=1",
+          "https://www.salesforce.com/platform/data-residency-resilience/"
+        ]
+      }
+    },
+    {
+      "slug": "hubspot-mcp-server",
+      "name": "HubSpot MCP Server",
+      "short_name": "HubSpot MCP",
+      "category": "crm-mcp-server",
+      "agent_native_scope": "Lets MCP-compatible AI assistants securely interact with HubSpot CRM data through scoped access and natural-language workflows.",
+      "summary": "Official remote MCP server for bringing HubSpot CRM context into AI agents and third-party applications.",
+      "primary_url": "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "MCP clients",
+        "HubSpot CRM",
+        "HubSpot apps",
+        "third-party agents"
+      ],
+      "deployment_model": [
+        "remote-mcp",
+        "crm-platform",
+        "hosted-api"
+      ],
+      "security_notes": "Scope the connected HubSpot app carefully. CRM data includes contacts, companies, deals, notes, and possibly sensitive customer history.",
+      "source_urls": [
+        "https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server",
+        "https://developers.hubspot.com/mcp"
+      ],
+      "directory_group": "crm",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/US + more",
+        "regions": [
+          "European Union",
+          "United States",
+          "Canada",
+          "Australia"
+        ],
+        "note": "HubSpot accounts are hosted in selected regional data centers including US and EU Germany.",
+        "confidence": "high",
+        "source_urls": [
+          "https://knowledge.hubspot.com/account-security/hubspot-cloud-infrastructure-and-data-hosting-frequently-asked-questions",
+          "https://www.hubspot.com/data-centers"
+        ]
+      }
+    },
+    {
+      "slug": "zendesk-ai-agents",
+      "name": "Zendesk AI Agents",
+      "short_name": "Zendesk",
+      "category": "support-agent-platform",
+      "agent_native_scope": "Extends Zendesk support automation with developer-customizable AI agents and API-key authenticated platform access.",
+      "summary": "Zendesk developer surface for AI agents in customer service and support automation workflows.",
+      "primary_url": "https://developer.zendesk.com/documentation/ai-agents/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Zendesk",
+        "support workflows",
+        "API keys"
+      ],
+      "deployment_model": [
+        "hosted-platform",
+        "support-platform",
+        "customer-ops-agent"
+      ],
+      "security_notes": "Support agents can expose customer tickets and account data. Use API-key hygiene, role limits, handoff rules, and conversation audit trails.",
+      "source_urls": [
+        "https://developer.zendesk.com/documentation/ai-agents/"
+      ],
+      "directory_group": "crm",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/US + more",
+        "regions": [
+          "European Economic Area",
+          "United States",
+          "United Kingdom",
+          "Japan",
+          "Australia"
+        ],
+        "note": "Zendesk offers regional hosting for entitled customers, including US and EEA choices.",
+        "confidence": "high",
+        "source_urls": [
+          "https://support.zendesk.com/hc/en-us/articles/4408825765530-Data-Hosting-Locations-for-Your-Zendesk-Service-Data",
+          "https://support.zendesk.com/hc/en-us/articles/4408883599130-Regional-Data-Hosting-Policy"
+        ]
+      }
+    },
+    {
+      "slug": "microsoft-dynamics-365-agents",
+      "name": "Microsoft Dynamics 365 Agents",
+      "short_name": "Dynamics agents",
+      "category": "crm-erp-agent-platform",
+      "agent_native_scope": "Uses Dynamics 365 and Copilot Studio agents for sales, service, finance, operations, contact center, and customer journeys.",
+      "summary": "Microsoft Dynamics 365 agent and Copilot capabilities across CRM, ERP, contact center, and Customer Insights workflows.",
+      "primary_url": "https://learn.microsoft.com/en-us/dynamics365/copilot/ai-get-started",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Dynamics 365",
+        "Microsoft Copilot Studio",
+        "Microsoft 365 Copilot",
+        "Teams",
+        "finance and operations apps"
+      ],
+      "deployment_model": [
+        "hosted-platform",
+        "crm-platform",
+        "erp-platform",
+        "enterprise-agent-platform"
+      ],
+      "security_notes": "Dynamics agents may span CRM, ERP, Teams, finance, and service records. Confirm environment boundaries, data-loss prevention, and approval paths.",
+      "source_urls": [
+        "https://learn.microsoft.com/en-us/dynamics365/copilot/ai-get-started",
+        "https://learn.microsoft.com/en-us/dynamics365/sales/ai-agents-apps"
+      ],
+      "directory_group": "crm",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "Azure geo choice",
+        "regions": [
+          "European Union",
+          "United States",
+          "global"
+        ],
+        "note": "Dynamics 365 stores customer data at rest in the selected Azure geo, with EU Data Boundary commitments.",
+        "confidence": "high",
+        "source_urls": [
+          "https://learn.microsoft.com/en-us/dynamics365/get-started/availability",
+          "https://learn.microsoft.com/en-us/privacy/eudb/eu-data-boundary-learn"
+        ]
+      }
+    },
+    {
+      "slug": "servicenow-ai-agent-studio",
+      "name": "ServiceNow AI Agent Studio",
+      "short_name": "ServiceNow",
+      "category": "enterprise-workflow-agent-platform",
+      "agent_native_scope": "Creates, manages, tests, and observes AI agents and agentic workflows across ServiceNow business processes.",
+      "summary": "ServiceNow studio for building and managing self-executing AI agents and agentic workflows inside the ServiceNow platform.",
+      "primary_url": "https://www.servicenow.com/docs/r/intelligent-experiences/ai-agent-studio.html",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "ServiceNow",
+        "Now Assist AI agents",
+        "ITSM",
+        "customer service",
+        "HR workflows"
+      ],
+      "deployment_model": [
+        "hosted-platform",
+        "workflow-platform",
+        "enterprise-agent-platform"
+      ],
+      "security_notes": "Enterprise workflow agents can mutate tickets, cases, HR records, approvals, and operational processes. Start with narrow actions and observable test runs.",
+      "source_urls": [
+        "https://www.servicenow.com/docs/r/intelligent-experiences/ai-agent-studio.html"
+      ],
+      "directory_group": "crm",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "Region choice",
+        "regions": [
+          "Europe",
+          "United States",
+          "global"
+        ],
+        "note": "ServiceNow has EU hosting options and AI data residency controls; confirm contract/product scope.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://www.servicenow.com/de/company/trust/privacy/faq.html",
+          "https://support.servicenow.com/kb?id=kb_article_view&sysparm_article=KB2689562"
+        ]
+      }
+    },
+    {
+      "slug": "openai-platform",
+      "name": "OpenAI Platform",
+      "short_name": "OpenAI API",
+      "category": "hosted-llm-api-platform",
+      "agent_native_scope": "Hosted frontier-model API for agents that need chat, responses, tool calling, embeddings, multimodal generation, realtime voice, files, evals, and project-level data controls.",
+      "summary": "OpenAI's hosted API platform for building agentic applications on GPT models, tools, embeddings, speech, images, and realtime interfaces.",
+      "primary_url": "https://openai.com/api/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "OpenAI SDKs",
+        "Agents SDK",
+        "Responses API",
+        "MCP",
+        "OpenAI-compatible gateways"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "model-platform",
+        "agent-api"
+      ],
+      "security_notes": "Use project-scoped keys, org controls, ZDR where available, regional endpoints where required, spend limits, and strict tool/function boundaries.",
+      "source_urls": [
+        "https://openai.com/api/",
+        "https://developers.openai.com/api/docs/guides/your-data"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/UK/US+",
+        "regions": [
+          "Europe",
+          "United Kingdom",
+          "United States",
+          "global"
+        ],
+        "note": "OpenAI documents API data residency per project across US, Europe, UK, and other regions; processing support varies by region, feature, and eligibility.",
+        "confidence": "high",
+        "source_urls": [
+          "https://developers.openai.com/api/docs/guides/your-data"
+        ]
+      }
+    },
+    {
+      "slug": "anthropic-claude-api",
+      "name": "Anthropic Claude API",
+      "short_name": "Claude API",
+      "category": "hosted-llm-api-platform",
+      "agent_native_scope": "Hosted Claude API for agents that need long-context reasoning, tool use, files, code execution features, managed agents, batch work, and workspace-level policy controls.",
+      "summary": "Anthropic's hosted Claude API and cloud-platform routes for model calls, tool use, managed agents, and agentic application development.",
+      "primary_url": "https://platform.claude.com/docs/en/api/overview",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Claude API",
+        "Claude Platform on AWS",
+        "Amazon Bedrock",
+        "Vertex AI",
+        "Microsoft Foundry",
+        "MCP"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "model-platform",
+        "cloud-provider-routes"
+      ],
+      "security_notes": "Use workspaces, scoped API keys, ZDR where contracted, cloud-provider routes for specific compliance needs, and explicit tool-execution controls.",
+      "source_urls": [
+        "https://platform.claude.com/docs/en/api/overview",
+        "https://platform.claude.com/docs/en/manage-claude/data-residency"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "us-or-global",
+        "label": "US/global",
+        "regions": [
+          "United States",
+          "global"
+        ],
+        "note": "First-party Claude API workspace geo is currently US; supported newer models can route inference as US-only or global. Use Bedrock, Vertex, or Foundry when those provider regions are the control surface.",
+        "confidence": "high",
+        "source_urls": [
+          "https://platform.claude.com/docs/en/manage-claude/data-residency",
+          "https://platform.claude.com/docs/en/manage-claude/api-and-data-retention"
+        ]
+      }
+    },
+    {
+      "slug": "google-gemini-vertex-ai",
+      "name": "Google Gemini API / Vertex AI",
+      "short_name": "Gemini Vertex",
+      "category": "hosted-llm-api-platform",
+      "agent_native_scope": "Google Cloud model and agent platform for agents that need Gemini models, regional endpoints, tool use, multimodal generation, embeddings, RAG, evaluation, and enterprise cloud controls.",
+      "summary": "Google Cloud's Gemini and Vertex/Gemini Enterprise Agent Platform surface for hosted models, agent building, regional endpoints, and enterprise AI controls.",
+      "primary_url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Gemini",
+        "Vertex AI",
+        "Google Cloud",
+        "Agent Platform",
+        "MCP-compatible apps"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "cloud-ai-platform",
+        "regional-endpoints"
+      ],
+      "security_notes": "Use project IAM, regional endpoints, VPC Service Controls, CMEK where supported, logging controls, and explicit checks for features excluded from residency commitments.",
+      "source_urls": [
+        "https://docs.cloud.google.com/gemini-enterprise-agent-platform",
+        "https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/data-residency"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "Cloud region",
+        "regions": [
+          "Europe",
+          "United Kingdom",
+          "United States",
+          "global"
+        ],
+        "note": "Google documents selected-location storage and regional or multi-regional ML processing for listed Gemini Enterprise Agent Platform capabilities; unsupported endpoints do not guarantee in-region processing.",
+        "confidence": "high",
+        "source_urls": [
+          "https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/data-residency",
+          "https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/locations"
+        ]
+      }
+    },
+    {
+      "slug": "azure-ai-foundry-models",
+      "name": "Azure AI Foundry Models",
+      "short_name": "Azure Foundry",
+      "category": "hosted-llm-api-platform",
+      "agent_native_scope": "Microsoft Azure model platform for agents that need Azure OpenAI, Foundry Models, regional deployments, Agents, enterprise IAM, networking, and compliance controls.",
+      "summary": "Azure-hosted OpenAI and other Foundry Models for enterprise AI apps, with Azure deployment types, regional availability, and Microsoft data protection controls.",
+      "primary_url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Azure OpenAI",
+        "Microsoft Foundry",
+        "Azure AI Agent Service",
+        "Microsoft Entra",
+        "Azure networking"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "cloud-ai-platform",
+        "regional-deployment"
+      ],
+      "security_notes": "Choose deployment type deliberately: global, data-zone, and regional deployments have different processing boundaries. Use Azure IAM, private networking, content filters, and Azure policy controls.",
+      "source_urls": [
+        "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+        "https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "Azure geo",
+        "regions": [
+          "Europe",
+          "United States",
+          "global"
+        ],
+        "note": "Foundry deployment types distinguish global, data-zone, and regional processing; data at rest remains in the designated Azure geography for supported deployments.",
+        "confidence": "high",
+        "source_urls": [
+          "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types",
+          "https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy"
+        ]
+      }
+    },
+    {
+      "slug": "amazon-bedrock",
+      "name": "Amazon Bedrock",
+      "short_name": "Bedrock",
+      "category": "hosted-llm-api-platform",
+      "agent_native_scope": "AWS managed foundation-model and agents platform for model invocation, knowledge bases, guardrails, Bedrock Agents, tool use, evaluations, and enterprise cloud controls.",
+      "summary": "AWS's fully managed foundation-model platform for building and scaling generative AI and agentic applications across supported AWS Regions.",
+      "primary_url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "AWS IAM",
+        "Amazon Bedrock Agents",
+        "AWS SDKs",
+        "Claude on Bedrock",
+        "Amazon Nova"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "cloud-ai-platform",
+        "regional-service"
+      ],
+      "security_notes": "Use IAM least privilege, region controls, VPC/PrivateLink where appropriate, CloudTrail, guardrails, and geography-specific inference profiles for residency-sensitive workloads.",
+      "source_urls": [
+        "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html",
+        "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "AWS region",
+        "regions": [
+          "Europe",
+          "United States",
+          "Japan",
+          "Australia",
+          "global"
+        ],
+        "note": "Bedrock runs in AWS regions and supports geography-specific cross-region inference profiles such as US, EU, APAC, Japan, and Australia; model providers do not access Bedrock prompts or completions.",
+        "confidence": "high",
+        "source_urls": [
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/geographic-cross-region-inference.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/models-region-compatibility.html"
+        ]
+      }
+    },
+    {
+      "slug": "mistral-ai-platform",
+      "name": "Mistral AI La Plateforme",
+      "short_name": "Mistral API",
+      "category": "hosted-llm-api-platform",
+      "agent_native_scope": "European model platform for agents that need Mistral models, agents/conversations APIs, tool calling, document intelligence, coding models, and hosted or self-hosted deployment choices.",
+      "summary": "Mistral's hosted API, Studio, Vibe, and deployment options for building agentic AI systems with European-first data hosting and optional US or self-hosted routes.",
+      "primary_url": "https://docs.mistral.ai/studio-api/overview",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Mistral models",
+        "Agents API",
+        "Conversations API",
+        "Mistral Code",
+        "cloud-provider routes"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "model-platform",
+        "self-host-option"
+      ],
+      "security_notes": "Choose EU default, US endpoint, partner-served, or self-hosted deployment deliberately. Review connector, code execution, document, and web-search tool data flows before use.",
+      "source_urls": [
+        "https://docs.mistral.ai/studio-api/overview",
+        "https://help.mistral.ai/en/articles/347629-where-do-you-store-my-data-or-my-organization-s-data"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU default",
+        "regions": [
+          "Europe",
+          "United States",
+          "self-hosted"
+        ],
+        "note": "Mistral says data is hosted in the EU by default, with an explicit US API endpoint option and some feature-dependent transfers to listed subprocessors.",
+        "confidence": "high",
+        "source_urls": [
+          "https://help.mistral.ai/en/articles/347629-where-do-you-store-my-data-or-my-organization-s-data",
+          "https://mistral.ai/"
+        ]
+      }
+    },
+    {
+      "slug": "cohere-platform",
+      "name": "Cohere Platform",
+      "short_name": "Cohere",
+      "category": "hosted-llm-api-platform",
+      "agent_native_scope": "Enterprise model platform for agents that need Command, Embed, Rerank, Compass, tool-aware retrieval, private deployments, and secure model serving.",
+      "summary": "Cohere's enterprise AI platform and model APIs, with SaaS, isolated Model Vault, and customer-managed private deployment options.",
+      "primary_url": "https://docs.cohere.com/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Cohere API",
+        "Command models",
+        "Embed",
+        "Rerank",
+        "private cloud"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "private-deployment",
+        "model-platform"
+      ],
+      "security_notes": "Use private deployments or Model Vault for sensitive workloads, verify SaaS region/storage terms directly, and scope retrieval/reranking data carefully.",
+      "source_urls": [
+        "https://docs.cohere.com/",
+        "https://cohere.com/private-deployments"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "customer-controlled",
+        "label": "Private deploy",
+        "regions": [
+          "self-hosted",
+          "customer-controlled",
+          "verify"
+        ],
+        "note": "Cohere documents customer-managed private deployments where interactions remain in the customer's infrastructure; verify standard SaaS/API residency before sensitive use.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://cohere.com/private-deployments",
+          "https://cohere.com/security"
+        ]
+      }
+    },
+    {
+      "slug": "groqcloud",
+      "name": "GroqCloud",
+      "short_name": "Groq",
+      "category": "hosted-llm-inference-platform",
+      "agent_native_scope": "Fast hosted inference platform for agents that need OpenAI-compatible chat, responses, audio, compound systems, built-in tools, and low-latency model calls.",
+      "summary": "Groq's hosted inference cloud for fast OpenAI-compatible model APIs, tool use, audio, and agentic compound systems.",
+      "primary_url": "https://console.groq.com/docs/overview",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "OpenAI-compatible clients",
+        "Groq SDK",
+        "Responses API",
+        "Compound systems",
+        "OpenCode"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "inference-platform",
+        "openai-compatible"
+      ],
+      "security_notes": "Enable Zero Data Retention where appropriate, understand which features require application-state retention, and treat built-in web/code tools as privileged external actions.",
+      "source_urls": [
+        "https://console.groq.com/docs/overview",
+        "https://console.groq.com/docs/your-data"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "us-or-global",
+        "label": "US storage",
+        "regions": [
+          "United States"
+        ],
+        "note": "Groq states customer data retained by GroqCloud is in GCP buckets located in the United States; ZDR can reduce retention for eligible features.",
+        "confidence": "high",
+        "source_urls": [
+          "https://console.groq.com/docs/your-data"
+        ]
+      }
+    },
+    {
+      "slug": "together-ai",
+      "name": "Together AI",
+      "short_name": "Together",
+      "category": "hosted-llm-inference-platform",
+      "agent_native_scope": "AI-native cloud for agents that need serverless inference, dedicated inference, fine-tuning, GPU clusters, OpenAI-compatible APIs, speech, image, and multimodal model access.",
+      "summary": "Together AI's hosted platform for running, training, and serving open-source models through serverless, dedicated, and GPU-cluster options.",
+      "primary_url": "https://docs.together.ai/intro",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "OpenAI-compatible clients",
+        "Together SDK",
+        "serverless inference",
+        "dedicated endpoints",
+        "GPU clusters"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "inference-platform",
+        "dedicated-infrastructure"
+      ],
+      "security_notes": "Use dedicated deployments for sensitive workloads, verify exact region/data residency terms with sales or docs, and avoid assuming serverless inference is region-pinned.",
+      "source_urls": [
+        "https://docs.together.ai/intro",
+        "https://www.together.ai/ai-factory"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "not-verified",
+        "label": "Region options",
+        "regions": [
+          "global",
+          "verify"
+        ],
+        "note": "Together states global-region and dedicated data-residency options for enterprise deployments; exact countries/regions were not confirmed from a public technical residency page in this pass.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://www.together.ai/ai-factory",
+          "https://docs.together.ai/intro"
+        ]
+      }
+    },
+    {
+      "slug": "fireworks-ai",
+      "name": "Fireworks AI",
+      "short_name": "Fireworks",
+      "category": "hosted-llm-inference-platform",
+      "agent_native_scope": "Hosted and dedicated inference platform for agents that need OpenAI-compatible APIs, low-latency model serving, on-demand deployments, fine-tuning, metrics, and regional placement.",
+      "summary": "Fireworks AI's inference and deployment platform for running open and custom models across global, US, Europe, and APAC region groupings.",
+      "primary_url": "https://docs.fireworks.ai/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "OpenAI-compatible clients",
+        "Fireworks API",
+        "Claude Code",
+        "OpenCode",
+        "GitHub Copilot"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "inference-platform",
+        "regional-deployment"
+      ],
+      "security_notes": "Prefer explicit multi-region or single-region placement for residency needs, review serverless versus dedicated deployment behaviour, and monitor prompt/cache/metrics retention.",
+      "source_urls": [
+        "https://docs.fireworks.ai/",
+        "https://docs.fireworks.ai/deployments/regions"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "Region choice",
+        "regions": [
+          "Europe",
+          "United States",
+          "global"
+        ],
+        "note": "Fireworks documents deployment multi-regions including GLOBAL, US, EUROPE, and APAC, with single-region availability by request or capacity.",
+        "confidence": "high",
+        "source_urls": [
+          "https://docs.fireworks.ai/deployments/regions"
+        ]
+      }
+    },
+    {
+      "slug": "hugging-face-inference-providers",
+      "name": "Hugging Face Inference Providers",
+      "short_name": "HF Inference",
+      "category": "hosted-model-marketplace",
+      "agent_native_scope": "Hosted model marketplace and API layer for agents that need access to many open and commercial inference providers through Hugging Face SDKs, Hub models, and endpoint routes.",
+      "summary": "Hugging Face Inference Providers and Endpoints provide hosted access to hundreds of models through one developer surface and provider marketplace.",
+      "primary_url": "https://huggingface.co/docs/inference-providers/index",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Hugging Face Hub",
+        "Inference Providers",
+        "Inference Endpoints",
+        "Transformers",
+        "provider backends"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "model-marketplace",
+        "provider-routing"
+      ],
+      "security_notes": "Provider-specific data handling can differ. Verify the selected provider, endpoint region, storage region, logging, and model/license terms before sensitive use.",
+      "source_urls": [
+        "https://huggingface.co/docs/inference-providers/index",
+        "https://huggingface.co/docs/hub/storage-regions"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/US choice",
+        "regions": [
+          "Europe",
+          "United States",
+          "global"
+        ],
+        "note": "Hugging Face documents EU storage regions for models, datasets, and inference endpoints; Inference Providers still require checking the chosen provider's handling.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://huggingface.co/docs/hub/storage-regions",
+          "https://huggingface.co/docs/hub/storage-buckets-security",
+          "https://huggingface.co/docs/inference-providers/index"
+        ]
+      }
+    },
+    {
+      "slug": "replicate",
+      "name": "Replicate",
+      "short_name": "Replicate",
+      "category": "hosted-model-api-platform",
+      "agent_native_scope": "Hosted model API for agents that need quick access to image, video, audio, vision, document, and language models without managing inference infrastructure.",
+      "summary": "Replicate's cloud API for running community, official, and custom models, with predictable official models and API-based prediction workflows.",
+      "primary_url": "https://replicate.com/docs",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Replicate API",
+        "HTTP clients",
+        "Python",
+        "Node.js",
+        "webhooks"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "model-marketplace",
+        "prediction-api"
+      ],
+      "security_notes": "API prediction inputs and outputs are deleted after an hour by default, but web predictions persist. Treat third-party models, uploaded files, generated media, and webhook URLs as sensitive.",
+      "source_urls": [
+        "https://replicate.com/docs",
+        "https://replicate.com/docs/topics/predictions/data-retention"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "us-or-global",
+        "label": "US hosting",
+        "regions": [
+          "United States"
+        ],
+        "note": "Replicate's subprocessor list shows infrastructure and service subprocessors located in the United States; API prediction data is automatically removed after one hour by default.",
+        "confidence": "high",
+        "source_urls": [
+          "https://replicate.com/docs/topics/site-policy/subprocessors",
+          "https://replicate.com/docs/topics/predictions/data-retention"
+        ]
+      }
+    },
+    {
+      "slug": "openrouter",
+      "name": "OpenRouter",
+      "short_name": "OpenRouter",
+      "category": "hosted-llm-gateway",
+      "agent_native_scope": "Model gateway for agents that need one API across many LLM providers, routing controls, privacy guardrails, ZDR enforcement, spend controls, and provider fallback.",
+      "summary": "OpenRouter is a hosted LLM routing gateway that gives agents a single API for many model providers with privacy, logging, routing, and enterprise controls.",
+      "primary_url": "https://openrouter.ai/docs",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "OpenAI-compatible clients",
+        "Anthropic",
+        "OpenAI",
+        "Google",
+        "many model providers"
+      ],
+      "deployment_model": [
+        "hosted-api",
+        "llm-gateway",
+        "provider-router"
+      ],
+      "security_notes": "Gateway routing means provider policies still matter. Use ZDR and provider logging settings, restrict allowed providers, and check which endpoints can satisfy residency or training restrictions.",
+      "source_urls": [
+        "https://openrouter.ai/docs",
+        "https://openrouter.ai/docs/guides/privacy/provider-logging"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "eu-us-choice",
+        "label": "EU/ZDR route",
+        "regions": [
+          "Europe",
+          "United States",
+          "global",
+          "verify"
+        ],
+        "note": "OpenRouter documents ZDR controls, provider logging controls, and sovereign/in-region routing, but each downstream provider's data policy still needs review.",
+        "confidence": "medium",
+        "source_urls": [
+          "https://openrouter.ai/docs/guides/features/zdr",
+          "https://openrouter.ai/docs/guides/privacy/provider-logging",
+          "https://openrouter.ai/docs/guides/features/sovereign-ai"
+        ]
+      }
+    },
+    {
+      "slug": "fly-io-gpus",
+      "name": "Fly.io GPUs and Machines",
+      "short_name": "Fly.io",
+      "category": "hosted-ai-app-runtime",
+      "agent_native_scope": "Global app and GPU runtime for agents that need to host model-adjacent services, inference workers, tool servers, APIs, private networks, and regional microVMs close to users.",
+      "summary": "Fly.io runs apps, machines, volumes, and GPUs in selectable global regions, making it useful for agent services, inference-adjacent APIs, and low-latency hosted tools.",
+      "primary_url": "https://fly.io/docs/gpus/",
+      "repo_url": null,
+      "open_source": false,
+      "works_with": [
+        "Docker",
+        "Fly Machines",
+        "Fly GPUs",
+        "private networking",
+        "agent APIs"
+      ],
+      "deployment_model": [
+        "hosted-runtime",
+        "regional-microvm",
+        "gpu-runtime"
+      ],
+      "security_notes": "Pin machines and volumes to intended regions, avoid public exposure for internal agent tools, use secrets correctly, and remember that multi-region routing can move traffic if you configure it that way.",
+      "source_urls": [
+        "https://fly.io/docs/gpus/",
+        "https://fly.io/docs/reference/regions/"
+      ],
+      "directory_group": "hosted-ai",
+      "data_residency": {
+        "posture": "customer-controlled",
+        "label": "Region choice",
+        "regions": [
+          "Europe",
+          "United Kingdom",
+          "United States",
+          "customer-controlled",
+          "global"
+        ],
+        "note": "Fly.io lists selectable regions including Amsterdam, Frankfurt, London, and several US regions; Fly Machines and Volumes are tied to the region where they are created.",
+        "confidence": "high",
+        "source_urls": [
+          "https://fly.io/docs/reference/regions/",
+          "https://fly.io/docs/volumes/overview/",
+          "https://fly.io/docs/gpus/"
+        ]
+      }
+    }
+  ]
+}

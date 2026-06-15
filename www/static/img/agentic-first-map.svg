@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 720" role="img" aria-labelledby="title desc">
   <title id="title">Agentic First route map</title>
-  <desc id="desc">A simple route map showing people, agents, source-owned facts, Companies, Directory, and approval points.</desc>
+  <desc id="desc">A simple route map showing people, agents, source-owned facts, Open Company Information, Open Tool Directory, and approval points.</desc>
   <rect width="920" height="720" fill="#fbfbf7"/>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M170 520 C260 440 300 302 450 300 C604 298 654 176 754 116" stroke="#244f86" stroke-width="12"/>
@@ -30,13 +30,15 @@
     </g>
     <g transform="translate(650 88)">
       <rect width="196" height="108" rx="8" fill="#fff" stroke="#d9ded7" stroke-width="3"/>
-      <text x="24" y="45" font-size="25" font-weight="700">Companies</text>
-      <text x="24" y="76" font-size="18" fill="#5a5f66">profile MCP</text>
+      <text x="24" y="38" font-size="23" font-weight="700">Open Company</text>
+      <text x="24" y="66" font-size="23" font-weight="700">Info</text>
+      <text x="24" y="92" font-size="17" fill="#5a5f66">published facts</text>
     </g>
     <g transform="translate(650 500)">
       <rect width="196" height="108" rx="8" fill="#fff" stroke="#d9ded7" stroke-width="3"/>
-      <text x="24" y="45" font-size="25" font-weight="700">Directory</text>
-      <text x="24" y="76" font-size="18" fill="#5a5f66">tool catalog</text>
+      <text x="24" y="38" font-size="23" font-weight="700">Open Tool</text>
+      <text x="24" y="66" font-size="23" font-weight="700">Directory</text>
+      <text x="24" y="92" font-size="17" fill="#5a5f66">tool catalog</text>
     </g>
   </g>
 </svg>

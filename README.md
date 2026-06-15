@@ -8,27 +8,28 @@ boundaries, and approval points. Agents find clean, source-owned
 information and use well-governed interfaces without scraping, guessing,
 or copying stale data between systems.
 
-This repo now owns the **top-level Agentic First tools directory and route map**.
+This repo now owns the **top-level Agentic First route map** for
+company-first agentic creation.
 The product surfaces live in the sibling
 [`pitch-mcp`](https://github.com/yqup/pitch-mcp) repo:
 
-- **Companies** at `/companies/` - source-owned company/person profiles,
-  schemas, validation, examples, skills, feedback, health, and MCP. This is
-  the way companies and people store public information online so agents can
-  find, verify, and use the right facts.
-- **Directory** at `/directory/` - the Agentics Tool Directory catalog for
-  tools, standards, runtimes, protocols, and operations surfaces.
+- **Open Company Information** at `/companies/` - source-owned company/person
+  profiles, schemas, validation, examples, skills, feedback, health, and MCP.
+  This is the way companies and people put public information online so agents
+  can find, verify, and use the right facts.
+- **Open Tool Directory** at `/directory/` - the agentic tool catalog for
+  tools, standards, models, runtimes, protocols, and operations surfaces.
 
 ## Routes
 
-- `https://agentic-first.co/` - top-level Agentic First tools directory.
-- `https://agentic-first.co/companies/` - company/profile directory, served from `pitch-mcp`.
+- `https://agentic-first.co/` - top-level Agentic First route map.
+- `https://agentic-first.co/companies/` - Open Company Information, served from `pitch-mcp`.
 - `https://agentic-first.co/companies/mcp` - company/profile MCP endpoint, served from `pitch-mcp`.
 - `https://agentic-first.co/companies/healthz` - company/profile health endpoint, served from `pitch-mcp`.
 - `https://agentic-first.co/companies/schemas/` - company/profile schemas, served from `pitch-mcp`.
 - `https://agentic-first.co/companies/feedback` - company/profile feedback endpoint, served from `pitch-mcp`.
-- `https://agentic-first.co/directory/` - Agentics Tool Directory, served from `pitch-mcp`.
-- `https://agentic-first.co/directory/llms.txt` - Tool Directory machine index, served from `pitch-mcp`.
+- `https://agentic-first.co/directory/` - Open Tool Directory, served from `pitch-mcp`.
+- `https://agentic-first.co/directory/llms.txt` - Open Tool Directory machine index, served from `pitch-mcp`.
 - `https://agent-first.co/*` - memorable alternate domain; redirects to the same path on `agentic-first.co`.
 
 Keep `https://directory.agentic-first.co/mcp` available during the

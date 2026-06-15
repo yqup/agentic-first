@@ -60,7 +60,7 @@ smoke_tests:
     method: GET
     path: /
     expected_status: 200
-    expected_body_contains: Agentic First tools
+    expected_body_contains: Company-first agentic creation
   - name: machine_index
     method: GET
     path: /llms.txt

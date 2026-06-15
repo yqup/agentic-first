@@ -1,6 +1,6 @@
 # Agentic First static site
 
-This is the top-level Agentic First tools directory for:
+This is the top-level Agentic First route map for:
 
 ```text
 https://agentic-first.co/
@@ -15,10 +15,10 @@ https://agentic-first.co/companies/
 https://agentic-first.co/directory/
 ```
 
-`/companies/` is the company/person profile directory: a way for companies
-and people to store public information online so agents can find, verify, and
-use the right facts. `/directory/` is the Agentics Tool Directory: the catalog
-of Agentic First tools, standards, runtimes, protocols, and operating patterns.
+`/companies/` is Open Company Information: a way for companies and people to
+put public information online so agents can find, verify, and use the right
+facts. `/directory/` is the Open Tool Directory: the catalog of agentic tools,
+standards, models, runtimes, protocols, and operating patterns.
 
 The favicon is `favicon.svg` at the web root so browsers can load it from
 `https://agentic-first.co/favicon.svg`.

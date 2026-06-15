@@ -5,8 +5,7 @@ surfaces are sub-paths owned by the sibling `pitch-mcp` repo:
 
 - `/companies/*` - company/person profile directory, schemas, feedback,
   health, and MCP.
-- `/directory/*` - Agentics Tool Directory static seed catalog and
-  machine index.
+- `/directory/*` - Open Tool Directory static seed catalog and machine index.
 
 See [`MIGRATION.md`](./MIGRATION.md) for what changed in the repo, what was tested, and what was observed on Annie during deployment discovery.
 
@@ -28,13 +27,13 @@ See [`MIGRATION.md`](./MIGRATION.md) for what changed in the repo, what was test
 ## Canonical Routes
 
 - `https://agentic-first.co/` - umbrella site
-- `https://agentic-first.co/companies/` - company/profile directory and standard
+- `https://agentic-first.co/companies/` - Open Company Information and standard
 - `https://agentic-first.co/companies/mcp` - company/profile MCP endpoint
 - `https://agentic-first.co/companies/healthz` - company/profile health endpoint
 - `https://agentic-first.co/companies/schemas/*` - company/profile schemas
 - `https://agentic-first.co/companies/feedback` - company/profile feedback endpoint
-- `https://agentic-first.co/directory/` - Agentics Tool Directory
-- `https://agentic-first.co/directory/llms.txt` - Tool Directory machine index
+- `https://agentic-first.co/directory/` - Open Tool Directory
+- `https://agentic-first.co/directory/llms.txt` - Open Tool Directory machine index
 
 ## Domain Handling
 
@@ -58,7 +57,7 @@ usage is quiet. Keep `/mcp` proxied longer unless MCP client redirect
 compatibility has been tested.
 
 The legacy `directory.agentic-first.co` host refers to the company/profile
-Directory, not the newer `/directory/` Tool Directory route.
+Directory, not the newer `/directory/` Open Tool Directory route.
 
 ## Deployment Guardrails
 

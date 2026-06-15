@@ -1,8 +1,8 @@
 # Agentic First
 
-> Top-level directory of Agentic First tools:
-> public surfaces that help companies, people, and agents publish,
-> discover, verify, and use source-owned information.
+> Top-level map for company-first agentic creation:
+> Open Company Information plus an Open Tool Directory for agents,
+> companies, and builders.
 
 Canonical site:
 
@@ -14,27 +14,27 @@ Alternate domain:
 
 ## Main Routes
 
-- `/` - Agentic First tools directory and route map
-- `/companies/` - company/person profile directory and publishing overview
+- `/` - Agentic First route map for Open Company Information and the Open Tool Directory
+- `/companies/` - Open Company Information publishing overview
 - `/companies/mcp` - company/profile MCP endpoint
 - `/companies/healthz` - company/profile health endpoint
 - `/companies/schemas/` - canonical company/profile schemas
 - `/companies/feedback` - company/profile feedback endpoint
 - `/companies/llms.txt` - machine index for the company/profile directory
-- `/directory/` - Agentics Tool Directory seed catalog
-- `/directory/llms.txt` - machine index for the Tool Directory
+- `/directory/` - Open Tool Directory seed catalog
+- `/directory/llms.txt` - machine index for the Open Tool Directory
 
 ## Source Repositories
 
 - Top-level site: https://github.com/yqup/agentic-first
-- Companies and Tool Directory product code: https://github.com/yqup/pitch-mcp
+- Open Company Information and Open Tool Directory product code: https://github.com/yqup/pitch-mcp
 - Brand guidelines: https://github.com/yqup/agentic-first/blob/main/BRAND-GUIDELINES.md
 
 ## Concept
 
-Agentic First means designing public information and private access paths so
-agents can read, verify, and act safely. The top-level site is the directory
-of the available Agentic First tools.
+Agentic First means company-first agentic creation: designing public
+information and private access paths so agents can read, verify, and act
+safely. The top-level site maps the two separate product surfaces.
 
 Use this distinction:
 
@@ -44,13 +44,18 @@ Use this distinction:
 
 ## Product Surfaces
 
-Use `/companies/` when the task concerns source-owned profiles about
-companies or people: publishing/storing company information online, schema
-validation, submissions, scans, feedback, or the public MCP tools.
+Use `/companies/` when the task concerns Open Company Information:
+publishing/storing company information online, schema validation,
+submissions, scans, feedback, or the public MCP tools.
 
-Use `/directory/` when the task concerns the Agentics Tool Directory:
-tools, standards, runtimes, protocols, and operations surfaces for
+Use `/directory/` when the task concerns the Open Tool Directory:
+tools, standards, models, runtimes, protocols, and operations surfaces for
 agent-native work.
+
+The top-level homepage includes two Directory-derived sections:
+UK / European-company check and sovereign AI shortlist. Treat residency,
+company jurisdiction, and sovereign AI labels as field notes that require
+vendor and contract verification before sensitive use.
 
 ## Legacy Company/Profile Compatibility
 

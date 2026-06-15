@@ -13,19 +13,22 @@ Alternate domain:
 This repo owns the top-level Agentic First route map. It routes users and
 agents into two deliberately separate areas:
 
-- Companies: a source-owned profile mechanism and live MCP service where
-  companies publish correct information on their own domain so agents can use
-  it without scraping or paying a data broker.
-- Tony's Agentics Tool Directory: Tony Wood's working directory of
-  agent-friendly tools, field notes, useful experiments, and things worth
-  tracking.
+- Open Company Information: a separate source-owned publishing platform and
+  live MCP service where companies put correct information online so agents
+  can use it without scraping or paying a data broker.
+- Open Tool Directory: a working directory of agent-friendly tools, field
+  notes, useful experiments, and things worth tracking.
+
+The homepage also surfaces a UK / European-company check and a sovereign AI
+shortlist. These homepage sections are practical routing aids and field notes,
+not legal advice, procurement approval, or compliance certification.
 
 ## Product Areas
 
-- Companies: https://agentic-first.co/companies/
+- Open Company Information: https://agentic-first.co/companies/
 - Company/profile MCP: https://agentic-first.co/companies/mcp
 - Company/profile machine index: https://agentic-first.co/companies/llms.txt
-- Tony's Agentics Tool Directory: https://agentic-first.co/directory/
+- Open Tool Directory: https://agentic-first.co/directory/
 - Tool Directory machine index: https://agentic-first.co/directory/llms.txt
 - Product source: https://github.com/yqup/pitch-mcp
 
