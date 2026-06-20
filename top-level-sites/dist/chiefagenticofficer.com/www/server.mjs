@@ -13,7 +13,12 @@ const config = {
   "analyticsTag": "<script defer src=\"/static/js/matomo-loader.js\"></script>",
   "faviconTag": "<link rel=\"icon\" href=\"/favicon.svg\" type=\"image/svg+xml\">",
   "hostHoldingPages": [],
-  "redirectWwwToApex": false
+  "redirectWwwToApex": false,
+  "mailerlite": {
+    "signupEndpoint": "/api/briefing-signup",
+    "groupId": "190738136197760503",
+    "source": "chiefagenticofficer.com"
+  }
 };
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || 8080);
@@ -58,6 +63,11 @@ async function routeRequest(req, res) {
 
   if (config.redirectWwwToApex && requestHost === "www." + hostOnly(config.domain)) {
     redirectToApex(req, res, url);
+    return;
+  }
+
+  if (config.mailerlite?.signupEndpoint && pathname === config.mailerlite.signupEndpoint) {
+    await handleMailerLiteSignup(req, res);
     return;
   }
 
@@ -125,6 +135,189 @@ async function serveLocalFile(req, res, requestPath, cacheControl = "public, max
     res.end();
   }).pipe(res);
   return true;
+}
+
+async function handleMailerLiteSignup(req, res) {
+  if (req.method !== "POST") {
+    res.writeHead(405, {
+      "content-type": "application/json; charset=utf-8",
+      "allow": "POST",
+      "cache-control": "no-store",
+    });
+    res.end(JSON.stringify({ ok: false, message: "Signup endpoint accepts POST only." }));
+    return;
+  }
+
+  if (!config.mailerlite?.groupId) {
+    sendJson(res, 503, { ok: false, message: "MailerLite group is not configured for this site." });
+    return;
+  }
+
+  const token = process.env.MAILERLITE_API_TOKEN || process.env.MAILERLITE_API_KEY;
+  if (!token) {
+    sendJson(res, 503, {
+      ok: false,
+      code: "missing_mailerlite_token",
+      message: "MailerLite is not configured on this preview server yet.",
+    });
+    return;
+  }
+
+  const fields = await readSignupFields(req);
+  if (fields.website) {
+    sendJson(res, 200, { ok: true, message: "Thank you." });
+    return;
+  }
+
+  const email = cleanField(fields.work_email || fields.email).toLowerCase();
+  if (!isValidEmail(email)) {
+    sendJson(res, 422, { ok: false, message: "Please enter a valid work email address." });
+    return;
+  }
+  if (fields.consent !== "yes") {
+    sendJson(res, 422, { ok: false, message: "Please confirm consent to receive the briefing." });
+    return;
+  }
+
+  const fullFields = {
+    name: cleanField(fields.name),
+    country: cleanField(fields.country_market),
+    role: cleanField(fields.role),
+    board_issue: cleanField(fields.board_issue),
+    signup_source: config.mailerlite.source || config.domain,
+  };
+  const safeFields = {
+    name: fullFields.name,
+    country: fullFields.country,
+  };
+
+  const basePayload = {
+    email,
+    groups: [String(config.mailerlite.groupId)],
+    fields: pruneEmpty(fullFields),
+  };
+
+  let result = await postMailerLiteSubscriber(token, basePayload);
+  if (!result.ok && result.status === 422 && Object.keys(basePayload.fields || {}).some((field) => !["name", "country"].includes(field))) {
+    result = await postMailerLiteSubscriber(token, {
+      ...basePayload,
+      fields: pruneEmpty(safeFields),
+    });
+    result.fieldWarning = "Some site-only fields were not sent because matching MailerLite custom fields may not exist yet.";
+  }
+
+  if (!result.ok) {
+    console.error("mailerlite_signup_error", {
+      status: result.status,
+      code: result.body?.message || result.error || "unknown",
+    });
+    sendJson(res, result.status >= 400 && result.status < 500 ? 422 : 502, {
+      ok: false,
+      message: "MailerLite could not accept this signup yet.",
+    });
+    return;
+  }
+
+  sendJson(res, 200, {
+    ok: true,
+    message: "Thank you. Your Chief Agentic Officer Briefing signup has been received.",
+    subscriber_id: result.body?.data?.id || null,
+    warning: result.fieldWarning || null,
+  });
+}
+
+function readSignupFields(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let size = 0;
+    req.on("data", (chunk) => {
+      size += chunk.length;
+      if (size > 32768) {
+        reject(new Error("signup_body_too_large"));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on("error", reject);
+    req.on("end", () => {
+      const body = Buffer.concat(chunks).toString("utf8");
+      const contentType = String(req.headers["content-type"] || "").toLowerCase();
+      if (contentType.includes("application/json")) {
+        try {
+          resolve(JSON.parse(body || "{}"));
+        } catch {
+          resolve({});
+        }
+        return;
+      }
+      const params = new URLSearchParams(body);
+      const fields = {};
+      for (const [key, value] of params.entries()) fields[key] = value;
+      resolve(fields);
+    });
+  });
+}
+
+function postMailerLiteSubscriber(token, payload) {
+  return new Promise((resolve) => {
+    const body = Buffer.from(JSON.stringify(payload), "utf8");
+    const apiReq = httpsRequest({
+      protocol: "https:",
+      hostname: "connect.mailerlite.com",
+      method: "POST",
+      path: "/api/subscribers",
+      headers: {
+        "authorization": "Bearer " + token,
+        "accept": "application/json",
+        "content-type": "application/json",
+        "content-length": String(body.length),
+      },
+    }, (apiRes) => {
+      const chunks = [];
+      apiRes.on("data", (chunk) => chunks.push(chunk));
+      apiRes.on("end", () => {
+        const responseText = Buffer.concat(chunks).toString("utf8");
+        let parsed = null;
+        try {
+          parsed = responseText ? JSON.parse(responseText) : null;
+        } catch {
+          parsed = { message: responseText.slice(0, 200) };
+        }
+        const status = apiRes.statusCode || 502;
+        resolve({ ok: status >= 200 && status < 300, status, body: parsed });
+      });
+    });
+    apiReq.on("error", (error) => resolve({ ok: false, status: 502, error: error.message }));
+    apiReq.end(body);
+  });
+}
+
+function cleanField(value) {
+  return String(value || "").trim().slice(0, 240);
+}
+
+function pruneEmpty(fields) {
+  const output = {};
+  for (const [key, value] of Object.entries(fields)) {
+    const cleaned = cleanField(value);
+    if (cleaned) output[key] = cleaned;
+  }
+  return output;
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || ""));
+}
+
+function sendJson(res, status, payload) {
+  const body = Buffer.from(JSON.stringify(payload), "utf8");
+  res.writeHead(status, {
+    "content-type": "application/json; charset=utf-8",
+    "content-length": String(body.length),
+    "cache-control": "no-store",
+  });
+  res.end(body);
 }
 
 function safeLocalPath(requestPath) {

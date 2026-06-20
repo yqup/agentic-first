@@ -50,6 +50,8 @@ services:
     read_only: true
     user: node
     command: ["node", "/srv/site/server.mjs"]
+    environment:
+      MAILERLITE_API_TOKEN: ${CHIEFAGENTICOFFICER_MAILERLITE_API_TOKEN:-}
     ports:
       - "127.0.0.1:8214:8080"
     volumes:

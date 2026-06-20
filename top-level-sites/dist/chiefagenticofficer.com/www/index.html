@@ -16,6 +16,8 @@
       --porcelain: #fffdf7;
       --sage: #617d66;
       --sage-dark: #2d4538;
+      --teal: #1f6f68;
+      --teal-dark: #174c49;
       --oxblood: #8f342d;
       --brass: #b9822d;
       --charcoal: #202726;
@@ -111,9 +113,22 @@
         linear-gradient(180deg, #fffdf7, #eadfca);
     }
 
+    .briefing-hero {
+      min-height: auto;
+      grid-template-columns: minmax(0, 0.9fr) minmax(340px, 0.68fr);
+      align-items: start;
+      padding: 64px 40px;
+      background: var(--paper);
+    }
+
     .hero-copy-wrap {
       align-self: end;
       padding: 56px 0 64px;
+    }
+
+    .briefing-hero .hero-copy-wrap {
+      align-self: start;
+      padding: 0;
     }
 
     .eyebrow {
@@ -148,6 +163,13 @@
       font-weight: 700;
     }
 
+    .briefing-hero h1 {
+      max-width: 760px;
+      margin-bottom: 20px;
+      font-size: 64px;
+      line-height: 1.02;
+    }
+
     h2 {
       max-width: 900px;
       margin-bottom: 18px;
@@ -169,6 +191,11 @@
       color: var(--ink-soft);
       font-size: 22px;
       line-height: 1.46;
+    }
+
+    .briefing-hero .hero-copy {
+      max-width: 720px;
+      font-size: 21px;
     }
 
     .hero-actions,
@@ -296,6 +323,47 @@
       line-height: 1.5;
     }
 
+    .role-explainer {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.72fr);
+      gap: 54px;
+      align-items: start;
+    }
+
+    .simple-panel {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--porcelain);
+      padding: 24px;
+    }
+
+    .simple-panel h3 {
+      font-family: var(--serif);
+      font-size: 27px;
+      line-height: 1.16;
+    }
+
+    .simple-list {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .simple-list li {
+      padding-top: 12px;
+      border-top: 1px solid rgba(31, 37, 33, 0.12);
+      color: var(--ink-soft);
+    }
+
+    .briefing-details-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.72fr);
+      gap: 24px;
+      align-items: start;
+    }
+
     .work-band {
       background: var(--porcelain);
       border-top: 1px solid var(--line);
@@ -419,6 +487,260 @@
       line-height: 1.5;
     }
 
+    .briefing-band {
+      background: #fbf8ef;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .briefing-band .eyebrow {
+      color: var(--teal-dark);
+    }
+
+    .briefing-band h2 {
+      max-width: 760px;
+      font-size: 42px;
+    }
+
+    .briefing-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.94fr) minmax(320px, 1.06fr);
+      gap: 48px;
+      align-items: start;
+    }
+
+    .briefing-summary {
+      max-width: 780px;
+      color: var(--ink-soft);
+      font-size: 20px;
+      line-height: 1.52;
+    }
+
+    .briefing-explainer {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .briefing-explainer h3,
+    .briefing-panel h3,
+    .sample-briefing h3,
+    .briefing-form h3 {
+      margin-bottom: 10px;
+      font-family: var(--serif);
+      font-size: 27px;
+      line-height: 1.16;
+    }
+
+    .briefing-explainer p,
+    .briefing-panel p,
+    .sample-briefing p {
+      color: var(--ink-soft);
+    }
+
+    .briefing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .briefing-actions .secondary {
+      color: var(--teal-dark);
+    }
+
+    .briefing-side {
+      display: grid;
+      gap: 20px;
+    }
+
+    .briefing-panel,
+    .sample-briefing,
+    .briefing-form {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--porcelain);
+    }
+
+    .briefing-panel,
+    .sample-briefing {
+      padding: 24px;
+    }
+
+    .briefing-outcomes,
+    .briefing-receive,
+    .sample-briefing ul {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .briefing-outcomes li,
+    .briefing-receive li,
+    .sample-briefing li {
+      padding-top: 12px;
+      border-top: 1px solid rgba(31, 37, 33, 0.12);
+      color: var(--ink-soft);
+    }
+
+    .briefing-outcomes li::before,
+    .briefing-receive li::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      display: inline-block;
+      margin-right: 10px;
+      border-radius: 50%;
+      background: var(--teal);
+      vertical-align: 0.08em;
+    }
+
+    .sample-meta {
+      margin-bottom: 12px;
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .briefing-guardrail {
+      grid-column: 1 / -1;
+      margin: 10px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
+    .briefing-form {
+      grid-column: 1 / -1;
+      margin-top: 18px;
+      padding: 26px;
+    }
+
+    .briefing-hero .briefing-form {
+      grid-column: auto;
+      margin-top: 0;
+      padding: 24px;
+      box-shadow: 0 18px 48px rgba(31, 37, 33, 0.1);
+    }
+
+    .briefing-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .briefing-hero .briefing-form-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .briefing-form label {
+      min-width: 0;
+      display: grid;
+      gap: 8px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .briefing-form input,
+    .briefing-form select {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid rgba(31, 37, 33, 0.24);
+      border-radius: 4px;
+      background: #fffdf7;
+      color: var(--ink);
+      font: inherit;
+      font-size: 16px;
+      padding: 9px 11px;
+    }
+
+    .briefing-form input:focus,
+    .briefing-form select:focus {
+      outline: 2px solid rgba(31, 111, 104, 0.32);
+      outline-offset: 2px;
+      border-color: var(--teal);
+    }
+
+    .briefing-span-2 {
+      grid-column: 1 / -1;
+    }
+
+    .briefing-consent {
+      grid-template-columns: 18px minmax(0, 1fr);
+      align-items: start;
+      gap: 10px;
+      padding-top: 8px;
+      color: var(--ink-soft);
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    .briefing-consent input {
+      width: 18px;
+      min-height: 18px;
+      height: 18px;
+      margin: 2px 0 0;
+      accent-color: var(--teal);
+    }
+
+    .briefing-form .button {
+      margin-top: 22px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 16px;
+    }
+
+    .briefing-form .button[disabled] {
+      cursor: wait;
+      opacity: 0.72;
+    }
+
+    .briefing-form-status {
+      min-height: 24px;
+      margin: 16px 0 0;
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
+    .briefing-form-status[data-state="success"] {
+      color: var(--teal-dark);
+      font-weight: 760;
+    }
+
+    .briefing-form-status[data-state="error"] {
+      color: var(--oxblood);
+      font-weight: 760;
+    }
+
+    .briefing-honeypot {
+      position: absolute;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .briefing-hero .briefing-outcomes {
+      max-width: 640px;
+      margin-top: 28px;
+    }
+
+    .simple-guardrail {
+      margin: 24px 0 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
     .control-band {
       background: var(--charcoal);
       color: var(--porcelain);
@@ -531,6 +853,11 @@
         padding: 48px 22px 0;
       }
 
+      .briefing-hero {
+        gap: 24px;
+        padding: 48px 22px;
+      }
+
       .hero-copy-wrap {
         padding: 36px 0 34px;
       }
@@ -548,6 +875,10 @@
         font-size: 58px;
       }
 
+      .briefing-hero h1 {
+        font-size: 48px;
+      }
+
       h2 {
         font-size: 38px;
       }
@@ -560,9 +891,13 @@
 
       .metric-strip,
       .brief,
+      .role-explainer,
       .route-grid,
       .implementation-head,
       .implementation-grid,
+      .briefing-layout,
+      .briefing-details-grid,
+      .briefing-form-grid,
       .cadence,
       .note-list,
       .cta-panel {
@@ -575,6 +910,7 @@
 
       .route-card,
       .implementation-card,
+      .briefing-panel,
       .note-panel {
         min-height: auto;
       }
@@ -583,6 +919,10 @@
     @media (max-width: 560px) {
       h1 {
         font-size: 44px;
+      }
+
+      .briefing-hero h1 {
+        font-size: 40px;
       }
 
       h2 {
@@ -614,202 +954,120 @@
   <header class="site-header">
     <a class="brand" href="/" aria-label="Chief Agentic Officer home">
       <span class="brand-mark">CAO</span>
-      <span>Chief Agentic Officer</span>
+      <span>CAO Briefing</span>
     </a>
     <nav aria-label="Primary navigation">
-      <a href="#mandate">Mandate</a>
-      <a href="#work">Work</a>
-      <a href="#implementation">Implement</a>
-      <a href="#cadence">Cadence</a>
-      <a href="#conversation">Conversation</a>
+      <a href="#briefing">Briefing</a>
+      <a href="#cao-role">What is CAO?</a>
+      <a href="#what-you-receive">What you receive</a>
+      <a href="#briefing-signup">Sign up</a>
     </nav>
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="page-title">
+    <section class="hero briefing-hero" id="briefing" aria-labelledby="page-title">
       <div class="hero-copy-wrap">
-        <p class="eyebrow">Board mandate for agentic work</p>
-        <h1 id="page-title">Chief Agentic Officer</h1>
-        <p class="hero-copy">The board-level operating role for agentic AI: ownership, boundaries, assurance, value, and human judgement in one accountable mandate.</p>
+        <p class="eyebrow">Briefing for board-facing leaders</p>
+        <h1 id="page-title">Chief Agentic Officer Briefing</h1>
+        <p class="hero-copy">A short UK and Europe-facing briefing for leaders who need clearer questions about agentic work before the next board, committee, regulator, investor, customer, or executive decision.</p>
+        <ul class="briefing-outcomes" aria-label="Briefing outcomes">
+          <li>Understand what is changing.</li><li>See what needs ownership.</li><li>Take clearer questions into the next meeting.</li>
+        </ul>
         <div class="hero-actions">
-          <a class="button primary" href="#mandate">Read the mandate</a>
-          <a class="button secondary" href="https://www.tonywood.org/advisory/?mtm_campaign=chiefagenticofficer_to_tonywood_advisory&amp;mtm_source=chiefagenticofficer.com&amp;mtm_medium=owned-referral&amp;mtm_content=hero_discuss_implementation" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="chiefagenticofficer.com" data-funnel-campaign="chiefagenticofficer_to_tonywood_advisory" data-funnel-content="hero_discuss_implementation">Discuss implementation</a>
+          <a class="button primary" href="#briefing-signup">Join the briefing list</a>
+          <a class="button secondary" href="mailto:hello@my-agentic.com?subject=Example%20Chief%20Agentic%20Officer%20Briefing">Send me an example briefing</a>
         </div>
       </div>
 
-      <aside class="mandate-panel" aria-label="Mandate map">
-        <div class="mandate-card">
-          <div class="mandate-title">
-            <span>Agentic operating mandate</span>
-            <span>CAO</span>
+      <aside aria-label="Join the briefing list">
+        <form class="briefing-form" id="briefing-signup" action="/api/briefing-signup" method="post" data-mailerlite-form data-success-message="Thank you. Your Chief Agentic Officer Briefing signup has been received." data-error-message="Sorry, the briefing signup could not be completed. Please try again or use the example briefing link." data-hosted-form="https://preview.mailerlite.io/forms/2458234/190738240719816107/share">
+          <div>
+            <p class="eyebrow">Briefing list</p>
+            <h3>Join the briefing list</h3>
           </div>
-          <div class="mandate-svg" aria-hidden="true">
-            <svg viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg">
-  <rect width="720" height="520" fill="#fffdf7"/>
-  <g stroke="#1f2521" stroke-opacity=".12" stroke-width="1">
-    <path d="M92 80v380M248 80v380M404 80v380M560 80v380"/>
-    <path d="M60 132h600M60 234h600M60 336h600M60 438h600"/>
-  </g>
-  <path d="M84 392C154 292 234 300 318 230c95-79 166-110 290-62" fill="none" stroke="#b9822d" stroke-width="6" stroke-linecap="round"/>
-  <path class="signal-line" d="M94 180c70 48 127 56 194 24 68-33 126-20 184 42 43 46 90 60 152 33" fill="none" stroke="#8f342d" stroke-width="4" stroke-linecap="round"/>
-  <path class="signal-line" d="M110 430c64-38 116-46 176-21 72 30 144 11 215-59 50-49 90-68 143-56" fill="none" stroke="#617d66" stroke-width="4" stroke-linecap="round" opacity=".88"/>
-  <g fill="#1f2521">
-    <circle cx="84" cy="392" r="7"/>
-    <circle cx="318" cy="230" r="7"/>
-    <circle cx="608" cy="168" r="7"/>
-  </g>
-  <g class="decision-node" fill="#8f342d" opacity=".72">
-    <circle cx="318" cy="230" r="32"/>
-    <circle cx="472" cy="246" r="24"/>
-  </g>
-  <g fill="#fffdf7" font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="18">
-    <text x="288" y="236">OWN</text>
-    <text x="446" y="252">STOP</text>
-  </g>
-  <g fill="#1f2521" font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="15">
-    <text x="74" y="114">Intent</text>
-    <text x="230" y="114">Boundaries</text>
-    <text x="386" y="114">Assurance</text>
-    <text x="542" y="114">Value</text>
-  </g>
-  <g fill="#596059" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="800">
-    <text x="76" y="462">estate map</text>
-    <text x="238" y="462">permissions</text>
-    <text x="392" y="462">exceptions</text>
-    <text x="552" y="462">decisions</text>
-  </g>
-</svg>
+          <input type="hidden" name="source" value="chiefagenticofficer.com">
+          <label class="briefing-honeypot">
+            <span>Website</span>
+            <input name="website" autocomplete="off" tabindex="-1">
+          </label>
+          <div class="briefing-form-grid">
+            <label>
+              <span>Name</span>
+              <input name="name" autocomplete="name" required>
+            </label>
+            <label>
+              <span>Work email</span>
+              <input name="work_email" type="email" autocomplete="email" required>
+            </label>
+            <label>
+              <span>Role type (optional)</span>
+              <select name="role">
+                <option value="">Select role type</option>
+                <option value="Board / NED">Board / NED</option><option value="Chair">Chair</option><option value="C-suite / executive">C-suite / executive</option><option value="CEO">CEO</option><option value="COO">COO</option><option value="CFO">CFO</option><option value="General Counsel">General Counsel</option><option value="CRO / risk">CRO / risk</option><option value="CISO / security">CISO / security</option><option value="DPO / data protection">DPO / data protection</option><option value="Company Secretary / governance">Company Secretary / governance</option><option value="Chief of Staff / operator">Chief of Staff / operator</option><option value="Advisor / consultant">Advisor / consultant</option><option value="Investor / analyst">Investor / analyst</option><option value="Other">Other</option>
+              </select>
+            </label>
+            <label>
+              <span>Country / market (optional)</span>
+              <select name="country_market">
+                <option value="">Select country or market</option>
+                <option value="Europe / pan-European">Europe / pan-European</option><option value="EU / European Union">EU / European Union</option><option value="United Kingdom">United Kingdom</option><option value="Ireland">Ireland</option><option value="France">France</option><option value="Germany">Germany</option><option value="Netherlands">Netherlands</option><option value="Belgium">Belgium</option><option value="Luxembourg">Luxembourg</option><option value="Switzerland">Switzerland</option><option value="Austria">Austria</option><option value="Denmark">Denmark</option><option value="Finland">Finland</option><option value="Norway">Norway</option><option value="Sweden">Sweden</option><option value="Iceland">Iceland</option><option value="Spain">Spain</option><option value="Portugal">Portugal</option><option value="Italy">Italy</option><option value="Greece">Greece</option><option value="Poland">Poland</option><option value="Czechia">Czechia</option><option value="Slovakia">Slovakia</option><option value="Hungary">Hungary</option><option value="Romania">Romania</option><option value="Bulgaria">Bulgaria</option><option value="Croatia">Croatia</option><option value="Slovenia">Slovenia</option><option value="Estonia">Estonia</option><option value="Latvia">Latvia</option><option value="Lithuania">Lithuania</option><option value="Cyprus">Cyprus</option><option value="Malta">Malta</option><option value="Other Europe">Other Europe</option><option value="United States">United States</option><option value="Canada">Canada</option><option value="Other / global">Other / global</option>
+              </select>
+            </label>
+            <label class="briefing-span-2">
+              <span>Which board issue are you watching? (optional)</span>
+              <select name="board_issue">
+                <option value="">Select issue</option>
+                <option value="AI governance">AI governance</option><option value="Cyber/resilience">Cyber/resilience</option><option value="Disclosure">Disclosure</option><option value="CSRD/ESRS">CSRD/ESRS</option><option value="GDPR/data">GDPR/data</option><option value="Board actions">Board actions</option><option value="Other">Other</option>
+              </select>
+            </label>
+            <label class="briefing-consent briefing-span-2">
+              <input name="consent" type="checkbox" value="yes" required>
+              <span>I consent to receive the Chief Agentic Officer Briefing and related board-readiness notes.</span>
+            </label>
           </div>
-        </div>
+          <button class="button primary" type="submit">Join the briefing list</button>
+          <div class="briefing-form-status" data-form-status role="status" aria-live="polite"></div>
+        </form>
       </aside>
     </section>
 
-    <section class="metric-strip" aria-label="Chief Agentic Officer concerns">
-      <span>Mandate</span><span>Control</span><span>Cadence</span><span>Assurance</span>
-    </section>
-
-    <section class="section" id="mandate">
-      <div class="section-inner brief">
+    <section class="section" id="cao-role">
+      <div class="section-inner role-explainer">
         <div>
-          <p class="eyebrow">The mandate</p>
-          <h2>Agentic AI needs an accountable operating owner.</h2>
+          <p class="eyebrow">What it is</p>
+          <h2>What is a Chief Agentic Officer?</h2>
+          <p class="lead">A Chief Agentic Officer is the person or mandate that makes agentic work owned: what exists, what it may do, who can stop it, and what leaders can inspect afterwards.</p>
+          <p>The point is not another title for the sake of it. It is a simple way to make agentic work easier to own, govern, narrow, stop, evidence, and discuss.</p>
         </div>
-        <div>
-          <p class="lead">The Chief Agentic Officer turns board ambition into a governed operating system for agentic work.</p>
-          <p>The role connects strategy, permissions, assurance, escalation, value, and human judgement so agentic systems can do useful work without becoming unowned automation.</p>
+        <div class="simple-panel">
+          <h3>What they look for</h3>
+          <ul class="simple-list">
+            <li>Where agentic work is already happening.</li><li>Who owns the boundary, stop condition, and evidence.</li><li>What needs a board, committee, or executive decision.</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <section class="section work-band" id="work">
+    <section class="section briefing-band" id="what-you-receive">
       <div class="section-inner">
-        <p class="eyebrow">Role architecture</p>
-        <h2>From AI pilots to accountable capability.</h2>
-        <div class="route-grid">
-          <article class="route-card">
-            <div>
-              <span>Mandate</span>
-              <strong>Turn board intent into operating authority.</strong>
-            </div>
-            <p>Clarify the problems agentic systems should solve, the risk appetite, the executive owner, and the decisions that remain human.</p>
-          </article><article class="route-card">
-            <div>
-              <span>Control</span>
-              <strong>Make trust boundaries inspectable.</strong>
-            </div>
-            <p>Define permissions, stop conditions, escalation paths, evidence trails, spending limits, publishing rights, and review points before scale.</p>
-          </article><article class="route-card">
-            <div>
-              <span>Assurance</span>
-              <strong>Show the work without slowing it down.</strong>
-            </div>
-            <p>Create a cadence for exceptions, outcomes, lessons, incidents, value, and the choices that need to travel from delivery back to the board.</p>
+        <div class="briefing-details-grid">
+          <article class="briefing-panel">
+            <h3>What you receive</h3>
+            <ul class="briefing-receive">
+              <li>A short UK/EU signal scan across AI governance, cyber, resilience, disclosure, CSRD/ESRS, GDPR/data, board actions, and reputation.</li><li>A plain-English note on why the signal may matter.</li><li>A few board-ready questions to carry forward.</li>
+            </ul>
+          </article>
+
+          <article class="sample-briefing">
+            <div class="sample-meta">Example question / Board readiness watch</div>
+            <h3>Which agentic workflows already need an owner?</h3>
+            <ul>
+              <li>What is already touching customers, data, disclosure, resilience, or external commitments?</li><li>Who can approve, stop, narrow, or escalate it?</li><li>What evidence would let leaders see the judgement afterwards?</li>
+            </ul>
           </article>
         </div>
-      </div>
-    </section>
 
-    <section class="section implementation-band" id="implementation">
-      <div class="section-inner">
-        <div class="implementation-head">
-          <div>
-            <p class="eyebrow">Implementation</p>
-            <h2>How the role becomes practical.</h2>
-          </div>
-          <div class="implementation-copy">
-            <p class="lead">The title only earns its keep when it changes decisions, cadence, and evidence.</p>
-            <p>If the implementation question is already live, <a href="https://www.tonywood.org/advisory/?mtm_campaign=chiefagenticofficer_to_tonywood_advisory&amp;mtm_source=chiefagenticofficer.com&amp;mtm_medium=owned-referral&amp;mtm_content=implementation_inline" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="chiefagenticofficer.com" data-funnel-campaign="chiefagenticofficer_to_tonywood_advisory" data-funnel-content="implementation_inline">TonyWood advisory is the practical next step</a>.</p>
-          </div>
-        </div>
-        <div class="implementation-grid">
-          <article class="implementation-card">
-            <span>01</span>
-            <h3>Name the mandate</h3>
-            <p>Clarify what the role is allowed to decide, what it must escalate, and which board or executive question it exists to settle.</p>
-          </article><article class="implementation-card">
-            <span>02</span>
-            <h3>Map the estate</h3>
-            <p>Find the pilots, agents, vendor workflows, quiet automations, and ownership gaps already shaping real work.</p>
-          </article><article class="implementation-card">
-            <span>03</span>
-            <h3>Set decision rights</h3>
-            <p>Make the boundaries explicit: who can approve, stop, narrow, fund, govern, or operationalise each use of agentic AI.</p>
-          </article><article class="implementation-card">
-            <span>04</span>
-            <h3>Install cadence</h3>
-            <p>Create a regular rhythm for decisions, exceptions, value, incidents, lessons, and follow-through.</p>
-          </article><article class="implementation-card">
-            <span>05</span>
-            <h3>Create the evidence trail</h3>
-            <p>Keep enough record of context, controls, judgements, and outcomes for leaders to defend the work afterwards.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section control-band">
-      <div class="section-inner">
-        <p class="eyebrow">Operating posture</p>
-        <h2>Firm boundaries. Useful autonomy. Visible judgement.</h2>
-        <p>The CAO is not a ceremonial title. It is the person or function that knows which agentic systems exist, what they can touch, when they stop, and how exceptions reach human judgement.</p>
-      </div>
-    </section>
-
-    <section class="section" id="cadence">
-      <div class="section-inner cadence">
-        <div>
-          <p class="eyebrow">Board rhythm</p>
-          <h2>A weekly rhythm for agentic work.</h2>
-          <p class="lead">Make agentic work legible to executives: current estate, trust boundaries, incidents, value, lessons, and decisions needed.</p>
-        </div>
-        <div class="note-list">
-          <article class="note-panel">
-            <span>01</span>
-            <h3>Map the estate</h3>
-            <p>Find the pilots, shadow workflows, vendor promises, automations, and agentic systems already influencing work.</p>
-          </article><article class="note-panel">
-            <span>02</span>
-            <h3>Set the controls</h3>
-            <p>Decide what agents may read, suggest, change, spend, publish, escalate, remember, or stop.</p>
-          </article><article class="note-panel">
-            <span>03</span>
-            <h3>Report the judgement</h3>
-            <p>Keep enough record of context, exceptions, outcomes, and decisions for leaders to inspect the work after the fact.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section cta" id="conversation">
-      <div class="section-inner cta-panel">
-        <div>
-          <p class="eyebrow">Implementation help</p>
-          <h2>Need to make this role real?</h2>
-          <p>Boards and CEOs may not need another concept. They need help deciding what to approve, stop, narrow, fund, govern, or operationalise, then a cadence that keeps the decision defensible.</p>
-        </div>
-        <div class="cta-actions">
-          <a class="button primary" href="https://www.tonywood.org/advisory/?mtm_campaign=chiefagenticofficer_to_tonywood_advisory&amp;mtm_source=chiefagenticofficer.com&amp;mtm_medium=owned-referral&amp;mtm_content=final_advisory_cta" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="chiefagenticofficer.com" data-funnel-campaign="chiefagenticofficer_to_tonywood_advisory" data-funnel-content="final_advisory_cta">Discuss advisory with Tony Wood</a>
-        </div>
+        <p class="simple-guardrail">The briefing supports judgement. It does not replace legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.</p>
       </div>
     </section>
   </main>
@@ -821,5 +1079,65 @@
     </div>
     <div>Board-level ownership for agentic systems, governance, and operating cadence.</div>
   </footer>
+  <script>
+    (() => {
+      const form = document.querySelector("[data-mailerlite-form]");
+      if (!form) return;
+
+      const status = form.querySelector("[data-form-status]");
+      const button = form.querySelector("button[type='submit']");
+      const defaultButtonText = button ? button.textContent : "";
+      const defaultError = form.dataset.errorMessage || "Sorry, the briefing signup could not be completed.";
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+
+        const body = new URLSearchParams();
+        const formData = new FormData(form);
+        for (const [key, value] of formData.entries()) body.append(key, value);
+
+        if (status) {
+          status.dataset.state = "";
+          status.textContent = "Joining...";
+        }
+        if (button) {
+          button.disabled = true;
+          button.textContent = "Joining...";
+        }
+
+        try {
+          const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+              "accept": "application/json",
+              "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
+            },
+            body,
+          });
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok || !payload.ok) {
+            throw new Error(payload.message || defaultError);
+          }
+
+          if (status) {
+            status.dataset.state = "success";
+            status.textContent = payload.message || form.dataset.successMessage || "Thank you.";
+          }
+          form.reset();
+        } catch (error) {
+          if (status) {
+            status.dataset.state = "error";
+            status.textContent = error.message || defaultError;
+          }
+        } finally {
+          if (button) {
+            button.disabled = false;
+            button.textContent = defaultButtonText;
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

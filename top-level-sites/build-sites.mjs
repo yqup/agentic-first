@@ -420,20 +420,27 @@ function isLocalPageMode(mode) {
 
 function composeFor(items) {
   const services = items
-    .map((site) => `  ${site.service}:
+    .map((site) => {
+      const envBlock = site.briefing?.mailerlite
+        ? `    environment:
+      MAILERLITE_API_TOKEN: \${CHIEFAGENTICOFFICER_MAILERLITE_API_TOKEN:-}
+`
+        : "";
+      return `  ${site.service}:
     image: node:20-alpine
     container_name: site-${site.service}
     restart: unless-stopped
     read_only: true
     user: node
     command: ["node", "/srv/site/server.mjs"]
-    ports:
+${envBlock}    ports:
       - "127.0.0.1:${site.port}:${nodeServerPort}"
     volumes:
       - ./dist/${site.domain}/www:/srv/site:ro
     tmpfs:
       - /tmp
-`)
+`;
+    })
     .join("\n");
 
   return `name: top-level-sites
@@ -511,6 +518,203 @@ function nodeServerFor(site) {
     hostHoldingPages: site.host_holding_pages || [],
     redirectWwwToApex: Boolean(site.redirect_www_to_apex),
   };
+  if (site.briefing?.mailerlite) {
+    serverConfig.mailerlite = {
+      signupEndpoint: site.briefing.mailerlite.endpoint || "/api/briefing-signup",
+      groupId: site.briefing.mailerlite.group_id,
+      source: site.domain,
+    };
+  }
+  const mailerLiteRouteBlock = serverConfig.mailerlite ? `
+  if (config.mailerlite?.signupEndpoint && pathname === config.mailerlite.signupEndpoint) {
+    await handleMailerLiteSignup(req, res);
+    return;
+  }
+` : "";
+  const mailerLiteHandlerBlock = serverConfig.mailerlite ? `
+async function handleMailerLiteSignup(req, res) {
+  if (req.method !== "POST") {
+    res.writeHead(405, {
+      "content-type": "application/json; charset=utf-8",
+      "allow": "POST",
+      "cache-control": "no-store",
+    });
+    res.end(JSON.stringify({ ok: false, message: "Signup endpoint accepts POST only." }));
+    return;
+  }
+
+  if (!config.mailerlite?.groupId) {
+    sendJson(res, 503, { ok: false, message: "MailerLite group is not configured for this site." });
+    return;
+  }
+
+  const token = process.env.MAILERLITE_API_TOKEN || process.env.MAILERLITE_API_KEY;
+  if (!token) {
+    sendJson(res, 503, {
+      ok: false,
+      code: "missing_mailerlite_token",
+      message: "MailerLite is not configured on this preview server yet.",
+    });
+    return;
+  }
+
+  const fields = await readSignupFields(req);
+  if (fields.website) {
+    sendJson(res, 200, { ok: true, message: "Thank you." });
+    return;
+  }
+
+  const email = cleanField(fields.work_email || fields.email).toLowerCase();
+  if (!isValidEmail(email)) {
+    sendJson(res, 422, { ok: false, message: "Please enter a valid work email address." });
+    return;
+  }
+  if (fields.consent !== "yes") {
+    sendJson(res, 422, { ok: false, message: "Please confirm consent to receive the briefing." });
+    return;
+  }
+
+  const fullFields = {
+    name: cleanField(fields.name),
+    country: cleanField(fields.country_market),
+    role: cleanField(fields.role),
+    board_issue: cleanField(fields.board_issue),
+    signup_source: config.mailerlite.source || config.domain,
+  };
+  const safeFields = {
+    name: fullFields.name,
+    country: fullFields.country,
+  };
+
+  const basePayload = {
+    email,
+    groups: [String(config.mailerlite.groupId)],
+    fields: pruneEmpty(fullFields),
+  };
+
+  let result = await postMailerLiteSubscriber(token, basePayload);
+  if (!result.ok && result.status === 422 && Object.keys(basePayload.fields || {}).some((field) => !["name", "country"].includes(field))) {
+    result = await postMailerLiteSubscriber(token, {
+      ...basePayload,
+      fields: pruneEmpty(safeFields),
+    });
+    result.fieldWarning = "Some site-only fields were not sent because matching MailerLite custom fields may not exist yet.";
+  }
+
+  if (!result.ok) {
+    console.error("mailerlite_signup_error", {
+      status: result.status,
+      code: result.body?.message || result.error || "unknown",
+    });
+    sendJson(res, result.status >= 400 && result.status < 500 ? 422 : 502, {
+      ok: false,
+      message: "MailerLite could not accept this signup yet.",
+    });
+    return;
+  }
+
+  sendJson(res, 200, {
+    ok: true,
+    message: "Thank you. Your Chief Agentic Officer Briefing signup has been received.",
+    subscriber_id: result.body?.data?.id || null,
+    warning: result.fieldWarning || null,
+  });
+}
+
+function readSignupFields(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let size = 0;
+    req.on("data", (chunk) => {
+      size += chunk.length;
+      if (size > 32768) {
+        reject(new Error("signup_body_too_large"));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on("error", reject);
+    req.on("end", () => {
+      const body = Buffer.concat(chunks).toString("utf8");
+      const contentType = String(req.headers["content-type"] || "").toLowerCase();
+      if (contentType.includes("application/json")) {
+        try {
+          resolve(JSON.parse(body || "{}"));
+        } catch {
+          resolve({});
+        }
+        return;
+      }
+      const params = new URLSearchParams(body);
+      const fields = {};
+      for (const [key, value] of params.entries()) fields[key] = value;
+      resolve(fields);
+    });
+  });
+}
+
+function postMailerLiteSubscriber(token, payload) {
+  return new Promise((resolve) => {
+    const body = Buffer.from(JSON.stringify(payload), "utf8");
+    const apiReq = httpsRequest({
+      protocol: "https:",
+      hostname: "connect.mailerlite.com",
+      method: "POST",
+      path: "/api/subscribers",
+      headers: {
+        "authorization": "Bearer " + token,
+        "accept": "application/json",
+        "content-type": "application/json",
+        "content-length": String(body.length),
+      },
+    }, (apiRes) => {
+      const chunks = [];
+      apiRes.on("data", (chunk) => chunks.push(chunk));
+      apiRes.on("end", () => {
+        const responseText = Buffer.concat(chunks).toString("utf8");
+        let parsed = null;
+        try {
+          parsed = responseText ? JSON.parse(responseText) : null;
+        } catch {
+          parsed = { message: responseText.slice(0, 200) };
+        }
+        const status = apiRes.statusCode || 502;
+        resolve({ ok: status >= 200 && status < 300, status, body: parsed });
+      });
+    });
+    apiReq.on("error", (error) => resolve({ ok: false, status: 502, error: error.message }));
+    apiReq.end(body);
+  });
+}
+
+function cleanField(value) {
+  return String(value || "").trim().slice(0, 240);
+}
+
+function pruneEmpty(fields) {
+  const output = {};
+  for (const [key, value] of Object.entries(fields)) {
+    const cleaned = cleanField(value);
+    if (cleaned) output[key] = cleaned;
+  }
+  return output;
+}
+
+function isValidEmail(value) {
+  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(value || ""));
+}
+
+function sendJson(res, status, payload) {
+  const body = Buffer.from(JSON.stringify(payload), "utf8");
+  res.writeHead(status, {
+    "content-type": "application/json; charset=utf-8",
+    "content-length": String(body.length),
+    "cache-control": "no-store",
+  });
+  res.end(body);
+}
+` : "";
 
   return `import { createReadStream } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -565,7 +769,7 @@ async function routeRequest(req, res) {
     redirectToApex(req, res, url);
     return;
   }
-
+${mailerLiteRouteBlock}
   if (isLocalStaticPath(pathname)) {
     const served = await serveLocalFile(req, res, pathname);
     if (!served) notFound(res);
@@ -631,7 +835,7 @@ async function serveLocalFile(req, res, requestPath, cacheControl = "public, max
   }).pipe(res);
   return true;
 }
-
+${mailerLiteHandlerBlock}
 function safeLocalPath(requestPath) {
   let decoded;
   try {
@@ -2001,47 +2205,106 @@ ${matomoScriptTagFor(site)}  <style>
 }
 
 function chiefAgenticOfficerPageFor(site) {
-  const proof = site.proof || [
-    "Mandate",
-    "Control",
-    "Cadence",
-    "Assurance",
+  const briefing = site.briefing || {};
+  const briefingOutcomes = briefing.outcomes || [
+    "Understand what is changing.",
+    "See what needs ownership.",
+    "Take clearer questions into the next meeting.",
   ];
-  const routes = site.routes || site.sections || [];
-  const operatingNotes = site.operating_notes || [];
-  const implementationSteps = site.implementation_steps || [
-    {
-      label: "01",
-      title: "Name the mandate",
-      body: "Clarify what the role can decide, what it must escalate, and which leadership question it exists to settle.",
-    },
-    {
-      label: "02",
-      title: "Map the estate",
-      body: "Find the pilots, vendor workflows, quiet automations, and ownership gaps already influencing real work.",
-    },
-    {
-      label: "03",
-      title: "Set decision rights",
-      body: "Make the boundaries explicit: who can approve, stop, narrow, fund, govern, or operationalise agentic work.",
-    },
-    {
-      label: "04",
-      title: "Install cadence",
-      body: "Create a regular rhythm for decisions, exceptions, value, incidents, lessons, and follow-through.",
-    },
-    {
-      label: "05",
-      title: "Create the evidence trail",
-      body: "Keep enough record of context, controls, judgements, and outcomes for leaders to defend the work afterwards.",
-    },
+  const briefingRolePoints = briefing.role_points || [
+    "Where agentic work is already happening.",
+    "Who owns the boundary, stop condition, and evidence.",
+    "What needs a board, committee, or executive decision.",
   ];
-  const contactHref = site.contact?.form_url
-    || (site.contact?.email ? `mailto:${site.contact.email}` : `https://${site.domain}/`);
-  const advisoryFallbackHref = site.advisory_url || site.contact?.form_url || contactHref;
-  const heroAdvisoryHref = tonywoodFunnelUrlFor(site, "hero_discuss_implementation") || advisoryFallbackHref;
-  const implementationAdvisoryHref = tonywoodFunnelUrlFor(site, "implementation_inline") || advisoryFallbackHref;
-  const finalAdvisoryHref = tonywoodFunnelUrlFor(site, "final_advisory_cta") || advisoryFallbackHref;
+  const briefingReceive = briefing.receive || [
+    "A short UK/EU signal scan across AI governance, cyber, resilience, disclosure, CSRD/ESRS, GDPR/data, board actions, and reputation.",
+    "A plain-English note on why the signal may matter.",
+    "A few board-ready questions to carry forward.",
+  ];
+  const briefingIssueOptions = briefing.issue_options || [
+    "AI governance",
+    "Cyber/resilience",
+    "Disclosure",
+    "CSRD/ESRS",
+    "GDPR/data",
+    "Board actions",
+    "Other",
+  ];
+  const briefingRoleOptions = briefing.role_options || [
+    "Board / NED",
+    "Chair",
+    "C-suite / executive",
+    "CEO",
+    "COO",
+    "CFO",
+    "General Counsel",
+    "CRO / risk",
+    "CISO / security",
+    "DPO / data protection",
+    "Company Secretary / governance",
+    "Chief of Staff / operator",
+    "Advisor / consultant",
+    "Investor / analyst",
+    "Other",
+  ];
+  const briefingCountryOptions = briefing.country_options || [
+    "Europe / pan-European",
+    "EU / European Union",
+    "United Kingdom",
+    "Ireland",
+    "France",
+    "Germany",
+    "Netherlands",
+    "Belgium",
+    "Luxembourg",
+    "Switzerland",
+    "Austria",
+    "Denmark",
+    "Finland",
+    "Norway",
+    "Sweden",
+    "Iceland",
+    "Spain",
+    "Portugal",
+    "Italy",
+    "Greece",
+    "Poland",
+    "Czechia",
+    "Slovakia",
+    "Hungary",
+    "Romania",
+    "Bulgaria",
+    "Croatia",
+    "Slovenia",
+    "Estonia",
+    "Latvia",
+    "Lithuania",
+    "Cyprus",
+    "Malta",
+    "Other Europe",
+    "United States",
+    "Canada",
+    "Other / global",
+  ];
+  const briefingSample = briefing.sample || {
+    eyebrow: "Example question",
+    title: "Which agentic workflows already need an owner?",
+    date: "Board readiness watch",
+    items: [
+      "What is already touching customers, data, disclosure, resilience, or external commitments?",
+      "Who can approve, stop, narrow, or escalate it?",
+      "What evidence would let leaders see the judgement afterwards?",
+    ],
+  };
+  const contactEmail = site.contact?.email || "hello@my-agentic.com";
+  const briefingMailerLite = briefing.mailerlite || {};
+  const briefingSignupEndpoint = briefingMailerLite.endpoint || "";
+  const briefingHostedFormHref = briefingMailerLite.share_url || "";
+  const briefingMailtoHref = `mailto:${contactEmail}?subject=${encodeURIComponent(briefing.form_subject || "Chief Agentic Officer Briefing signup")}`;
+  const briefingSignupHref = briefingSignupEndpoint || briefingMailtoHref;
+  const briefingExampleHref = `mailto:${contactEmail}?subject=${encodeURIComponent(briefing.example_subject || "Example Chief Agentic Officer Briefing")}`;
+  const briefingSuccessMessage = briefing.success_message || "Thank you. Your Chief Agentic Officer Briefing signup has been received.";
+  const briefingErrorMessage = briefing.error_message || "Sorry, the briefing signup could not be completed. Please try again or use the example briefing link.";
 
   return `<!doctype html>
 <html lang="en">
@@ -2060,6 +2323,8 @@ ${matomoScriptTagFor(site)}  <style>
       --porcelain: #fffdf7;
       --sage: #617d66;
       --sage-dark: #2d4538;
+      --teal: #1f6f68;
+      --teal-dark: #174c49;
       --oxblood: #8f342d;
       --brass: #b9822d;
       --charcoal: #202726;
@@ -2155,9 +2420,22 @@ ${matomoScriptTagFor(site)}  <style>
         linear-gradient(180deg, #fffdf7, #eadfca);
     }
 
+    .briefing-hero {
+      min-height: auto;
+      grid-template-columns: minmax(0, 0.9fr) minmax(340px, 0.68fr);
+      align-items: start;
+      padding: 64px 40px;
+      background: var(--paper);
+    }
+
     .hero-copy-wrap {
       align-self: end;
       padding: 56px 0 64px;
+    }
+
+    .briefing-hero .hero-copy-wrap {
+      align-self: start;
+      padding: 0;
     }
 
     .eyebrow {
@@ -2192,6 +2470,13 @@ ${matomoScriptTagFor(site)}  <style>
       font-weight: 700;
     }
 
+    .briefing-hero h1 {
+      max-width: 760px;
+      margin-bottom: 20px;
+      font-size: 64px;
+      line-height: 1.02;
+    }
+
     h2 {
       max-width: 900px;
       margin-bottom: 18px;
@@ -2213,6 +2498,11 @@ ${matomoScriptTagFor(site)}  <style>
       color: var(--ink-soft);
       font-size: 22px;
       line-height: 1.46;
+    }
+
+    .briefing-hero .hero-copy {
+      max-width: 720px;
+      font-size: 21px;
     }
 
     .hero-actions,
@@ -2340,6 +2630,47 @@ ${matomoScriptTagFor(site)}  <style>
       line-height: 1.5;
     }
 
+    .role-explainer {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.72fr);
+      gap: 54px;
+      align-items: start;
+    }
+
+    .simple-panel {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--porcelain);
+      padding: 24px;
+    }
+
+    .simple-panel h3 {
+      font-family: var(--serif);
+      font-size: 27px;
+      line-height: 1.16;
+    }
+
+    .simple-list {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .simple-list li {
+      padding-top: 12px;
+      border-top: 1px solid rgba(31, 37, 33, 0.12);
+      color: var(--ink-soft);
+    }
+
+    .briefing-details-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.72fr);
+      gap: 24px;
+      align-items: start;
+    }
+
     .work-band {
       background: var(--porcelain);
       border-top: 1px solid var(--line);
@@ -2463,6 +2794,260 @@ ${matomoScriptTagFor(site)}  <style>
       line-height: 1.5;
     }
 
+    .briefing-band {
+      background: #fbf8ef;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .briefing-band .eyebrow {
+      color: var(--teal-dark);
+    }
+
+    .briefing-band h2 {
+      max-width: 760px;
+      font-size: 42px;
+    }
+
+    .briefing-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.94fr) minmax(320px, 1.06fr);
+      gap: 48px;
+      align-items: start;
+    }
+
+    .briefing-summary {
+      max-width: 780px;
+      color: var(--ink-soft);
+      font-size: 20px;
+      line-height: 1.52;
+    }
+
+    .briefing-explainer {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .briefing-explainer h3,
+    .briefing-panel h3,
+    .sample-briefing h3,
+    .briefing-form h3 {
+      margin-bottom: 10px;
+      font-family: var(--serif);
+      font-size: 27px;
+      line-height: 1.16;
+    }
+
+    .briefing-explainer p,
+    .briefing-panel p,
+    .sample-briefing p {
+      color: var(--ink-soft);
+    }
+
+    .briefing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .briefing-actions .secondary {
+      color: var(--teal-dark);
+    }
+
+    .briefing-side {
+      display: grid;
+      gap: 20px;
+    }
+
+    .briefing-panel,
+    .sample-briefing,
+    .briefing-form {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--porcelain);
+    }
+
+    .briefing-panel,
+    .sample-briefing {
+      padding: 24px;
+    }
+
+    .briefing-outcomes,
+    .briefing-receive,
+    .sample-briefing ul {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .briefing-outcomes li,
+    .briefing-receive li,
+    .sample-briefing li {
+      padding-top: 12px;
+      border-top: 1px solid rgba(31, 37, 33, 0.12);
+      color: var(--ink-soft);
+    }
+
+    .briefing-outcomes li::before,
+    .briefing-receive li::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      display: inline-block;
+      margin-right: 10px;
+      border-radius: 50%;
+      background: var(--teal);
+      vertical-align: 0.08em;
+    }
+
+    .sample-meta {
+      margin-bottom: 12px;
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .briefing-guardrail {
+      grid-column: 1 / -1;
+      margin: 10px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
+    .briefing-form {
+      grid-column: 1 / -1;
+      margin-top: 18px;
+      padding: 26px;
+    }
+
+    .briefing-hero .briefing-form {
+      grid-column: auto;
+      margin-top: 0;
+      padding: 24px;
+      box-shadow: 0 18px 48px rgba(31, 37, 33, 0.1);
+    }
+
+    .briefing-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .briefing-hero .briefing-form-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .briefing-form label {
+      min-width: 0;
+      display: grid;
+      gap: 8px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .briefing-form input,
+    .briefing-form select {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid rgba(31, 37, 33, 0.24);
+      border-radius: 4px;
+      background: #fffdf7;
+      color: var(--ink);
+      font: inherit;
+      font-size: 16px;
+      padding: 9px 11px;
+    }
+
+    .briefing-form input:focus,
+    .briefing-form select:focus {
+      outline: 2px solid rgba(31, 111, 104, 0.32);
+      outline-offset: 2px;
+      border-color: var(--teal);
+    }
+
+    .briefing-span-2 {
+      grid-column: 1 / -1;
+    }
+
+    .briefing-consent {
+      grid-template-columns: 18px minmax(0, 1fr);
+      align-items: start;
+      gap: 10px;
+      padding-top: 8px;
+      color: var(--ink-soft);
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    .briefing-consent input {
+      width: 18px;
+      min-height: 18px;
+      height: 18px;
+      margin: 2px 0 0;
+      accent-color: var(--teal);
+    }
+
+    .briefing-form .button {
+      margin-top: 22px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 16px;
+    }
+
+    .briefing-form .button[disabled] {
+      cursor: wait;
+      opacity: 0.72;
+    }
+
+    .briefing-form-status {
+      min-height: 24px;
+      margin: 16px 0 0;
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
+    .briefing-form-status[data-state="success"] {
+      color: var(--teal-dark);
+      font-weight: 760;
+    }
+
+    .briefing-form-status[data-state="error"] {
+      color: var(--oxblood);
+      font-weight: 760;
+    }
+
+    .briefing-honeypot {
+      position: absolute;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .briefing-hero .briefing-outcomes {
+      max-width: 640px;
+      margin-top: 28px;
+    }
+
+    .simple-guardrail {
+      margin: 24px 0 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
     .control-band {
       background: var(--charcoal);
       color: var(--porcelain);
@@ -2575,6 +3160,11 @@ ${matomoScriptTagFor(site)}  <style>
         padding: 48px 22px 0;
       }
 
+      .briefing-hero {
+        gap: 24px;
+        padding: 48px 22px;
+      }
+
       .hero-copy-wrap {
         padding: 36px 0 34px;
       }
@@ -2592,6 +3182,10 @@ ${matomoScriptTagFor(site)}  <style>
         font-size: 58px;
       }
 
+      .briefing-hero h1 {
+        font-size: 48px;
+      }
+
       h2 {
         font-size: 38px;
       }
@@ -2604,9 +3198,13 @@ ${matomoScriptTagFor(site)}  <style>
 
       .metric-strip,
       .brief,
+      .role-explainer,
       .route-grid,
       .implementation-head,
       .implementation-grid,
+      .briefing-layout,
+      .briefing-details-grid,
+      .briefing-form-grid,
       .cadence,
       .note-list,
       .cta-panel {
@@ -2619,6 +3217,7 @@ ${matomoScriptTagFor(site)}  <style>
 
       .route-card,
       .implementation-card,
+      .briefing-panel,
       .note-panel {
         min-height: auto;
       }
@@ -2627,6 +3226,10 @@ ${matomoScriptTagFor(site)}  <style>
     @media (max-width: 560px) {
       h1 {
         font-size: 44px;
+      }
+
+      .briefing-hero h1 {
+        font-size: 40px;
       }
 
       h2 {
@@ -2658,132 +3261,120 @@ ${matomoScriptTagFor(site)}  <style>
   <header class="site-header">
     <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
       <span class="brand-mark">CAO</span>
-      <span>${escapeHtml(site.name)}</span>
+      <span>CAO Briefing</span>
     </a>
     <nav aria-label="Primary navigation">
-      <a href="#mandate">Mandate</a>
-      <a href="#work">Work</a>
-      <a href="#implementation">Implement</a>
-      <a href="#cadence">Cadence</a>
-      <a href="#conversation">Conversation</a>
+      <a href="#briefing">Briefing</a>
+      <a href="#cao-role">What is CAO?</a>
+      <a href="#what-you-receive">What you receive</a>
+      <a href="#briefing-signup">Sign up</a>
     </nav>
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="page-title">
+    <section class="hero briefing-hero" id="briefing" aria-labelledby="page-title">
       <div class="hero-copy-wrap">
-        <p class="eyebrow">${escapeHtml(site.eyebrow || "Board mandate for agentic work")}</p>
-        <h1 id="page-title">${escapeHtml(site.heading || site.name)}</h1>
-        <p class="hero-copy">${escapeHtml(site.summary)}</p>
+        <p class="eyebrow">${escapeHtml(briefing.eyebrow || "Briefing for board-facing leaders")}</p>
+        <h1 id="page-title">${escapeHtml(briefing.title || "Chief Agentic Officer Briefing")}</h1>
+        <p class="hero-copy">${escapeHtml(briefing.summary || "A short UK and Europe-facing briefing for leaders who need clearer questions about agentic work before the next board, committee, regulator, investor, customer, or executive decision.")}</p>
+        <ul class="briefing-outcomes" aria-label="Briefing outcomes">
+          ${briefingOutcomes.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
         <div class="hero-actions">
-          <a class="button primary" href="#mandate">${escapeHtml(site.primary_action_label || "Read the mandate")}</a>
-          <a class="button secondary" href="${escapeHtml(heroAdvisoryHref)}"${funnelAttrsFor(site, "hero_discuss_implementation")}>${escapeHtml(site.secondary_action_label || "Start the conversation")}</a>
+          <a class="button primary" href="#briefing-signup">${escapeHtml(briefing.primary_label || "Join the briefing list")}</a>
+          <a class="button secondary" href="${escapeHtml(briefingExampleHref)}">${escapeHtml(briefing.secondary_label || "Send me an example briefing")}</a>
         </div>
       </div>
 
-      <aside class="mandate-panel" aria-label="Mandate map">
-        <div class="mandate-card">
-          <div class="mandate-title">
-            <span>Agentic operating mandate</span>
-            <span>CAO</span>
+      <aside aria-label="Join the briefing list">
+        <form class="briefing-form" id="briefing-signup" action="${escapeHtml(briefingSignupHref)}" method="post"${briefingSignupEndpoint ? ` data-mailerlite-form data-success-message="${escapeHtml(briefingSuccessMessage)}" data-error-message="${escapeHtml(briefingErrorMessage)}" data-hosted-form="${escapeHtml(briefingHostedFormHref)}"` : ` enctype="text/plain"`}>
+          <div>
+            <p class="eyebrow">Briefing list</p>
+            <h3>${escapeHtml(briefing.primary_label || "Join the briefing list")}</h3>
           </div>
-          <div class="mandate-svg" aria-hidden="true">
-            ${caoMandateSvg()}
+          <input type="hidden" name="source" value="${escapeHtml(site.domain)}">
+          <label class="briefing-honeypot">
+            <span>Website</span>
+            <input name="website" autocomplete="off" tabindex="-1">
+          </label>
+          <div class="briefing-form-grid">
+            <label>
+              <span>Name</span>
+              <input name="name" autocomplete="name" required>
+            </label>
+            <label>
+              <span>Work email</span>
+              <input name="work_email" type="email" autocomplete="email" required>
+            </label>
+            <label>
+              <span>Role type (optional)</span>
+              <select name="role">
+                <option value="">Select role type</option>
+                ${briefingRoleOptions.map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join("")}
+              </select>
+            </label>
+            <label>
+              <span>Country / market (optional)</span>
+              <select name="country_market">
+                <option value="">Select country or market</option>
+                ${briefingCountryOptions.map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join("")}
+              </select>
+            </label>
+            <label class="briefing-span-2">
+              <span>Which board issue are you watching? (optional)</span>
+              <select name="board_issue">
+                <option value="">Select issue</option>
+                ${briefingIssueOptions.map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join("")}
+              </select>
+            </label>
+            <label class="briefing-consent briefing-span-2">
+              <input name="consent" type="checkbox" value="yes" required>
+              <span>I consent to receive the Chief Agentic Officer Briefing and related board-readiness notes.</span>
+            </label>
           </div>
-        </div>
+          <button class="button primary" type="submit">${escapeHtml(briefing.primary_label || "Join the briefing list")}</button>
+          <div class="briefing-form-status" data-form-status role="status" aria-live="polite"></div>
+        </form>
       </aside>
     </section>
 
-    <section class="metric-strip" aria-label="Chief Agentic Officer concerns">
-      ${proof.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
-    </section>
-
-    <section class="section" id="mandate">
-      <div class="section-inner brief">
+    <section class="section" id="cao-role">
+      <div class="section-inner role-explainer">
         <div>
-          <p class="eyebrow">${escapeHtml(site.brief_eyebrow || "The mandate")}</p>
-          <h2>${escapeHtml(site.brief_title || "Agentic AI needs an accountable operating owner.")}</h2>
+          <p class="eyebrow">What it is</p>
+          <h2>${escapeHtml(briefing.explainer_title || "What is a Chief Agentic Officer?")}</h2>
+          <p class="lead">${escapeHtml(briefing.explainer_body || "A Chief Agentic Officer is the person or mandate that makes agentic work owned: what exists, what it may do, who can stop it, and what leaders can inspect afterwards.")}</p>
+          <p>The point is not another title for the sake of it. It is a simple way to make agentic work easier to own, govern, narrow, stop, evidence, and discuss.</p>
         </div>
-        <div>
-          <p class="lead">${escapeHtml(site.brief || "The Chief Agentic Officer turns board ambition into a governed operating system for agentic work.")}</p>
-          <p>${escapeHtml(site.brief_support || "The role connects strategy, permissions, assurance, escalation, value, and human judgement so agentic systems can do useful work without becoming unowned automation.")}</p>
+        <div class="simple-panel">
+          <h3>What they look for</h3>
+          <ul class="simple-list">
+            ${briefingRolePoints.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+          </ul>
         </div>
       </div>
     </section>
 
-    <section class="section work-band" id="work">
+    <section class="section briefing-band" id="what-you-receive">
       <div class="section-inner">
-        <p class="eyebrow">${escapeHtml(site.work_eyebrow || "Where the role helps")}</p>
-        <h2>${escapeHtml(site.work_title || "From pilots to accountable capability.")}</h2>
-        <div class="route-grid">
-          ${routes.map((route) => `<article class="route-card">
-            <div>
-              <span>${escapeHtml(route.title)}</span>
-              <strong>${escapeHtml(route.heading || route.title)}</strong>
-            </div>
-            <p>${escapeHtml(route.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
+        <div class="briefing-details-grid">
+          <article class="briefing-panel">
+            <h3>What you receive</h3>
+            <ul class="briefing-receive">
+              ${briefingReceive.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </article>
 
-    <section class="section implementation-band" id="implementation">
-      <div class="section-inner">
-        <div class="implementation-head">
-          <div>
-            <p class="eyebrow">${escapeHtml(site.implementation_eyebrow || "Implementation")}</p>
-            <h2>${escapeHtml(site.implementation_title || "How the role becomes practical.")}</h2>
-          </div>
-          <div class="implementation-copy">
-            <p class="lead">${escapeHtml(site.implementation_intro || "The title only earns its keep when it changes decisions, cadence, and evidence.")}</p>
-            <p>${escapeHtml(site.implementation_link_prefix || "If the implementation question is already live,")} <a href="${escapeHtml(implementationAdvisoryHref)}"${funnelAttrsFor(site, "implementation_inline")}>${escapeHtml(site.implementation_link_label || "TonyWood advisory is the practical next step")}</a>.</p>
-          </div>
+          <article class="sample-briefing">
+            <div class="sample-meta">${escapeHtml(briefingSample.eyebrow || "Sample briefing card")} / ${escapeHtml(briefingSample.date || "Board readiness watch")}</div>
+            <h3>${escapeHtml(briefingSample.title || "Agentic workflow ownership before the next risk committee")}</h3>
+            <ul>
+              ${(briefingSample.items || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </article>
         </div>
-        <div class="implementation-grid">
-          ${implementationSteps.map((step) => `<article class="implementation-card">
-            <span>${escapeHtml(step.label)}</span>
-            <h3>${escapeHtml(step.title)}</h3>
-            <p>${escapeHtml(step.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
 
-    <section class="section control-band">
-      <div class="section-inner">
-        <p class="eyebrow">${escapeHtml(site.tone_eyebrow || "Operating posture")}</p>
-        <h2>${escapeHtml(site.tone_title || "Firm boundaries. Useful autonomy. Visible judgement.")}</h2>
-        <p>${escapeHtml(site.tone_body || "The CAO is not a ceremonial title. It is the person or function that knows which agentic systems exist, what they can touch, when they stop, and how exceptions reach human judgement.")}</p>
-      </div>
-    </section>
-
-    <section class="section" id="cadence">
-      <div class="section-inner cadence">
-        <div>
-          <p class="eyebrow">${escapeHtml(site.cadence_eyebrow || "Operating cadence")}</p>
-          <h2>${escapeHtml(site.cadence_title || "A weekly rhythm for agentic work.")}</h2>
-          <p class="lead">${escapeHtml(site.cadence_body || "Make agentic work legible to executives: current estate, trust boundaries, incidents, value, lessons, and decisions needed.")}</p>
-        </div>
-        <div class="note-list">
-          ${operatingNotes.map((note) => `<article class="note-panel">
-            <span>${escapeHtml(note.label)}</span>
-            <h3>${escapeHtml(note.title)}</h3>
-            <p>${escapeHtml(note.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section cta" id="conversation">
-      <div class="section-inner cta-panel">
-        <div>
-          <p class="eyebrow">${escapeHtml(site.cta_eyebrow || "Useful first conversation")}</p>
-          <h2>${escapeHtml(site.cta_title || "Start with the systems already shaping work.")}</h2>
-          <p>${escapeHtml(site.cta_body || "Which agents, pilots, vendor promises, and shadow workflows already need ownership, boundaries, and review?")}</p>
-        </div>
-        <div class="cta-actions">
-          <a class="button primary" href="${escapeHtml(finalAdvisoryHref)}"${funnelAttrsFor(site, "final_advisory_cta")}>${escapeHtml(site.cta_button_label || "Talk about the CAO role")}</a>
-        </div>
+        <p class="simple-guardrail">${escapeHtml(briefing.guardrail || "The briefing supports judgement. It does not replace legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.")}</p>
       </div>
     </section>
   </main>
@@ -2793,8 +3384,68 @@ ${matomoScriptTagFor(site)}  <style>
       <strong>${escapeHtml(site.name)}</strong>
       <div>${escapeHtml(site.domain)}</div>
     </div>
-    <div>${escapeHtml(site.footer_tagline || "Board-level ownership for agentic systems, governance, and operating cadence.")}</div>
+    <div>${escapeHtml(site.footer_tagline || "A short briefing on board-level ownership for agentic work.")}</div>
   </footer>
+  <script>
+    (() => {
+      const form = document.querySelector("[data-mailerlite-form]");
+      if (!form) return;
+
+      const status = form.querySelector("[data-form-status]");
+      const button = form.querySelector("button[type='submit']");
+      const defaultButtonText = button ? button.textContent : "";
+      const defaultError = form.dataset.errorMessage || "Sorry, the briefing signup could not be completed.";
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+
+        const body = new URLSearchParams();
+        const formData = new FormData(form);
+        for (const [key, value] of formData.entries()) body.append(key, value);
+
+        if (status) {
+          status.dataset.state = "";
+          status.textContent = "Joining...";
+        }
+        if (button) {
+          button.disabled = true;
+          button.textContent = "Joining...";
+        }
+
+        try {
+          const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+              "accept": "application/json",
+              "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
+            },
+            body,
+          });
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok || !payload.ok) {
+            throw new Error(payload.message || defaultError);
+          }
+
+          if (status) {
+            status.dataset.state = "success";
+            status.textContent = payload.message || form.dataset.successMessage || "Thank you.";
+          }
+          form.reset();
+        } catch (error) {
+          if (status) {
+            status.dataset.state = "error";
+            status.textContent = error.message || defaultError;
+          }
+        } finally {
+          if (button) {
+            button.disabled = false;
+            button.textContent = defaultButtonText;
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
 `;

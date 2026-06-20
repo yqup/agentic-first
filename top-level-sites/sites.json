@@ -191,8 +191,8 @@
       "primary_conversion": "cao_role_advisory_conversation",
       "measurement_note": "Track CAO role interest, implementation CTA clicks, and advisory landings from role and mandate language."
     },
-    "primary_action_label": "Read the mandate",
-    "secondary_action_label": "Discuss implementation",
+    "primary_action_label": "Join the briefing list",
+    "secondary_action_label": "Send me an example briefing",
     "brief_eyebrow": "The mandate",
     "brief_title": "Agentic AI needs an accountable operating owner.",
     "brief": "The Chief Agentic Officer turns board ambition into a governed operating system for agentic work.",
@@ -237,6 +237,116 @@
         "body": "Keep enough record of context, controls, judgements, and outcomes for leaders to defend the work afterwards."
       }
     ],
+    "briefing": {
+      "eyebrow": "Briefing for board-facing leaders",
+      "title": "Chief Agentic Officer Briefing",
+      "explainer_title": "What is a Chief Agentic Officer?",
+      "explainer_body": "A Chief Agentic Officer is the person or mandate that makes agentic work owned: what exists, what it may do, who can stop it, and what leaders can inspect afterwards.",
+      "summary": "A short UK and Europe-facing briefing for leaders who need clearer questions about agentic work before the next board, committee, regulator, investor, customer, or executive decision.",
+      "outcomes": [
+        "Understand what is changing.",
+        "See what needs ownership.",
+        "Take clearer questions into the next meeting."
+      ],
+      "role_points": [
+        "Where agentic work is already happening.",
+        "Who owns the boundary, stop condition, and evidence.",
+        "What needs a board, committee, or executive decision."
+      ],
+      "receive": [
+        "A short UK/EU signal scan across AI governance, cyber, resilience, disclosure, CSRD/ESRS, GDPR/data, board actions, and reputation.",
+        "A plain-English note on why the signal may matter.",
+        "A few board-ready questions to carry forward."
+      ],
+      "sample": {
+        "eyebrow": "Example question",
+        "title": "Which agentic workflows already need an owner?",
+        "date": "Board readiness watch",
+        "items": [
+          "What is already touching customers, data, disclosure, resilience, or external commitments?",
+          "Who can approve, stop, narrow, or escalate it?",
+          "What evidence would let leaders see the judgement afterwards?"
+        ]
+      },
+      "guardrail": "The briefing supports judgement. It does not replace legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.",
+      "primary_label": "Join the briefing list",
+      "secondary_label": "Send me an example briefing",
+      "form_subject": "Chief Agentic Officer Briefing signup",
+      "example_subject": "Example Chief Agentic Officer Briefing",
+      "success_message": "Thank you. Your Chief Agentic Officer Briefing signup has been received.",
+      "error_message": "Sorry, the briefing signup could not be completed. Please try again or use the example briefing link.",
+      "mailerlite": {
+        "endpoint": "/api/briefing-signup",
+        "group_id": "190738136197760503",
+        "form_id": "190738240719816107",
+        "share_url": "https://preview.mailerlite.io/forms/2458234/190738240719816107/share"
+      },
+      "issue_options": [
+        "AI governance",
+        "Cyber/resilience",
+        "Disclosure",
+        "CSRD/ESRS",
+        "GDPR/data",
+        "Board actions",
+        "Other"
+      ],
+      "role_options": [
+        "Board / NED",
+        "Chair",
+        "C-suite / executive",
+        "CEO",
+        "COO",
+        "CFO",
+        "General Counsel",
+        "CRO / risk",
+        "CISO / security",
+        "DPO / data protection",
+        "Company Secretary / governance",
+        "Chief of Staff / operator",
+        "Advisor / consultant",
+        "Investor / analyst",
+        "Other"
+      ],
+      "country_options": [
+        "Europe / pan-European",
+        "EU / European Union",
+        "United Kingdom",
+        "Ireland",
+        "France",
+        "Germany",
+        "Netherlands",
+        "Belgium",
+        "Luxembourg",
+        "Switzerland",
+        "Austria",
+        "Denmark",
+        "Finland",
+        "Norway",
+        "Sweden",
+        "Iceland",
+        "Spain",
+        "Portugal",
+        "Italy",
+        "Greece",
+        "Poland",
+        "Czechia",
+        "Slovakia",
+        "Hungary",
+        "Romania",
+        "Bulgaria",
+        "Croatia",
+        "Slovenia",
+        "Estonia",
+        "Latvia",
+        "Lithuania",
+        "Cyprus",
+        "Malta",
+        "Other Europe",
+        "United States",
+        "Canada",
+        "Other / global"
+      ]
+    },
     "tone_eyebrow": "Operating posture",
     "tone_title": "Firm boundaries. Useful autonomy. Visible judgement.",
     "tone_body": "The CAO is not a ceremonial title. It is the person or function that knows which agentic systems exist, what they can touch, when they stop, and how exceptions reach human judgement.",
