@@ -59,6 +59,8 @@ The installer:
 - host-checks ANI (`srv1339660`)
 - extracts to `/srv/apps/top-level-sites/releases/<release-id>`
 - updates `/srv/apps/top-level-sites/current`
+- links `/srv/apps/top-level-sites/shared/.env` into the current release if it
+  exists, so private runtime settings can stay outside git and releases
 - starts one container per site on `127.0.0.1:8211` through `8220`
 - serves `/matomo-config.json` and `/static/js/matomo-loader.js` for site IDs
   `5` through `14`
@@ -73,3 +75,23 @@ Do not change DNS until the installer finishes successfully.
 After it succeeds, point each domain's A record at ANI. If `www` hostnames are
 kept in the generated Caddy snippets, point each `www` hostname at ANI too, or
 make it a CNAME to the apex hostname.
+
+## Private Runtime Settings
+
+Keep secrets out of git and release archives. The installer will use this file
+when it exists:
+
+```text
+/srv/apps/top-level-sites/shared/.env
+```
+
+For the Chief Agentic Officer briefing signup, set:
+
+```text
+CHIEFAGENTICOFFICER_MAILERLITE_API_TOKEN=<MailerLite API token>
+```
+
+The generated Compose file passes that value only into the
+`chiefagenticofficer_com` container as `MAILERLITE_API_TOKEN`. Without this
+setting, `/api/briefing-signup` returns `missing_mailerlite_token` and no
+subscriber is created.

@@ -16,6 +16,8 @@ ARCHIVE_PATH="${2:?usage: install-on-ani.sh <release-id> <archive-path>}"
 APP_ROOT="/srv/apps/${APP_NAME}"
 RELEASES_DIR="${APP_ROOT}/releases"
 CURRENT_LINK="${APP_ROOT}/current"
+SHARED_DIR="${APP_ROOT}/shared"
+SHARED_ENV="${SHARED_DIR}/.env"
 RECEIPTS_DIR="/srv/deploy-state/${APP_NAME}/receipts"
 CADDY_SITES_DIR="/etc/caddy/sites"
 CADDY_BACKUP_DIR="/etc/caddy/sites.backups/${RELEASE_ID}"
@@ -51,7 +53,7 @@ cleanup() { rm -rf "${WORK_DIR}"; }
 trap cleanup EXIT
 
 say "Create release directory"
-mkdir -p "${RELEASES_DIR}" "${RECEIPTS_DIR}" "${CADDY_BACKUP_DIR}"
+mkdir -p "${RELEASES_DIR}" "${SHARED_DIR}" "${RECEIPTS_DIR}" "${CADDY_BACKUP_DIR}"
 rm -rf "${RELEASE_DIR}"
 mkdir -p "${RELEASE_DIR}"
 
@@ -69,6 +71,9 @@ fi
 
 say "Update current symlink"
 ln -sfn "${RELEASE_DIR}" "${CURRENT_LINK}"
+if [ -f "${SHARED_ENV}" ]; then
+  ln -sfn "${SHARED_ENV}" "${CURRENT_LINK}/.env"
+fi
 
 say "Start per-site containers"
 cd "${CURRENT_LINK}"
@@ -121,6 +126,9 @@ say "Write receipt"
   echo "archive: ${ARCHIVE_PATH}"
   echo "app_root: ${APP_ROOT}"
   echo "current: ${CURRENT_LINK}"
+  if [ -f "${SHARED_ENV}" ]; then
+    echo "shared_env: ${SHARED_ENV}"
+  fi
   echo "domains:"
   for i in "${!DOMAINS[@]}"; do
     echo "  - domain: ${DOMAINS[$i]}"
