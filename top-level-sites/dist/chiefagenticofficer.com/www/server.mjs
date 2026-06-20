@@ -193,6 +193,8 @@ async function handleMailerLiteSignup(req, res) {
 
   const basePayload = {
     email,
+    status: "active",
+    resubscribe: true,
     groups: [String(config.mailerlite.groupId)],
     fields: pruneEmpty(fullFields),
   };
