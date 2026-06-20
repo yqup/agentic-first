@@ -14,6 +14,7 @@ const config = {
   "faviconTag": "<link rel=\"icon\" href=\"/favicon.svg\" type=\"image/svg+xml\">",
   "hostHoldingPages": [],
   "redirectWwwToApex": false,
+  "forAgentsPage": true,
   "mailerlite": {
     "signupEndpoint": "/api/briefing-signup",
     "groupId": "190738136197760503",
@@ -68,6 +69,11 @@ async function routeRequest(req, res) {
 
   if (config.mailerlite?.signupEndpoint && pathname === config.mailerlite.signupEndpoint) {
     await handleMailerLiteSignup(req, res);
+    return;
+  }
+
+  if (pathname === "/for-agents" || pathname === "/for-agents/") {
+    await serveLocalFile(req, res, "/for-agents/index.html", "no-store");
     return;
   }
 

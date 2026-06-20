@@ -16,7 +16,9 @@
     "summary": "The board-level operating role for agentic AI: ownership, boundaries, assurance, value, and human judgement in one accountable mandate."
   },
   "links": {
-    "website": "https://chiefagenticofficer.com"
+    "website": "https://chiefagenticofficer.com",
+    "for_agents": "https://chiefagenticofficer.com/for-agents/",
+    "llms": "https://chiefagenticofficer.com/llms.txt"
   },
   "contact": {
     "preferred_channel": "form",
@@ -29,5 +31,41 @@
     "primary_conversion": "cao_role_advisory_conversation",
     "primary_destination": "https://www.tonywood.org/advisory/",
     "campaign": "chiefagenticofficer_to_tonywood_advisory"
-  }
+  },
+  "briefing": {
+    "name": "Chief Agentic Officer Briefing",
+    "purpose": "The Chief Agentic Officer Briefing helps board-facing leaders notice the UK/EU signals that may affect how agentic work is owned, governed, evidenced, narrowed, stopped, funded, or escalated.",
+    "focus": "Most AI news is US-, China-, vendor-, or productivity-led. This briefing looks instead for UK and European governance, risk, compliance, resilience, disclosure, data, reputation, and board-action signals that a board-facing leader may need to understand.",
+    "guardrail": "The briefing supports judgement. It does not replace legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement."
+  },
+  "briefing_categories": [
+    {
+      "name": "AI governance",
+      "meaning": "Ownership, decision rights, assurance, risk appetite, human judgement, and accountable use of AI or agentic systems."
+    },
+    {
+      "name": "Cyber/resilience",
+      "meaning": "Cybersecurity, operational resilience, incident readiness, third-party dependency, business continuity, and systems that must keep working under pressure."
+    },
+    {
+      "name": "Disclosure",
+      "meaning": "Signals that may affect what leaders say to boards, regulators, investors, customers, markets, or other external stakeholders."
+    },
+    {
+      "name": "CSRD/ESRS",
+      "meaning": "European sustainability reporting, assurance, data, governance, and evidence obligations connected to CSRD and ESRS."
+    },
+    {
+      "name": "GDPR/data",
+      "meaning": "Personal data, lawful basis, data protection, privacy, records, data movement, and data-use boundaries."
+    },
+    {
+      "name": "Board actions",
+      "meaning": "Items that may require a board, committee, chair, company secretary, executive, or accountable owner to approve, stop, narrow, fund, review, or escalate."
+    },
+    {
+      "name": "Other",
+      "meaning": "Signals that do not fit the named categories but may still matter for UK/EU board readiness, reputation, customer trust, or practical operating judgement."
+    }
+  ]
 }

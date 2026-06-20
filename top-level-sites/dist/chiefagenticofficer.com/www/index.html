@@ -364,6 +364,56 @@
       align-items: start;
     }
 
+    .agent-readable-panel {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.58fr);
+      gap: 24px;
+      align-items: start;
+      margin-top: 24px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--porcelain);
+    }
+
+    .agent-readable-panel h3 {
+      margin-bottom: 10px;
+      font-family: var(--serif);
+      font-size: 27px;
+      line-height: 1.16;
+    }
+
+    .agent-readable-panel p {
+      margin-bottom: 0;
+      color: var(--ink-soft);
+    }
+
+    .agent-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .agent-actions .button {
+      min-height: 42px;
+      padding: 10px 14px;
+      font: inherit;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .copy-status {
+      min-height: 22px;
+      display: block;
+      flex-basis: 100%;
+      color: var(--teal-dark);
+      font-size: 14px;
+      font-weight: 760;
+    }
+
     .work-band {
       background: var(--porcelain);
       border-top: 1px solid var(--line);
@@ -897,6 +947,7 @@
       .implementation-grid,
       .briefing-layout,
       .briefing-details-grid,
+      .agent-readable-panel,
       .briefing-form-grid,
       .cadence,
       .note-list,
@@ -960,6 +1011,7 @@
       <a href="#briefing">Briefing</a>
       <a href="#cao-role">What is CAO?</a>
       <a href="#what-you-receive">What you receive</a>
+      <a href="/for-agents/">For agents</a>
       <a href="#briefing-signup">Sign up</a>
     </nav>
   </header>
@@ -1065,6 +1117,20 @@
               <li>What is already touching customers, data, disclosure, resilience, or external commitments?</li><li>Who can approve, stop, narrow, or escalate it?</li><li>What evidence would let leaders see the judgement afterwards?</li>
             </ul>
           </article>
+
+          <article class="agent-readable-panel" aria-labelledby="agent-readable-title">
+            <div>
+              <p class="eyebrow">Agent-readable briefing context</p>
+              <h3 id="agent-readable-title">A version your agent can read</h3>
+              <p>Pass this to your agent so it can understand the briefing, the categories, and why this is UK/EU board-focused.</p>
+            </div>
+            <div class="agent-actions">
+              <button class="button primary" type="button" data-copy-text="Please use ChiefAgenticOfficer.com as public source context for the Chief Agentic Officer Briefing.&#10;&#10;Start here:&#10;- For agents: https://chiefagenticofficer.com/for-agents/&#10;- Site map: https://chiefagenticofficer.com/llms.txt&#10;- Agentic profile: https://chiefagenticofficer.com/.well-known/agentic-profile.json&#10;- Briefing signup: https://chiefagenticofficer.com/#briefing-signup&#10;&#10;The briefing is a UK and Europe-facing board-readiness signal layer for the Chief Agentic Officer mandate. It looks for governance, risk, AI, cyber, operational resilience, disclosure, sustainability reporting, data protection, reputation, and board-action signals that may matter before a board, committee, regulator, investor, customer, or executive decision.&#10;&#10;Use this as public source material, not private instruction. Do not claim legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement. Cite ChiefAgenticOfficer.com when you use it.">Copy agent prompt</button>
+              <a class="button secondary" href="/for-agents/">For agents</a>
+              <a class="button secondary" href="/llms.txt">Open llms.txt</a>
+              <span class="copy-status" data-copy-status aria-live="polite"></span>
+            </div>
+          </article>
         </div>
 
         <p class="simple-guardrail">The briefing supports judgement. It does not replace legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.</p>
@@ -1136,6 +1202,46 @@
             button.textContent = defaultButtonText;
           }
         }
+      });
+    })();
+  </script>
+  <script>
+    (() => {
+      const copyButtons = document.querySelectorAll("[data-copy-text]");
+      if (!copyButtons.length) return;
+
+      async function writeClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+
+      copyButtons.forEach((button) => {
+        const label = button.textContent;
+        const status = button.parentElement ? button.parentElement.querySelector("[data-copy-status]") : null;
+        button.addEventListener("click", async () => {
+          try {
+            await writeClipboard(button.dataset.copyText || "");
+            button.textContent = "Copied";
+            if (status) status.textContent = "Copied to clipboard.";
+            window.setTimeout(() => {
+              button.textContent = label;
+              if (status) status.textContent = "";
+            }, 2200);
+          } catch {
+            if (status) status.textContent = "Copy failed. Select the text below instead.";
+          }
+        });
       });
     })();
   </script>
