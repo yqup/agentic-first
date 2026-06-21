@@ -63,21 +63,27 @@ with:
 CHIEFAGENTICOFFICER_MAILERLITE_API_TOKEN=<token>
 ```
 
-## Agent-readable briefing context
+## Public MCP and agent-readable context
 
-The Chief Agentic Officer site exposes a public, agent-readable layer for the briefing:
+The Chief Agentic Officer site also exposes public, agent-readable context for the briefing:
 
-- Main-page panel: `A version your agent can read`
 - Human page: `https://chiefagenticofficer.com/for-agents/`
 - Agent map: `https://chiefagenticofficer.com/llms.txt`
 - Structured profile: `https://chiefagenticofficer.com/.well-known/agentic-profile.json`
+- Public MCP: `https://chiefagenticofficer.com/mcp`
 
-The main-page panel should stay compact: it helps a reader pass the site to an assistant so the assistant understands the briefing, the signup categories, and why the briefing is UK/EU board-focused.
+The main page panel, "A version your agent can read", should tell readers to pass the site to their assistant so it can understand the briefing, the categories, why the briefing is UK/EU board-focused, and how to use the public MCP when supported.
 
-The generated public context is descriptive source material only. It does not grant private access, authority to act, or legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.
+The copied agent prompt should lead with the MCP path:
 
-Current top-level-sites boundary:
+```text
+If your assistant supports MCP, connect to https://chiefagenticofficer.com/mcp first. Then read /for-agents/, /llms.txt, and /.well-known/agentic-profile.json.
+```
 
-- `/for-agents/`, `llms.txt`, and the agentic profile are served by the generated CAO site.
-- The MailerLite signup route remains separate at `/api/briefing-signup`.
-- This bundle no longer publishes or proxies a `/mcp` route for `chiefagenticofficer.com`; any future MCP service should be documented and deployed as a separate, explicit runtime.
+The MCP is public, read-only context for the Chief Agentic Officer Briefing. It helps agents search and read public briefing context, understand categories, and cite the site correctly. It does not grant private access, authority to act, or legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.
+
+Deployment notes:
+
+- The generated edge Caddy config routes `/mcp` to the public CAO MCP service.
+- The generated site still serves `/for-agents/`, `llms.txt`, and the agentic profile as static public context.
+- The MailerLite signup route is separate and should remain unchanged by MCP copy or routing work.

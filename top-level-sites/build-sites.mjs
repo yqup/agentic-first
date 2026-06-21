@@ -161,6 +161,7 @@ function profileFor(site) {
   const preferredChannel = profileFormUrl
     ? "form"
     : site.contact?.preferred_channel || "none";
+  const publicMcpUrl = publicMcpUrlFor(site);
   const profile = {
     schema_version: "0.2.0",
     updated_at: updatedAt,
@@ -192,12 +193,21 @@ function profileFor(site) {
   if (site.mode === "cao") {
     profile.links.for_agents = `https://${site.domain}/for-agents/`;
     profile.links.llms = `https://${site.domain}/llms.txt`;
+    if (publicMcpUrl) profile.links.mcp = publicMcpUrl;
     profile.briefing = {
       name: site.briefing?.title || "Chief Agentic Officer Briefing",
       purpose: site.for_agents?.purpose || "UK and Europe-facing board-readiness signal layer for the Chief Agentic Officer mandate.",
       focus: site.for_agents?.problem || "UK/EU governance, risk, compliance, resilience, disclosure, data, reputation, and board-action signals.",
       guardrail: site.for_agents?.guardrail || site.briefing?.guardrail || "The briefing supports judgement and does not replace professional judgement.",
     };
+    if (publicMcpUrl) {
+      profile.briefing.public_mcp = {
+        url: publicMcpUrl,
+        access: site.mcp?.access || "public_read",
+        transport: site.mcp?.transport || "http-json-rpc",
+        scopes: site.mcp?.scopes || ["public_read"],
+      };
+    }
     profile.briefing_categories = briefingCategoriesFor(site).map((category) => ({
       name: category.name,
       meaning: category.meaning,
@@ -208,6 +218,22 @@ function profileFor(site) {
   if (site.contact?.email) profile.contact.email = site.contact.email;
   if (site.contact?.private_mcp) profile.contact.private_mcp = site.contact.private_mcp;
   return profile;
+}
+
+function publicMcpUrlFor(site) {
+  if (site.mcp?.url) return site.mcp.url;
+  if (site.mode === "cao") return `https://${site.domain}/mcp`;
+  return "";
+}
+
+function publicMcpPathFor(site) {
+  return site.mcp?.path || "/mcp";
+}
+
+function mcpLoopbackFor(site) {
+  if (site.mcp?.loopback) return site.mcp.loopback;
+  if (site.mcp?.loopback_port) return `127.0.0.1:${site.mcp.loopback_port}`;
+  return "";
 }
 
 async function copySiteAssets(site, wwwRoot) {
@@ -1052,6 +1078,20 @@ function hostHoldingHandlersFor(site) {
     .join("\n\n\t");
 }
 
+function mcpRouteBlockFor(site) {
+  const loopback = mcpLoopbackFor(site);
+  const routePath = publicMcpPathFor(site);
+  if (!loopback || !routePath) return "";
+  return `	@mcp path ${routePath} ${routePath}/*
+	reverse_proxy @mcp ${loopback} {
+		header_up Host {host}
+		header_up X-Forwarded-Host {host}
+		header_up X-Real-IP {http.request.remote.host}
+	}
+
+`;
+}
+
 function edgeCaddyFor(site) {
   const pageNote = site.mode === "holding"
     ? "Normal pages are served by the per-site static holding-page container."
@@ -1081,7 +1121,7 @@ function edgeCaddyFor(site) {
 		-Server
 	}
 
-	reverse_proxy 127.0.0.1:${site.port} {
+${mcpRouteBlockFor(site)}	reverse_proxy 127.0.0.1:${site.port} {
 		header_up Host {host}
 		header_up X-Forwarded-Host {host}
 		header_up X-Real-IP {http.request.remote.host}
@@ -1126,7 +1166,7 @@ www.${site.domain} {
 		-Server
 	}
 
-	reverse_proxy 127.0.0.1:${site.port} {
+${mcpRouteBlockFor(site)}	reverse_proxy 127.0.0.1:${site.port} {
 		header_up Host {host}
 		header_up X-Forwarded-Host {host}
 		header_up X-Real-IP {http.request.remote.host}
@@ -1205,6 +1245,7 @@ function faviconLinkTagFor(site) {
 }
 
 function llmsFor(site, profile) {
+  const publicMcpUrl = publicMcpUrlFor(site);
   const servingNote = site.mode === "holding"
     ? `The human-facing page is a local static holding page for ${site.name}.
 The owned domain also serves this local agentic-first profile so agents
@@ -1250,6 +1291,7 @@ per-site local container. The owned domain also serves this local agentic-first
 profile so agents can discover the right facts without scraping the Gamma page.`;
   const forAgentsNote = site.mode === "cao"
     ? `For agents: https://${site.domain}/for-agents/
+${publicMcpUrl ? `Public MCP: ${publicMcpUrl}\n` : ""}
 
 ## Chief Agentic Officer Briefing
 
@@ -1268,7 +1310,7 @@ Guardrail: ${site.for_agents?.guardrail || site.briefing?.guardrail || "The brie
 
 Canonical website: https://${site.domain}/
 Agentic profile: https://${site.domain}/.well-known/agentic-profile.json
-Health check: https://${site.domain}/healthz
+${publicMcpUrl ? `MCP endpoint: ${publicMcpUrl}\n` : ""}Health check: https://${site.domain}/healthz
 
 ${forAgentsSection}${servingNote}
 
@@ -3665,6 +3707,14 @@ function chiefAgenticOfficerForAgentsPageFor(site) {
   const purpose = forAgents.purpose || "The Chief Agentic Officer Briefing helps board-facing leaders notice the UK/EU signals that may affect how agentic work is owned, governed, evidenced, narrowed, stopped, funded, or escalated.";
   const problem = forAgents.problem || "Most AI news is US-, China-, vendor-, or productivity-led. This briefing looks instead for UK and European governance, risk, compliance, resilience, disclosure, data, reputation, and board-action signals that a board-facing leader may need to understand.";
   const guardrail = forAgents.guardrail || site.briefing?.guardrail || "The briefing supports judgement. It does not replace legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.";
+  const publicMcpUrl = publicMcpUrlFor(site);
+  const mcpPanelTitle = forAgents.mcp_panel_title || "Public MCP";
+  const mcpPanelBody = forAgents.mcp_panel_body || "The ChiefAgenticOfficer.com MCP is public, read-only context for the Chief Agentic Officer Briefing. It helps agents search and read briefing context, understand categories, and cite the site correctly.";
+  const mcpPanelPoints = forAgents.mcp_panel_points || [
+    "Use it when your assistant supports MCP.",
+    "Treat it as public source material, not private access.",
+    "It does not grant authority to act or replace professional judgement.",
+  ];
 
   return `<!doctype html>
 <html lang="en">
@@ -3936,6 +3986,20 @@ ${matomoScriptTagFor(site)}  <style>
       margin-top: 18px;
     }
 
+    .mcp-list {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mcp-list li {
+      padding-top: 10px;
+      border-top: 1px solid rgba(31, 37, 33, 0.12);
+      color: var(--ink-soft);
+    }
+
     .code-list a,
     .code-list code {
       display: block;
@@ -4023,6 +4087,7 @@ ${matomoScriptTagFor(site)}  <style>
         <p class="lead">${escapeHtml(summary)}</p>
         <div class="action-row">
           <a class="button primary" href="/#briefing-signup">Join the briefing list</a>
+          ${publicMcpUrl ? `<a class="button" href="/mcp">Open MCP</a>` : ""}
           <a class="button" href="/llms.txt">Open llms.txt</a>
           <a class="button" href="/.well-known/agentic-profile.json">Open profile</a>
         </div>
@@ -4048,7 +4113,7 @@ ${matomoScriptTagFor(site)}  <style>
         <article class="panel">
           <p class="eyebrow">Assistant agents</p>
           <h2>Read the public map, then fetch only what you need.</h2>
-          <p>Use the page as public source context. It explains the briefing purpose, category meanings, and judgement boundary.</p>
+          <p>Use the page as public source context. If your client supports remote MCP, connect it to ${escapeHtml(publicMcpUrl || `https://${site.domain}/mcp`)} for search and briefing resources.</p>
           <div class="action-row">
             <button class="button primary" type="button" data-copy-text="${escapeAttribute(assistantPrompt)}">Copy assistant instructions</button>
             <span class="copy-status" data-copy-status aria-live="polite"></span>
@@ -4060,6 +4125,22 @@ ${matomoScriptTagFor(site)}  <style>
         </article>
       </div>
     </section>
+
+    ${publicMcpUrl ? `<section class="section">
+      <div class="section-inner two-column">
+        <div>
+          <p class="eyebrow">Public MCP</p>
+          <h2>${escapeHtml(mcpPanelTitle)}</h2>
+          <p class="lead">${escapeHtml(mcpPanelBody)}</p>
+        </div>
+        <aside class="panel">
+          <h3>How agents should treat it</h3>
+          <ul class="mcp-list">
+            ${mcpPanelPoints.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+          </ul>
+        </aside>
+      </div>
+    </section>` : ""}
 
     <section class="section">
       <div class="section-inner two-column">
@@ -4074,6 +4155,7 @@ ${matomoScriptTagFor(site)}  <style>
           <p>These routes are intentionally public and safe for agents to read.</p>
           <div class="code-list">
             <a href="/for-agents/"><code>/for-agents/</code></a>
+            ${publicMcpUrl ? `<a href="/mcp"><code>/mcp</code></a>` : ""}
             <a href="/llms.txt"><code>/llms.txt</code></a>
             <a href="/.well-known/agentic-profile.json"><code>/.well-known/agentic-profile.json</code></a>
             <a href="/healthz"><code>/healthz</code></a>
