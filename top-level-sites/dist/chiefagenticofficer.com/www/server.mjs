@@ -406,18 +406,47 @@ function notFound(res) {
 
 async function proxyMcp(req, res, url) {
   const targets = (config.mcpProxy.targets || [config.mcpProxy.target]).filter(Boolean);
-  const body = await readProxyBody(req, 1024 * 1024);
-  let lastError = null;
-  for (const targetValue of targets) {
-    const result = await proxyMcpToTarget(req, res, url, body, targetValue);
-    if (result.ok) return;
-    lastError = result.error;
-  }
-  console.error("mcp_proxy_error", lastError || new Error("no MCP proxy target succeeded"));
-  if (!res.headersSent) {
-    res.writeHead(502, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
-  }
-  res.end("bad gateway\n");
+  await proxyMcpStreamToTarget(req, res, url, targets[0] || config.mcpProxy.target);
+}
+
+function proxyMcpStreamToTarget(req, res, url, targetValue) {
+  return new Promise((resolve) => {
+    const target = new URL(targetValue);
+    const upstreamReq = httpRequest({
+      protocol: target.protocol,
+      hostname: target.hostname,
+      port: target.port || 80,
+      method: req.method,
+      path: url.pathname + url.search,
+      headers: mcpProxyHeaders(req, target),
+    }, (upstreamRes) => {
+      const statusCode = upstreamRes.statusCode || 502;
+      const headers = responseHeaders(upstreamRes.headers);
+      headers["x-cao-mcp-proxy"] = "top-level-sites";
+      res.writeHead(statusCode, headers);
+      if (req.method === "HEAD") {
+        res.end();
+        resolve();
+        return;
+      }
+      upstreamRes.pipe(res);
+      upstreamRes.on("end", resolve);
+    });
+
+    upstreamReq.setTimeout(5000, () => {
+      upstreamReq.destroy(new Error("MCP proxy target timed out: " + targetValue));
+    });
+    upstreamReq.on("error", (error) => {
+      console.error("mcp_proxy_error", error);
+      if (!res.headersSent) {
+        res.writeHead(502, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
+      }
+      res.end("bad gateway\n");
+      resolve();
+    });
+
+    req.pipe(upstreamReq);
+  });
 }
 
 function proxyMcpToTarget(req, res, url, body, targetValue) {
