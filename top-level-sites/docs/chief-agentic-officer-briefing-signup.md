@@ -81,3 +81,21 @@ Current top-level-sites boundary:
 - `/for-agents/`, `llms.txt`, and the agentic profile are served by the generated CAO site.
 - The MailerLite signup route remains separate at `/api/briefing-signup`.
 - This bundle no longer publishes or proxies a `/mcp` route for `chiefagenticofficer.com`; any future MCP service should be documented and deployed as a separate, explicit runtime.
+
+## 2026-06-21 deployment note
+
+The successful ANI deploy used release `top-level-sites-20260621T153854Z` from commit `4af180a` and wrote the receipt:
+
+```text
+/srv/deploy-state/top-level-sites/receipts/top-level-sites-20260621T153854Z.yaml
+```
+
+That release included the CAO `/mcp` edge route because the installed ANI deploy gate rejected release `top-level-sites-20260621T153732Z` with:
+
+```text
+ERROR: CAO Caddy fragment must include /mcp matcher
+```
+
+Afterwards, commit `ac1db11` reverted the `/mcp` route and returned the Agentic First top-level-sites source to the current boundary above: `/for-agents/`, `llms.txt`, and the structured profile are the public agent-readable surfaces in this bundle.
+
+Before deploying the current source state, either update the ANI deploy gate so it no longer requires the CAO `/mcp` matcher, or intentionally restore an explicit CAO `/mcp` runtime and route. Do not treat this as a MailerLite change; the signup endpoint and server-side token handoff remain separate.
