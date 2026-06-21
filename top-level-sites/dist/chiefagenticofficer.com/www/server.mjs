@@ -1,6 +1,6 @@
 import { createReadStream } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
-import { createServer, request as httpRequest } from "node:http";
+import { createServer } from "node:http";
 import { request as httpsRequest } from "node:https";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,23 +15,6 @@ const config = {
   "hostHoldingPages": [],
   "redirectWwwToApex": false,
   "forAgentsPage": true,
-  "mcpProxy": {
-    "path": "/mcp",
-    "target": "http://172.25.0.1:8234",
-    "targets": [
-      "http://172.25.0.1:8234",
-      "http://172.24.0.1:8234",
-      "http://172.26.0.1:8234",
-      "http://172.27.0.1:8234",
-      "http://172.28.0.1:8234",
-      "http://172.23.0.1:8234",
-      "http://172.22.0.1:8234",
-      "http://172.21.0.1:8234",
-      "http://172.20.0.1:8234",
-      "http://172.19.0.1:8234",
-      "http://172.17.0.1:8234"
-    ]
-  },
   "mailerlite": {
     "signupEndpoint": "/api/briefing-signup",
     "groupId": "190738136197760503",
@@ -40,7 +23,6 @@ const config = {
 };
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || 8080);
-const listenHost = process.env.LISTEN_HOST || "0.0.0.0";
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
 const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "snaxk", "gamma"].includes(config.mode);
 
@@ -71,8 +53,8 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(listenPort, listenHost, () => {
-  console.log("site_server_ready domain=" + config.domain + " mode=" + config.mode + " host=" + listenHost + " port=" + listenPort);
+server.listen(listenPort, "0.0.0.0", () => {
+  console.log("site_server_ready domain=" + config.domain + " mode=" + config.mode + " port=" + listenPort);
 });
 
 async function routeRequest(req, res) {
@@ -82,10 +64,6 @@ async function routeRequest(req, res) {
 
   if (config.redirectWwwToApex && requestHost === "www." + hostOnly(config.domain)) {
     redirectToApex(req, res, url);
-    return;
-  }
-  if (isMcpProxyPath(pathname)) {
-    await proxyMcp(req, res, url);
     return;
   }
 
@@ -127,11 +105,6 @@ function isLocalStaticPath(pathname) {
     || pathname.startsWith("/.well-known/")
     || pathname.startsWith("/assets/")
     || pathname.startsWith("/static/");
-}
-
-function isMcpProxyPath(pathname) {
-  const proxyPath = config.mcpProxy?.path;
-  return Boolean(proxyPath) && (pathname === proxyPath || pathname.startsWith(proxyPath + "/"));
 }
 
 async function serveLocalFile(req, res, requestPath, cacheControl = "public, max-age=300") {
@@ -404,106 +377,6 @@ function notFound(res) {
   res.end("not found\n");
 }
 
-async function proxyMcp(req, res, url) {
-  const targets = (config.mcpProxy.targets || [config.mcpProxy.target]).filter(Boolean);
-  await proxyMcpStreamToTarget(req, res, url, targets[0] || config.mcpProxy.target);
-}
-
-function proxyMcpStreamToTarget(req, res, url, targetValue) {
-  return new Promise((resolve) => {
-    const target = new URL(targetValue);
-    const upstreamReq = httpRequest({
-      protocol: target.protocol,
-      hostname: target.hostname,
-      port: target.port || 80,
-      method: req.method,
-      path: url.pathname + url.search,
-      headers: mcpProxyHeaders(req, target),
-    }, (upstreamRes) => {
-      const statusCode = upstreamRes.statusCode || 502;
-      const headers = responseHeaders(upstreamRes.headers);
-      headers["x-cao-mcp-proxy"] = "top-level-sites";
-      res.writeHead(statusCode, headers);
-      if (req.method === "HEAD") {
-        res.end();
-        resolve();
-        return;
-      }
-      upstreamRes.pipe(res);
-      upstreamRes.on("end", resolve);
-    });
-
-    upstreamReq.setTimeout(5000, () => {
-      upstreamReq.destroy(new Error("MCP proxy target timed out: " + targetValue));
-    });
-    upstreamReq.on("error", (error) => {
-      console.error("mcp_proxy_error", error);
-      if (!res.headersSent) {
-        res.writeHead(502, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
-      }
-      res.end("bad gateway\n");
-      resolve();
-    });
-
-    req.pipe(upstreamReq);
-  });
-}
-
-function proxyMcpToTarget(req, res, url, body, targetValue) {
-  return new Promise((resolve) => {
-    const target = new URL(targetValue);
-    const upstreamReq = httpRequest({
-      protocol: target.protocol,
-      hostname: target.hostname,
-      port: target.port || 80,
-      method: req.method,
-      path: url.pathname + url.search,
-      headers: mcpProxyHeaders(req, target),
-    }, (upstreamRes) => {
-      const statusCode = upstreamRes.statusCode || 502;
-      const headers = responseHeaders(upstreamRes.headers);
-      headers["x-cao-mcp-proxy"] = "top-level-sites";
-      res.writeHead(statusCode, headers);
-      if (req.method === "HEAD") {
-        res.end();
-        resolve();
-        return;
-      }
-      upstreamRes.pipe(res);
-      upstreamRes.on("end", () => resolve({ ok: true }));
-    });
-
-    upstreamReq.setTimeout(1200, () => {
-      upstreamReq.destroy(new Error("MCP proxy target timed out: " + targetValue));
-    });
-    upstreamReq.on("error", (error) => {
-      resolve({ ok: false, error });
-    });
-
-    if (body.length > 0) upstreamReq.write(body);
-    upstreamReq.end();
-  });
-}
-
-function readProxyBody(req, limitBytes) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    let total = 0;
-    req.on("data", (chunk) => {
-      total += chunk.length;
-      if (total > limitBytes) {
-        reject(new Error("proxy request body too large"));
-        req.destroy();
-        return;
-      }
-      chunks.push(chunk);
-    });
-    req.on("end", () => resolve(Buffer.concat(chunks)));
-    req.on("error", reject);
-    req.resume();
-  });
-}
-
 function proxyGamma(req, res) {
   return new Promise((resolve) => {
     const upstreamUrl = new URL(req.url || "/", config.gammaOrigin);
@@ -580,26 +453,6 @@ function upstreamHeaders(req) {
   }
   headers.host = config.domain;
   headers["accept-encoding"] = "identity";
-  headers["x-forwarded-host"] = req.headers.host || config.domain;
-  return headers;
-}
-
-function mcpProxyHeaders(req, target) {
-  const headers = { ...req.headers };
-  for (const name of [
-    "connection",
-    "host",
-    "keep-alive",
-    "proxy-authenticate",
-    "proxy-authorization",
-    "te",
-    "trailer",
-    "transfer-encoding",
-    "upgrade",
-  ]) {
-    delete headers[name];
-  }
-  headers.host = target.host;
   headers["x-forwarded-host"] = req.headers.host || config.domain;
   return headers;
 }
