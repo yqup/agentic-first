@@ -1049,6 +1049,7 @@ function readProxyBody(req, limitBytes) {
     });
     req.on("end", () => resolve(Buffer.concat(chunks)));
     req.on("error", reject);
+    req.resume();
   });
 }
 
