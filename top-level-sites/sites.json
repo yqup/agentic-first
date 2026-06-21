@@ -185,7 +185,7 @@
       "url": "https://chiefagenticofficer.com/mcp",
       "path": "/mcp",
       "loopback": "127.0.0.1:8234",
-      "container_proxy_url": "http://172.25.0.1:8234",
+      "host_network_proxy": true,
       "access": "public_read",
       "transport": "http-json-rpc",
       "scopes": ["public_read"]

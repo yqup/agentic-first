@@ -17,6 +17,7 @@ const config = {
 };
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || 8080);
+const listenHost = process.env.LISTEN_HOST || "0.0.0.0";
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
 const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "snaxk", "gamma"].includes(config.mode);
 
@@ -47,8 +48,8 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(listenPort, "0.0.0.0", () => {
-  console.log("site_server_ready domain=" + config.domain + " mode=" + config.mode + " port=" + listenPort);
+server.listen(listenPort, listenHost, () => {
+  console.log("site_server_ready domain=" + config.domain + " mode=" + config.mode + " host=" + listenHost + " port=" + listenPort);
 });
 
 async function routeRequest(req, res) {

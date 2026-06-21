@@ -465,16 +465,31 @@ function isLocalPageMode(mode) {
 function composeFor(items) {
   const services = items
     .map((site) => {
-      const envBlock = site.briefing?.mailerlite
+      const useHostNetwork = Boolean(site.mcp?.host_network_proxy);
+      const envLines = [];
+      if (site.briefing?.mailerlite) {
+        envLines.push("      MAILERLITE_API_TOKEN: ${CHIEFAGENTICOFFICER_MAILERLITE_API_TOKEN:-}");
+      }
+      if (useHostNetwork) {
+        envLines.push(`      PORT: "${site.port}"`);
+        envLines.push('      LISTEN_HOST: "127.0.0.1"');
+      }
+      const envBlock = envLines.length
         ? `    environment:
-      MAILERLITE_API_TOKEN: \${CHIEFAGENTICOFFICER_MAILERLITE_API_TOKEN:-}
+${envLines.join("\n")}
 `
         : "";
-      const extraHostsBlock = mcpLoopbackFor(site)
+      const extraHostsBlock = mcpLoopbackFor(site) && !useHostNetwork
         ? `    extra_hosts:
       - "host.docker.internal:host-gateway"
 `
         : "";
+      const networkBlock = useHostNetwork ? "    network_mode: host\n" : "";
+      const portsBlock = useHostNetwork
+        ? ""
+        : `    ports:
+      - "127.0.0.1:${site.port}:${nodeServerPort}"
+`;
       return `  ${site.service}:
     image: node:20-alpine
     container_name: site-${site.service}
@@ -482,9 +497,7 @@ function composeFor(items) {
     read_only: true
     user: node
     command: ["node", "/srv/site/server.mjs"]
-${envBlock}${extraHostsBlock}    ports:
-      - "127.0.0.1:${site.port}:${nodeServerPort}"
-    volumes:
+${envBlock}${extraHostsBlock}${networkBlock}${portsBlock}    volumes:
       - ./dist/${site.domain}/www:/srv/site:ro
     tmpfs:
       - /tmp
@@ -570,9 +583,12 @@ function nodeServerFor(site) {
   if (site.mode === "cao") serverConfig.forAgentsPage = true;
   if (mcpLoopbackFor(site)) {
     const loopbackPort = String(mcpLoopbackFor(site)).split(":").pop();
+    const defaultMcpProxyTarget = site.mcp?.host_network_proxy
+      ? `http://127.0.0.1:${loopbackPort}`
+      : `http://host.docker.internal:${loopbackPort}`;
     serverConfig.mcpProxy = {
       path: publicMcpPathFor(site),
-      target: site.mcp?.container_proxy_url || `http://host.docker.internal:${loopbackPort}`,
+      target: site.mcp?.container_proxy_url || defaultMcpProxyTarget,
     };
   }
   if (site.briefing?.mailerlite) {
@@ -791,6 +807,7 @@ import { fileURLToPath } from "node:url";
 const config = ${JSON.stringify(serverConfig, null, 2)};
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || ${nodeServerPort});
+const listenHost = process.env.LISTEN_HOST || "0.0.0.0";
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
 const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "snaxk", "gamma"].includes(config.mode);
 
@@ -821,8 +838,8 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(listenPort, "0.0.0.0", () => {
-  console.log("site_server_ready domain=" + config.domain + " mode=" + config.mode + " port=" + listenPort);
+server.listen(listenPort, listenHost, () => {
+  console.log("site_server_ready domain=" + config.domain + " mode=" + config.mode + " host=" + listenHost + " port=" + listenPort);
 });
 
 async function routeRequest(req, res) {

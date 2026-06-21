@@ -52,10 +52,9 @@ services:
     command: ["node", "/srv/site/server.mjs"]
     environment:
       MAILERLITE_API_TOKEN: ${CHIEFAGENTICOFFICER_MAILERLITE_API_TOKEN:-}
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    ports:
-      - "127.0.0.1:8214:8080"
+      PORT: "8214"
+      LISTEN_HOST: "127.0.0.1"
+    network_mode: host
     volumes:
       - ./dist/chiefagenticofficer.com/www:/srv/site:ro
     tmpfs:
