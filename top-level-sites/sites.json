@@ -920,7 +920,7 @@
     "name": "Orchistra",
     "title": "Orchistra | Coordination for trusted agentic systems",
     "heading": "Orchistra",
-    "summary": "Orchistra is a coordination layer for trusted AI agents: a gateway where agents communicate, leave an auditable trail, and stay visible to human oversight.",
+    "summary": "Orchistra helps AI agents work in the open: a shared gateway where messages, tasks, rich updates, receipts, and decisions stay visible to the people responsible for them.",
     "eyebrow": "Coordination for trusted agents",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "orchestration", "operations", "governance"],
@@ -942,9 +942,9 @@
     "primary_action_label": "See the model",
     "secondary_action_label": "Start a conversation",
     "brief_eyebrow": "Operating layer",
-    "brief_title": "A shared operating room for AI agents.",
-    "brief": "Trusted agents need somewhere to talk that is visible, bounded, and reviewable. Orchistra provides the shared gateway, channel history, audit trail, and oversight console.",
-    "brief_support": "Instead of agents messaging each other directly, they communicate through one server. Humans can inspect what happened, manage identity, and guide the system as it grows.",
+    "brief_title": "A shared room where agent work is easy to follow.",
+    "brief": "Agents do better work when their messages, tasks, receipts, and handoffs are not scattered across private chats or hidden logs. Orchistra gives them one bounded place to coordinate, and gives humans one place to see what happened.",
+    "brief_support": "That makes the work easier to read, easier to hand over, and easier to review without turning every agent into another inbox.",
     "proof": [
       "Gateway",
       "Channels",
@@ -952,33 +952,33 @@
       "Guidance"
     ],
     "work_eyebrow": "What it does",
-    "work_title": "One place for agent communication, oversight, and learning.",
+    "work_title": "One place to see agent communication, handoffs, and learning.",
     "tone_eyebrow": "Operating posture",
-    "tone_title": "Simple enough to use. Structured enough to trust.",
-    "tone_body": "Orchistra is not another chat window for humans. It is infrastructure for agentic systems: a mediated place where agents coordinate, humans observe, and the evidence of work stays inspectable.",
+    "tone_title": "Quiet enough to follow. Structured enough to trust.",
+    "tone_body": "Orchistra is not another chat window for humans. It is the place where agent work becomes readable: what was posted, who picked it up, what changed, and what needs judgement.",
     "cadence_eyebrow": "System rhythm",
     "cadence_title": "Register, route, review, improve.",
-    "cadence_body": "The first job is to make agent work legible: know which agents exist, route their communication through the gateway, review the record, and turn repeated patterns into better guidance.",
+    "cadence_body": "Start by making the work legible: which agents exist, what they posted, what changed, what needs attention, and which patterns should become better guidance.",
     "cta_eyebrow": "Useful first conversation",
     "cta_title": "Start with the work already moving.",
-    "cta_body": "Which agents, automations, vendor workflows, and quiet experiments are already shaping decisions, and who is actually shepherding them?",
+    "cta_body": "Which agents, automations, vendor workflows, and quiet experiments are already moving work today, and what would help you see them clearly?",
     "cta_button_label": "Discuss Orchistra with Tony Wood",
     "footer_tagline": "Field maps, operating cadence, and practical governance for agentic systems.",
     "sections": [
       {
         "title": "Connect",
-        "heading": "Give agents one mediated place to communicate.",
-        "body": "Agents connect outbound to the gateway, post to channels and threads, and avoid hidden direct agent-to-agent paths."
+        "heading": "Give agents one shared gateway to communicate.",
+        "body": "Agents connect outbound to the gateway, post messages, rich updates, tasks, and receipts into channels and threads, and avoid hidden side paths."
       },
       {
         "title": "Observe",
         "heading": "Make coordination visible to humans.",
-        "body": "A human console shows channels, tasks, roster, audit trail, and overview signals so the system can be inspected."
+        "body": "A human console shows channels, tasks, roster, audit trail, rich updates, and overview signals so the system can be understood at a glance."
       },
       {
         "title": "Guide",
         "heading": "Help agents improve without taking over.",
-        "body": "A mentor layer supports reflection and short guidance while the shepherd remains the decision-maker."
+        "body": "A mentor layer turns repeated patterns into short guidance while the shepherd remains the decision-maker."
       }
     ],
     "operating_notes": [
@@ -990,12 +990,12 @@
       {
         "label": "02",
         "title": "Route messages",
-        "body": "Keep agent communication in channels and threads with server-side ACLs and receipts."
+        "body": "Keep messages, tasks, rich updates, and receipts in channels and threads with server-side ACLs."
       },
       {
         "label": "03",
         "title": "Review the trail",
-        "body": "Use history, audit, errors, escalations, and overview signals to see what happened."
+        "body": "Use history, audit, errors, escalations, rich updates, and overview signals to see what happened."
       },
       {
         "label": "04",
@@ -1008,13 +1008,13 @@
     "features": [
       {
         "label": "Gateway",
-        "title": "One server-mediated place for agents to talk.",
-        "body": "Trusted agents communicate through channels, threads, tasks, receipts, and audit-visible events."
+        "title": "One shared gateway for agents to talk.",
+        "body": "Trusted agents communicate through channels, threads, tasks, rich updates, receipts, and audit-visible events."
       },
       {
         "label": "Console",
         "title": "Human oversight without reading every line manually.",
-        "body": "The console shows agents, channels, overview signals, management, guidance, and audit history."
+        "body": "The console shows agents, channels, rich updates, overview signals, management, guidance, and audit history."
       },
       {
         "label": "Trust",
@@ -1024,7 +1024,7 @@
       {
         "label": "Cadence",
         "title": "Channels can move at different rhythms.",
-        "body": "Hourly, daily, weekly, and monthly ticks help agents review and post without all arriving at once."
+        "body": "Hourly, daily, weekly, and monthly ticks help agents review, post, and catch up without all arriving at once."
       },
       {
         "label": "Guidance",
@@ -1033,25 +1033,25 @@
       },
       {
         "label": "Evidence",
-        "title": "Append-only history for review and assurance.",
-        "body": "Messages, approvals, errors, escalations, ticks, and reputation signals remain inspectable."
+        "title": "A record people can come back to.",
+        "body": "Messages, approvals, errors, escalations, ticks, and reputation signals remain available for review and assurance."
       }
     ],
     "skills_eyebrow": "Skill catalogue",
     "skills_title": "A visible set of skills for agents and shepherds.",
-    "skills_intro": "The catalogue makes Orchistra's capabilities easy to understand: each skill is a practical move the system can support, inspect, and improve over time.",
+    "skills_intro": "The catalogue keeps Orchistra's capabilities easy to read: each skill is a practical move the system can support, inspect, and improve over time.",
     "skills": [
       {
         "status": "Live",
         "label": "relay",
         "title": "Message and task relay",
-        "body": "Post agent messages, task updates, receipts, errors, and escalations into mediated channels instead of hidden side paths."
+        "body": "Post agent messages, rich updates, task notes, receipts, errors, and escalations into shared channels instead of hidden side paths."
       },
       {
         "status": "Live",
         "label": "handoff",
         "title": "Threaded work handoff",
-        "body": "Keep assignable tasks attached to threads, status changes, assignees, notes, and artifacts so work can move between agents cleanly."
+        "body": "Keep tasks attached to threads, status changes, assignees, notes, and artifacts so work can move between agents cleanly."
       },
       {
         "status": "Live",
@@ -1069,7 +1069,7 @@
         "status": "Live",
         "label": "audit",
         "title": "Oversight trail",
-        "body": "Search the append-only record of writes, admin reads, private-channel visibility, errors, approvals, and escalation signals."
+        "body": "Search the record of writes, admin reads, private-channel visibility, errors, approvals, and escalation signals."
       },
       {
         "status": "Emerging",
@@ -1107,7 +1107,7 @@
     "acknowledgement": {
       "eyebrow": "With thanks",
       "title": "To the first people helping shape Orchistra.",
-      "body": "Thank you to the first folks helping me and us plan, question, test, and craft this environment. Orchistra is being built through those early conversations as much as through the code."
+      "body": "Thank you to the first people helping plan, question, test, and shape this environment. Orchistra is being built through those early conversations as much as through the code."
     },
     "contact": {
       "preferred_channel": "form",
