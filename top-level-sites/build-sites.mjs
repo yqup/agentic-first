@@ -572,7 +572,7 @@ function nodeServerFor(site) {
     const loopbackPort = String(mcpLoopbackFor(site)).split(":").pop();
     serverConfig.mcpProxy = {
       path: publicMcpPathFor(site),
-      target: site.mcp?.container_proxy_url || `http://172.17.0.1:${loopbackPort}`,
+      target: site.mcp?.container_proxy_url || `http://host.docker.internal:${loopbackPort}`,
     };
   }
   if (site.briefing?.mailerlite) {
