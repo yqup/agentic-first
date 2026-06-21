@@ -470,6 +470,11 @@ function composeFor(items) {
       MAILERLITE_API_TOKEN: \${CHIEFAGENTICOFFICER_MAILERLITE_API_TOKEN:-}
 `
         : "";
+      const extraHostsBlock = mcpLoopbackFor(site)
+        ? `    extra_hosts:
+      - "host.docker.internal:host-gateway"
+`
+        : "";
       return `  ${site.service}:
     image: node:20-alpine
     container_name: site-${site.service}
@@ -477,7 +482,7 @@ function composeFor(items) {
     read_only: true
     user: node
     command: ["node", "/srv/site/server.mjs"]
-${envBlock}    ports:
+${envBlock}${extraHostsBlock}    ports:
       - "127.0.0.1:${site.port}:${nodeServerPort}"
     volumes:
       - ./dist/${site.domain}/www:/srv/site:ro
@@ -563,6 +568,13 @@ function nodeServerFor(site) {
     redirectWwwToApex: Boolean(site.redirect_www_to_apex),
   };
   if (site.mode === "cao") serverConfig.forAgentsPage = true;
+  if (mcpLoopbackFor(site)) {
+    const loopbackPort = String(mcpLoopbackFor(site)).split(":").pop();
+    serverConfig.mcpProxy = {
+      path: publicMcpPathFor(site),
+      target: site.mcp?.container_proxy_url || `http://host.docker.internal:${loopbackPort}`,
+    };
+  }
   if (site.briefing?.mailerlite) {
     serverConfig.mailerlite = {
       signupEndpoint: site.briefing.mailerlite.endpoint || "/api/briefing-signup",
@@ -771,7 +783,7 @@ function sendJson(res, status, payload) {
 
   return `import { createReadStream } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
-import { createServer } from "node:http";
+import { createServer, request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -822,6 +834,10 @@ async function routeRequest(req, res) {
     redirectToApex(req, res, url);
     return;
   }
+  if (isMcpProxyPath(pathname)) {
+    await proxyMcp(req, res, url);
+    return;
+  }
 ${mailerLiteRouteBlock}${forAgentsRouteBlock}
   if (isLocalStaticPath(pathname)) {
     const served = await serveLocalFile(req, res, pathname);
@@ -851,6 +867,11 @@ function isLocalStaticPath(pathname) {
     || pathname.startsWith("/.well-known/")
     || pathname.startsWith("/assets/")
     || pathname.startsWith("/static/");
+}
+
+function isMcpProxyPath(pathname) {
+  const proxyPath = config.mcpProxy?.path;
+  return Boolean(proxyPath) && (pathname === proxyPath || pathname.startsWith(proxyPath + "/"));
 }
 
 async function serveLocalFile(req, res, requestPath, cacheControl = "public, max-age=300") {
@@ -938,6 +959,43 @@ function notFound(res) {
   res.end("not found\\n");
 }
 
+function proxyMcp(req, res, url) {
+  return new Promise((resolve) => {
+    const target = new URL(config.mcpProxy.target);
+    const upstreamReq = httpRequest({
+      protocol: target.protocol,
+      hostname: target.hostname,
+      port: target.port || 80,
+      method: req.method,
+      path: url.pathname + url.search,
+      headers: mcpProxyHeaders(req, target),
+    }, (upstreamRes) => {
+      const statusCode = upstreamRes.statusCode || 502;
+      const headers = responseHeaders(upstreamRes.headers);
+      headers["x-cao-mcp-proxy"] = "top-level-sites";
+      res.writeHead(statusCode, headers);
+      if (req.method === "HEAD") {
+        res.end();
+        resolve();
+        return;
+      }
+      upstreamRes.pipe(res);
+      upstreamRes.on("end", resolve);
+    });
+
+    upstreamReq.on("error", (error) => {
+      console.error("mcp_proxy_error", error);
+      if (!res.headersSent) {
+        res.writeHead(502, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
+      }
+      res.end("bad gateway\\n");
+      resolve();
+    });
+
+    req.pipe(upstreamReq);
+  });
+}
+
 function proxyGamma(req, res) {
   return new Promise((resolve) => {
     const upstreamUrl = new URL(req.url || "/", config.gammaOrigin);
@@ -1014,6 +1072,26 @@ function upstreamHeaders(req) {
   }
   headers.host = config.domain;
   headers["accept-encoding"] = "identity";
+  headers["x-forwarded-host"] = req.headers.host || config.domain;
+  return headers;
+}
+
+function mcpProxyHeaders(req, target) {
+  const headers = { ...req.headers };
+  for (const name of [
+    "connection",
+    "host",
+    "keep-alive",
+    "proxy-authenticate",
+    "proxy-authorization",
+    "te",
+    "trailer",
+    "transfer-encoding",
+    "upgrade",
+  ]) {
+    delete headers[name];
+  }
+  headers.host = target.host;
   headers["x-forwarded-host"] = req.headers.host || config.domain;
   return headers;
 }
