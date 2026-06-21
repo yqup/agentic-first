@@ -62,3 +62,22 @@ with:
 ```text
 CHIEFAGENTICOFFICER_MAILERLITE_API_TOKEN=<token>
 ```
+
+## Agent-readable briefing context
+
+The Chief Agentic Officer site exposes a public, agent-readable layer for the briefing:
+
+- Main-page panel: `A version your agent can read`
+- Human page: `https://chiefagenticofficer.com/for-agents/`
+- Agent map: `https://chiefagenticofficer.com/llms.txt`
+- Structured profile: `https://chiefagenticofficer.com/.well-known/agentic-profile.json`
+
+The main-page panel should stay compact: it helps a reader pass the site to an assistant so the assistant understands the briefing, the signup categories, and why the briefing is UK/EU board-focused.
+
+The generated public context is descriptive source material only. It does not grant private access, authority to act, or legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.
+
+Current top-level-sites boundary:
+
+- `/for-agents/`, `llms.txt`, and the agentic profile are served by the generated CAO site.
+- The MailerLite signup route remains separate at `/api/briefing-signup`.
+- This bundle no longer publishes or proxies a `/mcp` route for `chiefagenticofficer.com`; any future MCP service should be documented and deployed as a separate, explicit runtime.
