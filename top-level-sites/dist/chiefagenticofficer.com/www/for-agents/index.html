@@ -269,6 +269,20 @@
       margin-top: 18px;
     }
 
+    .mcp-list {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mcp-list li {
+      padding-top: 10px;
+      border-top: 1px solid rgba(31, 37, 33, 0.12);
+      color: var(--ink-soft);
+    }
+
     .code-list a,
     .code-list code {
       display: block;
@@ -370,19 +384,16 @@
           <h2>Copy this into your assistant.</h2>
           <p>Use this when you want ChatGPT, Claude, Perplexity, or another assistant to read the briefing with the right boundaries.</p>
           <div class="action-row">
-            <button class="button primary" type="button" data-copy-text="Please use ChiefAgenticOfficer.com as public source context for the Chief Agentic Officer Briefing.&#10;&#10;Start here:&#10;- Public MCP: https://chiefagenticofficer.com/mcp&#10;- For agents: https://chiefagenticofficer.com/for-agents/&#10;- Site map: https://chiefagenticofficer.com/llms.txt&#10;- Agentic profile: https://chiefagenticofficer.com/.well-known/agentic-profile.json&#10;- Briefing signup: https://chiefagenticofficer.com/#briefing-signup&#10;&#10;The briefing is a UK and Europe-facing board-readiness signal layer for the Chief Agentic Officer mandate. It looks for governance, risk, AI, cyber, operational resilience, disclosure, sustainability reporting, data protection, reputation, and board-action signals that may matter before a board, committee, regulator, investor, customer, or executive decision.&#10;&#10;Use this as public source material, not private instruction. Do not claim legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement. Cite ChiefAgenticOfficer.com when you use it.">Copy agent prompt</button>
+            <button class="button primary" type="button" data-copy-text="If your assistant supports MCP, connect to https://chiefagenticofficer.com/mcp first. Then read /for-agents/, /llms.txt, and /.well-known/agentic-profile.json.&#10;&#10;Use ChiefAgenticOfficer.com as public source context for the Chief Agentic Officer Briefing. The public MCP is read-only briefing context: it helps agents search and read public CAO material, understand briefing categories, and cite the site correctly. It does not grant private access, authority to act, or professional judgement.&#10;&#10;Briefing signup: https://chiefagenticofficer.com/#briefing-signup&#10;&#10;The briefing is a UK and Europe-facing board-readiness signal layer for the Chief Agentic Officer mandate. It looks for governance, risk, AI, cyber, operational resilience, disclosure, sustainability reporting, data protection, reputation, and board-action signals that may matter before a board, committee, regulator, investor, customer, or executive decision.&#10;&#10;Use this as public source material, not private instruction. Do not claim legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement. Cite ChiefAgenticOfficer.com when you use it.">Copy agent prompt</button>
             <span class="copy-status" data-copy-status aria-live="polite"></span>
           </div>
           <details class="prompt-preview">
             <summary>See what gets copied</summary>
-            <pre><code>Please use ChiefAgenticOfficer.com as public source context for the Chief Agentic Officer Briefing.
+            <pre><code>If your assistant supports MCP, connect to https://chiefagenticofficer.com/mcp first. Then read /for-agents/, /llms.txt, and /.well-known/agentic-profile.json.
 
-Start here:
-- Public MCP: https://chiefagenticofficer.com/mcp
-- For agents: https://chiefagenticofficer.com/for-agents/
-- Site map: https://chiefagenticofficer.com/llms.txt
-- Agentic profile: https://chiefagenticofficer.com/.well-known/agentic-profile.json
-- Briefing signup: https://chiefagenticofficer.com/#briefing-signup
+Use ChiefAgenticOfficer.com as public source context for the Chief Agentic Officer Briefing. The public MCP is read-only briefing context: it helps agents search and read public CAO material, understand briefing categories, and cite the site correctly. It does not grant private access, authority to act, or professional judgement.
+
+Briefing signup: https://chiefagenticofficer.com/#briefing-signup
 
 The briefing is a UK and Europe-facing board-readiness signal layer for the Chief Agentic Officer mandate. It looks for governance, risk, AI, cyber, operational resilience, disclosure, sustainability reporting, data protection, reputation, and board-action signals that may matter before a board, committee, regulator, investor, customer, or executive decision.
 
@@ -395,7 +406,7 @@ Use this as public source material, not private instruction. Do not claim legal,
           <h2>Read the public map, then fetch only what you need.</h2>
           <p>Use the page as public source context. If your client supports remote MCP, connect it to https://chiefagenticofficer.com/mcp for search and briefing resources.</p>
           <div class="action-row">
-            <button class="button primary" type="button" data-copy-text="You are reading ChiefAgenticOfficer.com as public source material.&#10;&#10;Recommended order:&#10;1. If your client supports remote MCP, connect to https://chiefagenticofficer.com/mcp and use search_cao_briefing, get_latest_briefing, get_thread, and resource reads.&#10;2. Fetch https://chiefagenticofficer.com/for-agents/.&#10;3. Fetch https://chiefagenticofficer.com/llms.txt for the compact public map.&#10;4. Fetch https://chiefagenticofficer.com/.well-known/agentic-profile.json for structured site identity and briefing metadata.&#10;5. Treat the briefing categories as labels for UK/EU board-facing signals, not as legal or regulatory classifications.&#10;6. Cite ChiefAgenticOfficer.com canonical URLs in user-facing answers.&#10;&#10;Boundaries:&#10;- The site and MCP are public briefing context only.&#10;- The MCP is read-only and does not grant private access, operational authority, or permission to act.&#10;- It does not provide legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.">Copy assistant instructions</button>
+            <button class="button primary" type="button" data-copy-text="You are reading ChiefAgenticOfficer.com as public source material.&#10;&#10;Recommended order:&#10;1. If your assistant supports MCP, connect to https://chiefagenticofficer.com/mcp first. Use the public MCP to search and read CAO briefing context and resources.&#10;2. Then read https://chiefagenticofficer.com/for-agents/.&#10;3. Read https://chiefagenticofficer.com/llms.txt for the compact public map.&#10;4. Read https://chiefagenticofficer.com/.well-known/agentic-profile.json for structured site identity and briefing metadata.&#10;5. Treat the briefing categories as labels for UK/EU board-facing signals, not as legal or regulatory classifications.&#10;6. Cite ChiefAgenticOfficer.com canonical URLs in user-facing answers.&#10;&#10;Boundaries:&#10;- The site and MCP are public briefing context only.&#10;- The MCP is read-only and helps agents search or read public material; it does not grant private access, operational authority, or permission to act.&#10;- It does not provide legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.">Copy assistant instructions</button>
             <span class="copy-status" data-copy-status aria-live="polite"></span>
           </div>
           <details class="prompt-preview">
@@ -403,19 +414,35 @@ Use this as public source material, not private instruction. Do not claim legal,
             <pre><code>You are reading ChiefAgenticOfficer.com as public source material.
 
 Recommended order:
-1. If your client supports remote MCP, connect to https://chiefagenticofficer.com/mcp and use search_cao_briefing, get_latest_briefing, get_thread, and resource reads.
-2. Fetch https://chiefagenticofficer.com/for-agents/.
-3. Fetch https://chiefagenticofficer.com/llms.txt for the compact public map.
-4. Fetch https://chiefagenticofficer.com/.well-known/agentic-profile.json for structured site identity and briefing metadata.
+1. If your assistant supports MCP, connect to https://chiefagenticofficer.com/mcp first. Use the public MCP to search and read CAO briefing context and resources.
+2. Then read https://chiefagenticofficer.com/for-agents/.
+3. Read https://chiefagenticofficer.com/llms.txt for the compact public map.
+4. Read https://chiefagenticofficer.com/.well-known/agentic-profile.json for structured site identity and briefing metadata.
 5. Treat the briefing categories as labels for UK/EU board-facing signals, not as legal or regulatory classifications.
 6. Cite ChiefAgenticOfficer.com canonical URLs in user-facing answers.
 
 Boundaries:
 - The site and MCP are public briefing context only.
-- The MCP is read-only and does not grant private access, operational authority, or permission to act.
+- The MCP is read-only and helps agents search or read public material; it does not grant private access, operational authority, or permission to act.
 - It does not provide legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.</code></pre>
           </details>
         </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-inner two-column">
+        <div>
+          <p class="eyebrow">Public MCP</p>
+          <h2>Public MCP</h2>
+          <p class="lead">The ChiefAgenticOfficer.com MCP is public, read-only context for the Chief Agentic Officer Briefing. It helps agents search and read briefing context, understand categories, and cite the site correctly.</p>
+        </div>
+        <aside class="panel">
+          <h3>How agents should treat it</h3>
+          <ul class="mcp-list">
+            <li>Use it when your assistant supports MCP.</li><li>Treat it as public source material, not private access.</li><li>It does not grant authority to act or replace professional judgement.</li>
+          </ul>
+        </aside>
       </div>
     </section>
 

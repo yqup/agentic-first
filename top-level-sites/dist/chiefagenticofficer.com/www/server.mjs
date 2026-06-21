@@ -17,7 +17,7 @@ const config = {
   "forAgentsPage": true,
   "mcpProxy": {
     "path": "/mcp",
-    "target": "http://host.docker.internal:8234"
+    "target": "http://172.17.0.1:8234"
   },
   "mailerlite": {
     "signupEndpoint": "/api/briefing-signup",

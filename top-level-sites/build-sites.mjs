@@ -572,7 +572,7 @@ function nodeServerFor(site) {
     const loopbackPort = String(mcpLoopbackFor(site)).split(":").pop();
     serverConfig.mcpProxy = {
       path: publicMcpPathFor(site),
-      target: site.mcp?.container_proxy_url || `http://host.docker.internal:${loopbackPort}`,
+      target: site.mcp?.container_proxy_url || `http://172.17.0.1:${loopbackPort}`,
     };
   }
   if (site.briefing?.mailerlite) {
@@ -3786,6 +3786,13 @@ function chiefAgenticOfficerForAgentsPageFor(site) {
   const problem = forAgents.problem || "Most AI news is US-, China-, vendor-, or productivity-led. This briefing looks instead for UK and European governance, risk, compliance, resilience, disclosure, data, reputation, and board-action signals that a board-facing leader may need to understand.";
   const guardrail = forAgents.guardrail || site.briefing?.guardrail || "The briefing supports judgement. It does not replace legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.";
   const publicMcpUrl = publicMcpUrlFor(site);
+  const mcpPanelTitle = forAgents.mcp_panel_title || "Public MCP";
+  const mcpPanelBody = forAgents.mcp_panel_body || "The ChiefAgenticOfficer.com MCP is public, read-only context for the Chief Agentic Officer Briefing. It helps agents search and read briefing context, understand categories, and cite the site correctly.";
+  const mcpPanelPoints = forAgents.mcp_panel_points || [
+    "Use it when your assistant supports MCP.",
+    "Treat it as public source material, not private access.",
+    "It does not grant authority to act or replace professional judgement.",
+  ];
 
   return `<!doctype html>
 <html lang="en">
@@ -4057,6 +4064,20 @@ ${matomoScriptTagFor(site)}  <style>
       margin-top: 18px;
     }
 
+    .mcp-list {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mcp-list li {
+      padding-top: 10px;
+      border-top: 1px solid rgba(31, 37, 33, 0.12);
+      color: var(--ink-soft);
+    }
+
     .code-list a,
     .code-list code {
       display: block;
@@ -4182,6 +4203,22 @@ ${matomoScriptTagFor(site)}  <style>
         </article>
       </div>
     </section>
+
+    ${publicMcpUrl ? `<section class="section">
+      <div class="section-inner two-column">
+        <div>
+          <p class="eyebrow">Public MCP</p>
+          <h2>${escapeHtml(mcpPanelTitle)}</h2>
+          <p class="lead">${escapeHtml(mcpPanelBody)}</p>
+        </div>
+        <aside class="panel">
+          <h3>How agents should treat it</h3>
+          <ul class="mcp-list">
+            ${mcpPanelPoints.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+          </ul>
+        </aside>
+      </div>
+    </section>` : ""}
 
     <section class="section">
       <div class="section-inner two-column">
