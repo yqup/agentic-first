@@ -186,9 +186,25 @@ function notFound(res) {
   res.end("not found\n");
 }
 
-function proxyMcp(req, res, url) {
+async function proxyMcp(req, res, url) {
+  const targets = (config.mcpProxy.targets || [config.mcpProxy.target]).filter(Boolean);
+  const body = await readProxyBody(req, 1024 * 1024);
+  let lastError = null;
+  for (const targetValue of targets) {
+    const result = await proxyMcpToTarget(req, res, url, body, targetValue);
+    if (result.ok) return;
+    lastError = result.error;
+  }
+  console.error("mcp_proxy_error", lastError || new Error("no MCP proxy target succeeded"));
+  if (!res.headersSent) {
+    res.writeHead(502, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
+  }
+  res.end("bad gateway\n");
+}
+
+function proxyMcpToTarget(req, res, url, body, targetValue) {
   return new Promise((resolve) => {
-    const target = new URL(config.mcpProxy.target);
+    const target = new URL(targetValue);
     const upstreamReq = httpRequest({
       protocol: target.protocol,
       hostname: target.hostname,
@@ -207,19 +223,36 @@ function proxyMcp(req, res, url) {
         return;
       }
       upstreamRes.pipe(res);
-      upstreamRes.on("end", resolve);
+      upstreamRes.on("end", () => resolve({ ok: true }));
     });
 
+    upstreamReq.setTimeout(1200, () => {
+      upstreamReq.destroy(new Error("MCP proxy target timed out: " + targetValue));
+    });
     upstreamReq.on("error", (error) => {
-      console.error("mcp_proxy_error", error);
-      if (!res.headersSent) {
-        res.writeHead(502, { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" });
-      }
-      res.end("bad gateway\n");
-      resolve();
+      resolve({ ok: false, error });
     });
 
-    req.pipe(upstreamReq);
+    if (body.length > 0) upstreamReq.write(body);
+    upstreamReq.end();
+  });
+}
+
+function readProxyBody(req, limitBytes) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let total = 0;
+    req.on("data", (chunk) => {
+      total += chunk.length;
+      if (total > limitBytes) {
+        reject(new Error("proxy request body too large"));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on("end", () => resolve(Buffer.concat(chunks)));
+    req.on("error", reject);
   });
 }
 
