@@ -2,9 +2,12 @@
 
 Canonical website: https://chiefagenticofficer.com/
 Agentic profile: https://chiefagenticofficer.com/.well-known/agentic-profile.json
+MCP endpoint: https://chiefagenticofficer.com/mcp
 Health check: https://chiefagenticofficer.com/healthz
 
 For agents: https://chiefagenticofficer.com/for-agents/
+Public MCP: https://chiefagenticofficer.com/mcp
+
 
 ## Chief Agentic Officer Briefing
 
@@ -49,7 +52,8 @@ without scraping the page.
   "links": {
     "website": "https://chiefagenticofficer.com",
     "for_agents": "https://chiefagenticofficer.com/for-agents/",
-    "llms": "https://chiefagenticofficer.com/llms.txt"
+    "llms": "https://chiefagenticofficer.com/llms.txt",
+    "mcp": "https://chiefagenticofficer.com/mcp"
   },
   "contact": {
     "preferred_channel": "form",
@@ -67,7 +71,15 @@ without scraping the page.
     "name": "Chief Agentic Officer Briefing",
     "purpose": "The Chief Agentic Officer Briefing helps board-facing leaders notice the UK/EU signals that may affect how agentic work is owned, governed, evidenced, narrowed, stopped, funded, or escalated.",
     "focus": "Most AI news is US-, China-, vendor-, or productivity-led. This briefing looks instead for UK and European governance, risk, compliance, resilience, disclosure, data, reputation, and board-action signals that a board-facing leader may need to understand.",
-    "guardrail": "The briefing supports judgement. It does not replace legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement."
+    "guardrail": "The briefing supports judgement. It does not replace legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.",
+    "public_mcp": {
+      "url": "https://chiefagenticofficer.com/mcp",
+      "access": "public_read",
+      "transport": "http-json-rpc",
+      "scopes": [
+        "public_read"
+      ]
+    }
   },
   "briefing_categories": [
     {

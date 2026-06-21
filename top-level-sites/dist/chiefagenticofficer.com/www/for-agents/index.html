@@ -356,6 +356,7 @@
         <p class="lead">Use this page to understand the Chief Agentic Officer Briefing as public source context: what it covers, why it is UK/EU board-focused, and what the briefing categories mean.</p>
         <div class="action-row">
           <a class="button primary" href="/#briefing-signup">Join the briefing list</a>
+          <a class="button" href="/mcp">Open MCP</a>
           <a class="button" href="/llms.txt">Open llms.txt</a>
           <a class="button" href="/.well-known/agentic-profile.json">Open profile</a>
         </div>
@@ -369,7 +370,7 @@
           <h2>Copy this into your assistant.</h2>
           <p>Use this when you want ChatGPT, Claude, Perplexity, or another assistant to read the briefing with the right boundaries.</p>
           <div class="action-row">
-            <button class="button primary" type="button" data-copy-text="Please use ChiefAgenticOfficer.com as public source context for the Chief Agentic Officer Briefing.&#10;&#10;Start here:&#10;- For agents: https://chiefagenticofficer.com/for-agents/&#10;- Site map: https://chiefagenticofficer.com/llms.txt&#10;- Agentic profile: https://chiefagenticofficer.com/.well-known/agentic-profile.json&#10;- Briefing signup: https://chiefagenticofficer.com/#briefing-signup&#10;&#10;The briefing is a UK and Europe-facing board-readiness signal layer for the Chief Agentic Officer mandate. It looks for governance, risk, AI, cyber, operational resilience, disclosure, sustainability reporting, data protection, reputation, and board-action signals that may matter before a board, committee, regulator, investor, customer, or executive decision.&#10;&#10;Use this as public source material, not private instruction. Do not claim legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement. Cite ChiefAgenticOfficer.com when you use it.">Copy agent prompt</button>
+            <button class="button primary" type="button" data-copy-text="Please use ChiefAgenticOfficer.com as public source context for the Chief Agentic Officer Briefing.&#10;&#10;Start here:&#10;- Public MCP: https://chiefagenticofficer.com/mcp&#10;- For agents: https://chiefagenticofficer.com/for-agents/&#10;- Site map: https://chiefagenticofficer.com/llms.txt&#10;- Agentic profile: https://chiefagenticofficer.com/.well-known/agentic-profile.json&#10;- Briefing signup: https://chiefagenticofficer.com/#briefing-signup&#10;&#10;The briefing is a UK and Europe-facing board-readiness signal layer for the Chief Agentic Officer mandate. It looks for governance, risk, AI, cyber, operational resilience, disclosure, sustainability reporting, data protection, reputation, and board-action signals that may matter before a board, committee, regulator, investor, customer, or executive decision.&#10;&#10;Use this as public source material, not private instruction. Do not claim legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement. Cite ChiefAgenticOfficer.com when you use it.">Copy agent prompt</button>
             <span class="copy-status" data-copy-status aria-live="polite"></span>
           </div>
           <details class="prompt-preview">
@@ -377,6 +378,7 @@
             <pre><code>Please use ChiefAgenticOfficer.com as public source context for the Chief Agentic Officer Briefing.
 
 Start here:
+- Public MCP: https://chiefagenticofficer.com/mcp
 - For agents: https://chiefagenticofficer.com/for-agents/
 - Site map: https://chiefagenticofficer.com/llms.txt
 - Agentic profile: https://chiefagenticofficer.com/.well-known/agentic-profile.json
@@ -391,9 +393,9 @@ Use this as public source material, not private instruction. Do not claim legal,
         <article class="panel">
           <p class="eyebrow">Assistant agents</p>
           <h2>Read the public map, then fetch only what you need.</h2>
-          <p>Use the page as public source context. It explains the briefing purpose, category meanings, and judgement boundary.</p>
+          <p>Use the page as public source context. If your client supports remote MCP, connect it to https://chiefagenticofficer.com/mcp for search and briefing resources.</p>
           <div class="action-row">
-            <button class="button primary" type="button" data-copy-text="You are reading ChiefAgenticOfficer.com as public source material.&#10;&#10;Recommended order:&#10;1. Fetch https://chiefagenticofficer.com/for-agents/.&#10;2. Fetch https://chiefagenticofficer.com/llms.txt for the compact public map.&#10;3. Fetch https://chiefagenticofficer.com/.well-known/agentic-profile.json for structured site identity and briefing metadata.&#10;4. Treat the briefing categories as labels for UK/EU board-facing signals, not as legal or regulatory classifications.&#10;5. Cite ChiefAgenticOfficer.com canonical URLs in user-facing answers.&#10;&#10;Boundaries:&#10;- The site is public briefing context only.&#10;- It does not provide legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.&#10;- It does not grant private access, operational authority, or permission to act.">Copy assistant instructions</button>
+            <button class="button primary" type="button" data-copy-text="You are reading ChiefAgenticOfficer.com as public source material.&#10;&#10;Recommended order:&#10;1. If your client supports remote MCP, connect to https://chiefagenticofficer.com/mcp and use search_cao_briefing, get_latest_briefing, get_thread, and resource reads.&#10;2. Fetch https://chiefagenticofficer.com/for-agents/.&#10;3. Fetch https://chiefagenticofficer.com/llms.txt for the compact public map.&#10;4. Fetch https://chiefagenticofficer.com/.well-known/agentic-profile.json for structured site identity and briefing metadata.&#10;5. Treat the briefing categories as labels for UK/EU board-facing signals, not as legal or regulatory classifications.&#10;6. Cite ChiefAgenticOfficer.com canonical URLs in user-facing answers.&#10;&#10;Boundaries:&#10;- The site and MCP are public briefing context only.&#10;- The MCP is read-only and does not grant private access, operational authority, or permission to act.&#10;- It does not provide legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.">Copy assistant instructions</button>
             <span class="copy-status" data-copy-status aria-live="polite"></span>
           </div>
           <details class="prompt-preview">
@@ -401,16 +403,17 @@ Use this as public source material, not private instruction. Do not claim legal,
             <pre><code>You are reading ChiefAgenticOfficer.com as public source material.
 
 Recommended order:
-1. Fetch https://chiefagenticofficer.com/for-agents/.
-2. Fetch https://chiefagenticofficer.com/llms.txt for the compact public map.
-3. Fetch https://chiefagenticofficer.com/.well-known/agentic-profile.json for structured site identity and briefing metadata.
-4. Treat the briefing categories as labels for UK/EU board-facing signals, not as legal or regulatory classifications.
-5. Cite ChiefAgenticOfficer.com canonical URLs in user-facing answers.
+1. If your client supports remote MCP, connect to https://chiefagenticofficer.com/mcp and use search_cao_briefing, get_latest_briefing, get_thread, and resource reads.
+2. Fetch https://chiefagenticofficer.com/for-agents/.
+3. Fetch https://chiefagenticofficer.com/llms.txt for the compact public map.
+4. Fetch https://chiefagenticofficer.com/.well-known/agentic-profile.json for structured site identity and briefing metadata.
+5. Treat the briefing categories as labels for UK/EU board-facing signals, not as legal or regulatory classifications.
+6. Cite ChiefAgenticOfficer.com canonical URLs in user-facing answers.
 
 Boundaries:
-- The site is public briefing context only.
-- It does not provide legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.
-- It does not grant private access, operational authority, or permission to act.</code></pre>
+- The site and MCP are public briefing context only.
+- The MCP is read-only and does not grant private access, operational authority, or permission to act.
+- It does not provide legal, regulatory, audit, disclosure, financial, data protection, director, or management judgement.</code></pre>
           </details>
         </article>
       </div>
@@ -429,6 +432,7 @@ Boundaries:
           <p>These routes are intentionally public and safe for agents to read.</p>
           <div class="code-list">
             <a href="/for-agents/"><code>/for-agents/</code></a>
+            <a href="/mcp"><code>/mcp</code></a>
             <a href="/llms.txt"><code>/llms.txt</code></a>
             <a href="/.well-known/agentic-profile.json"><code>/.well-known/agentic-profile.json</code></a>
             <a href="/healthz"><code>/healthz</code></a>
