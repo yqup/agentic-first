@@ -12,13 +12,6 @@ chiefagenticofficer.com, www.chiefagenticofficer.com {
 		-Server
 	}
 
-	@mcp path /mcp /mcp/*
-	reverse_proxy @mcp 127.0.0.1:8234 {
-		header_up Host {host}
-		header_up X-Forwarded-Host {host}
-		header_up X-Real-IP {http.request.remote.host}
-	}
-
 	reverse_proxy 127.0.0.1:8214 {
 		header_up Host {host}
 		header_up X-Forwarded-Host {host}
