@@ -1524,9 +1524,9 @@ function yqupPageFor(site) {
   const secondary = site.ecosystem_secondary || [];
   const thinkingLinks = site.thinking_links || [];
   const queueUpPhrases = site.queue_up_phrases || [
-    "Why queue up for AI governance?",
-    "Why queue up for board clarity?",
-    "Why queue up for agent-readable system sites?",
+    "AI governance",
+    "Board clarity",
+    "Agent-readable system sites",
   ];
   const logo = site.brand_assets?.logo || "/assets/yqup-logo.svg";
   const heroHref = tonywoodFunnelUrlFor(site, "hero_discuss_advisory") || defaultTonywoodAdvisoryUrl;
@@ -1784,8 +1784,8 @@ ${matomoScriptTagFor(site)}  <style>
     .queue-phrases {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin: 26px 0 0;
+      gap: 9px;
+      margin: 24px 0 0;
       padding: 0;
       list-style: none;
     }
@@ -1794,12 +1794,12 @@ ${matomoScriptTagFor(site)}  <style>
       min-height: 34px;
       display: inline-flex;
       align-items: center;
-      padding: 7px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 6px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 4px;
-      color: rgba(255, 255, 255, 0.78);
-      font-size: 13px;
-      font-weight: 720;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 12px;
+      font-weight: 680;
     }
 
     .button.primary {
