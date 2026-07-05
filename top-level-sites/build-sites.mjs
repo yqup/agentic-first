@@ -7341,12 +7341,23 @@ ${matomoScriptTagFor(site)}  <style>
 }
 
 function orchistraPageFor(site) {
-  const proof = site.proof || [
+  const proofLabels = site.proof || [
     "Intent before motion",
     "Bounded agents",
     "Live signals",
     "Reviewable memory",
   ];
+  const operatingSignals = (site.operating_signals || proofLabels.map((label) => ({
+    label,
+    title: label,
+    body: "A visible part of the operating model that helps humans understand what agents are doing.",
+  }))).map((signal) => typeof signal === "string"
+    ? {
+        label: signal,
+        title: signal,
+        body: "A visible part of the operating model that helps humans understand what agents are doing.",
+      }
+    : signal);
   const routes = site.routes || site.sections || [];
   const operatingNotes = site.operating_notes || [];
   const features = site.features || [
@@ -7415,7 +7426,17 @@ function orchistraPageFor(site) {
   };
   const fallbackContactHref = site.contact?.form_url
     || (site.contact?.email ? `mailto:${site.contact.email}` : `https://${site.domain}/`);
-  const conversationHref = tonywoodFunnelUrlFor(site, "final_conversation_cta") || fallbackContactHref;
+  const caoFeeder = site.cao_feeder || {};
+  const caoUrl = caoFeeder.primary_url || "https://chiefagenticofficer.com/#briefing-signup";
+  const caoCampaign = caoFeeder.primary_campaign || "orchistra_to_chiefagenticofficer_briefing";
+  const caoStage = caoFeeder.primary_stage || "source_to_chiefagenticofficer_briefing";
+  const heroCaoHref = trackedOutboundUrlFor(site, caoUrl, "hero_cao_briefing", caoCampaign) || caoUrl;
+  const feederCaoHref = trackedOutboundUrlFor(site, caoUrl, caoFeeder.primary_content || "feeder_cao_briefing", caoCampaign) || caoUrl;
+  const platformUrl = caoFeeder.secondary_url || defaultTonywoodAdvisoryUrl;
+  const platformCampaign = caoFeeder.secondary_campaign || "orchistra_platform_interest_to_tonywood_advisory";
+  const platformStage = caoFeeder.secondary_stage || "source_to_tonywood_platform_interest";
+  const feederPlatformHref = trackedOutboundUrlFor(site, platformUrl, caoFeeder.secondary_content || "feeder_platform_interest", platformCampaign) || platformUrl;
+  const conversationHref = trackedOutboundUrlFor(site, platformUrl, "final_platform_interest_cta", platformCampaign) || fallbackContactHref;
 
   return `<!doctype html>
 <html lang="en">
@@ -7869,34 +7890,6 @@ ${matomoScriptTagFor(site)}  <style>
       color: var(--white);
     }
 
-    .signal-strip {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      border-bottom: 1px solid var(--line);
-      background: var(--white);
-    }
-
-    .signal-strip span {
-      min-height: 68px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 18px 24px;
-      border-right: 1px solid var(--line);
-      color: var(--hedge);
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    .signal-strip span::before {
-      content: "";
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: var(--signal);
-      box-shadow: 14px 0 0 var(--gold);
-    }
-
     .section {
       padding: 84px 40px;
     }
@@ -7904,6 +7897,69 @@ ${matomoScriptTagFor(site)}  <style>
     .section-inner {
       width: min(100%, 1180px);
       margin: 0 auto;
+    }
+
+    .signals-band {
+      padding: 44px 40px;
+      border-bottom: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .signal-overview {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.52fr) minmax(0, 1.48fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .signal-intro h2 {
+      max-width: 420px;
+      margin-bottom: 0;
+      font-size: 32px;
+      line-height: 1.08;
+    }
+
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .signal-card {
+      min-width: 0;
+      min-height: 206px;
+      display: flex;
+      flex-direction: column;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .signal-card span {
+      width: fit-content;
+      display: inline-flex;
+      margin-bottom: 16px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(224, 93, 69, 0.12);
+      color: var(--signal);
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .signal-card h3 {
+      font-size: 19px;
+      line-height: 1.16;
+    }
+
+    .signal-card p {
+      margin-bottom: 0;
+      color: var(--ink-soft);
+      font-size: 15px;
+      line-height: 1.45;
     }
 
     .intro {
@@ -7967,6 +8023,60 @@ ${matomoScriptTagFor(site)}  <style>
     .product-signal strong {
       font-size: 24px;
       line-height: 1;
+    }
+
+    .feeder-band {
+      background: #fbf8ef;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .feeder-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(300px, 0.58fr);
+      gap: 36px;
+      align-items: end;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .feeder-panel h2 {
+      max-width: 760px;
+      font-family: var(--serif);
+      font-size: 44px;
+      line-height: 1.06;
+      font-weight: 700;
+    }
+
+    .feeder-panel p {
+      max-width: 780px;
+      color: var(--ink-soft);
+      font-size: 20px;
+      line-height: 1.52;
+    }
+
+    .feeder-panel .lead {
+      color: var(--ink);
+    }
+
+    .feeder-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-start;
+    }
+
+    .feeder-actions .button.primary {
+      background: var(--hedge);
+      color: var(--white);
+      border-color: var(--hedge);
+    }
+
+    .feeder-actions .button.secondary {
+      color: var(--hedge);
     }
 
     .work-band {
@@ -8369,9 +8479,10 @@ ${matomoScriptTagFor(site)}  <style>
         font-size: 19px;
       }
 
-      .signal-strip,
+      .signal-overview,
       .intro,
       .route-grid,
+      .feeder-panel,
       .cadence,
       .note-list,
       .feature-grid,
@@ -8385,6 +8496,10 @@ ${matomoScriptTagFor(site)}  <style>
 
       .section {
         padding: 64px 22px;
+      }
+
+      .signal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .route-card,
@@ -8418,6 +8533,10 @@ ${matomoScriptTagFor(site)}  <style>
         font-size: 18px;
       }
 
+      .signal-grid {
+        grid-template-columns: 1fr;
+      }
+
       .button {
         width: 100%;
       }
@@ -8432,6 +8551,7 @@ ${matomoScriptTagFor(site)}  <style>
     </a>
     <nav aria-label="Primary navigation">
       <a href="#map">Map</a>
+      <a href="#cao-briefing">CAO Briefing</a>
       <a href="#work">Work</a>
       <a href="#features">Features</a>
       <a href="#skills">Skills</a>
@@ -8452,12 +8572,25 @@ ${matomoScriptTagFor(site)}  <style>
         <p class="hero-copy">${escapeHtml(site.summary)}</p>
         <div class="hero-actions">
           <a class="button primary" href="#map">${escapeHtml(site.primary_action_label || "Map the flock")}</a>
+          <a class="button secondary" href="${escapeHtml(heroCaoHref)}"${outboundAttrsFor(site, "hero_cao_briefing", caoStage, caoCampaign)}>${escapeHtml(site.secondary_action_label || "Read the CAO briefing")}</a>
         </div>
       </div>
     </section>
 
-    <section class="signal-strip" aria-label="Operating signals">
-      ${proof.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+    <section class="signals-band" aria-labelledby="signals-title">
+      <div class="section-inner signal-overview">
+        <div class="signal-intro">
+          <p class="eyebrow">What becomes visible</p>
+          <h2 id="signals-title">The operating model in plain English.</h2>
+        </div>
+        <div class="signal-grid">
+          ${operatingSignals.map((signal) => `<article class="signal-card">
+            <span>${escapeHtml(signal.label)}</span>
+            <h3>${escapeHtml(signal.title)}</h3>
+            <p>${escapeHtml(signal.body)}</p>
+          </article>`).join("")}
+        </div>
+      </div>
     </section>
 
     <section class="section" id="map">
@@ -8480,6 +8613,21 @@ ${matomoScriptTagFor(site)}  <style>
               <div class="product-signal"><span>Escalations</span><strong>03</strong></div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section feeder-band" id="cao-briefing">
+      <div class="section-inner feeder-panel">
+        <div>
+          <p class="eyebrow">${escapeHtml(caoFeeder.eyebrow || "Board briefing")}</p>
+          <h2>${escapeHtml(caoFeeder.title || "Agent communication is a Chief Agentic Officer question.")}</h2>
+          <p class="lead">${escapeHtml(caoFeeder.body || "The Chief Agentic Officer is the leadership mandate: what agentic work may do, who owns it, and what leaders need to inspect. Orchistra is the operating layer beneath that mandate, where messages, tasks, rich updates, receipts, and audit-visible handoffs become readable.")}</p>
+          <p>${escapeHtml(caoFeeder.support || "Use the briefing to frame the board-level ownership question, then use Orchistra to see whether the work is actually visible enough to trust.")}</p>
+        </div>
+        <div class="feeder-actions">
+          <a class="button primary" href="${escapeHtml(feederCaoHref)}"${outboundAttrsFor(site, caoFeeder.primary_content || "feeder_cao_briefing", caoStage, caoCampaign)}>${escapeHtml(caoFeeder.primary_label || "Read the CAO briefing")}</a>
+          <a class="button secondary" href="${escapeHtml(feederPlatformHref)}"${outboundAttrsFor(site, caoFeeder.secondary_content || "feeder_platform_interest", platformStage, platformCampaign)}>${escapeHtml(caoFeeder.secondary_label || "Discuss Orchistra as a platform")}</a>
         </div>
       </div>
     </section>
@@ -8597,7 +8745,7 @@ ${matomoScriptTagFor(site)}  <style>
           <p>${escapeHtml(site.cta_body || "Which agents, automations, and vendor tools are already shaping decisions, and who is shepherding them?")}</p>
         </div>
         <div class="cta-actions">
-          <a class="button primary" href="${escapeHtml(conversationHref)}"${funnelAttrsFor(site, "final_conversation_cta")}>${escapeHtml(site.cta_button_label || "Talk about Orchistra")}</a>
+          <a class="button primary" href="${escapeHtml(conversationHref)}"${outboundAttrsFor(site, "final_platform_interest_cta", platformStage, platformCampaign)}>${escapeHtml(site.cta_button_label || "Talk about Orchistra")}</a>
         </div>
       </div>
     </section>
