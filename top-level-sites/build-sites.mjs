@@ -1640,16 +1640,14 @@ ${matomoScriptTagFor(site)}  <style>
       width: 132px;
       height: auto;
       display: block;
-      border-radius: 4px;
     }
 
     .hero-logo {
-      width: min(100%, 310px);
+      width: min(100%, 205px);
       height: auto;
       display: block;
-      margin: 0 0 28px;
-      border-radius: 4px;
-      box-shadow: 0 10px 30px rgba(17, 17, 17, 0.06);
+      margin: 0 0 58px;
+      filter: invert(1);
     }
 
     nav {
@@ -1669,6 +1667,30 @@ ${matomoScriptTagFor(site)}  <style>
     .hero {
       padding: 82px 40px 64px;
       border-bottom: 1px solid var(--line);
+      background: #000000;
+      color: #f4f4f0;
+    }
+
+    .hero .eyebrow,
+    .hero .lead {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .hero .button {
+      border-color: #f4f4f0;
+      color: #f4f4f0;
+    }
+
+    .hero .button.primary {
+      background: #f4f4f0;
+      color: #111111;
+    }
+
+    .hero .field-rule {
+      border-color: rgba(255, 255, 255, 0.25);
+      background:
+        linear-gradient(90deg, transparent 0 12px, rgba(255, 255, 255, 0.2) 12px 13px, transparent 13px 28px);
+      background-size: 28px 100%;
     }
 
     .section {
@@ -2054,7 +2076,7 @@ ${matomoScriptTagFor(site)}  <style>
       <div class="hero-grid">
         <div>
           <img class="hero-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)} logo">
-          <p class="eyebrow">${escapeHtml(site.eyebrow || "YQUP Advisory")}</p>
+          <p class="eyebrow">YQUP &middot; ADVISORY</p>
           <h1 id="page-title">${escapeHtml(site.heading)}</h1>
           <p class="lead">${escapeHtml(site.summary)}</p>
           <div class="hero-actions">
