@@ -44,6 +44,12 @@ This regenerates:
 - `top-level-sites/docker-compose.yml`
 - `top-level-sites/infra/caddy/sites/*.caddy`
 
+## Change Notes
+
+- [YQUP consulting refresh](docs/yqup-consulting-refresh.md)
+- [Orchistra CAO feeder refresh](docs/orchistra-cao-feeder-refresh.md)
+- [Chief Agentic Officer briefing signup](docs/chief-agentic-officer-briefing-signup.md)
+
 ## Local Container Preview
 
 Run on AKAAR:
