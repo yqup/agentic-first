@@ -1,5 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 286 72" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 226" role="img" aria-labelledby="title desc">
   <title id="title">YQUP logo</title>
-  <desc id="desc">The original YQUP wordmark from the old YQUP website.</desc>
-  <text x="0" y="54" fill="currentColor" font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="70" font-weight="300" letter-spacing="0.075em">YQUP</text>
+  <desc id="desc">Old YQUP block logo with Why Queue UP meaning label.</desc>
+  <rect x="2" y="2" width="356" height="222" rx="26" fill="#f7f5ef" stroke="rgba(17,17,17,0.14)" stroke-width="4"/>
+  <g transform="translate(65 42)">
+    <rect x="0" y="0" width="48" height="68" fill="#050505"/>
+    <rect x="60" y="0" width="48" height="68" fill="#050505"/>
+    <rect x="120" y="0" width="48" height="68" fill="#050505"/>
+    <rect x="180" y="0" width="48" height="68" fill="#050505"/>
+    <g fill="#ffffff" font-family="Arial" font-size="44" font-weight="520" text-anchor="middle">
+      <text x="24" y="49">Y</text>
+      <text x="84" y="49">Q</text>
+      <text x="144" y="49">U</text>
+      <text x="204" y="49">P</text>
+    </g>
+  </g>
+  <text x="180" y="168" fill="#111111" font-family="Arial" font-size="35" font-weight="760" letter-spacing="0" text-anchor="middle">Why Queue UP</text>
+  <path d="M104 193h152" fill="none" stroke="#6f7f67" stroke-width="3" stroke-linecap="round"/>
 </svg>

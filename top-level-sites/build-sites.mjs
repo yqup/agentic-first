@@ -1523,6 +1523,11 @@ function yqupPageFor(site) {
   const featured = site.ecosystem_featured || [];
   const secondary = site.ecosystem_secondary || [];
   const thinkingLinks = site.thinking_links || [];
+  const queueUpPhrases = site.queue_up_phrases || [
+    "Why queue up for AI governance?",
+    "Why queue up for board clarity?",
+    "Why queue up for agent-readable system sites?",
+  ];
   const logo = site.brand_assets?.logo || "/assets/yqup-logo.svg";
   const heroHref = tonywoodFunnelUrlFor(site, "hero_discuss_advisory") || defaultTonywoodAdvisoryUrl;
   const navHref = tonywoodFunnelUrlFor(site, "nav_advisory") || defaultTonywoodAdvisoryUrl;
@@ -1637,17 +1642,16 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .brand-logo {
-      width: 132px;
+      width: 112px;
       height: auto;
       display: block;
     }
 
     .hero-logo {
-      width: min(100%, 205px);
+      width: min(100%, 260px);
       height: auto;
       display: block;
-      margin: 0 0 58px;
-      filter: invert(1);
+      margin: 0 0 34px;
     }
 
     nav {
@@ -1775,6 +1779,27 @@ ${matomoScriptTagFor(site)}  <style>
       font-weight: 820;
       text-decoration: none;
       white-space: nowrap;
+    }
+
+    .queue-phrases {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 26px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .queue-phrases li {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 4px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 13px;
+      font-weight: 720;
     }
 
     .button.primary {
@@ -2046,6 +2071,10 @@ ${matomoScriptTagFor(site)}  <style>
         flex-direction: column;
       }
 
+      .queue-phrases li {
+        width: 100%;
+      }
+
       .route-list a {
         align-items: flex-start;
         flex-direction: column;
@@ -2083,6 +2112,9 @@ ${matomoScriptTagFor(site)}  <style>
             <a class="button primary" href="${escapeHtml(heroHref)}"${funnelAttrsFor(site, "hero_discuss_advisory")}>${escapeHtml(site.primary_action_label || "Discuss advisory")}</a>
             <a class="button" href="#system-sites">Build a system site</a>
           </div>
+          <ul class="queue-phrases" aria-label="Why queue up prompts">
+            ${queueUpPhrases.map((phrase) => `<li>${escapeHtml(phrase)}</li>`).join("")}
+          </ul>
           <div class="field-rule" aria-hidden="true"></div>
         </div>
         <aside class="hero-aside" aria-label="Agent-readable public routes">

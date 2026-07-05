@@ -37,6 +37,13 @@
     ],
     "primary_action_label": "Discuss advisory",
     "secondary_action_label": "Explore the work",
+    "queue_up_phrases": [
+      "Why queue UP for AI governance?",
+      "Why queue UP for board clarity?",
+      "Why queue UP for agent-readable system sites?",
+      "Why queue UP for operations that actually adopt AI?",
+      "Why queue UP for decision trails people and agents can both read?"
+    ],
     "sections": [
       {
         "title": "AI governance",
