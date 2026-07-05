@@ -4,9 +4,13 @@ Canonical website: https://yqup.com/
 Agentic profile: https://yqup.com/.well-known/agentic-profile.json
 Health check: https://yqup.com/healthz
 
-The human-facing design for this site is ingested from Gamma into the
-per-site local container. The owned domain also serves this local agentic-first
-profile so agents can discover the right facts without scraping the Gamma page.
+The human-facing page is a local static YQUP consulting page for
+agent-readable system sites, human-visible governance surfaces, board advisory,
+operations, and agentic-systems consulting. YQUP builds the public or controlled
+information surfaces that agents need to read while keeping the same work clear
+to humans. It links the YQUP ecosystem and routes qualified consulting enquiries
+to Tonywood.org advisory. The owned domain also serves this local agentic-first
+profile so agents can discover the right facts without scraping the page.
 
 ```json
 {
@@ -24,7 +28,7 @@ profile so agents can discover the right facts without scraping the Gamma page.
       "agentic-ai"
     ],
     "tagline": "AI is not the problem. Lack of clarity is.",
-    "summary": "YQUP helps CEOs and boards see what is really happening in AI and agentic work, then decide what to do next."
+    "summary": "YQUP builds agent-readable system sites and human-visible governance surfaces so boards, CEOs, and operators can make AI and agentic work useful, governed, and operationally real."
   },
   "links": {
     "website": "https://yqup.com"
@@ -35,7 +39,7 @@ profile so agents can discover the right facts without scraping the Gamma page.
   },
   "analytics": {
     "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "site_goal": "Create qualified consulting conversations with CEOs and boards who need clarity on AI, governance, and agentic work.",
+    "site_goal": "Create qualified consulting conversations with CEOs, boards, and operators who need agent-readable system sites, human-visible governance surfaces, and clarity around AI and agentic work.",
     "primary_conversion": "qualified_consulting_enquiry",
     "primary_destination": "https://www.tonywood.org/advisory/",
     "campaign": "yqup_to_tonywood_advisory"

@@ -2,17 +2,17 @@
   {
     "domain": "yqup.com",
     "service": "yqup_com",
-    "mode": "gamma",
+    "mode": "yqup",
     "local_port": 8211,
     "local_preview": "http://127.0.0.1:8211/",
-    "gamma_origin": "https://sites.gamma.app",
+    "gamma_origin": null,
     "matomo_site_id": "5",
     "document_root": "/srv/apps/top-level-sites/current/dist/yqup.com/www",
     "container_caddyfile": "/srv/apps/top-level-sites/current/dist/yqup.com/Caddyfile",
     "profile": "https://yqup.com/.well-known/agentic-profile.json",
     "healthz": "https://yqup.com/healthz",
     "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "analytics_site_goal": "Create qualified consulting conversations with CEOs and boards who need clarity on AI, governance, and agentic work.",
+    "analytics_site_goal": "Create qualified consulting conversations with CEOs, boards, and operators who need agent-readable system sites, human-visible governance surfaces, and clarity around AI and agentic work.",
     "primary_conversion": "qualified_consulting_enquiry"
   },
   {

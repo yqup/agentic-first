@@ -13,7 +13,7 @@
       "agentic-ai"
     ],
     "tagline": "AI is not the problem. Lack of clarity is.",
-    "summary": "YQUP helps CEOs and boards see what is really happening in AI and agentic work, then decide what to do next."
+    "summary": "YQUP builds agent-readable system sites and human-visible governance surfaces so boards, CEOs, and operators can make AI and agentic work useful, governed, and operationally real."
   },
   "links": {
     "website": "https://yqup.com"
@@ -24,7 +24,7 @@
   },
   "analytics": {
     "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "site_goal": "Create qualified consulting conversations with CEOs and boards who need clarity on AI, governance, and agentic work.",
+    "site_goal": "Create qualified consulting conversations with CEOs, boards, and operators who need agent-readable system sites, human-visible governance surfaces, and clarity around AI and agentic work.",
     "primary_conversion": "qualified_consulting_enquiry",
     "primary_destination": "https://www.tonywood.org/advisory/",
     "campaign": "yqup_to_tonywood_advisory"

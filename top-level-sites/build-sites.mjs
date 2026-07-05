@@ -57,6 +57,9 @@ for (const site of sites) {
   await writeFile(path.join(wwwRoot, "llms.txt"), llmsFor(site, profile), "utf8");
   await writeFile(path.join(wwwRoot, "robots.txt"), "User-agent: *\nAllow: /\n", "utf8");
   await copySiteAssets(site, wwwRoot);
+  if (site.mode === "yqup") {
+    await writeFile(path.join(wwwRoot, "index.html"), yqupPageFor(site), "utf8");
+  }
   if (site.mode === "holding") {
     const holdingPage = site.holding_page || {};
     const html = holdingPage.template === "logo"
@@ -460,7 +463,7 @@ function matomoLoaderSource() {
 }
 
 function isLocalPageMode(mode) {
-  return ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "snaxk", "gamma"].includes(mode);
+  return ["yqup", "holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "snaxk", "gamma"].includes(mode);
 }
 
 function composeFor(items) {
@@ -781,7 +784,7 @@ const config = ${JSON.stringify(serverConfig, null, 2)};
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || ${nodeServerPort});
 const hostHoldingHosts = new Set(config.hostHoldingPages.map((page) => String(page.host || "").toLowerCase()));
-const localPageMode = ["holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "snaxk", "gamma"].includes(config.mode);
+const localPageMode = ["yqup", "holding", "country", "cao", "agentics_home", "ai_ops", "orchistra", "agentic_leader", "snaxk", "gamma"].includes(config.mode);
 
 const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],
@@ -1082,21 +1085,23 @@ function hostHoldingHandlersFor(site) {
 function edgeCaddyFor(site) {
   const pageNote = site.mode === "holding"
     ? "Normal pages are served by the per-site static holding-page container."
-    : site.mode === "country"
-      ? "Normal pages are served by the per-site English-country static container."
-      : site.mode === "cao"
-        ? "Normal pages are served by the per-site bespoke Chief Agentic Officer container."
-        : site.mode === "agentics_home"
-          ? "Normal pages are served by the per-site My Agentic home container."
-          : site.mode === "ai_ops"
-            ? "Normal pages are served by the per-site AIperations operations container."
-            : site.mode === "orchistra"
-              ? "Normal pages are served by the per-site bespoke Orchistra container."
-              : site.mode === "agentic_leader"
-                ? "Normal pages are served by the per-site bespoke Agentic Leader field-guide container."
-                : site.mode === "snaxk"
-                  ? "Normal pages are served by the per-site bespoke SNAXK judgement container."
-                  : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
+    : site.mode === "yqup"
+      ? "Normal pages are served by the per-site bespoke YQUP consulting and system-sites container."
+      : site.mode === "country"
+        ? "Normal pages are served by the per-site English-country static container."
+        : site.mode === "cao"
+          ? "Normal pages are served by the per-site bespoke Chief Agentic Officer container."
+          : site.mode === "agentics_home"
+            ? "Normal pages are served by the per-site My Agentic home container."
+            : site.mode === "ai_ops"
+              ? "Normal pages are served by the per-site AIperations operations container."
+              : site.mode === "orchistra"
+                ? "Normal pages are served by the per-site bespoke Orchistra container."
+                : site.mode === "agentic_leader"
+                  ? "Normal pages are served by the per-site bespoke Agentic Leader field-guide container."
+                  : site.mode === "snaxk"
+                    ? "Normal pages are served by the per-site bespoke SNAXK judgement container."
+                    : "Normal pages are handled by the per-site container from an ingested Gamma snapshot.";
   const hostBlock = site.redirect_www_to_apex
     ? `${site.domain} {
 	encode zstd gzip
@@ -1232,7 +1237,15 @@ function faviconLinkTagFor(site) {
 }
 
 function llmsFor(site, profile) {
-  const servingNote = site.mode === "holding"
+  const servingNote = site.mode === "yqup"
+    ? `The human-facing page is a local static YQUP consulting page for
+agent-readable system sites, human-visible governance surfaces, board advisory,
+operations, and agentic-systems consulting. YQUP builds the public or controlled
+information surfaces that agents need to read while keeping the same work clear
+to humans. It links the YQUP ecosystem and routes qualified consulting enquiries
+to Tonywood.org advisory. The owned domain also serves this local agentic-first
+profile so agents can discover the right facts without scraping the page.`
+    : site.mode === "holding"
     ? `The human-facing page is a local static holding page for ${site.name}.
 The owned domain also serves this local agentic-first profile so agents
 can discover the right facts before the full public site is launched.`
@@ -1311,23 +1324,25 @@ function healthFor(site) {
     status: "ok",
     site: site.domain,
     service: site.service,
-    mode: site.mode === "holding"
-      ? "static-holding-container"
-      : site.mode === "country"
-        ? "static-country-container"
-        : site.mode === "cao"
-          ? "static-cao-container"
-          : site.mode === "agentics_home"
-            ? "static-agentics-home-container"
-            : site.mode === "ai_ops"
-              ? "static-ai-operations-container"
-              : site.mode === "orchistra"
-                ? "static-orchistra-container"
-                : site.mode === "agentic_leader"
-                  ? "static-agentic-leader-container"
-                  : site.mode === "snaxk"
-                    ? "static-snaxk-container"
-                    : "gamma-fronting-container",
+    mode: site.mode === "yqup"
+      ? "static-yqup-container"
+      : site.mode === "holding"
+        ? "static-holding-container"
+        : site.mode === "country"
+          ? "static-country-container"
+          : site.mode === "cao"
+            ? "static-cao-container"
+            : site.mode === "agentics_home"
+              ? "static-agentics-home-container"
+              : site.mode === "ai_ops"
+                ? "static-ai-operations-container"
+                : site.mode === "orchistra"
+                  ? "static-orchistra-container"
+                  : site.mode === "agentic_leader"
+                    ? "static-agentic-leader-container"
+                    : site.mode === "snaxk"
+                      ? "static-snaxk-container"
+                      : "gamma-fronting-container",
     updated_at: updatedAt,
     agentic_profile: "/.well-known/agentic-profile.json",
     matomo_site_id: site.matomo_site_id || null,
@@ -1500,6 +1515,692 @@ function hasFaviconReference(html) {
   return /rel=["'][^"']*(?:shortcut\s+)?icon[^"']*["']/i.test(html)
     || /rel=["']apple-touch-icon["']/i.test(html)
     || /\/favicon\./i.test(html);
+}
+
+function yqupPageFor(site) {
+  const sections = site.sections || [];
+  const offers = site.offers || [];
+  const featured = site.ecosystem_featured || [];
+  const secondary = site.ecosystem_secondary || [];
+  const thinkingLinks = site.thinking_links || [];
+  const heroHref = tonywoodFunnelUrlFor(site, "hero_discuss_advisory") || defaultTonywoodAdvisoryUrl;
+  const navHref = tonywoodFunnelUrlFor(site, "nav_advisory") || defaultTonywoodAdvisoryUrl;
+  const systemHref = tonywoodFunnelUrlFor(site, "system_site_build") || defaultTonywoodAdvisoryUrl;
+  const finalHref = tonywoodFunnelUrlFor(site, "final_consulting_enquiry") || defaultTonywoodAdvisoryUrl;
+  const tonywoodHomeHref = trackedOutboundUrlFor(site, "https://www.tonywood.org/", "final_tonywood_home", "yqup_to_tonywood") || "https://www.tonywood.org/";
+  const publicFiles = [
+    { path: "/llms.txt", label: "Agent instructions" },
+    { path: "/.well-known/agentic-profile.json", label: "Agentic profile" },
+    { path: "/matomo-config.json", label: "Analytics intent" },
+    { path: "/healthz", label: "Service health" },
+  ];
+  const systemNotes = [
+    {
+      title: "Agent-readable",
+      body: "Publish the plain facts, routes, owners, boundaries, and source context that assistants and agents can safely consume."
+    },
+    {
+      title: "Human-visible",
+      body: "Keep the same facts readable to boards, CEOs, operators, advisers, and teams, so automation does not disappear into private chats."
+    },
+    {
+      title: "Governed",
+      body: "Add enough structure for accountability: decision trails, stop lines, review cadence, evidence, analytics, and ownership."
+    },
+  ];
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(site.title || site.name)}</title>
+  <meta name="description" content="${escapeHtml(site.summary)}">
+  <link rel="canonical" href="https://${escapeHtml(site.domain)}/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${matomoScriptTagFor(site)}  <style>
+    :root {
+      color-scheme: light;
+      --ink: #111111;
+      --ink-soft: #4f514b;
+      --paper: #f7f5ef;
+      --surface: #ffffff;
+      --surface-soft: #eeebe2;
+      --line: rgba(17, 17, 17, 0.15);
+      --line-strong: rgba(17, 17, 17, 0.34);
+      --sage: #6f7f67;
+      --sage-dark: #475642;
+      --field: #c8bea6;
+      --shadow: 0 22px 58px rgba(17, 17, 17, 0.08);
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.58;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-underline-offset: 0.2em;
+    }
+
+    p,
+    h1,
+    h2,
+    h3 {
+      margin-top: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 14px 40px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(247, 245, 239, 0.95);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink);
+      font-weight: 880;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--surface);
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px 22px;
+      color: var(--ink-soft);
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    nav a {
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: 82px 40px 64px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section {
+      padding: 72px 40px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-inner {
+      width: min(100%, 1160px);
+      margin: 0 auto;
+    }
+
+    .hero-grid {
+      width: min(100%, 1160px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(310px, 410px);
+      gap: 48px;
+      align-items: end;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin-bottom: 14px;
+      color: var(--sage-dark);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 870px;
+      margin-bottom: 24px;
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 92px);
+      line-height: 0.96;
+      font-weight: 700;
+    }
+
+    h2 {
+      max-width: 820px;
+      margin-bottom: 18px;
+      font-family: var(--serif);
+      font-size: 44px;
+      line-height: 1.06;
+      font-weight: 700;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+      line-height: 1.16;
+    }
+
+    .lead {
+      max-width: 820px;
+      color: var(--ink-soft);
+      font-size: 21px;
+      line-height: 1.48;
+    }
+
+    .hero-actions,
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 28px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 17px;
+      border: 1px solid var(--ink);
+      border-radius: 4px;
+      background: transparent;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 820;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .button.primary {
+      background: var(--ink);
+      color: var(--surface);
+    }
+
+    .hero-aside,
+    .panel,
+    .service-card,
+    .ecosystem-card,
+    .thinking-card {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-aside {
+      padding: 24px;
+    }
+
+    .route-list,
+    .plain-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .route-list {
+      margin-top: 18px;
+    }
+
+    .route-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #fbfaf6;
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .route-list span {
+      color: var(--ink-soft);
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 760;
+      text-align: right;
+    }
+
+    .field-rule {
+      height: 12px;
+      margin: 34px 0 0;
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, transparent 0 12px, rgba(111, 127, 103, 0.22) 12px 13px, transparent 13px 28px);
+      background-size: 28px 100%;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(260px, 0.42fr);
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 30px;
+    }
+
+    .section-heading p {
+      color: var(--ink-soft);
+    }
+
+    .system-grid,
+    .services-grid,
+    .ecosystem-grid,
+    .thinking-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .system-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .services-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ecosystem-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .thinking-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .panel,
+    .service-card,
+    .ecosystem-card,
+    .thinking-card {
+      padding: 22px;
+    }
+
+    .service-card,
+    .ecosystem-card,
+    .thinking-card {
+      min-height: 100%;
+    }
+
+    .panel p,
+    .service-card p,
+    .ecosystem-card p,
+    .thinking-card p {
+      color: var(--ink-soft);
+    }
+
+    .service-label,
+    .ecosystem-label {
+      display: inline-flex;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--sage);
+      color: var(--sage-dark);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .ecosystem-card a,
+    .thinking-card a {
+      font-weight: 850;
+      text-decoration-thickness: 1px;
+    }
+
+    .directory-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .directory-strip a {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 780;
+      text-decoration: none;
+    }
+
+    .black-band {
+      background: var(--ink);
+      color: var(--surface);
+    }
+
+    .black-band .eyebrow {
+      color: #d8dfd3;
+    }
+
+    .black-band .lead,
+    .black-band p {
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .black-band .button {
+      border-color: var(--surface);
+      color: var(--surface);
+    }
+
+    .black-band .button.primary {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .country-note {
+      border-left: 3px solid var(--sage);
+      padding: 18px 0 18px 20px;
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 30px 40px;
+      background: var(--paper);
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+
+    footer strong {
+      color: var(--ink);
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .section-heading {
+        grid-template-columns: 1fr;
+      }
+
+      .ecosystem-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .thinking-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 820px) {
+      .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 22px;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+
+      .hero,
+      .section {
+        padding: 56px 22px;
+      }
+
+      .system-grid,
+      .services-grid,
+      .ecosystem-grid,
+      .thinking-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h2 {
+        font-size: 34px;
+      }
+
+      .lead {
+        font-size: 19px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .button {
+        width: 100%;
+      }
+
+      .hero-actions,
+      .action-row {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .route-list a {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .route-list span {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
+      <span class="brand-mark">YQUP</span>
+      <span>${escapeHtml(site.name)}</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#system-sites">System sites</a>
+      <a href="#consulting">Consulting</a>
+      <a href="#ecosystem">Ecosystem</a>
+      <a href="#thinking">Thinking</a>
+      <a href="${escapeHtml(navHref)}"${funnelAttrsFor(site, "nav_advisory")}>Advisory</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">${escapeHtml(site.eyebrow || "YQUP Advisory")}</p>
+          <h1 id="page-title">${escapeHtml(site.heading)}</h1>
+          <p class="lead">${escapeHtml(site.summary)}</p>
+          <div class="hero-actions">
+            <a class="button primary" href="${escapeHtml(heroHref)}"${funnelAttrsFor(site, "hero_discuss_advisory")}>${escapeHtml(site.primary_action_label || "Discuss advisory")}</a>
+            <a class="button" href="#system-sites">Build a system site</a>
+          </div>
+          <div class="field-rule" aria-hidden="true"></div>
+        </div>
+        <aside class="hero-aside" aria-label="Agent-readable public routes">
+          <p class="eyebrow">Readable by agents and people</p>
+          <h2>Small public surfaces for serious work.</h2>
+          <p>YQUP treats every owned site as part of the operating system: clear enough for a person to trust, structured enough for an agent to use.</p>
+          <ul class="route-list">
+            ${publicFiles.map((item) => `<li><a href="${escapeHtml(item.path)}"><code>${escapeHtml(item.path)}</code><span>${escapeHtml(item.label)}</span></a></li>`).join("")}
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="system-sites">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">System sites</p>
+            <h2>Information agents can read, with human visibility around it.</h2>
+          </div>
+          <p>These are not brochure pages with a hidden automation layer. They are deliberately small, owned surfaces for context, routes, governance, status, and decision support.</p>
+        </div>
+        <div class="system-grid">
+          ${systemNotes.map((item) => `<article class="panel">
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("")}
+        </div>
+        <div class="action-row">
+          <a class="button primary" href="${escapeHtml(systemHref)}"${funnelAttrsFor(site, "system_site_build")}>Talk about a system site</a>
+          <a class="button" href="/llms.txt">Open llms.txt</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="consulting">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Where YQUP helps</p>
+            <h2>Consulting for boards, CEOs, operators, and agentic systems.</h2>
+          </div>
+          <p class="country-note">A calm English-country bias: walk the ground, name the boundary, inspect the evidence, and leave the work clearer than you found it.</p>
+        </div>
+        <div class="services-grid">
+          ${sections.map((item) => `<article class="service-card">
+            <span class="service-label">${escapeHtml(item.title)}</span>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Ways to work</p>
+            <h2>Advisory that turns unclear AI work into owned operating moves.</h2>
+          </div>
+          <p>Use YQUP for a focused board decision, an operating-model review, a system-site build, a practical workshop, a town hall, or ongoing outside counsel.</p>
+        </div>
+        <div class="services-grid">
+          ${offers.map((item) => `<article class="service-card">
+            <span class="service-label">${escapeHtml(item.label)}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ecosystem">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">YQUP ecosystem</p>
+            <h2>Owned sites for the work YQUP is building around.</h2>
+          </div>
+          <p>Each site is a doorway for a specific agentic-system question: board mandate, orchestration, judgement, training, operations, governance, funding, or the agent profile itself.</p>
+        </div>
+        <div class="ecosystem-grid">
+          ${featured.map((item) => {
+            const href = trackedOutboundUrlFor(site, item.url, item.content, item.campaign) || item.url;
+            return `<article class="ecosystem-card">
+              <span class="ecosystem-label">${escapeHtml(item.label)}</span>
+              <h3><a href="${escapeHtml(href)}"${outboundAttrsFor(site, item.content, "source_to_yqup_ecosystem", item.campaign)}>${escapeHtml(item.name)}</a></h3>
+              <p>${escapeHtml(item.body)}</p>
+            </article>`;
+          }).join("")}
+        </div>
+        <div class="directory-strip" aria-label="Additional YQUP sites">
+          ${secondary.map((item) => {
+            const href = trackedOutboundUrlFor(site, item.url, item.content, item.campaign) || item.url;
+            return `<a href="${escapeHtml(href)}"${outboundAttrsFor(site, item.content, "source_to_yqup_directory", item.campaign)}>${escapeHtml(item.name)}</a>`;
+          }).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="thinking">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Thinking behind the work</p>
+            <h2>Writing and research that shapes the YQUP operating view.</h2>
+          </div>
+          <p>These pieces explain the judgement behind YQUP: management literacy, governance slop, agentic language, trigger systems, attention, and getting practical work done with agents.</p>
+        </div>
+        <div class="thinking-grid">
+          ${thinkingLinks.map((item) => {
+            const href = tonywoodWritingUrlFor(site, item.url, item.content) || item.url;
+            return `<article class="thinking-card">
+              <h3><a href="${escapeHtml(href)}"${funnelAttrsFor(site, item.content, "source_to_tonywood_writing")}>${escapeHtml(item.title)}</a></h3>
+              <p>${escapeHtml(item.body)}</p>
+            </article>`;
+          }).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section black-band" id="contact">
+      <div class="section-inner">
+        <p class="eyebrow">Bring a live question</p>
+        <h2>Use YQUP when you need AI clarity that agents and people can both work from.</h2>
+        <p class="lead">Start with the real decision: what needs to be understood, owned, governed, published, stopped, funded, explained, or turned into an operating rhythm.</p>
+        <div class="action-row">
+          <a class="button primary" href="${escapeHtml(finalHref)}"${funnelAttrsFor(site, "final_consulting_enquiry")}>Contact through Tonywood advisory</a>
+          <a class="button" href="${escapeHtml(tonywoodHomeHref)}"${outboundAttrsFor(site, "final_tonywood_home", "source_to_tonywood_home", "yqup_to_tonywood")}>Read Tonywood.org</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <strong>${escapeHtml(site.name)}</strong>
+      <div>${escapeHtml(site.domain)}</div>
+    </div>
+    <div>Agent-readable system sites, human-visible governance, and practical AI advisory.</div>
+  </footer>
+</body>
+</html>
+`;
 }
 
 function holdingPageFor(site) {

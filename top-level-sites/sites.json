@@ -1,30 +1,199 @@
 [
   {
     "domain": "yqup.com",
+    "mode": "yqup",
     "name": "YQUP",
-    "title": "YQUP Consulting",
+    "title": "YQUP | Agent-readable system sites and AI governance consulting",
     "heading": "AI is not the problem. Lack of clarity is.",
-    "summary": "YQUP helps CEOs and boards see what is really happening in AI and agentic work, then decide what to do next.",
+    "summary": "YQUP builds agent-readable system sites and human-visible governance surfaces so boards, CEOs, and operators can make AI and agentic work useful, governed, and operationally real.",
     "eyebrow": "YQUP Advisory",
     "jurisdiction": "GB",
     "industry": ["ai-governance", "board-advisory", "agentic-ai"],
-    "theme": "#0f172a",
-    "accent": "#d8b56d",
+    "theme": "#111111",
+    "accent": "#6f7f67",
     "matomo_site_id": "5",
     "analytics_goal": {
-      "site_goal": "Create qualified consulting conversations with CEOs and boards who need clarity on AI, governance, and agentic work.",
+      "site_goal": "Create qualified consulting conversations with CEOs, boards, and operators who need agent-readable system sites, human-visible governance surfaces, and clarity around AI and agentic work.",
       "primary_conversion": "qualified_consulting_enquiry",
-      "measurement_note": "Track YQUP pageviews, profile contact discoveries, and movements to Tonywood.org advisory from consulting and clarity messages."
+      "primary_destination": "https://www.tonywood.org/advisory/",
+      "campaign": "yqup_to_tonywood_advisory",
+      "measurement_note": "Track YQUP pageviews, profile contact discoveries, Tonywood.org advisory clicks, and ecosystem referrals from consulting and clarity messages."
+    },
+    "tonywood_funnel": {
+      "target_url": "https://www.tonywood.org/advisory/",
+      "source": "yqup.com",
+      "campaign": "yqup_to_tonywood_advisory",
+      "medium": "owned-referral"
     },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/w5cb4nim4hs17oq/5415qe362jaqfkz/slide/grjI7EPE0TIuq1P42_mCpX8pgnU",
+    "primary_action_label": "Discuss advisory",
+    "secondary_action_label": "Explore the work",
     "sections": [
       {
-        "title": "Where YQUP helps",
-        "body": "The work sits between strategy, operating model, governance, and practical delivery for organisations trying to move past AI theatre."
+        "title": "AI governance",
+        "body": "Clarify which AI and agentic work can be approved, narrowed, stopped, explained, funded, or operationalised, then publish the right agent-readable context around it."
       },
       {
-        "title": "Useful first conversation",
-        "body": "Start with a diagnostic conversation about ownership, incentives, governance, and where agentic systems should actually be trusted."
+        "title": "Board decision trails",
+        "body": "Turn concern into a defensible next move, with ownership, evidence, risk appetite, and a clear record of the judgement."
+      },
+      {
+        "title": "Agentic operations",
+        "body": "Help agents, assistants, tools, and human teams work together visibly instead of scattering work through hidden chats, private notes, and ad hoc automations."
+      },
+      {
+        "title": "Practical adoption",
+        "body": "Move beyond AI theatre into operating cadence, working practices, town halls, training, and reviewable outcomes."
+      }
+    ],
+    "offers": [
+      {
+        "label": "Board / CEO advisory",
+        "title": "Make the live AI decision clearer.",
+        "body": "For boards and CEOs who need to approve, stop, narrow, explain, fund, govern, or operationalise AI work without losing the decision trail."
+      },
+      {
+        "label": "Operating model review",
+        "title": "Find out whether the controls are real.",
+        "body": "Review access, accountability, data boundaries, finance controls, workflow ownership, review rhythm, and escalation paths."
+      },
+      {
+        "label": "System site build",
+        "title": "Make the work readable to agents and humans.",
+        "body": "Design and build small public or controlled system sites with llms.txt, agentic profiles, source context, clear routes, and human-readable pages."
+      },
+      {
+        "label": "Agentic systems workshop",
+        "title": "Give teams a working language.",
+        "body": "A practical session for leaders and operators on outcomes, boundaries, evidence, cadence, human gates, and agent-ready ways of working."
+      },
+      {
+        "label": "Leadership and town halls",
+        "title": "Explain the work without hype.",
+        "body": "Help teams understand what AI is for, how agentic work should be directed, and where human judgement remains essential."
+      },
+      {
+        "label": "Ongoing advisory",
+        "title": "Keep the operating rhythm honest.",
+        "body": "Regular support for leaders who need a calm outside view on progress, risk, governance, adoption, and the next useful decision."
+      }
+    ],
+    "ecosystem_featured": [
+      {
+        "name": "Tony Wood",
+        "url": "https://www.tonywood.org/",
+        "campaign": "yqup_to_tonywood",
+        "content": "ecosystem_tonywood",
+        "label": "Advisory and thinking",
+        "body": "The public home for Tony's writing, research, advisory offer, and agent-readable context."
+      },
+      {
+        "name": "Chief Agentic Officer",
+        "url": "https://chiefagenticofficer.com/",
+        "campaign": "yqup_to_chiefagenticofficer",
+        "content": "ecosystem_chiefagenticofficer",
+        "label": "Board-level mandate",
+        "body": "A role and briefing layer for ownership, boundaries, assurance, value, and human judgement in agentic work."
+      },
+      {
+        "name": "Orchistra",
+        "url": "https://orchistra.com/",
+        "campaign": "yqup_to_orchistra",
+        "content": "ecosystem_orchistra",
+        "label": "Visible coordination",
+        "body": "A shared gateway where agent messages, tasks, rich updates, receipts, and decisions stay visible."
+      },
+      {
+        "name": "SNAXK",
+        "url": "https://snaxk.com/",
+        "campaign": "yqup_to_snaxk",
+        "content": "ecosystem_snaxk",
+        "label": "Judgement engine",
+        "body": "The judgement layer beneath the Chief Agentic Officer question: stop conditions, evidence, review, and trust."
+      },
+      {
+        "name": "Shepherd of Agentic Sheep",
+        "url": "https://shepherdofagenticsheep.com/",
+        "campaign": "yqup_to_shepherd",
+        "content": "ecosystem_shepherd",
+        "label": "People and training",
+        "body": "A plain-English frame for leading agentic work, preserving human gates, and training people around new systems."
+      }
+    ],
+    "ecosystem_secondary": [
+      {
+        "name": "AIperations",
+        "url": "https://aiperations.com/",
+        "campaign": "yqup_to_aiperations",
+        "content": "directory_aiperations"
+      },
+      {
+        "name": "Agentic Leader",
+        "url": "https://agenticleader.com/",
+        "campaign": "yqup_to_agenticleader",
+        "content": "directory_agenticleader"
+      },
+      {
+        "name": "Agentic Board",
+        "url": "https://agenticboard.com/",
+        "campaign": "yqup_to_agenticboard",
+        "content": "directory_agenticboard"
+      },
+      {
+        "name": "Dilijenz",
+        "url": "https://dilijenz.com/",
+        "campaign": "yqup_to_dilijenz",
+        "content": "directory_dilijenz"
+      },
+      {
+        "name": "Syndesy",
+        "url": "https://syndesy.com/",
+        "campaign": "yqup_to_syndesy",
+        "content": "directory_syndesy"
+      },
+      {
+        "name": "My Agentic",
+        "url": "https://my-agentic.com/",
+        "campaign": "yqup_to_my_agentic",
+        "content": "directory_my_agentic"
+      }
+    ],
+    "thinking_links": [
+      {
+        "title": "Management Is The Missing Literacy",
+        "url": "https://www.tonywood.org/writing/management-is-the-missing-literacy/",
+        "content": "thinking_management_literacy",
+        "body": "Why outcomes, quality, attention, AI use, and responsibility should become general management skills."
+      },
+      {
+        "title": "Governance Slop",
+        "url": "https://www.tonywood.org/writing/governance-slop/",
+        "content": "thinking_governance_slop",
+        "body": "The gap between policies, assumptions, and actual oversight."
+      },
+      {
+        "title": "Agentic Language",
+        "url": "https://www.tonywood.org/white-papers/agentic-language-common-language-layer/",
+        "content": "thinking_agentic_language",
+        "body": "A common operating layer for humans and agents: terms, moves, receipts, judgement, and stop-line boundaries."
+      },
+      {
+        "title": "Triggers",
+        "url": "https://www.tonywood.org/white-papers/triggers-signal-language-long-running-agentic-systems/",
+        "content": "thinking_triggers",
+        "body": "A signal language for routing attention, constraining action, and learning from exceptions."
+      },
+      {
+        "title": "Attention Is The Product",
+        "url": "https://www.tonywood.org/writing/when-the-agentic-interface-is-not-there-your-attention-is-the-product/",
+        "content": "thinking_attention_product",
+        "body": "Why agent-ready interfaces and safe automation are becoming trust signals for software."
+      },
+      {
+        "title": "Getting Things Done With Agentic Workers",
+        "url": "https://www.tonywood.org/writing/getting-things-done-with-agentic-workers/",
+        "content": "thinking_getting_things_done",
+        "body": "A practical reflection on small-business agentic work and token spend as operating capital."
       }
     ],
     "contact": {
