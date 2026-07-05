@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 118" role="img" aria-labelledby="title desc">
+  <title id="title">YQUP logo</title>
+  <desc id="desc">YQUP wordmark with a simple system-site mark.</desc>
+  <rect x="1" y="1" width="416" height="114" rx="4" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+  <g fill="#111111">
+    <path d="M28 27h15l20 31l20-31h15L70 70v21H56V70L28 27Z"/>
+    <path d="M104 59c0-20 15-34 35-34s35 14 35 34c0 11-5 21-13 27l12 15h-17l-7-8c-3 1-7 2-11 2c-19 0-34-15-34-36Zm14 0c0 13 9 22 21 22c1 0 2 0 3-1l-11-13h17l5 6c4-4 7-8 7-14c0-13-9-22-21-22s-21 9-21 22Z"/>
+    <path d="M191 27h14v38c0 10 6 16 16 16s16-6 16-16V27h14v38c0 18-12 30-30 30s-30-12-30-30V27Z"/>
+    <path d="M276 27h34c18 0 29 10 29 26s-11 26-29 26h-20v12h-14V27Zm14 13v26h19c10 0 16-5 16-13s-6-13-16-13h-19Z"/>
+  </g>
+  <g fill="none" stroke="#6f7f67" stroke-width="3" stroke-linecap="round">
+    <path d="M31 100h300"/>
+    <path d="M349 38h36"/>
+    <path d="M349 58h50"/>
+    <path d="M349 78h32"/>
+  </g>
+</svg>

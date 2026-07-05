@@ -1523,6 +1523,7 @@ function yqupPageFor(site) {
   const featured = site.ecosystem_featured || [];
   const secondary = site.ecosystem_secondary || [];
   const thinkingLinks = site.thinking_links || [];
+  const logo = site.brand_assets?.logo || "/assets/yqup-logo.svg";
   const heroHref = tonywoodFunnelUrlFor(site, "hero_discuss_advisory") || defaultTonywoodAdvisoryUrl;
   const navHref = tonywoodFunnelUrlFor(site, "nav_advisory") || defaultTonywoodAdvisoryUrl;
   const systemHref = tonywoodFunnelUrlFor(site, "system_site_build") || defaultTonywoodAdvisoryUrl;
@@ -1635,17 +1636,20 @@ ${matomoScriptTagFor(site)}  <style>
       text-decoration: none;
     }
 
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--ink);
-      background: var(--ink);
-      color: var(--surface);
-      font-size: 12px;
-      font-weight: 900;
-      line-height: 1;
+    .brand-logo {
+      width: 132px;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .hero-logo {
+      width: min(100%, 310px);
+      height: auto;
+      display: block;
+      margin: 0 0 28px;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(17, 17, 17, 0.06);
     }
 
     nav {
@@ -2034,8 +2038,7 @@ ${matomoScriptTagFor(site)}  <style>
 <body>
   <header class="site-header">
     <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
-      <span class="brand-mark">YQUP</span>
-      <span>${escapeHtml(site.name)}</span>
+      <img class="brand-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)}">
     </a>
     <nav aria-label="Primary navigation">
       <a href="#system-sites">System sites</a>
@@ -2050,6 +2053,7 @@ ${matomoScriptTagFor(site)}  <style>
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-grid">
         <div>
+          <img class="hero-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)} logo">
           <p class="eyebrow">${escapeHtml(site.eyebrow || "YQUP Advisory")}</p>
           <h1 id="page-title">${escapeHtml(site.heading)}</h1>
           <p class="lead">${escapeHtml(site.summary)}</p>

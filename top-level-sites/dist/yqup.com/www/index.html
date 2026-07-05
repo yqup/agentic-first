@@ -85,17 +85,20 @@
       text-decoration: none;
     }
 
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--ink);
-      background: var(--ink);
-      color: var(--surface);
-      font-size: 12px;
-      font-weight: 900;
-      line-height: 1;
+    .brand-logo {
+      width: 132px;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .hero-logo {
+      width: min(100%, 310px);
+      height: auto;
+      display: block;
+      margin: 0 0 28px;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(17, 17, 17, 0.06);
     }
 
     nav {
@@ -484,8 +487,7 @@
 <body>
   <header class="site-header">
     <a class="brand" href="/" aria-label="YQUP home">
-      <span class="brand-mark">YQUP</span>
-      <span>YQUP</span>
+      <img class="brand-logo" src="/assets/yqup-logo.svg" alt="YQUP">
     </a>
     <nav aria-label="Primary navigation">
       <a href="#system-sites">System sites</a>
@@ -500,6 +502,7 @@
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-grid">
         <div>
+          <img class="hero-logo" src="/assets/yqup-logo.svg" alt="YQUP logo">
           <p class="eyebrow">YQUP Advisory</p>
           <h1 id="page-title">AI is not the problem. Lack of clarity is.</h1>
           <p class="lead">YQUP builds agent-readable system sites and human-visible governance surfaces so boards, CEOs, and operators can make AI and agentic work useful, governed, and operationally real.</p>

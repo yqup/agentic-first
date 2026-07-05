@@ -25,7 +25,16 @@
       "campaign": "yqup_to_tonywood_advisory",
       "medium": "owned-referral"
     },
+    "brand_assets": {
+      "logo": "/assets/yqup-logo.svg"
+    },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/w5cb4nim4hs17oq/5415qe362jaqfkz/slide/grjI7EPE0TIuq1P42_mCpX8pgnU",
+    "assets": [
+      {
+        "source": "assets/yqup-logo.svg",
+        "target": "assets/yqup-logo.svg"
+      }
+    ],
     "primary_action_label": "Discuss advisory",
     "secondary_action_label": "Explore the work",
     "sections": [
