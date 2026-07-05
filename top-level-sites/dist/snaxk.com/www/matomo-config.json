@@ -9,11 +9,11 @@
   ],
   "northStar": {
     "objective": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "siteGoal": "Create qualified conversations about judgement, judgement boundaries, evaluation, and decision support for long-running agentic systems.",
-    "primaryConversion": "judgement_boundary_conversation",
-    "primaryDestination": "https://www.tonywood.org/advisory/",
+    "siteGoal": "Feed qualified visitors into ChiefAgenticOfficer.com while measuring interest in SNAXK as a possible judgement engine for agentic work.",
+    "primaryConversion": "chiefagenticofficer_feeder_click",
+    "primaryDestination": "https://chiefagenticofficer.com/",
     "source": "snaxk.com",
-    "campaign": "snaxk_to_tonywood_advisory",
-    "measurementNote": "Track SNAXK interest as visits and Tonywood.org advisory movements from judgement and boundary language."
+    "campaign": "snaxk_to_chiefagenticofficer",
+    "measurementNote": "Track SNAXK visitors who click through to ChiefAgenticOfficer.com, Tonywood.org advisory, and judgement-engine-interest CTAs."
   }
 }

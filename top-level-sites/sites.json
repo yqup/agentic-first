@@ -35,9 +35,9 @@
     "domain": "snaxk.com",
     "mode": "snaxk",
     "name": "SNAXK",
-    "title": "SNAXK | Judgement for long-running agents",
-    "heading": "Judgement for long-running agents.",
-    "summary": "SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review.",
+    "title": "SNAXK | Judgement engine for agentic work",
+    "heading": "A judgement engine for agentic work.",
+    "summary": "SNAXK helps surface the judgement a Chief Agentic Officer needs to inspect: ownership, boundaries, stop conditions, evidence, review, and measurable trust for long-running agentic systems.",
     "eyebrow": "SNAXK",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "evaluation", "decision-support"],
@@ -45,17 +45,29 @@
     "accent": "#f2b84b",
     "matomo_site_id": "6",
     "analytics_goal": {
-      "site_goal": "Create qualified conversations about judgement, judgement boundaries, evaluation, and decision support for long-running agentic systems.",
-      "primary_conversion": "judgement_boundary_conversation",
-      "measurement_note": "Track SNAXK interest as visits and Tonywood.org advisory movements from judgement and boundary language."
+      "site_goal": "Feed qualified visitors into ChiefAgenticOfficer.com while measuring interest in SNAXK as a possible judgement engine for agentic work.",
+      "primary_conversion": "chiefagenticofficer_feeder_click",
+      "primary_destination": "https://chiefagenticofficer.com/",
+      "campaign": "snaxk_to_chiefagenticofficer",
+      "measurement_note": "Track SNAXK visitors who click through to ChiefAgenticOfficer.com, Tonywood.org advisory, and judgement-engine-interest CTAs."
     },
     "brand_assets": {
       "lozenge": "/assets/snaxk-lozenge.png",
       "logo": "/assets/snaxk-logo.png"
     },
     "research_milestone": "SNAXK 0.10.8",
-    "primary_action_label": "See the judgement loop",
-    "secondary_action_label": "Discuss judgement boundaries",
+    "primary_action_label": "Open the CAO briefing",
+    "secondary_action_label": "Discuss with Tony Wood",
+    "cao_feeder": {
+      "primary_url": "https://chiefagenticofficer.com/",
+      "primary_campaign": "snaxk_to_chiefagenticofficer",
+      "primary_stage": "source_to_chiefagenticofficer",
+      "primary_content": "hero_cao_briefing",
+      "secondary_url": "https://www.tonywood.org/advisory/",
+      "secondary_campaign": "snaxk_to_tonywood_advisory",
+      "secondary_stage": "source_to_tonywood_advisory",
+      "engine_content": "snaxk_engine_interest"
+    },
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/23d6gw7ynyx4pa8/omj3dp3uf69ye5w/slide/LnIqPGkUCPdwci3xovE3sp1Aygo",
     "assets": [
       {
@@ -69,12 +81,16 @@
     ],
     "sections": [
       {
-        "title": "Longer runs need better judgement",
-        "body": "As agents move from demos into ongoing work, judgement becomes the core control surface: what to continue, stop, escalate, or reframe."
+        "title": "Why this matters to a Chief Agentic Officer",
+        "body": "The Chief Agentic Officer needs to know what agentic work exists, what it may do, who owns the boundary, and what evidence leaders can inspect afterwards."
       },
       {
-        "title": "Built for practical systems",
-        "body": "The site is a home for experiments, notes, and tools that keep agentic work inspectable and useful."
+        "title": "What the judgement engine helps surface",
+        "body": "SNAXK is the control layer idea beneath that mandate: notice signal before action, route uncertainty through boundaries, and carry forward only changes that survive review."
+      },
+      {
+        "title": "Use this with the CAO briefing",
+        "body": "Read ChiefAgenticOfficer.com for the board-level mandate, then use SNAXK as the practical question: how will the system slow down, stop, adapt, escalate, and show its judgement?"
       }
     ],
     "judgement_loop": [

@@ -4,10 +4,11 @@ Canonical website: https://snaxk.com/
 Agentic profile: https://snaxk.com/.well-known/agentic-profile.json
 Health check: https://snaxk.com/healthz
 
-The human-facing page is a local static SNAXK research page
-about judgement, judgement boundaries, review, and measurement for long-running
-agents. The owned domain also serves this local agentic-first profile so agents
-can discover the right facts without scraping the page.
+The human-facing page is a local static SNAXK feeder page
+for ChiefAgenticOfficer.com, positioning SNAXK as a judgement engine layer for
+agentic work: ownership, boundaries, stop conditions, evidence, review, and
+board-readable judgement. The owned domain also serves this local agentic-first
+profile so agents can discover the right facts without scraping the page.
 
 ```json
 {
@@ -24,8 +25,8 @@ can discover the right facts without scraping the page.
       "evaluation",
       "decision-support"
     ],
-    "tagline": "Judgement for long-running agents.",
-    "summary": "SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review."
+    "tagline": "A judgement engine for agentic work.",
+    "summary": "SNAXK helps surface the judgement a Chief Agentic Officer needs to inspect: ownership, boundaries, stop conditions, evidence, review, and measurable trust for long-running agentic systems."
   },
   "links": {
     "website": "https://snaxk.com"
@@ -36,10 +37,10 @@ can discover the right facts without scraping the page.
   },
   "analytics": {
     "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "site_goal": "Create qualified conversations about judgement, judgement boundaries, evaluation, and decision support for long-running agentic systems.",
-    "primary_conversion": "judgement_boundary_conversation",
-    "primary_destination": "https://www.tonywood.org/advisory/",
-    "campaign": "snaxk_to_tonywood_advisory"
+    "site_goal": "Feed qualified visitors into ChiefAgenticOfficer.com while measuring interest in SNAXK as a possible judgement engine for agentic work.",
+    "primary_conversion": "chiefagenticofficer_feeder_click",
+    "primary_destination": "https://chiefagenticofficer.com/",
+    "campaign": "snaxk_to_chiefagenticofficer"
   }
 }
 ```

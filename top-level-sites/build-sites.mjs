@@ -263,7 +263,7 @@ function analyticsFor(site) {
     primary_destination: goal.primary_destination || funnel.target_url || defaultTonywoodAdvisoryUrl,
     measurement_note: goal.measurement_note || "Review source-site visits, tracked Tonywood outbound clicks, Tonywood campaign landings, and manually qualified advisory conversations.",
     source,
-    campaign: funnel.campaign || campaignForDestination(source, "tonywood_advisory"),
+    campaign: goal.campaign || funnel.campaign || campaignForDestination(source, "tonywood_advisory"),
   };
 }
 
@@ -294,6 +294,21 @@ function tonywoodWritingUrlFor(site, target, content = "writing_link") {
   return trackedTonywoodUrlFor(site, target, content, campaignForDestination(source, "tonywood_writing"));
 }
 
+function trackedOutboundUrlFor(site, target, content = "cta", campaign = "", medium = "owned-referral") {
+  const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
+  try {
+    const url = new URL(target);
+    const source = funnel.source || site.domain;
+    url.searchParams.set("mtm_campaign", campaign || campaignForDestination(source, "outbound"));
+    url.searchParams.set("mtm_source", source);
+    url.searchParams.set("mtm_medium", medium);
+    if (content) url.searchParams.set("mtm_content", content);
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
 function funnelAttrsFor(site, content, stage = "source_to_tonywood_advisory") {
   const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
   const source = funnel.source || site.domain;
@@ -306,6 +321,18 @@ function funnelAttrsFor(site, content, stage = "source_to_tonywood_advisory") {
     ["data-funnel-stage", stage],
     ["data-funnel-source", source],
     ["data-funnel-campaign", campaign],
+    ["data-funnel-content", content],
+  ].map(([name, value]) => ` ${name}="${escapeHtml(value)}"`).join("");
+}
+
+function outboundAttrsFor(site, content, stage, campaign) {
+  const funnel = site.tonywood_funnel || defaultTonywoodFunnelFor(site);
+  const source = funnel.source || site.domain;
+  return [
+    ["data-funnel-category", "Source site funnel"],
+    ["data-funnel-stage", stage],
+    ["data-funnel-source", source],
+    ["data-funnel-campaign", campaign || campaignForDestination(source, "outbound")],
     ["data-funnel-content", content],
   ].map(([name, value]) => ` ${name}="${escapeHtml(value)}"`).join("");
 }
@@ -1241,10 +1268,11 @@ evidence, cadence, attention, escalation, and human judgement. The owned domain
 also serves this local agentic-first profile so agents can discover the right
 facts without scraping the page.`
                 : site.mode === "snaxk"
-                  ? `The human-facing page is a local static SNAXK research page
-about judgement, judgement boundaries, review, and measurement for long-running
-agents. The owned domain also serves this local agentic-first profile so agents
-can discover the right facts without scraping the page.`
+                  ? `The human-facing page is a local static SNAXK feeder page
+for ChiefAgenticOfficer.com, positioning SNAXK as a judgement engine layer for
+agentic work: ownership, boundaries, stop conditions, evidence, review, and
+board-readable judgement. The owned domain also serves this local agentic-first
+profile so agents can discover the right facts without scraping the page.`
                   : `The human-facing design for this site is ingested from Gamma into the
 per-site local container. The owned domain also serves this local agentic-first
 profile so agents can discover the right facts without scraping the Gamma page.`;
@@ -2222,7 +2250,7 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
-    <section class="section cta" id="conversation">
+    <section class="section cta" id="engine-interest">
       <div class="cta-inner">
         <p class="eyebrow">${escapeHtml(site.cta_eyebrow || "Useful first conversation")}</p>
         <h2>${escapeHtml(site.cta_title || "Start with the operating question, not the tool.")}</h2>
@@ -4166,8 +4194,23 @@ function snaxkPageFor(site) {
   const statusNoteMarkup = statusNote
     ? `\n            <p>${escapeHtml(statusNote)}</p>`
     : "";
-  const conversationHref = tonywoodFunnelUrlFor(site, "hero_judgement_boundaries") || defaultTonywoodAdvisoryUrl;
-  const finalConversationHref = tonywoodFunnelUrlFor(site, "final_judgement_boundaries") || defaultTonywoodAdvisoryUrl;
+  const caoFeeder = site.cao_feeder || {};
+  const caoUrl = caoFeeder.primary_url || "https://chiefagenticofficer.com/";
+  const caoCampaign = caoFeeder.primary_campaign || "snaxk_to_chiefagenticofficer";
+  const caoStage = caoFeeder.primary_stage || "source_to_chiefagenticofficer";
+  const caoHeroContent = caoFeeder.primary_content || "hero_cao_briefing";
+  const caoPanelContent = "cao_briefing_panel";
+  const advisoryUrl = caoFeeder.secondary_url || defaultTonywoodAdvisoryUrl;
+  const advisoryCampaign = caoFeeder.secondary_campaign || "snaxk_to_tonywood_advisory";
+  const advisoryStage = caoFeeder.secondary_stage || "source_to_tonywood_advisory";
+  const heroCaoHref = trackedOutboundUrlFor(site, caoUrl, caoHeroContent, caoCampaign) || caoUrl;
+  const panelCaoHref = trackedOutboundUrlFor(site, caoUrl, caoPanelContent, caoCampaign) || caoUrl;
+  const finalCaoHref = trackedOutboundUrlFor(site, caoUrl, "final_cao_briefing", caoCampaign) || caoUrl;
+  const advisoryHref = trackedOutboundUrlFor(site, advisoryUrl, "hero_tonywood_advisory", advisoryCampaign) || advisoryUrl;
+  const panelAdvisoryContent = "cao_panel_tonywood_advisory";
+  const panelAdvisoryHref = trackedOutboundUrlFor(site, advisoryUrl, panelAdvisoryContent, advisoryCampaign) || advisoryUrl;
+  const engineInterestContent = caoFeeder.engine_content || "snaxk_engine_interest";
+  const engineInterestHref = trackedOutboundUrlFor(site, advisoryUrl, engineInterestContent, advisoryCampaign) || advisoryUrl;
   const loop = site.judgement_loop || [
     { label: "01", title: "Fast heuristic pass", body: "Scan messages, events, and signals before action." },
     { label: "02", title: "Meaning check", body: "Separate routine noise from work that deserves judgement." },
@@ -4210,18 +4253,22 @@ function snaxkPageFor(site) {
 ${matomoScriptTagFor(site)}  <style>
     :root {
       color-scheme: light;
-      --ink: #17120d;
-      --muted: #65584c;
-      --paper: #fff7e8;
+      --ink: #1f2521;
+      --muted: #596059;
+      --paper: #f5f0e4;
       --cream: #fffdf7;
       --brown: #4b2f1b;
       --brown-soft: #76512b;
       --gold: #f2b84b;
       --honey: #f6d98d;
-      --sage: #64765c;
+      --sage: #617d66;
+      --sage-dark: #2d4538;
+      --charcoal: #202726;
+      --oxblood: #8f342d;
       --mist: #dbe6e0;
-      --line: rgba(75, 47, 27, 0.17);
-      --shadow: rgba(53, 35, 19, 0.14);
+      --line: rgba(31, 37, 33, 0.16);
+      --shadow: rgba(31, 37, 33, 0.13);
+      --serif: Georgia, "Times New Roman", serif;
     }
 
     * {
@@ -4236,7 +4283,7 @@ ${matomoScriptTagFor(site)}  <style>
       margin: 0;
       color: var(--ink);
       background:
-        linear-gradient(180deg, #fffaf0 0, var(--paper) 420px, #f8efe0 100%);
+        linear-gradient(180deg, #fffdf7 0, var(--paper) 520px, #eadfca 100%);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       letter-spacing: 0;
     }
@@ -4251,8 +4298,8 @@ ${matomoScriptTagFor(site)}  <style>
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      padding: 0 40px;
-      background: rgba(255, 253, 247, 0.92);
+      padding: 14px 40px;
+      background: rgba(255, 253, 247, 0.94);
       border-bottom: 1px solid var(--line);
     }
 
@@ -4292,17 +4339,17 @@ ${matomoScriptTagFor(site)}  <style>
     .hero {
       min-height: 690px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.74fr);
       gap: 42px;
       align-items: center;
       width: min(1240px, 100%);
       margin: 0 auto;
-      padding: 72px 40px 64px;
+      padding: 74px 40px 68px;
     }
 
     .eyebrow {
       margin: 0 0 14px;
-      color: var(--sage);
+      color: var(--oxblood);
       font-size: 13px;
       line-height: 1.2;
       font-weight: 860;
@@ -4319,17 +4366,19 @@ ${matomoScriptTagFor(site)}  <style>
 
     h1 {
       max-width: 11ch;
-      color: var(--brown);
+      color: var(--charcoal);
+      font-family: var(--serif);
       font-size: 84px;
-      line-height: 0.95;
-      font-weight: 890;
+      line-height: 0.96;
+      font-weight: 700;
     }
 
     h2 {
-      color: var(--brown);
+      color: var(--charcoal);
+      font-family: var(--serif);
       font-size: 46px;
       line-height: 1.05;
-      font-weight: 850;
+      font-weight: 700;
     }
 
     h3 {
@@ -4362,8 +4411,8 @@ ${matomoScriptTagFor(site)}  <style>
       gap: 10px;
       padding: 0 18px;
       border: 1px solid var(--brown);
-      border-radius: 6px;
-      background: var(--brown);
+      border-radius: 4px;
+      background: var(--charcoal);
       color: #fffdf7;
       text-decoration: none;
       font-weight: 820;
@@ -4378,7 +4427,7 @@ ${matomoScriptTagFor(site)}  <style>
 
     .button.secondary {
       background: transparent;
-      color: var(--brown);
+      color: var(--charcoal);
     }
 
     .research-strip {
@@ -4409,7 +4458,7 @@ ${matomoScriptTagFor(site)}  <style>
       border: 1px solid var(--line);
       border-radius: 8px;
       background:
-        linear-gradient(180deg, rgba(255, 253, 247, 0.94), rgba(255, 247, 232, 0.92));
+        linear-gradient(180deg, rgba(255, 253, 247, 0.96), rgba(245, 240, 228, 0.94));
       box-shadow: 0 24px 70px var(--shadow);
     }
 
@@ -4463,7 +4512,7 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .section {
-      padding: 70px 40px;
+      padding: 76px 40px;
       border-top: 1px solid var(--line);
     }
 
@@ -4492,7 +4541,7 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .loop-band {
-      background: #fffdf7;
+      background: var(--cream);
     }
 
     .loop-grid {
@@ -4519,7 +4568,7 @@ ${matomoScriptTagFor(site)}  <style>
       place-items: center;
       margin-bottom: 32px;
       border-radius: 8px;
-      background: var(--brown);
+      background: var(--charcoal);
       color: #fffdf7;
       font-size: 13px;
       font-weight: 850;
@@ -4527,7 +4576,7 @@ ${matomoScriptTagFor(site)}  <style>
 
     .boundary-band {
       background:
-        linear-gradient(180deg, rgba(219, 230, 224, 0.54), rgba(255, 247, 232, 0.7));
+        linear-gradient(180deg, rgba(219, 230, 224, 0.64), rgba(245, 240, 228, 0.82));
     }
 
     .boundary-grid {
@@ -4606,7 +4655,7 @@ ${matomoScriptTagFor(site)}  <style>
       border: 1px solid var(--line);
       border-radius: 8px;
       background:
-        linear-gradient(180deg, rgba(246, 217, 141, 0.30), rgba(255, 253, 247, 0.92));
+        linear-gradient(180deg, rgba(246, 217, 141, 0.28), rgba(255, 253, 247, 0.94));
       text-align: center;
     }
 
@@ -4617,7 +4666,7 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .cta {
-      background: var(--brown);
+      background: var(--charcoal);
       color: #fffdf7;
     }
 
@@ -4640,7 +4689,90 @@ ${matomoScriptTagFor(site)}  <style>
     .cta .button {
       border-color: #fffdf7;
       background: #fffdf7;
-      color: var(--brown);
+      color: var(--charcoal);
+    }
+
+    .briefing-band {
+      background: #fbf8ef;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .briefing-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.58fr);
+      gap: 34px;
+      align-items: end;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--cream);
+      box-shadow: 0 20px 58px var(--shadow);
+    }
+
+    .briefing-panel h2 {
+      max-width: 760px;
+      font-size: 44px;
+    }
+
+    .briefing-panel p {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.55;
+    }
+
+    .briefing-panel .lead {
+      color: var(--ink);
+      font-size: 21px;
+    }
+
+    .briefing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-start;
+    }
+
+    .briefing-actions .button.primary {
+      background: var(--sage-dark);
+      color: var(--cream);
+      border-color: var(--sage-dark);
+    }
+
+    .briefing-actions .button.secondary {
+      color: var(--sage-dark);
+    }
+
+    .engine-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .engine-card {
+      min-height: 186px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--cream);
+    }
+
+    .engine-card span {
+      display: block;
+      margin-bottom: 28px;
+      color: var(--oxblood);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .engine-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
     }
 
     footer {
@@ -4662,7 +4794,8 @@ ${matomoScriptTagFor(site)}  <style>
     @media (max-width: 1060px) {
       .hero,
       .split,
-      .measure {
+      .measure,
+      .briefing-panel {
         grid-template-columns: 1fr;
       }
 
@@ -4679,6 +4812,10 @@ ${matomoScriptTagFor(site)}  <style>
       }
 
       .boundary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .engine-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -4728,7 +4865,8 @@ ${matomoScriptTagFor(site)}  <style>
       }
 
       .loop-grid,
-      .boundary-grid {
+      .boundary-grid,
+      .engine-grid {
         grid-template-columns: 1fr;
       }
 
@@ -4746,10 +4884,11 @@ ${matomoScriptTagFor(site)}  <style>
       <span>${escapeHtml(site.name)}</span>
     </a>
     <nav aria-label="Primary">
-      <a href="#judgement-loop">Judgement loop</a>
+      <a href="#cao-briefing">CAO briefing</a>
+      <a href="#engine">Engine</a>
       <a href="#boundaries">Boundaries</a>
       <a href="#measurement">Measure</a>
-      <a href="#conversation">Conversation</a>
+      <a href="#engine-interest">Interest</a>
     </nav>
   </header>
 
@@ -4760,23 +4899,24 @@ ${matomoScriptTagFor(site)}  <style>
         <h1 id="page-title">${escapeHtml(site.heading || "Judgement for long-running agents.")}</h1>
         <p class="lede">${escapeHtml(summary)}</p>
         <div class="actions">
-          <a class="button" href="#judgement-loop">
+          <a class="button" href="${escapeHtml(heroCaoHref)}"${outboundAttrsFor(site, caoHeroContent, caoStage, caoCampaign)}>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            ${escapeHtml(site.primary_action_label || "See the judgement loop")}
+            ${escapeHtml(site.primary_action_label || "Open the CAO briefing")}
           </a>
-          <a class="button secondary" href="${escapeHtml(conversationHref)}"${funnelAttrsFor(site, "hero_judgement_boundaries")}>
+          <a class="button secondary" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, "hero_tonywood_advisory", advisoryStage, advisoryCampaign)}>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
               <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
             </svg>
-            ${escapeHtml(site.secondary_action_label || "Discuss judgement boundaries")}
+            ${escapeHtml(site.secondary_action_label || "Discuss with Tony Wood")}
           </a>
         </div>
         <div class="research-strip" aria-label="Research status">
           <span>${escapeHtml(milestone)}</span>
-          <span>OpenClaw first</span>
+          <span>Chief Agentic Officer feeder</span>
+          <span>Judgement engine interest</span>
         </div>
       </div>
 
@@ -4786,8 +4926,8 @@ ${matomoScriptTagFor(site)}  <style>
         </div>
         <div class="lab-copy">
           <p class="eyebrow">Signal before action</p>
-          <h2>Agents can answer before they can judge.</h2>
-          <p>SNAXK sits in the space before action: is anything meaningful happening, is the request bounded, and should the system continue, slow down, stop, or ask for review?</p>
+          <h2>The engine layer beneath the mandate.</h2>
+          <p>ChiefAgenticOfficer.com names the leadership question. SNAXK explores the engine underneath it: how an agent slows down, stops, adapts, escalates, and leaves evidence of its judgement.</p>
         </div>
         <div class="mini-loop" aria-label="Short judgement path">
           ${loop.slice(0, 3).map((item) => `<span><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.title)}</span>`).join("\n          ")}
@@ -4798,9 +4938,9 @@ ${matomoScriptTagFor(site)}  <style>
     <section class="section" aria-labelledby="thesis-title">
       <div class="section-inner split">
         <div>
-          <p class="eyebrow">The gap</p>
-          <h2 id="thesis-title">Most agent systems can produce. Fewer know when to pause.</h2>
-          <p class="lede">That is the space SNAXK is operating in: a lightweight layer for better judgement, clearer boundaries, and reviewable change.</p>
+          <p class="eyebrow">The feeder role</p>
+          <h2 id="thesis-title">SNAXK points people toward the Chief Agentic Officer question.</h2>
+          <p class="lede">If agentic work is becoming real work, someone has to own the boundary, the stop condition, the evidence, and the review. SNAXK makes that need visible.</p>
         </div>
         <div class="section-copy">
           ${sections.map((section) => `<article>
@@ -4811,11 +4951,43 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
-    <section class="section loop-band" id="judgement-loop" aria-labelledby="loop-title">
+    <section class="section briefing-band" id="cao-briefing" aria-labelledby="cao-title">
+      <div class="section-inner briefing-panel">
+        <div>
+          <p class="eyebrow">Use this with the CAO briefing</p>
+          <h2 id="cao-title">The Chief Agentic Officer owns the mandate. SNAXK explores the judgement engine.</h2>
+          <p class="lead">ChiefAgenticOfficer.com is the primary next step for leaders who need the board-facing frame: what agentic work may do, who owns it, and what can be inspected afterwards.</p>
+          <p>SNAXK is the feeder idea below that frame. It asks whether long-running agentic systems can make their judgement more visible before leaders are asked to trust them.</p>
+        </div>
+        <div class="briefing-actions">
+          <a class="button primary" href="${escapeHtml(panelCaoHref)}"${outboundAttrsFor(site, caoPanelContent, caoStage, caoCampaign)}>Read ChiefAgenticOfficer.com</a>
+          <a class="button secondary" href="${escapeHtml(panelAdvisoryHref)}"${outboundAttrsFor(site, panelAdvisoryContent, advisoryStage, advisoryCampaign)}>Talk to Tony Wood</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section loop-band" id="engine" aria-labelledby="engine-title">
       <div class="section-inner">
-        <p class="eyebrow">Judgement loop</p>
-        <h2 id="loop-title">A small loop before long-running agents change course.</h2>
+        <p class="eyebrow">What the engine helps surface</p>
+        <h2 id="engine-title">Board-readable judgement before long-running agents change course.</h2>
         <p class="lede">The hypothesis is simple: agents behave better when they do not jump straight from input to action.</p>
+        <div class="engine-grid">
+          <article class="engine-card">
+            <span>Ownership</span>
+            <h3>Who owns this work?</h3>
+            <p>The engine should make it clearer which human or mandate owns the agentic work, the decision, and the follow-through.</p>
+          </article>
+          <article class="engine-card">
+            <span>Stop condition</span>
+            <h3>When should it pause?</h3>
+            <p>Useful autonomy needs visible boundaries: slow down, stop, adapt, escalate, or ask for review before risk becomes hidden.</p>
+          </article>
+          <article class="engine-card">
+            <span>Evidence</span>
+            <h3>What can leaders inspect?</h3>
+            <p>The judgement only matters if people can see what changed, why it changed, and what was deliberately not carried forward.</p>
+          </article>
+        </div>
         <div class="loop-grid">
           ${loop.map((item) => `<article class="step">
             <span>${escapeHtml(item.label)}</span>
@@ -4850,10 +5022,10 @@ ${matomoScriptTagFor(site)}  <style>
             ${measurements.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n            ")}
           </ul>
         </div>
-        <aside class="status-panel" aria-label="Research rollout">
+        <aside class="status-panel" aria-label="Judgement engine status">
           <img src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)} logo">
           <div>
-            <p class="eyebrow">Research rollout</p>
+            <p class="eyebrow">Judgement engine</p>
             <h3>${escapeHtml(milestone)}</h3>${statusNoteMarkup}
           </div>
         </aside>
@@ -4862,17 +5034,18 @@ ${matomoScriptTagFor(site)}  <style>
 
     <section class="section cta" id="conversation">
       <div class="section-inner">
-        <p class="eyebrow">Useful first conversation</p>
-        <h2>Talk about the judgement boundaries before the agent runs for days.</h2>
-        <p>Where should your agent slow down, stop, adapt, escalate, remember, or refuse to carry a change forward?</p>
+        <p class="eyebrow">Register interest in the judgement engine</p>
+        <h2>Want to explore whether this engine could help your agentic work?</h2>
+        <p>SNAXK is not being sold as a packaged product today. This is a tracked interest route for leaders and builders who want to discuss judgement boundaries, board-readable evidence, and whether a SNAXK-style engine should exist separately in future.</p>
         <div class="actions">
-          <a class="button" href="${escapeHtml(finalConversationHref)}"${funnelAttrsFor(site, "final_judgement_boundaries")}>
+          <a class="button" href="${escapeHtml(engineInterestHref)}"${outboundAttrsFor(site, engineInterestContent, advisoryStage, advisoryCampaign)}>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
               <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
             </svg>
-            Discuss judgement boundaries
+            Register judgement-engine interest
           </a>
+          <a class="button secondary" href="${escapeHtml(finalCaoHref)}"${outboundAttrsFor(site, "final_cao_briefing", caoStage, caoCampaign)}>Open the CAO briefing</a>
         </div>
       </div>
     </section>

@@ -3,26 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SNAXK | Judgement for long-running agents</title>
-  <meta name="description" content="SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review.">
+  <title>SNAXK | Judgement engine for agentic work</title>
+  <meta name="description" content="SNAXK helps surface the judgement a Chief Agentic Officer needs to inspect: ownership, boundaries, stop conditions, evidence, review, and measurable trust for long-running agentic systems.">
   <link rel="preload" as="image" href="/assets/snaxk-lozenge.png">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script defer src="/static/js/matomo-loader.js"></script>
   <style>
     :root {
       color-scheme: light;
-      --ink: #17120d;
-      --muted: #65584c;
-      --paper: #fff7e8;
+      --ink: #1f2521;
+      --muted: #596059;
+      --paper: #f5f0e4;
       --cream: #fffdf7;
       --brown: #4b2f1b;
       --brown-soft: #76512b;
       --gold: #f2b84b;
       --honey: #f6d98d;
-      --sage: #64765c;
+      --sage: #617d66;
+      --sage-dark: #2d4538;
+      --charcoal: #202726;
+      --oxblood: #8f342d;
       --mist: #dbe6e0;
-      --line: rgba(75, 47, 27, 0.17);
-      --shadow: rgba(53, 35, 19, 0.14);
+      --line: rgba(31, 37, 33, 0.16);
+      --shadow: rgba(31, 37, 33, 0.13);
+      --serif: Georgia, "Times New Roman", serif;
     }
 
     * {
@@ -37,7 +41,7 @@
       margin: 0;
       color: var(--ink);
       background:
-        linear-gradient(180deg, #fffaf0 0, var(--paper) 420px, #f8efe0 100%);
+        linear-gradient(180deg, #fffdf7 0, var(--paper) 520px, #eadfca 100%);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       letter-spacing: 0;
     }
@@ -52,8 +56,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      padding: 0 40px;
-      background: rgba(255, 253, 247, 0.92);
+      padding: 14px 40px;
+      background: rgba(255, 253, 247, 0.94);
       border-bottom: 1px solid var(--line);
     }
 
@@ -93,17 +97,17 @@
     .hero {
       min-height: 690px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.74fr);
       gap: 42px;
       align-items: center;
       width: min(1240px, 100%);
       margin: 0 auto;
-      padding: 72px 40px 64px;
+      padding: 74px 40px 68px;
     }
 
     .eyebrow {
       margin: 0 0 14px;
-      color: var(--sage);
+      color: var(--oxblood);
       font-size: 13px;
       line-height: 1.2;
       font-weight: 860;
@@ -120,17 +124,19 @@
 
     h1 {
       max-width: 11ch;
-      color: var(--brown);
+      color: var(--charcoal);
+      font-family: var(--serif);
       font-size: 84px;
-      line-height: 0.95;
-      font-weight: 890;
+      line-height: 0.96;
+      font-weight: 700;
     }
 
     h2 {
-      color: var(--brown);
+      color: var(--charcoal);
+      font-family: var(--serif);
       font-size: 46px;
       line-height: 1.05;
-      font-weight: 850;
+      font-weight: 700;
     }
 
     h3 {
@@ -163,8 +169,8 @@
       gap: 10px;
       padding: 0 18px;
       border: 1px solid var(--brown);
-      border-radius: 6px;
-      background: var(--brown);
+      border-radius: 4px;
+      background: var(--charcoal);
       color: #fffdf7;
       text-decoration: none;
       font-weight: 820;
@@ -179,7 +185,7 @@
 
     .button.secondary {
       background: transparent;
-      color: var(--brown);
+      color: var(--charcoal);
     }
 
     .research-strip {
@@ -210,7 +216,7 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background:
-        linear-gradient(180deg, rgba(255, 253, 247, 0.94), rgba(255, 247, 232, 0.92));
+        linear-gradient(180deg, rgba(255, 253, 247, 0.96), rgba(245, 240, 228, 0.94));
       box-shadow: 0 24px 70px var(--shadow);
     }
 
@@ -264,7 +270,7 @@
     }
 
     .section {
-      padding: 70px 40px;
+      padding: 76px 40px;
       border-top: 1px solid var(--line);
     }
 
@@ -293,7 +299,7 @@
     }
 
     .loop-band {
-      background: #fffdf7;
+      background: var(--cream);
     }
 
     .loop-grid {
@@ -320,7 +326,7 @@
       place-items: center;
       margin-bottom: 32px;
       border-radius: 8px;
-      background: var(--brown);
+      background: var(--charcoal);
       color: #fffdf7;
       font-size: 13px;
       font-weight: 850;
@@ -328,7 +334,7 @@
 
     .boundary-band {
       background:
-        linear-gradient(180deg, rgba(219, 230, 224, 0.54), rgba(255, 247, 232, 0.7));
+        linear-gradient(180deg, rgba(219, 230, 224, 0.64), rgba(245, 240, 228, 0.82));
     }
 
     .boundary-grid {
@@ -407,7 +413,7 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background:
-        linear-gradient(180deg, rgba(246, 217, 141, 0.30), rgba(255, 253, 247, 0.92));
+        linear-gradient(180deg, rgba(246, 217, 141, 0.28), rgba(255, 253, 247, 0.94));
       text-align: center;
     }
 
@@ -418,7 +424,7 @@
     }
 
     .cta {
-      background: var(--brown);
+      background: var(--charcoal);
       color: #fffdf7;
     }
 
@@ -441,7 +447,90 @@
     .cta .button {
       border-color: #fffdf7;
       background: #fffdf7;
-      color: var(--brown);
+      color: var(--charcoal);
+    }
+
+    .briefing-band {
+      background: #fbf8ef;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .briefing-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.58fr);
+      gap: 34px;
+      align-items: end;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--cream);
+      box-shadow: 0 20px 58px var(--shadow);
+    }
+
+    .briefing-panel h2 {
+      max-width: 760px;
+      font-size: 44px;
+    }
+
+    .briefing-panel p {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.55;
+    }
+
+    .briefing-panel .lead {
+      color: var(--ink);
+      font-size: 21px;
+    }
+
+    .briefing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-start;
+    }
+
+    .briefing-actions .button.primary {
+      background: var(--sage-dark);
+      color: var(--cream);
+      border-color: var(--sage-dark);
+    }
+
+    .briefing-actions .button.secondary {
+      color: var(--sage-dark);
+    }
+
+    .engine-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .engine-card {
+      min-height: 186px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--cream);
+    }
+
+    .engine-card span {
+      display: block;
+      margin-bottom: 28px;
+      color: var(--oxblood);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .engine-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
     }
 
     footer {
@@ -463,7 +552,8 @@
     @media (max-width: 1060px) {
       .hero,
       .split,
-      .measure {
+      .measure,
+      .briefing-panel {
         grid-template-columns: 1fr;
       }
 
@@ -480,6 +570,10 @@
       }
 
       .boundary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .engine-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -529,7 +623,8 @@
       }
 
       .loop-grid,
-      .boundary-grid {
+      .boundary-grid,
+      .engine-grid {
         grid-template-columns: 1fr;
       }
 
@@ -547,10 +642,11 @@
       <span>SNAXK</span>
     </a>
     <nav aria-label="Primary">
-      <a href="#judgement-loop">Judgement loop</a>
+      <a href="#cao-briefing">CAO briefing</a>
+      <a href="#engine">Engine</a>
       <a href="#boundaries">Boundaries</a>
       <a href="#measurement">Measure</a>
-      <a href="#conversation">Conversation</a>
+      <a href="#engine-interest">Interest</a>
     </nav>
   </header>
 
@@ -558,26 +654,27 @@
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy">
         <p class="eyebrow">SNAXK</p>
-        <h1 id="page-title">Judgement for long-running agents.</h1>
-        <p class="lede">SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review.</p>
+        <h1 id="page-title">A judgement engine for agentic work.</h1>
+        <p class="lede">SNAXK helps surface the judgement a Chief Agentic Officer needs to inspect: ownership, boundaries, stop conditions, evidence, review, and measurable trust for long-running agentic systems.</p>
         <div class="actions">
-          <a class="button" href="#judgement-loop">
+          <a class="button" href="https://chiefagenticofficer.com/?mtm_campaign=snaxk_to_chiefagenticofficer&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=hero_cao_briefing" data-funnel-category="Source site funnel" data-funnel-stage="source_to_chiefagenticofficer" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_chiefagenticofficer" data-funnel-content="hero_cao_briefing">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            See the judgement loop
+            Open the CAO briefing
           </a>
-          <a class="button secondary" href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=hero_judgement_boundaries" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="hero_judgement_boundaries">
+          <a class="button secondary" href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=hero_tonywood_advisory" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="hero_tonywood_advisory">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
               <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
             </svg>
-            Discuss judgement boundaries
+            Discuss with Tony Wood
           </a>
         </div>
         <div class="research-strip" aria-label="Research status">
           <span>SNAXK 0.10.8</span>
-          <span>OpenClaw first</span>
+          <span>Chief Agentic Officer feeder</span>
+          <span>Judgement engine interest</span>
         </div>
       </div>
 
@@ -587,8 +684,8 @@
         </div>
         <div class="lab-copy">
           <p class="eyebrow">Signal before action</p>
-          <h2>Agents can answer before they can judge.</h2>
-          <p>SNAXK sits in the space before action: is anything meaningful happening, is the request bounded, and should the system continue, slow down, stop, or ask for review?</p>
+          <h2>The engine layer beneath the mandate.</h2>
+          <p>ChiefAgenticOfficer.com names the leadership question. SNAXK explores the engine underneath it: how an agent slows down, stops, adapts, escalates, and leaves evidence of its judgement.</p>
         </div>
         <div class="mini-loop" aria-label="Short judgement path">
           <span><strong>01</strong>Fast heuristic pass</span>
@@ -601,28 +698,64 @@
     <section class="section" aria-labelledby="thesis-title">
       <div class="section-inner split">
         <div>
-          <p class="eyebrow">The gap</p>
-          <h2 id="thesis-title">Most agent systems can produce. Fewer know when to pause.</h2>
-          <p class="lede">That is the space SNAXK is operating in: a lightweight layer for better judgement, clearer boundaries, and reviewable change.</p>
+          <p class="eyebrow">The feeder role</p>
+          <h2 id="thesis-title">SNAXK points people toward the Chief Agentic Officer question.</h2>
+          <p class="lede">If agentic work is becoming real work, someone has to own the boundary, the stop condition, the evidence, and the review. SNAXK makes that need visible.</p>
         </div>
         <div class="section-copy">
           <article>
-            <h3>Longer runs need better judgement</h3>
-            <p>As agents move from demos into ongoing work, judgement becomes the core control surface: what to continue, stop, escalate, or reframe.</p>
+            <h3>Why this matters to a Chief Agentic Officer</h3>
+            <p>The Chief Agentic Officer needs to know what agentic work exists, what it may do, who owns the boundary, and what evidence leaders can inspect afterwards.</p>
           </article>
           <article>
-            <h3>Built for practical systems</h3>
-            <p>The site is a home for experiments, notes, and tools that keep agentic work inspectable and useful.</p>
+            <h3>What the judgement engine helps surface</h3>
+            <p>SNAXK is the control layer idea beneath that mandate: notice signal before action, route uncertainty through boundaries, and carry forward only changes that survive review.</p>
+          </article>
+          <article>
+            <h3>Use this with the CAO briefing</h3>
+            <p>Read ChiefAgenticOfficer.com for the board-level mandate, then use SNAXK as the practical question: how will the system slow down, stop, adapt, escalate, and show its judgement?</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section loop-band" id="judgement-loop" aria-labelledby="loop-title">
+    <section class="section briefing-band" id="cao-briefing" aria-labelledby="cao-title">
+      <div class="section-inner briefing-panel">
+        <div>
+          <p class="eyebrow">Use this with the CAO briefing</p>
+          <h2 id="cao-title">The Chief Agentic Officer owns the mandate. SNAXK explores the judgement engine.</h2>
+          <p class="lead">ChiefAgenticOfficer.com is the primary next step for leaders who need the board-facing frame: what agentic work may do, who owns it, and what can be inspected afterwards.</p>
+          <p>SNAXK is the feeder idea below that frame. It asks whether long-running agentic systems can make their judgement more visible before leaders are asked to trust them.</p>
+        </div>
+        <div class="briefing-actions">
+          <a class="button primary" href="https://chiefagenticofficer.com/?mtm_campaign=snaxk_to_chiefagenticofficer&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=cao_briefing_panel" data-funnel-category="Source site funnel" data-funnel-stage="source_to_chiefagenticofficer" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_chiefagenticofficer" data-funnel-content="cao_briefing_panel">Read ChiefAgenticOfficer.com</a>
+          <a class="button secondary" href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=cao_panel_tonywood_advisory" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="cao_panel_tonywood_advisory">Talk to Tony Wood</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section loop-band" id="engine" aria-labelledby="engine-title">
       <div class="section-inner">
-        <p class="eyebrow">Judgement loop</p>
-        <h2 id="loop-title">A small loop before long-running agents change course.</h2>
+        <p class="eyebrow">What the engine helps surface</p>
+        <h2 id="engine-title">Board-readable judgement before long-running agents change course.</h2>
         <p class="lede">The hypothesis is simple: agents behave better when they do not jump straight from input to action.</p>
+        <div class="engine-grid">
+          <article class="engine-card">
+            <span>Ownership</span>
+            <h3>Who owns this work?</h3>
+            <p>The engine should make it clearer which human or mandate owns the agentic work, the decision, and the follow-through.</p>
+          </article>
+          <article class="engine-card">
+            <span>Stop condition</span>
+            <h3>When should it pause?</h3>
+            <p>Useful autonomy needs visible boundaries: slow down, stop, adapt, escalate, or ask for review before risk becomes hidden.</p>
+          </article>
+          <article class="engine-card">
+            <span>Evidence</span>
+            <h3>What can leaders inspect?</h3>
+            <p>The judgement only matters if people can see what changed, why it changed, and what was deliberately not carried forward.</p>
+          </article>
+        </div>
         <div class="loop-grid">
           <article class="step">
             <span>01</span>
@@ -694,10 +827,10 @@
             <li>Can we measure trustworthiness over time?</li>
           </ul>
         </div>
-        <aside class="status-panel" aria-label="Research rollout">
+        <aside class="status-panel" aria-label="Judgement engine status">
           <img src="/assets/snaxk-logo.png" alt="SNAXK logo">
           <div>
-            <p class="eyebrow">Research rollout</p>
+            <p class="eyebrow">Judgement engine</p>
             <h3>SNAXK 0.10.8</h3>
           </div>
         </aside>
@@ -706,17 +839,18 @@
 
     <section class="section cta" id="conversation">
       <div class="section-inner">
-        <p class="eyebrow">Useful first conversation</p>
-        <h2>Talk about the judgement boundaries before the agent runs for days.</h2>
-        <p>Where should your agent slow down, stop, adapt, escalate, remember, or refuse to carry a change forward?</p>
+        <p class="eyebrow">Register interest in the judgement engine</p>
+        <h2>Want to explore whether this engine could help your agentic work?</h2>
+        <p>SNAXK is not being sold as a packaged product today. This is a tracked interest route for leaders and builders who want to discuss judgement boundaries, board-readable evidence, and whether a SNAXK-style engine should exist separately in future.</p>
         <div class="actions">
-          <a class="button" href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=final_judgement_boundaries" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="final_judgement_boundaries">
+          <a class="button" href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=snaxk_engine_interest" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="snaxk_engine_interest">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
               <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
             </svg>
-            Discuss judgement boundaries
+            Register judgement-engine interest
           </a>
+          <a class="button secondary" href="https://chiefagenticofficer.com/?mtm_campaign=snaxk_to_chiefagenticofficer&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=final_cao_briefing" data-funnel-category="Source site funnel" data-funnel-stage="source_to_chiefagenticofficer" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_chiefagenticofficer" data-funnel-content="final_cao_briefing">Open the CAO briefing</a>
         </div>
       </div>
     </section>
