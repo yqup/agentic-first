@@ -13,12 +13,24 @@ image to build reliable cards.
 
 ## Affected Sites
 
-Apply this to generated top-level public sites, especially:
+Apply this to every generated top-level public site that we maintain in Matomo:
 
-- `https://yqup.com/`
-- `https://orchistra.com/`
-- `https://snaxk.com/`
-- `https://agentic-first.co/`
+| Domain | Matomo site ID | Notes |
+| --- | ---: | --- |
+| `https://yqup.com/` | `5` | YQUP consulting and system-sites homepage |
+| `https://snaxk.com/` | `6` | SNAXK judgement engine |
+| `https://my-agentic.com/` | `7` | Agentics URL home |
+| `https://chiefagenticofficer.com/` | `8` | Chief Agentic Officer top-level listing |
+| `https://agenticleader.com/` | `9` | Agentic Leader |
+| `https://aiperations.com/` | `10` | AIperations |
+| `https://agenticboard.com/` | `11` | Agentic Board |
+| `https://dilijenz.com/` | `12` | Dilijenz holding page |
+| `https://syndesy.com/` | `13` | Syndesy holding page |
+| `https://orchistra.com/` | `14` | Orchistra |
+
+`https://www.tonywood.org/` and the standalone
+`https://chiefagenticofficer.com/` repo also have their own LinkedIn/Open Graph
+next-step notes in their respective site repositories.
 
 ## Next Change Requirement
 
