@@ -46,6 +46,7 @@ This regenerates:
 
 ## Change Notes
 
+- [LinkedIn Open Graph previews](docs/linkedin-open-graph-previews.md) - next site-change task.
 - [SNAXK country-map refresh](docs/snaxk-country-map-refresh.md)
 - [YQUP consulting refresh](docs/yqup-consulting-refresh.md)
 - [Orchistra CAO feeder refresh](docs/orchistra-cao-feeder-refresh.md)
