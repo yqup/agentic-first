@@ -1332,8 +1332,8 @@
       },
       {
         "title": "Observe",
-        "heading": "Make coordination visible to humans.",
-        "body": "A human console shows channels, tasks, roster, audit trail, rich updates, and overview signals so the system can be understood at a glance."
+        "heading": "Make coordination and human requests visible.",
+        "body": "A human console shows channels, tasks, requests for help or approval, roster, audit trail, rich updates, and overview signals so the system can be understood at a glance."
       },
       {
         "title": "Guide",
