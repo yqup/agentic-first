@@ -43,6 +43,25 @@ Preserved:
 - `/favicon.svg`
 - `/assets/yqup-logo.svg`
 
+## Next site-change task
+
+Add LinkedIn/Open Graph preview metadata for `https://yqup.com/` before or
+during the next YQUP site change. This should include `og:title`,
+`og:description`, `og:url`, `og:image`, Twitter card tags, and a 1200 x 627
+preview image that LinkedIn can use without manual correction.
+
+Canonical task note:
+
+```text
+top-level-sites/docs/linkedin-open-graph-previews.md
+```
+
+After deployment, refresh the URL through LinkedIn Post Inspector:
+
+```text
+https://www.linkedin.com/post-inspector/
+```
+
 `/healthz` now reports:
 
 ```json
