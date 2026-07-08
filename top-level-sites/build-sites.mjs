@@ -8383,8 +8383,8 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 72px 40px 92px;
       overflow: hidden;
       background:
-        radial-gradient(circle at 84% 18%, rgba(239, 107, 74, 0.24), transparent 28%),
-        linear-gradient(125deg, rgba(23, 21, 18, 0.98), rgba(48, 43, 34, 0.94) 56%, rgba(32, 127, 121, 0.88));
+        linear-gradient(90deg, rgba(23, 21, 18, 0.96), rgba(23, 21, 18, 0.72) 42%, rgba(23, 21, 18, 0.18) 78%),
+        linear-gradient(135deg, #171512 0%, #20352c 46%, #d2a84b 112%);
       color: var(--white);
       isolation: isolate;
     }
@@ -8398,31 +8398,48 @@ ${matomoScriptTagFor(site)}  <style>
 
     .console-scene {
       position: absolute;
-      right: max(28px, 5vw);
-      top: 96px;
-      width: min(720px, 54vw);
-      min-height: 520px;
-      opacity: 0.72;
+      right: max(28px, 4vw);
+      top: 88px;
+      width: min(780px, 57vw);
+      min-height: 540px;
+      opacity: 0.94;
+      transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
+      transform-origin: center;
     }
 
     .console-window {
       position: relative;
       display: grid;
-      grid-template-columns: 164px minmax(0, 1fr) 168px;
-      min-height: 500px;
-      border: 1px solid rgba(255, 253, 247, 0.22);
+      grid-template-columns: 190px minmax(0, 1fr) 190px;
+      min-height: 520px;
+      border: 1px solid rgba(255, 253, 247, 0.38);
       border-radius: 8px;
-      background: rgba(255, 253, 247, 0.92);
-      box-shadow: 0 34px 90px rgba(3, 16, 14, 0.32);
+      background: rgba(255, 250, 242, 0.94);
+      box-shadow:
+        0 44px 110px rgba(3, 16, 14, 0.46),
+        0 0 0 1px rgba(222, 163, 49, 0.16) inset;
       color: var(--ink);
       overflow: hidden;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(12px) saturate(1.08);
+    }
+
+    .console-window::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(105deg, rgba(255, 250, 242, 0.28), transparent 28%),
+        linear-gradient(180deg, transparent 58%, rgba(222, 163, 49, 0.12));
+      mix-blend-mode: soft-light;
     }
 
     .console-sidebar,
     .console-rail {
-      padding: 18px 14px;
-      background: #10221f;
+      padding: 20px 16px;
+      background:
+        linear-gradient(180deg, rgba(255, 250, 242, 0.08), transparent 34%),
+        #10221f;
       color: rgba(255, 253, 247, 0.84);
     }
 
@@ -8449,7 +8466,7 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .console-channel.active {
-      background: rgba(146, 199, 214, 0.18);
+      background: rgba(222, 163, 49, 0.2);
       color: var(--white);
     }
 
@@ -8459,6 +8476,7 @@ ${matomoScriptTagFor(site)}  <style>
       width: 8px;
       height: 8px;
       border-radius: 999px;
+      flex: 0 0 auto;
       background: var(--sky);
     }
 
@@ -8477,8 +8495,9 @@ ${matomoScriptTagFor(site)}  <style>
       min-width: 0;
       padding: 18px;
       background:
-        linear-gradient(90deg, rgba(231, 239, 233, 0.76) 1px, transparent 1px) 0 0 / 34px 34px,
-        linear-gradient(180deg, #fffdf7 0%, #f7f2e6 100%);
+        linear-gradient(90deg, rgba(32, 127, 121, 0.08) 1px, transparent 1px) 0 0 / 34px 34px,
+        linear-gradient(rgba(32, 127, 121, 0.08) 1px, transparent 1px) 0 0 / 34px 34px,
+        linear-gradient(180deg, #fffdf7 0%, #f8efe0 100%);
     }
 
     .thread-header {
@@ -8517,7 +8536,8 @@ ${matomoScriptTagFor(site)}  <style>
       display: grid;
       place-items: center;
       border-radius: 8px;
-      background: var(--hedge);
+      background:
+        linear-gradient(135deg, var(--hedge), #20483d);
       color: var(--white);
       font-size: 12px;
       font-weight: 900;
@@ -8528,8 +8548,10 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 11px 12px;
       border: 1px solid rgba(16, 34, 31, 0.12);
       border-radius: 8px;
-      background: var(--white);
-      box-shadow: 0 10px 24px rgba(16, 34, 31, 0.08);
+      background: rgba(255, 250, 242, 0.96);
+      box-shadow:
+        0 12px 28px rgba(16, 34, 31, 0.1),
+        0 0 0 1px rgba(222, 163, 49, 0.08) inset;
       font-size: 12px;
       line-height: 1.42;
     }
@@ -8577,7 +8599,9 @@ ${matomoScriptTagFor(site)}  <style>
       display: grid;
       grid-template-columns: 8px minmax(0, 1fr);
       align-items: center;
-      background: rgba(255, 253, 247, 0.08);
+      min-height: 38px;
+      background: rgba(255, 253, 247, 0.1);
+      line-height: 1.18;
     }
 
     .flow-line {
@@ -9757,7 +9781,7 @@ ${matomoScriptTagFor(site)}  <style>
   <main>
     <section class="hero" aria-labelledby="page-title">
       <div class="console-stage" aria-hidden="true">
-        ${orchistraHeroConsole()}
+        ${orchistraHeroConsole(site)}
       </div>
       <div class="hero-inner">
         <p class="eyebrow">${escapeHtml(site.eyebrow || "Shepherds of agentic systems")}</p>
@@ -10077,46 +10101,64 @@ ${matomoScriptTagFor(site)}  <style>
 `;
 }
 
-function orchistraHeroConsole() {
+function orchistraHeroConsole(site) {
+  const caoSite = sites.find((item) => item.domain === "chiefagenticofficer.com") || {};
+  const issueOptions = (caoSite.briefing?.issue_options || [])
+    .filter((item) => item && item !== "Other");
+  const categories = caoSite.for_agents?.categories || [];
+  const categoryMeaning = (name, fallback) => categories.find((item) => item.name === name)?.meaning || fallback;
+  const channelLabels = (issueOptions.length ? issueOptions : [
+    "AI governance",
+    "Cyber/resilience",
+    "Disclosure",
+    "GDPR/data",
+  ]).slice(0, 4);
+  const cards = [
+    {
+      dot: "AI",
+      name: "AI governance",
+      body: categoryMeaning("AI governance", "Ownership, decision rights, assurance, and accountable use need a visible owner."),
+      receipt: "owner question",
+    },
+    {
+      dot: "CY",
+      name: "Cyber/resilience",
+      body: categoryMeaning("Cyber/resilience", "Operational resilience and incident readiness need evidence before the next review."),
+      receipt: "evidence needed",
+    },
+    {
+      dot: "BA",
+      name: "Board actions",
+      body: categoryMeaning("Board actions", "Approve, stop, narrow, fund, review, or escalate: the decision route should be explicit."),
+      receipt: "decision route",
+    },
+  ];
+  const metrics = [
+    `${issueOptions.length || 6} signal lanes`,
+    "UK/EU signal scan",
+    "3 board questions",
+    "judgement support",
+  ];
   return `<div class="console-scene">
   <div class="console-window">
     <aside class="console-sidebar">
-      <strong>Orchistra</strong>
-      <div class="console-channel active"># ops</div>
-      <div class="console-channel"># research</div>
-      <div class="console-channel"># builds</div>
-      <div class="console-channel"># guidance</div>
+      <strong>CAO signals</strong>
+      ${channelLabels.map((label, index) => `<div class="console-channel${index === 0 ? " active" : ""}">${escapeHtml(label)}</div>`).join("")}
     </aside>
     <div class="console-main">
       <div class="thread-header">
-        <span># ops / agent handoff</span>
-        <span>live audit on</span>
+        <span>Chief Agentic Officer Briefing</span>
+        <span>public signal scan</span>
       </div>
       <div class="message-stack">
-        <div class="message-row">
-          <div class="agent-dot">TI</div>
+        ${cards.map((card, index) => `<div class="message-row">
+          <div class="agent-dot">${escapeHtml(card.dot)}</div>
           <div class="message-card">
-            <strong>Termintel</strong>
-            <p>Signal checked. Routing status to the gateway thread.</p>
-            <span class="receipt">acked</span>
+            <strong>${escapeHtml(card.name)}</strong>
+            <p>${escapeHtml(card.body)}</p>
+            ${index === cards.length - 1 ? `<span class="typing"><i></i><i></i><i></i></span>` : `<span class="receipt">${escapeHtml(card.receipt)}</span>`}
           </div>
-        </div>
-        <div class="message-row">
-          <div class="agent-dot">AT</div>
-          <div class="message-card">
-            <strong>Atlas</strong>
-            <p>Seen. Checking receipts and task lineage before handoff.</p>
-            <span class="receipt">seen</span>
-          </div>
-        </div>
-        <div class="message-row">
-          <div class="agent-dot">SG</div>
-          <div class="message-card">
-            <strong>Signal Guide</strong>
-            <p>Pattern noted: add a concise evidence note before deploy.</p>
-            <span class="typing"><i></i><i></i><i></i></span>
-          </div>
-        </div>
+        </div>`).join("")}
       </div>
       <span class="flow-line flow-one"></span>
       <span class="flow-line flow-two"></span>
@@ -10124,11 +10166,8 @@ function orchistraHeroConsole() {
       <span class="pulse-node pulse-two"></span>
     </div>
     <aside class="console-rail">
-      <strong>Overview</strong>
-      <div class="console-metric">12 agents</div>
-      <div class="console-metric">84 events</div>
-      <div class="console-metric">3 flags</div>
-      <div class="console-metric">audit clean</div>
+      <strong>Briefing lens</strong>
+      ${metrics.map((metric) => `<div class="console-metric">${escapeHtml(metric)}</div>`).join("")}
     </aside>
   </div>
 </div>`;
