@@ -8140,6 +8140,10 @@ function orchistraPageFor(site) {
     body: "That is why we created Orchistra. It should feel less like a noisy dashboard and more like a field map: what is moving, who is tending it, where evidence sits, and when a person needs to step in.",
     quote: "The point is not watching everything. It is watching the right things.",
     quote_source: "Shepherd of Agentic Sheep",
+    quote_source_url: "https://shepherdofagenticsheep.com/",
+    quote_source_campaign: "orchistra_to_shepherd",
+    quote_source_stage: "source_to_shepherd",
+    quote_source_content: "field_quote_shepherd",
     image_url: site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg",
     image_alt: "English countryside field used as a visual cue for calm agent oversight.",
     primary_label: "Show interest",
@@ -8267,6 +8271,11 @@ function orchistraPageFor(site) {
   const tonywoodHomeStage = fieldNote.secondary_stage || "source_to_tonywood_home";
   const tonywoodHomeContent = fieldNote.secondary_content || "field_note_tonywood_home";
   const tonywoodHomeHref = trackedOutboundUrlFor(site, tonywoodHomeUrl, tonywoodHomeContent, tonywoodHomeCampaign) || tonywoodHomeUrl;
+  const quoteSourceUrl = fieldNote.quote_source_url || "https://shepherdofagenticsheep.com/";
+  const quoteSourceCampaign = fieldNote.quote_source_campaign || "orchistra_to_shepherd";
+  const quoteSourceStage = fieldNote.quote_source_stage || "source_to_shepherd";
+  const quoteSourceContent = fieldNote.quote_source_content || "field_quote_shepherd";
+  const quoteSourceHref = trackedOutboundUrlFor(site, quoteSourceUrl, quoteSourceContent, quoteSourceCampaign) || quoteSourceUrl;
 
   return `<!doctype html>
 <html lang="en">
@@ -8861,6 +8870,12 @@ ${matomoScriptTagFor(site)}  <style>
       font-size: 14px;
       font-style: normal;
       font-weight: 820;
+    }
+
+    .field-quote cite a {
+      color: inherit;
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.18em;
     }
 
     .field-note-actions {
@@ -9814,7 +9829,7 @@ ${matomoScriptTagFor(site)}  <style>
           <p>${escapeHtml(fieldNote.body || "Orchistra should feel less like a noisy dashboard and more like a field map.")}</p>
           ${fieldNote.quote ? `<blockquote class="field-quote">
             <p>${escapeHtml(fieldNote.quote)}</p>
-            <cite>${escapeHtml(fieldNote.quote_source || "Shepherd of Agentic Sheep")}</cite>
+            <cite><a href="${escapeHtml(quoteSourceHref)}"${outboundAttrsFor(site, quoteSourceContent, quoteSourceStage, quoteSourceCampaign)}>${escapeHtml(fieldNote.quote_source || "Shepherd of Agentic Sheep")}</a></cite>
           </blockquote>` : ""}
           <div class="field-note-actions">
             <a class="button primary" href="${escapeHtml(fieldInterestHref)}"${outboundAttrsFor(site, fieldInterestContent, platformStage, platformCampaign)}>${escapeHtml(fieldNote.primary_label || "Show interest")}</a>
