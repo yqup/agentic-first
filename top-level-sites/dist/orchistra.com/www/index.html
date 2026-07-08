@@ -1325,6 +1325,16 @@
       color: var(--ink);
     }
 
+    .footer-brand {
+      display: grid;
+      gap: 3px;
+    }
+
+    .footer-product,
+    .footer-legal {
+      font-size: 13px;
+    }
+
     @media (prefers-reduced-motion: no-preference) {
       .flow-line {
         background-size: 160% 100%;
@@ -2032,9 +2042,11 @@
   </main>
 
   <footer>
-    <div>
+    <div class="footer-brand">
       <strong>Orchistra</strong>
       <div>orchistra.com</div>
+      <div class="footer-product">A YQUP product</div>
+      <div class="footer-legal">Copyright (c) 2026 YQUP Ltd</div>
     </div>
     <div>Field maps, operating cadence, and practical governance for agentic systems.</div>
   </footer>

@@ -9603,6 +9603,16 @@ ${matomoScriptTagFor(site)}  <style>
       color: var(--ink);
     }
 
+    .footer-brand {
+      display: grid;
+      gap: 3px;
+    }
+
+    .footer-product,
+    .footer-legal {
+      font-size: 13px;
+    }
+
     @media (prefers-reduced-motion: no-preference) {
       .flow-line {
         background-size: 160% 100%;
@@ -10105,9 +10115,11 @@ ${matomoScriptTagFor(site)}  <style>
   </main>
 
   <footer>
-    <div>
+    <div class="footer-brand">
       <strong>${escapeHtml(site.name)}</strong>
       <div>${escapeHtml(site.domain)}</div>
+      <div class="footer-product">${escapeHtml(site.footer_product_line || "A YQUP product")}</div>
+      <div class="footer-legal">${escapeHtml(site.footer_legal || "Copyright (c) 2026 YQUP Ltd")}</div>
     </div>
     <div>${escapeHtml(site.footer_tagline || "Shepherding agentic systems, operating cadence, and practical governance.")}</div>
   </footer>
