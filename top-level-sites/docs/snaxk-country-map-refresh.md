@@ -38,7 +38,37 @@ The footer now includes:
 
 - Previous release ID: `top-level-sites-20260708T144135Z`
 - Corrective release ID: `top-level-sites-20260708T152257Z`
+- Corrective commit: `e5b60a3`
+- Corrective archive SHA-256: `9c248cdc706162f8d6eb5a8361bfc5ad6e94dadd25eb2851ef37aa7faf0b673a`
+- Documentation follow-up release ID: `top-level-sites-20260708T154213Z`
 - Deployment target: ANI via `top-level-sites-deploy-ani`
+
+## Deployment Acceptance
+
+The corrective release was deployed to ANI and made current at:
+
+- `/srv/apps/top-level-sites/releases/top-level-sites-20260708T152257Z`
+
+Deploy gate evidence:
+
+- Archive hash verification: OK
+- Per-site containers: recreated successfully
+- Loopback `/healthz`: OK for all top-level-site containers
+- Loopback `/.well-known/agentic-profile.json`: OK for all top-level-site containers
+- Caddy validation: valid configuration
+- Receipt written: `/srv/deploy-state/top-level-sites/receipts/top-level-sites-20260708T152257Z.yaml`
+
+Public SNAXK acceptance:
+
+- `https://snaxk.com/`: 200
+- `https://www.snaxk.com/`: 200
+- `/healthz`: 200 on apex and `www`
+- `/matomo-config.json`: 200 on apex and `www`
+- `/.well-known/agentic-profile.json`: 200 on apex and `www`
+- `/llms.txt`: 200 on apex and `www`
+- `/favicon.svg`: 200 on apex and `www`
+- `/assets/snaxk-badge.png`: 200 on apex and `www`
+- Public Matomo surface checker: passed for apex and `www`
 
 ## Verification
 
