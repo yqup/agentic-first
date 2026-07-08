@@ -4949,6 +4949,8 @@ function snaxkPageFor(site) {
   const lozenge = site.brand_assets?.lozenge || "/assets/snaxk-lozenge.png";
   const logo = site.brand_assets?.logo || "/assets/snaxk-logo.png";
   const milestone = site.research_milestone || "SNAXK 0.10.8";
+  const footerProductLine = site.footer_product_line || "A YQUP product";
+  const footerLegal = site.footer_legal || "Copyright (c) 2026 YQUP Ltd";
   const statusNote = site.status_note || "";
   const statusNoteMarkup = statusNote
     ? `\n            <p>${escapeHtml(statusNote)}</p>`
@@ -4999,6 +5001,23 @@ function snaxkPageFor(site) {
       body: "SNAXK is testing whether a smaller research skill can help long-running agents notice when to continue, pause, escalate, or change course.",
     },
   ];
+  const engineCards = [
+    {
+      label: "Signal",
+      title: "Notice before action",
+      body: "Read the signal, the consequence, and the uncertainty before work moves on.",
+    },
+    {
+      label: "Boundary",
+      title: "Slow, stop, adapt",
+      body: "Make the pause points visible enough for a human to inspect later.",
+    },
+    {
+      label: "Evidence",
+      title: "Carry the trail",
+      body: "Keep the record of why the system changed course or decided not to.",
+    },
+  ];
 
   return `<!doctype html>
 <html lang="en">
@@ -5012,21 +5031,23 @@ function snaxkPageFor(site) {
 ${matomoScriptTagFor(site)}  <style>
     :root {
       color-scheme: light;
-      --ink: #1f2521;
-      --muted: #596059;
-      --paper: #f5f0e4;
-      --cream: #fffdf7;
+      --ink: #191814;
+      --muted: #5c564b;
+      --paper: #f8f1e3;
+      --cream: #fffaf0;
       --brown: #4b2f1b;
-      --brown-soft: #76512b;
+      --brown-soft: #754c22;
       --gold: #f2b84b;
-      --honey: #f6d98d;
+      --honey: #f7d487;
       --sage: #617d66;
-      --sage-dark: #2d4538;
-      --charcoal: #202726;
+      --field: #26392f;
+      --hedge: #1e2a23;
+      --charcoal: #181b19;
       --oxblood: #8f342d;
       --mist: #dbe6e0;
-      --line: rgba(31, 37, 33, 0.16);
-      --shadow: rgba(31, 37, 33, 0.13);
+      --line: rgba(25, 24, 20, 0.15);
+      --line-light: rgba(255, 250, 240, 0.18);
+      --shadow: rgba(25, 24, 20, 0.15);
       --serif: Georgia, "Times New Roman", serif;
     }
 
@@ -5036,15 +5057,19 @@ ${matomoScriptTagFor(site)}  <style>
 
     html {
       scroll-behavior: smooth;
+      overflow-x: hidden;
     }
 
     body {
       margin: 0;
       color: var(--ink);
       background:
-        linear-gradient(180deg, #fffdf7 0, var(--paper) 520px, #eadfca 100%);
+        linear-gradient(90deg, rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 28px 28px,
+        linear-gradient(rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 28px 28px,
+        linear-gradient(180deg, var(--paper) 0, #eee0c7 100%);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       letter-spacing: 0;
+      overflow-x: hidden;
     }
 
     a {
@@ -5052,21 +5077,21 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .site-header {
-      min-height: 74px;
+      min-height: 70px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      padding: 14px 40px;
-      background: rgba(255, 253, 247, 0.94);
-      border-bottom: 1px solid var(--line);
+      padding: 14px 42px;
+      background: var(--hedge);
+      border-bottom: 1px solid var(--line-light);
+      color: var(--cream);
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      color: var(--brown);
       text-decoration: none;
       font-weight: 860;
     }
@@ -5076,15 +5101,19 @@ ${matomoScriptTagFor(site)}  <style>
       height: 42px;
       border-radius: 8px;
       object-fit: contain;
+      background: var(--cream);
+      box-shadow: 0 0 0 1px rgba(255, 250, 240, 0.28);
     }
 
     nav {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 22px;
-      color: var(--muted);
+      justify-content: flex-end;
+      gap: 8px 22px;
+      color: rgba(255, 250, 240, 0.78);
       font-size: 14px;
-      font-weight: 760;
+      font-weight: 780;
     }
 
     nav a {
@@ -5096,14 +5125,48 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .hero {
-      min-height: 690px;
+      position: relative;
+      min-height: clamp(640px, 82svh, 780px);
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.74fr);
-      gap: 42px;
+      grid-template-columns: minmax(0, 0.92fr) minmax(390px, 0.78fr);
+      gap: 48px;
       align-items: center;
-      width: min(1240px, 100%);
-      margin: 0 auto;
-      padding: 74px 40px 68px;
+      padding: 72px 42px 82px;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 75% 24%, rgba(242, 184, 75, 0.24), transparent 30%),
+        linear-gradient(90deg, rgba(24, 27, 25, 0.98), rgba(24, 27, 25, 0.78) 48%, rgba(38, 57, 47, 0.62)),
+        linear-gradient(135deg, #181b19 0%, #26392f 58%, #7d5a22 132%);
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse at 88% 58%, transparent 0 18%, rgba(255, 250, 240, 0.10) 18.3% 18.6%, transparent 18.9% 100%),
+        radial-gradient(ellipse at 81% 51%, transparent 0 28%, rgba(255, 250, 240, 0.08) 28.3% 28.6%, transparent 28.9% 100%),
+        radial-gradient(ellipse at 73% 46%, transparent 0 38%, rgba(255, 250, 240, 0.06) 38.3% 38.6%, transparent 38.9% 100%),
+        linear-gradient(90deg, rgba(255, 250, 240, 0.035) 1px, transparent 1px) 0 0 / 34px 34px,
+        linear-gradient(rgba(255, 250, 240, 0.035) 1px, transparent 1px) 0 0 / 34px 34px;
+      opacity: 0.84;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 90px;
+      z-index: -1;
+      background: linear-gradient(0deg, rgba(248, 241, 227, 0.92), transparent);
+    }
+
+    .hero-copy,
+    .judgement-map {
+      position: relative;
+      z-index: 1;
     }
 
     .eyebrow {
@@ -5124,10 +5187,10 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     h1 {
-      max-width: 11ch;
-      color: var(--charcoal);
+      max-width: 10.5ch;
+      color: var(--cream);
       font-family: var(--serif);
-      font-size: 84px;
+      font-size: clamp(50px, 7vw, 88px);
       line-height: 0.96;
       font-weight: 700;
     }
@@ -5151,8 +5214,13 @@ ${matomoScriptTagFor(site)}  <style>
       max-width: 700px;
       margin: 24px 0 0;
       color: var(--muted);
-      font-size: 21px;
+      font-size: 20px;
       line-height: 1.55;
+    }
+
+    .hero .lede {
+      color: rgba(255, 250, 240, 0.84);
+      font-size: clamp(18px, 2vw, 22px);
     }
 
     .actions {
@@ -5171,8 +5239,8 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 0 18px;
       border: 1px solid var(--brown);
       border-radius: 4px;
-      background: var(--charcoal);
-      color: #fffdf7;
+      background: var(--cream);
+      color: var(--charcoal);
       text-decoration: none;
       font-weight: 820;
       white-space: nowrap;
@@ -5189,6 +5257,17 @@ ${matomoScriptTagFor(site)}  <style>
       color: var(--charcoal);
     }
 
+    .hero .button {
+      border-color: var(--cream);
+      background: var(--cream);
+      color: var(--charcoal);
+    }
+
+    .hero .button.secondary {
+      background: rgba(255, 250, 240, 0.08);
+      color: var(--cream);
+    }
+
     .research-strip {
       display: flex;
       flex-wrap: wrap;
@@ -5203,10 +5282,194 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 0 12px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: rgba(255, 253, 247, 0.74);
+      background: rgba(255, 250, 240, 0.74);
       color: var(--muted);
       font-size: 13px;
       font-weight: 760;
+    }
+
+    .hero .research-strip span {
+      border-color: rgba(255, 250, 240, 0.18);
+      background: rgba(255, 250, 240, 0.08);
+      color: rgba(255, 250, 240, 0.76);
+    }
+
+    .judgement-map {
+      position: relative;
+      display: grid;
+      gap: 16px;
+      min-height: 520px;
+      padding: 20px;
+      border: 1px solid rgba(255, 250, 240, 0.18);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255, 250, 240, 0.94), rgba(234, 226, 207, 0.88)),
+        var(--cream);
+      color: var(--ink);
+      box-shadow: 0 42px 95px rgba(0, 0, 0, 0.30);
+      overflow: hidden;
+    }
+
+    .judgement-map::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 8px;
+      background:
+        radial-gradient(ellipse at 68% 32%, transparent 0 19%, rgba(111, 127, 97, 0.35) 19.5% 20%, transparent 20.5% 100%),
+        radial-gradient(ellipse at 54% 45%, transparent 0 30%, rgba(111, 127, 97, 0.24) 30.5% 31%, transparent 31.5% 100%),
+        radial-gradient(ellipse at 45% 56%, transparent 0 42%, rgba(111, 127, 97, 0.18) 42.5% 43%, transparent 43.5% 100%),
+        linear-gradient(90deg, rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 26px 26px,
+        linear-gradient(rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 26px 26px;
+      pointer-events: none;
+    }
+
+    .map-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--brown);
+      font-size: 13px;
+      font-weight: 880;
+      text-transform: uppercase;
+    }
+
+    .map-top img {
+      width: 78px;
+      height: auto;
+      display: block;
+    }
+
+    .field-nodes {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .field-node {
+      min-height: 108px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      padding: 14px;
+      border: 1px solid rgba(25, 24, 20, 0.13);
+      border-radius: 8px;
+      background: rgba(255, 250, 240, 0.76);
+      box-shadow: 0 10px 28px rgba(25, 24, 20, 0.06);
+    }
+
+    .field-node span,
+    .engine-card span,
+    .console-card span {
+      color: var(--oxblood);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .field-node strong {
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    .field-node p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.42;
+    }
+
+    .engine-console {
+      position: relative;
+      z-index: 1;
+      margin-top: 2px;
+      border: 1px solid rgba(255, 250, 240, 0.14);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(242, 184, 75, 0.12), transparent 45%),
+        #151715;
+      color: rgba(255, 250, 240, 0.9);
+      overflow: hidden;
+    }
+
+    .console-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 40px;
+      padding: 0 14px;
+      border-bottom: 1px solid rgba(255, 250, 240, 0.10);
+      color: rgba(255, 250, 240, 0.62);
+      font-size: 12px;
+      font-weight: 820;
+    }
+
+    .console-dots {
+      display: inline-flex;
+      gap: 7px;
+    }
+
+    .console-dots i {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--gold);
+    }
+
+    .console-dots i:nth-child(2) {
+      background: var(--sage);
+    }
+
+    .console-dots i:nth-child(3) {
+      background: var(--oxblood);
+    }
+
+    .console-stack {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+    }
+
+    .console-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid rgba(255, 250, 240, 0.10);
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      background: rgba(255, 250, 240, 0.045);
+    }
+
+    .console-card strong {
+      display: block;
+      margin-top: 3px;
+      color: var(--cream);
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .console-card em {
+      align-self: start;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: rgba(111, 127, 97, 0.22);
+      color: var(--honey);
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 900;
+      text-transform: uppercase;
     }
 
     .hero-lab {
@@ -5280,6 +5543,47 @@ ${matomoScriptTagFor(site)}  <style>
       margin: 0 auto;
     }
 
+    .signal-band {
+      background: var(--paper);
+    }
+
+    .signal-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(420px, 1fr);
+      gap: 46px;
+      align-items: start;
+    }
+
+    .lozenge-panel {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      min-height: 290px;
+      padding: 30px;
+      border: 1px solid rgba(75, 47, 27, 0.12);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(242, 184, 75, 0.26), transparent 42%),
+        linear-gradient(180deg, rgba(255, 250, 240, 0.92), rgba(235, 224, 204, 0.92));
+      box-shadow: 0 22px 70px var(--shadow);
+      text-align: center;
+    }
+
+    .lozenge-panel img {
+      width: min(310px, 86%);
+      height: auto;
+      display: block;
+      margin-bottom: 18px;
+    }
+
+    .lozenge-panel p {
+      max-width: 460px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.56;
+    }
+
     .split {
       display: grid;
       grid-template-columns: minmax(0, 0.85fr) minmax(420px, 1fr);
@@ -5300,7 +5604,8 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .loop-band {
-      background: var(--cream);
+      background:
+        linear-gradient(180deg, #fffaf0, #f2e6cf);
     }
 
     .loop-grid {
@@ -5317,7 +5622,7 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 18px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #fff8e7;
+      background: rgba(255, 250, 240, 0.82);
     }
 
     .step span {
@@ -5328,7 +5633,7 @@ ${matomoScriptTagFor(site)}  <style>
       margin-bottom: 32px;
       border-radius: 8px;
       background: var(--charcoal);
-      color: #fffdf7;
+      color: var(--cream);
       font-size: 13px;
       font-weight: 850;
     }
@@ -5350,7 +5655,7 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 18px;
       border: 1px solid rgba(75, 47, 27, 0.18);
       border-radius: 8px;
-      background: rgba(255, 253, 247, 0.82);
+      background: rgba(255, 250, 240, 0.82);
     }
 
     .boundary::before {
@@ -5414,7 +5719,7 @@ ${matomoScriptTagFor(site)}  <style>
       border: 1px solid var(--line);
       border-radius: 8px;
       background:
-        linear-gradient(180deg, rgba(246, 217, 141, 0.28), rgba(255, 253, 247, 0.94));
+        linear-gradient(180deg, rgba(246, 217, 141, 0.28), rgba(255, 250, 240, 0.94));
       text-align: center;
     }
 
@@ -5425,13 +5730,15 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .cta {
-      background: var(--charcoal);
-      color: #fffdf7;
+      background:
+        radial-gradient(circle at 78% 18%, rgba(242, 184, 75, 0.18), transparent 32%),
+        var(--charcoal);
+      color: var(--cream);
     }
 
     .cta h2,
     .cta h3 {
-      color: #fffdf7;
+      color: var(--cream);
     }
 
     .cta .eyebrow {
@@ -5440,14 +5747,14 @@ ${matomoScriptTagFor(site)}  <style>
 
     .cta p {
       max-width: 700px;
-      color: rgba(255, 253, 247, 0.82);
+      color: rgba(255, 250, 240, 0.82);
       font-size: 18px;
       line-height: 1.58;
     }
 
     .cta .button {
-      border-color: #fffdf7;
-      background: #fffdf7;
+      border-color: var(--cream);
+      background: var(--cream);
       color: var(--charcoal);
     }
 
@@ -5494,13 +5801,13 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .briefing-actions .button.primary {
-      background: var(--sage-dark);
+      background: var(--field);
       color: var(--cream);
-      border-color: var(--sage-dark);
+      border-color: var(--field);
     }
 
     .briefing-actions .button.secondary {
-      color: var(--sage-dark);
+      color: var(--field);
     }
 
     .engine-grid {
@@ -5539,7 +5846,7 @@ ${matomoScriptTagFor(site)}  <style>
       justify-content: space-between;
       gap: 24px;
       padding: 30px 40px;
-      color: rgba(255, 253, 247, 0.74);
+      color: rgba(255, 250, 240, 0.74);
       background: #24150d;
       font-size: 14px;
       line-height: 1.5;
@@ -5547,11 +5854,22 @@ ${matomoScriptTagFor(site)}  <style>
 
     footer strong {
       display: block;
-      color: #fffdf7;
+      color: var(--cream);
+    }
+
+    .footer-product {
+      margin-top: 10px;
+      color: var(--honey);
+      font-weight: 860;
+    }
+
+    .footer-legal {
+      color: rgba(255, 250, 240, 0.66);
     }
 
     @media (max-width: 1060px) {
       .hero,
+      .signal-grid,
       .split,
       .measure,
       .briefing-panel {
@@ -5567,7 +5885,7 @@ ${matomoScriptTagFor(site)}  <style>
       }
 
       .loop-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       .boundary-grid {
@@ -5623,6 +5941,16 @@ ${matomoScriptTagFor(site)}  <style>
         padding: 16px;
       }
 
+      .judgement-map {
+        min-height: auto;
+        padding: 16px;
+      }
+
+      .field-nodes,
+      .signal-grid {
+        grid-template-columns: 1fr;
+      }
+
       .loop-grid,
       .boundary-grid,
       .engine-grid {
@@ -5643,11 +5971,12 @@ ${matomoScriptTagFor(site)}  <style>
       <span>${escapeHtml(site.name)}</span>
     </a>
     <nav aria-label="Primary">
+      <a href="#signal">Signal</a>
       <a href="#cao-briefing">CAO briefing</a>
       <a href="#engine">Engine</a>
       <a href="#boundaries">Boundaries</a>
       <a href="#measurement">Measure</a>
-      <a href="#engine-interest">Interest</a>
+      <a href="#conversation">Interest</a>
     </nav>
   </header>
 
@@ -5679,28 +6008,62 @@ ${matomoScriptTagFor(site)}  <style>
         </div>
       </div>
 
-      <aside class="hero-lab" aria-label="SNAXK control layer">
-        <div class="lozenge">
+      <aside class="judgement-map" aria-label="SNAXK judgement engine map">
+        <div class="map-top">
           <img src="${escapeHtml(lozenge)}" alt="${escapeHtml(site.name)} lozenge">
+          <span>${escapeHtml(milestone)}</span>
         </div>
-        <div class="lab-copy">
-          <p class="eyebrow">Signal before action</p>
-          <h2>The engine layer beneath the mandate.</h2>
-          <p>ChiefAgenticOfficer.com names the leadership question. SNAXK explores the engine underneath it: how an agent slows down, stops, adapts, escalates, and leaves evidence of its judgement.</p>
+        <div class="field-nodes" aria-label="Judgement map">
+          ${loop.slice(0, 4).map((item) => `<article class="field-node">
+            <span>${escapeHtml(item.label)}</span>
+            <strong>${escapeHtml(item.title)}</strong>
+            <p>${escapeHtml(item.body)}</p>
+          </article>`).join("\n          ")}
         </div>
-        <div class="mini-loop" aria-label="Short judgement path">
-          ${loop.slice(0, 3).map((item) => `<span><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.title)}</span>`).join("\n          ")}
+        <div class="engine-console" aria-label="Judgement console">
+          <div class="console-bar">
+            <span class="console-dots"><i></i><i></i><i></i></span>
+            <span>signal / boundary / review</span>
+          </div>
+          <div class="console-stack">
+            ${engineCards.map((card) => `<article class="console-card">
+              <div>
+                <span>${escapeHtml(card.label)}</span>
+                <strong>${escapeHtml(card.title)}</strong>
+              </div>
+              <em>watch</em>
+            </article>`).join("\n            ")}
+          </div>
         </div>
       </aside>
     </section>
 
-    <section class="section" aria-labelledby="thesis-title">
-      <div class="section-inner split">
+    <section class="section signal-band" id="signal" aria-labelledby="thesis-title">
+      <div class="section-inner signal-grid">
         <div>
           <p class="eyebrow">The feeder role</p>
           <h2 id="thesis-title">SNAXK points people toward the Chief Agentic Officer question.</h2>
           <p class="lede">If agentic work is becoming real work, someone has to own the boundary, the stop condition, the evidence, and the review. SNAXK makes that need visible.</p>
+          <div class="engine-grid">
+            ${engineCards.map((card) => `<article class="engine-card">
+              <span>${escapeHtml(card.label)}</span>
+              <h3>${escapeHtml(card.title)}</h3>
+              <p>${escapeHtml(card.body)}</p>
+            </article>`).join("\n            ")}
+          </div>
         </div>
+        <aside class="lozenge-panel" aria-label="SNAXK identity">
+          <img src="${escapeHtml(lozenge)}" alt="${escapeHtml(site.name)} lozenge">
+          <h3>The engine layer beneath the mandate.</h3>
+          <p>ChiefAgenticOfficer.com names the leadership question. SNAXK explores how an agent slows down, stops, adapts, escalates, and leaves evidence of its judgement.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="surface-title">
+      <div class="section-inner">
+        <p class="eyebrow">What it surfaces</p>
+        <h2 id="surface-title">Judgement that people and boards can inspect.</h2>
         <div class="section-copy">
           ${sections.map((section) => `<article>
             <h3>${escapeHtml(section.title)}</h3>
@@ -5814,6 +6177,8 @@ ${matomoScriptTagFor(site)}  <style>
     <div>
       <strong>${escapeHtml(site.name)}</strong>
       <div>${escapeHtml(site.domain)}</div>
+      <div class="footer-product">${escapeHtml(footerProductLine)}</div>
+      <div class="footer-legal">${escapeHtml(footerLegal)}</div>
     </div>
     <div>Judgement, boundaries, review, and measurable trust for long-running agents.</div>
   </footer>

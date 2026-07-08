@@ -243,6 +243,8 @@
     "research_milestone": "SNAXK 0.10.8",
     "primary_action_label": "Open the CAO briefing",
     "secondary_action_label": "Discuss with Tony Wood",
+    "footer_product_line": "A YQUP product",
+    "footer_legal": "Copyright (c) 2026 YQUP Ltd",
     "cao_feeder": {
       "primary_url": "https://chiefagenticofficer.com/",
       "primary_campaign": "snaxk_to_chiefagenticofficer",

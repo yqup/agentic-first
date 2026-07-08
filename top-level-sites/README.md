@@ -46,6 +46,7 @@ This regenerates:
 
 ## Change Notes
 
+- [SNAXK country-map refresh](docs/snaxk-country-map-refresh.md)
 - [YQUP consulting refresh](docs/yqup-consulting-refresh.md)
 - [Orchistra CAO feeder refresh](docs/orchistra-cao-feeder-refresh.md)
 - [Chief Agentic Officer briefing signup](docs/chief-agentic-officer-briefing-signup.md)
