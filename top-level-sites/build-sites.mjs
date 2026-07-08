@@ -8100,25 +8100,89 @@ ${matomoScriptTagFor(site)}  <style>
 }
 
 function orchistraPageFor(site) {
-  const proofLabels = site.proof || [
-    "Intent before motion",
-    "Bounded agents",
-    "Live signals",
-    "Reviewable memory",
+  const outcomes = site.outcomes || [
+    {
+      title: "Clear coordination",
+      body: "Agents, routines, and human operators can see where work belongs and what has moved.",
+    },
+    {
+      title: "Human attention",
+      body: "Judgement points, approvals, blockers, and quiet escalations have somewhere visible to land.",
+    },
+    {
+      title: "Searchable evidence",
+      body: "Threads, receipts, rich updates, and audit-visible decisions stay available when people need the trail.",
+    },
+    {
+      title: "Reusable learning",
+      body: "Repeated questions, handoffs, and mistakes can become better guidance and operating practice.",
+    },
   ];
-  const operatingSignals = (site.operating_signals || proofLabels.map((label) => ({
-    label,
-    title: label,
-    body: "A visible part of the operating model that helps humans understand what agents are doing.",
-  }))).map((signal) => typeof signal === "string"
-    ? {
-        label: signal,
-        title: signal,
-        body: "A visible part of the operating model that helps humans understand what agents are doing.",
-      }
-    : signal);
+  const serviceFlow = site.service_flow || {
+    eyebrow: "Service model",
+    title: "Signals and workers become work people can follow.",
+    body: "Orchistra sits between the places work starts and the people responsible for it.",
+    inputs: [
+      { title: "Signals", body: "Customer notes, research, operations, incidents, and quiet changes." },
+      { title: "Workers", body: "Agents, automations, routines, humans, and tools doing the work." },
+    ],
+    core_title: "Orchistra",
+    core_body: "Shared channels, threads, rich updates, receipts, guidance, and audit-visible decisions.",
+    outputs: [
+      { title: "Clear action", body: "What happened, what changed, and what should happen next." },
+      { title: "Human control", body: "Attention, approval, and decisions recorded." },
+      { title: "Reusable learning", body: "Patterns become guidance, playbook candidates, and better handoffs." },
+    ],
+  };
+  const fieldNote = site.field_note || {
+    eyebrow: "In the field",
+    title: "The calm place between useful agents and responsible people.",
+    body: "That is why we created Orchistra. It should feel less like a noisy dashboard and more like a field map: what is moving, who is tending it, where evidence sits, and when a person needs to step in.",
+    quote: "The point is not watching everything. It is watching the right things.",
+    quote_source: "Shepherd of Agentic Sheep",
+    image_url: site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg",
+    image_alt: "English countryside field used as a visual cue for calm agent oversight.",
+    primary_label: "Show interest",
+    secondary_label: "Read TonyWood.org",
+    secondary_url: "https://www.tonywood.org/",
+  };
+  const messageModel = site.message_model || {
+    eyebrow: "Conversation model",
+    title: "Messages are more than notes.",
+    body: "A post can start a thread, reply to a task, carry a rich update, request human attention, record a decision, or link a later fix back to the original problem.",
+    steps: [
+      { label: "Thread", title: "Start the work", body: "Give the work a visible place to live." },
+      { label: "Update", title: "Keep context", body: "Post progress, evidence, receipts, and changes." },
+      { label: "Decision", title: "Bring in humans", body: "Ask for attention and record the answer." },
+      { label: "Learning", title: "Improve the pattern", body: "Turn repeated questions into guidance." },
+    ],
+  };
+  const useCases = site.use_cases || [
+    {
+      label: "1",
+      title: "Customer and service triage",
+      body: "Keep intake, routing, summaries, source pointers, follow-ups, and human decisions in a visible service lane.",
+    },
+    {
+      label: "2",
+      title: "Research and evidence work",
+      body: "Let agents compare sources, post rich updates, preserve uncertainty, and hand work over without losing the trail.",
+    },
+    {
+      label: "3",
+      title: "Sales, marketing, and communications",
+      body: "Coordinate drafts, approvals, campaign notes, platform signals, and next actions in threads people can revisit.",
+    },
+    {
+      label: "4",
+      title: "Operations and recurring workflows",
+      body: "Give repeated jobs a visible rhythm: what ran, what changed, what needs attention, and what should improve next time.",
+    },
+  ];
   const routes = site.routes || site.sections || [];
   const operatingNotes = site.operating_notes || [];
+  const researchLinks = site.research_links || [];
+  const featureJourneys = site.feature_journeys || [];
   const features = site.features || [
     {
       label: "Channels",
@@ -8196,6 +8260,13 @@ function orchistraPageFor(site) {
   const platformStage = caoFeeder.secondary_stage || "source_to_tonywood_platform_interest";
   const feederPlatformHref = trackedOutboundUrlFor(site, platformUrl, caoFeeder.secondary_content || "feeder_platform_interest", platformCampaign) || platformUrl;
   const conversationHref = trackedOutboundUrlFor(site, platformUrl, "final_platform_interest_cta", platformCampaign) || fallbackContactHref;
+  const fieldInterestContent = fieldNote.primary_content || "field_note_platform_interest";
+  const fieldInterestHref = trackedOutboundUrlFor(site, platformUrl, fieldInterestContent, platformCampaign) || platformUrl;
+  const tonywoodHomeUrl = fieldNote.secondary_url || "https://www.tonywood.org/";
+  const tonywoodHomeCampaign = fieldNote.secondary_campaign || "orchistra_to_tonywood";
+  const tonywoodHomeStage = fieldNote.secondary_stage || "source_to_tonywood_home";
+  const tonywoodHomeContent = fieldNote.secondary_content || "field_note_tonywood_home";
+  const tonywoodHomeHref = trackedOutboundUrlFor(site, tonywoodHomeUrl, tonywoodHomeContent, tonywoodHomeCampaign) || tonywoodHomeUrl;
 
   return `<!doctype html>
 <html lang="en">
@@ -8208,21 +8279,22 @@ function orchistraPageFor(site) {
 ${matomoScriptTagFor(site)}  <style>
     :root {
       color-scheme: light;
-      --ink: #10221f;
-      --ink-soft: #40534f;
-      --paper: #f7f2e6;
-      --mist: #e7efe9;
-      --field: #2f6f5f;
-      --hedge: #163a32;
-      --night: #10221f;
-      --signal: #e05d45;
-      --gold: #d8a13a;
-      --sky: #92c7d6;
-      --white: #fffdf7;
-      --panel: #fffaf0;
-      --line: rgba(16, 34, 31, 0.16);
+      --ink: #171512;
+      --ink-soft: #514b42;
+      --paper: #fbf7ee;
+      --mist: #f0e8da;
+      --field: #207f79;
+      --hedge: #1c2721;
+      --night: #171512;
+      --signal: #ef6b4a;
+      --mint: #2fa875;
+      --gold: #dea331;
+      --sky: #32aebd;
+      --white: #fffaf2;
+      --panel: rgba(255, 250, 242, 0.9);
+      --line: rgba(23, 21, 18, 0.16);
       --line-light: rgba(255, 253, 247, 0.18);
-      --shadow: 0 22px 56px rgba(16, 34, 31, 0.16);
+      --shadow: 0 18px 55px rgba(23, 21, 18, 0.14);
       --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --serif: Georgia, "Times New Roman", serif;
     }
@@ -8239,7 +8311,10 @@ ${matomoScriptTagFor(site)}  <style>
     body {
       margin: 0;
       overflow-x: hidden;
-      background: var(--paper);
+      background:
+        linear-gradient(90deg, rgba(23, 21, 18, 0.03) 1px, transparent 1px) 0 0 / 26px 26px,
+        linear-gradient(rgba(23, 21, 18, 0.03) 1px, transparent 1px) 0 0 / 26px 26px,
+        var(--paper);
       color: var(--ink);
       font-family: var(--sans);
       font-size: 17px;
@@ -8302,14 +8377,14 @@ ${matomoScriptTagFor(site)}  <style>
 
     .hero {
       position: relative;
-      min-height: 84svh;
+      min-height: 78svh;
       display: grid;
       align-items: end;
-      padding: 78px 40px 54px;
+      padding: 72px 40px 92px;
       overflow: hidden;
       background:
-        radial-gradient(circle at 84% 20%, rgba(224, 93, 69, 0.22), transparent 32%),
-        linear-gradient(132deg, #10221f 0%, #163a32 52%, #2f6f5f 100%);
+        radial-gradient(circle at 84% 18%, rgba(239, 107, 74, 0.24), transparent 28%),
+        linear-gradient(125deg, rgba(23, 21, 18, 0.98), rgba(48, 43, 34, 0.94) 56%, rgba(32, 127, 121, 0.88));
       color: var(--white);
       isolation: isolate;
     }
@@ -8327,6 +8402,7 @@ ${matomoScriptTagFor(site)}  <style>
       top: 96px;
       width: min(720px, 54vw);
       min-height: 520px;
+      opacity: 0.72;
     }
 
     .console-window {
@@ -8552,8 +8628,8 @@ ${matomoScriptTagFor(site)}  <style>
       inset: 0;
       z-index: -1;
       background:
-        linear-gradient(90deg, rgba(16, 34, 31, 0.96), rgba(16, 34, 31, 0.72) 42%, rgba(16, 34, 31, 0.18) 76%),
-        linear-gradient(180deg, rgba(16, 34, 31, 0.08), rgba(16, 34, 31, 0.6));
+        linear-gradient(90deg, rgba(23, 21, 18, 0.96), rgba(23, 21, 18, 0.78) 44%, rgba(23, 21, 18, 0.22) 78%),
+        linear-gradient(180deg, rgba(23, 21, 18, 0.08), rgba(23, 21, 18, 0.58));
     }
 
     .hero-inner {
@@ -8658,63 +8734,278 @@ ${matomoScriptTagFor(site)}  <style>
       margin: 0 auto;
     }
 
-    .signals-band {
-      padding: 44px 40px;
-      border-bottom: 1px solid var(--line);
-      background: var(--white);
+    .outcome-band {
+      position: relative;
+      z-index: 2;
+      margin-top: -62px;
+      padding: 0 40px 40px;
     }
 
-    .signal-overview {
-      display: grid;
-      grid-template-columns: minmax(260px, 0.52fr) minmax(0, 1.48fr);
-      gap: 24px;
-      align-items: start;
-    }
-
-    .signal-intro h2 {
-      max-width: 420px;
-      margin-bottom: 0;
-      font-size: 32px;
-      line-height: 1.08;
-    }
-
-    .signal-grid {
+    .summary-strip {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
+      gap: 14px;
     }
 
-    .signal-card {
+    .metric {
       min-width: 0;
-      min-height: 206px;
-      display: flex;
-      flex-direction: column;
+      min-height: 146px;
       padding: 18px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: var(--panel);
+      background: rgba(255, 250, 242, 0.96);
+      box-shadow: var(--shadow);
     }
 
-    .signal-card span {
-      width: fit-content;
-      display: inline-flex;
-      margin-bottom: 16px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(224, 93, 69, 0.12);
-      color: var(--signal);
-      font-size: 11px;
+    .metric strong {
+      display: block;
+      max-width: 10ch;
+      margin-bottom: 10px;
+      color: var(--ink);
+      font-size: 25px;
+      line-height: 1.05;
       font-weight: 900;
-      line-height: 1.1;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 15px;
+      line-height: 1.42;
+      font-weight: 650;
+    }
+
+    .service-flow-band {
+      padding-top: 42px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 250, 242, 0.62);
+    }
+
+    .field-note-band {
+      padding-top: 50px;
+      background: var(--paper);
+    }
+
+    .field-note {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.92fr) minmax(0, 1.08fr);
+      gap: 42px;
+      align-items: center;
+    }
+
+    .field-note-media {
+      min-width: 0;
+    }
+
+    .field-note-media img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .field-note-copy p:not(.eyebrow) {
+      max-width: 700px;
+      color: var(--ink-soft);
+      font-size: 20px;
+      line-height: 1.58;
+    }
+
+    .field-quote {
+      max-width: 720px;
+      margin: 24px 0 0;
+      padding: 22px;
+      border-left: 6px solid var(--gold);
+      background: var(--white);
+      color: var(--ink);
+      box-shadow: 0 12px 34px rgba(23, 21, 18, 0.08);
+    }
+
+    .field-quote p {
+      margin-bottom: 8px;
+      font-family: var(--serif);
+      font-size: 30px;
+      line-height: 1.18;
+    }
+
+    .field-quote cite {
+      color: var(--ink-soft);
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 820;
+    }
+
+    .field-note-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .field-note-actions .button.primary {
+      background: var(--hedge);
+      color: var(--white);
+      border-color: var(--hedge);
+    }
+
+    .field-note-actions .button.secondary {
+      color: var(--hedge);
+    }
+
+    .service-flow {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+      gap: 42px;
+      align-items: center;
+    }
+
+    .flow-copy p:not(.eyebrow) {
+      max-width: 720px;
+      color: var(--ink-soft);
+      font-size: 20px;
+      line-height: 1.58;
+    }
+
+    .flow-diagram {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(150px, 0.72fr) minmax(210px, 0.92fr) minmax(190px, 0.84fr);
+      gap: 18px;
+      align-items: center;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .flow-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .flow-card,
+    .flow-core {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 250, 242, 0.88);
+    }
+
+    .flow-card {
+      padding: 14px;
+    }
+
+    .flow-card strong,
+    .flow-core strong {
+      display: block;
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.18;
+    }
+
+    .flow-card p,
+    .flow-core p {
+      margin: 7px 0 0;
+      color: var(--ink-soft);
+      font-size: 14px;
+      line-height: 1.42;
+    }
+
+    .flow-core {
+      position: relative;
+      padding: 22px;
+      background: var(--night);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .flow-core strong {
+      color: var(--white);
+      font-size: 28px;
+    }
+
+    .flow-core p {
+      color: rgba(255, 250, 242, 0.78);
+    }
+
+    .flow-core::before,
+    .flow-core::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 18px;
+      height: 2px;
+      background: var(--gold);
+      transform: translateY(-50%);
+    }
+
+    .flow-core::before {
+      left: -18px;
+    }
+
+    .flow-core::after {
+      right: -18px;
+    }
+
+    .message-model-band {
+      background: var(--mist);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .message-model {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr);
+      gap: 42px;
+      align-items: start;
+    }
+
+    .message-model p:not(.eyebrow) {
+      max-width: 700px;
+      color: var(--ink-soft);
+      font-size: 20px;
+      line-height: 1.58;
+    }
+
+    .message-steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .message-step {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 250, 242, 0.82);
+    }
+
+    .message-step span {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--signal);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .signal-card h3 {
+    .message-step h3 {
       font-size: 19px;
-      line-height: 1.16;
     }
 
-    .signal-card p {
+    .message-step p {
       margin-bottom: 0;
       color: var(--ink-soft);
       font-size: 15px;
@@ -8911,6 +9202,128 @@ ${matomoScriptTagFor(site)}  <style>
     .note-panel p {
       margin: 14px 0 0;
       color: var(--ink-soft);
+    }
+
+    .use-cases-band {
+      background: rgba(255, 250, 242, 0.68);
+    }
+
+    .use-case-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+      gap: 42px;
+      align-items: end;
+    }
+
+    .use-case-head p:not(.eyebrow) {
+      margin-bottom: 18px;
+      color: var(--ink-soft);
+      font-size: 20px;
+      line-height: 1.55;
+    }
+
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .use-case-card {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 16px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 0 12px 34px rgba(23, 21, 18, 0.08);
+    }
+
+    .use-case-number {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--white);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .use-case-card p {
+      margin-bottom: 0;
+      color: var(--ink-soft);
+    }
+
+    .research-band {
+      background: var(--paper);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .research-head,
+    .journey-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(320px, 1.14fr);
+      gap: 42px;
+      align-items: end;
+    }
+
+    .research-head p:not(.eyebrow),
+    .journey-head p:not(.eyebrow) {
+      margin-bottom: 18px;
+      color: var(--ink-soft);
+      font-size: 20px;
+      line-height: 1.55;
+    }
+
+    .research-grid,
+    .journey-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .journey-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .research-card,
+    .journey-card {
+      min-width: 0;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .research-card p,
+    .journey-card p {
+      color: var(--ink-soft);
+    }
+
+    .research-link {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 6px;
+      color: var(--field);
+      font-weight: 860;
+      text-decoration-thickness: 0.08em;
+    }
+
+    .journey-card span {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--field);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .cadence {
@@ -9203,7 +9616,7 @@ ${matomoScriptTagFor(site)}  <style>
       }
 
       .hero::after {
-        background: linear-gradient(90deg, rgba(16, 34, 31, 0.96), rgba(16, 34, 31, 0.8));
+        background: linear-gradient(90deg, rgba(23, 21, 18, 0.96), rgba(23, 21, 18, 0.8));
       }
     }
 
@@ -9238,13 +9651,24 @@ ${matomoScriptTagFor(site)}  <style>
         font-size: 19px;
       }
 
-      .signal-overview,
+      .summary-strip,
+      .field-note,
+      .service-flow,
+      .flow-diagram,
+      .message-model,
+      .message-steps,
       .intro,
       .route-grid,
       .feeder-panel,
       .cadence,
       .note-list,
+      .use-case-head,
+      .use-case-grid,
+      .research-head,
+      .research-grid,
       .feature-grid,
+      .journey-head,
+      .journey-grid,
       .skills-head,
       .skills-grid,
       .roadmap-grid,
@@ -9257,8 +9681,9 @@ ${matomoScriptTagFor(site)}  <style>
         padding: 64px 22px;
       }
 
-      .signal-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .outcome-band {
+        margin-top: 0;
+        padding: 22px;
       }
 
       .route-card,
@@ -9292,7 +9717,12 @@ ${matomoScriptTagFor(site)}  <style>
         font-size: 18px;
       }
 
-      .signal-grid {
+      .flow-core::before,
+      .flow-core::after {
+        display: none;
+      }
+
+      .use-case-card {
         grid-template-columns: 1fr;
       }
 
@@ -9310,9 +9740,13 @@ ${matomoScriptTagFor(site)}  <style>
     </a>
     <nav aria-label="Primary navigation">
       <a href="#map">Map</a>
+      <a href="#field-note">Field note</a>
       <a href="#cao-briefing">CAO Briefing</a>
       <a href="#work">Work</a>
+      <a href="#use-cases">Use cases</a>
+      <a href="#research">Research</a>
       <a href="#features">Features</a>
+      <a href="#journeys">Journeys</a>
       <a href="#skills">Skills</a>
       <a href="#cadence">Cadence</a>
       <a href="#roadmap">Roadmap</a>
@@ -9336,17 +9770,76 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
-    <section class="signals-band" aria-labelledby="signals-title">
-      <div class="section-inner signal-overview">
-        <div class="signal-intro">
-          <p class="eyebrow">What becomes visible</p>
-          <h2 id="signals-title">The operating model in plain English.</h2>
+    <section class="outcome-band" aria-label="Orchistra service outcomes">
+      <div class="section-inner summary-strip">
+        ${outcomes.map((outcome) => `<article class="metric">
+          <strong>${escapeHtml(outcome.title)}</strong>
+          <span>${escapeHtml(outcome.body)}</span>
+        </article>`).join("")}
+      </div>
+    </section>
+
+    <section class="section field-note-band" id="field-note">
+      <div class="section-inner field-note">
+        <div class="field-note-media">
+          <img src="${escapeHtml(fieldNote.image_url || site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg")}" alt="${escapeHtml(fieldNote.image_alt || "English countryside field used as a visual cue for calm agent oversight.")}" loading="lazy">
         </div>
-        <div class="signal-grid">
-          ${operatingSignals.map((signal) => `<article class="signal-card">
-            <span>${escapeHtml(signal.label)}</span>
-            <h3>${escapeHtml(signal.title)}</h3>
-            <p>${escapeHtml(signal.body)}</p>
+        <div class="field-note-copy">
+          <p class="eyebrow">${escapeHtml(fieldNote.eyebrow || "In the field")}</p>
+          <h2>${escapeHtml(fieldNote.title || "The calm place between useful agents and responsible people.")}</h2>
+          <p>${escapeHtml(fieldNote.body || "Orchistra should feel less like a noisy dashboard and more like a field map.")}</p>
+          ${fieldNote.quote ? `<blockquote class="field-quote">
+            <p>${escapeHtml(fieldNote.quote)}</p>
+            <cite>${escapeHtml(fieldNote.quote_source || "Shepherd of Agentic Sheep")}</cite>
+          </blockquote>` : ""}
+          <div class="field-note-actions">
+            <a class="button primary" href="${escapeHtml(fieldInterestHref)}"${outboundAttrsFor(site, fieldInterestContent, platformStage, platformCampaign)}>${escapeHtml(fieldNote.primary_label || "Show interest")}</a>
+            <a class="button secondary" href="${escapeHtml(tonywoodHomeHref)}"${outboundAttrsFor(site, tonywoodHomeContent, tonywoodHomeStage, tonywoodHomeCampaign)}>${escapeHtml(fieldNote.secondary_label || "Read TonyWood.org")}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section service-flow-band" aria-labelledby="signals-title">
+      <div class="section-inner service-flow">
+        <div class="flow-copy">
+          <p class="eyebrow">${escapeHtml(serviceFlow.eyebrow || "Service model")}</p>
+          <h2 id="signals-title">${escapeHtml(serviceFlow.title || "Signals and workers become work people can follow.")}</h2>
+          <p>${escapeHtml(serviceFlow.body || "Orchistra sits between the places work starts and the people responsible for it.")}</p>
+        </div>
+        <div class="flow-diagram" aria-label="Orchistra service model">
+          <div class="flow-stack">
+            ${(serviceFlow.inputs || []).map((item) => `<article class="flow-card">
+              <strong>${escapeHtml(item.title)}</strong>
+              <p>${escapeHtml(item.body)}</p>
+            </article>`).join("")}
+          </div>
+          <article class="flow-core">
+            <strong>${escapeHtml(serviceFlow.core_title || "Orchistra")}</strong>
+            <p>${escapeHtml(serviceFlow.core_body || "Shared channels, threads, rich updates, receipts, guidance, and audit-visible decisions.")}</p>
+          </article>
+          <div class="flow-stack">
+            ${(serviceFlow.outputs || []).map((item) => `<article class="flow-card">
+              <strong>${escapeHtml(item.title)}</strong>
+              <p>${escapeHtml(item.body)}</p>
+            </article>`).join("")}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section message-model-band" id="message-model">
+      <div class="section-inner message-model">
+        <div>
+          <p class="eyebrow">${escapeHtml(messageModel.eyebrow || "Conversation model")}</p>
+          <h2>${escapeHtml(messageModel.title || "Messages are more than notes.")}</h2>
+          <p>${escapeHtml(messageModel.body || "A post can start a thread, carry a rich update, request human attention, record a decision, or link a later fix back to the original problem.")}</p>
+        </div>
+        <div class="message-steps" aria-label="Orchistra message model">
+          ${(messageModel.steps || []).map((step) => `<article class="message-step">
+            <span>${escapeHtml(step.label)}</span>
+            <h3>${escapeHtml(step.title)}</h3>
+            <p>${escapeHtml(step.body)}</p>
           </article>`).join("")}
         </div>
       </div>
@@ -9407,6 +9900,49 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
+    <section class="section use-cases-band" id="use-cases">
+      <div class="section-inner">
+        <div class="use-case-head">
+          <div>
+            <p class="eyebrow">${escapeHtml(site.use_cases_eyebrow || "Where this helps")}</p>
+            <h2>${escapeHtml(site.use_cases_title || "Useful wherever agent work already moves quietly.")}</h2>
+          </div>
+          <p>${escapeHtml(site.use_cases_intro || "Start with the places where AI work is useful but hard to see.")}</p>
+        </div>
+        <div class="use-case-grid">
+          ${useCases.map((item) => `<article class="use-case-card">
+            <span class="use-case-number">${escapeHtml(item.label)}</span>
+            <div>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.body)}</p>
+            </div>
+          </article>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section research-band" id="research">
+      <div class="section-inner">
+        <div class="research-head">
+          <div>
+            <p class="eyebrow">${escapeHtml(site.research_eyebrow || "Research field")}</p>
+            <h2>${escapeHtml(site.research_title || "Used for CAO briefing work and ongoing agent-shepherd research.")}</h2>
+          </div>
+          <p>${escapeHtml(site.research_intro || "Orchistra is being shaped around practical work where agent communication needs to stay visible and public-safe.")}</p>
+        </div>
+        <div class="research-grid">
+          ${researchLinks.map((link) => {
+            const href = trackedOutboundUrlFor(site, link.url, link.content || slugForCampaign(link.title), link.campaign) || link.url;
+            return `<article class="research-card">
+              <h3>${escapeHtml(link.title)}</h3>
+              <p>${escapeHtml(link.body)}</p>
+              <a class="research-link" href="${escapeHtml(href)}"${outboundAttrsFor(site, link.content || slugForCampaign(link.title), link.stage || "source_to_outbound", link.campaign)}>${escapeHtml(link.label || "Open link")}</a>
+            </article>`;
+          }).join("")}
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="features">
       <div class="section-inner">
         <p class="eyebrow">${escapeHtml(site.features_eyebrow || "Feature list")}</p>
@@ -9416,6 +9952,25 @@ ${matomoScriptTagFor(site)}  <style>
             <span>${escapeHtml(feature.label)}</span>
             <h3>${escapeHtml(feature.title)}</h3>
             <p>${escapeHtml(feature.body)}</p>
+          </article>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section journey-band" id="journeys">
+      <div class="section-inner">
+        <div class="journey-head">
+          <div>
+            <p class="eyebrow">${escapeHtml(site.feature_journeys_eyebrow || "Feature journeys")}</p>
+            <h2>${escapeHtml(site.feature_journeys_title || "Common things agents and people can do.")}</h2>
+          </div>
+          <p>${escapeHtml(site.feature_journeys_intro || "The feature set is easiest to understand as a set of ordinary moves.")}</p>
+        </div>
+        <div class="journey-grid">
+          ${featureJourneys.map((journey) => `<article class="journey-card">
+            <span>${escapeHtml(journey.label)}</span>
+            <h3>${escapeHtml(journey.title)}</h3>
+            <p>${escapeHtml(journey.body)}</p>
           </article>`).join("")}
         </div>
       </div>
