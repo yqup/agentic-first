@@ -129,29 +129,31 @@
 
     .console-scene {
       position: absolute;
-      right: max(28px, 4vw);
-      top: 88px;
-      width: min(780px, 57vw);
-      min-height: 540px;
-      opacity: 0.94;
-      transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
+      right: max(18px, 3vw);
+      top: 82px;
+      width: min(920px, 61vw);
+      min-height: 600px;
+      opacity: 0.98;
+      filter: drop-shadow(0 54px 82px rgba(0, 0, 0, 0.34));
+      transform: perspective(1400px) rotateY(-6deg) rotateX(2deg);
       transform-origin: center;
     }
 
     .console-window {
       position: relative;
       display: grid;
-      grid-template-columns: 190px minmax(0, 1fr) 190px;
-      min-height: 520px;
-      border: 1px solid rgba(255, 253, 247, 0.38);
+      grid-template-rows: 44px minmax(0, 1fr);
+      min-height: 585px;
+      border: 1px solid rgba(255, 253, 247, 0.14);
       border-radius: 8px;
-      background: rgba(255, 250, 242, 0.94);
+      background: #151615;
       box-shadow:
-        0 44px 110px rgba(3, 16, 14, 0.46),
-        0 0 0 1px rgba(222, 163, 49, 0.16) inset;
-      color: var(--ink);
+        0 48px 130px rgba(0, 0, 0, 0.56),
+        0 0 0 1px rgba(255, 253, 247, 0.06) inset,
+        0 0 90px rgba(38, 132, 255, 0.18);
+      color: rgba(255, 253, 247, 0.92);
       overflow: hidden;
-      backdrop-filter: blur(12px) saturate(1.08);
+      backdrop-filter: blur(18px) saturate(1.1);
     }
 
     .console-window::before {
@@ -160,26 +162,163 @@
       inset: 0;
       pointer-events: none;
       background:
-        linear-gradient(105deg, rgba(255, 250, 242, 0.28), transparent 28%),
-        linear-gradient(180deg, transparent 58%, rgba(222, 163, 49, 0.12));
-      mix-blend-mode: soft-light;
+        radial-gradient(circle at 78% 5%, rgba(38, 132, 255, 0.24), transparent 32%),
+        radial-gradient(circle at 6% 78%, rgba(47, 168, 117, 0.18), transparent 30%),
+        linear-gradient(105deg, rgba(255, 255, 255, 0.08), transparent 30%);
+      mix-blend-mode: screen;
+    }
+
+    .window-chrome {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+      padding: 0 16px;
+      border-bottom: 1px solid rgba(255, 253, 247, 0.08);
+      background: rgba(28, 29, 28, 0.96);
+      color: rgba(255, 253, 247, 0.86);
+      font-size: 13px;
+      font-weight: 820;
+    }
+
+    .traffic-lights {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .traffic-lights i {
+      width: 13px;
+      height: 13px;
+      border-radius: 999px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18) inset;
+    }
+
+    .traffic-lights i:nth-child(1) {
+      background: #ff5f57;
+    }
+
+    .traffic-lights i:nth-child(2) {
+      background: #ffbd2e;
+    }
+
+    .traffic-lights i:nth-child(3) {
+      background: #28c840;
+    }
+
+    .chrome-status {
+      color: rgba(255, 253, 247, 0.48);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .console-shell {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 218px minmax(0, 1fr);
+      min-height: 0;
     }
 
     .console-sidebar,
     .console-rail {
-      padding: 20px 16px;
+      min-width: 0;
+      padding: 18px 16px;
       background:
-        linear-gradient(180deg, rgba(255, 250, 242, 0.08), transparent 34%),
-        #10221f;
+        linear-gradient(180deg, rgba(255, 253, 247, 0.05), transparent 36%),
+        #202120;
+      border-right: 1px solid rgba(255, 253, 247, 0.08);
       color: rgba(255, 253, 247, 0.84);
     }
 
-    .console-sidebar strong,
+    .sidebar-brand {
+      display: grid;
+      gap: 2px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-brand span {
+      color: rgba(255, 253, 247, 0.48);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-brand strong,
     .console-rail strong {
       display: block;
-      margin-bottom: 14px;
       color: var(--white);
-      font-size: 13px;
+      font-size: 16px;
+      line-height: 1.05;
+    }
+
+    .side-nav {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 253, 247, 0.08);
+    }
+
+    .side-nav span,
+    .channel-row {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: rgba(255, 253, 247, 0.72);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .side-nav span.active,
+    .channel-row.active {
+      background: rgba(38, 132, 255, 0.22);
+      color: var(--white);
+      box-shadow: 0 0 0 1px rgba(38, 132, 255, 0.18) inset;
+    }
+
+    .side-nav i,
+    .channel-row i {
+      color: rgba(255, 253, 247, 0.54);
+      font-style: normal;
+      text-align: center;
+    }
+
+    .channel-row small {
+      min-width: 40px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(38, 132, 255, 0.2);
+      color: #4da2ff;
+      font-size: 10px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .sidebar-label {
+      margin: 10px 0 6px;
+      color: rgba(255, 253, 247, 0.42);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-foot {
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 253, 247, 0.08);
+      color: rgba(255, 253, 247, 0.54);
+      font-size: 11px;
+      line-height: 1.35;
     }
 
     .console-channel,
@@ -224,11 +363,11 @@
     .console-main {
       position: relative;
       min-width: 0;
-      padding: 18px;
+      padding: 0;
       background:
-        linear-gradient(90deg, rgba(32, 127, 121, 0.08) 1px, transparent 1px) 0 0 / 34px 34px,
-        linear-gradient(rgba(32, 127, 121, 0.08) 1px, transparent 1px) 0 0 / 34px 34px,
-        linear-gradient(180deg, #fffdf7 0%, #f8efe0 100%);
+        linear-gradient(90deg, rgba(255, 253, 247, 0.025) 1px, transparent 1px) 0 0 / 32px 32px,
+        linear-gradient(rgba(255, 253, 247, 0.025) 1px, transparent 1px) 0 0 / 32px 32px,
+        #171817;
     }
 
     .thread-header {
@@ -236,74 +375,173 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      min-height: 42px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--line);
-      font-size: 13px;
+      min-height: 58px;
+      padding: 0 22px;
+      border-bottom: 1px solid rgba(255, 253, 247, 0.08);
+      color: rgba(255, 253, 247, 0.92);
+      font-size: 16px;
       font-weight: 900;
     }
 
     .thread-header span:last-child {
-      color: var(--field);
+      color: #28c840;
       font-size: 12px;
+      text-shadow: 0 0 18px rgba(40, 200, 64, 0.42);
+    }
+
+    .channel-guide {
+      margin: 18px 22px 0;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 253, 247, 0.08);
+      border-radius: 8px;
+      background: rgba(255, 253, 247, 0.035);
+      color: rgba(255, 253, 247, 0.7);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .channel-guide strong {
+      display: block;
+      margin-bottom: 4px;
+      color: rgba(255, 253, 247, 0.94);
+      font-size: 13px;
     }
 
     .message-stack {
       display: grid;
       gap: 12px;
-      margin-top: 18px;
+      margin: 18px 22px;
     }
 
     .message-row {
+      position: relative;
       display: grid;
-      grid-template-columns: 34px minmax(0, 1fr);
-      gap: 10px;
+      grid-template-columns: 30px minmax(0, 1fr) auto;
+      gap: 12px;
       align-items: start;
+      min-width: 0;
+      padding: 16px 16px 14px 18px;
+      border: 1px solid rgba(38, 132, 255, 0.55);
+      border-left: 4px solid #2684ff;
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(38, 132, 255, 0.12), transparent 50%),
+        rgba(255, 253, 247, 0.035);
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.28),
+        0 0 0 1px rgba(255, 253, 247, 0.035) inset,
+        0 0 28px rgba(38, 132, 255, 0.16);
+    }
+
+    .message-row.green {
+      border-color: rgba(47, 168, 117, 0.66);
+      border-left-color: #2fd078;
+      background:
+        linear-gradient(90deg, rgba(47, 168, 117, 0.13), transparent 52%),
+        rgba(255, 253, 247, 0.035);
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.26),
+        0 0 28px rgba(47, 168, 117, 0.12);
+    }
+
+    .message-row.amber {
+      border-color: rgba(222, 163, 49, 0.68);
+      border-left-color: #f59d28;
+      background:
+        linear-gradient(90deg, rgba(222, 163, 49, 0.13), transparent 52%),
+        rgba(255, 253, 247, 0.035);
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.26),
+        0 0 28px rgba(222, 163, 49, 0.12);
     }
 
     .agent-dot {
-      width: 34px;
-      height: 34px;
+      width: 28px;
+      height: 28px;
       display: grid;
       place-items: center;
-      border-radius: 8px;
-      background:
-        linear-gradient(135deg, var(--hedge), #20483d);
-      color: var(--white);
-      font-size: 12px;
+      border-radius: 7px;
+      background: rgba(38, 132, 255, 0.18);
+      color: #4da2ff;
+      font-size: 13px;
       font-weight: 900;
     }
 
     .message-card {
       min-width: 0;
-      padding: 11px 12px;
-      border: 1px solid rgba(16, 34, 31, 0.12);
-      border-radius: 8px;
-      background: rgba(255, 250, 242, 0.96);
-      box-shadow:
-        0 12px 28px rgba(16, 34, 31, 0.1),
-        0 0 0 1px rgba(222, 163, 49, 0.08) inset;
-      font-size: 12px;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: rgba(255, 253, 247, 0.78);
+      font-size: 13px;
       line-height: 1.42;
     }
 
     .message-card strong {
-      display: block;
-      margin-bottom: 4px;
-      color: var(--hedge);
-      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+      color: rgba(255, 253, 247, 0.96);
+      font-size: 14px;
+      line-height: 1.1;
+    }
+
+    .message-card strong small {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(47, 168, 117, 0.18);
+      color: #2fd078;
+      font-size: 10px;
+      font-weight: 900;
     }
 
     .message-card p {
       margin: 0;
-      color: var(--ink-soft);
+      color: rgba(255, 253, 247, 0.72);
     }
 
     .receipt {
       display: inline-flex;
       margin-top: 7px;
-      color: var(--field);
+      color: #2fd078;
       font-size: 11px;
+      font-weight: 900;
+    }
+
+    .message-time {
+      color: rgba(255, 253, 247, 0.35);
+      font-size: 11px;
+      font-weight: 820;
+      white-space: nowrap;
+    }
+
+    .composer-bar {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      left: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 11px 12px;
+      border: 1px solid rgba(255, 253, 247, 0.08);
+      border-radius: 8px;
+      background: rgba(27, 28, 27, 0.92);
+      box-shadow: 0 -18px 34px rgba(0, 0, 0, 0.22);
+      color: rgba(255, 253, 247, 0.42);
+      font-size: 12px;
+      font-weight: 760;
+    }
+
+    .composer-bar span:last-child {
+      padding: 7px 11px;
+      border-radius: 7px;
+      background: rgba(47, 168, 117, 0.22);
+      color: #6fea9c;
       font-weight: 900;
     }
 
@@ -1530,48 +1768,83 @@
       <div class="console-stage" aria-hidden="true">
         <div class="console-scene">
   <div class="console-window">
-    <aside class="console-sidebar">
-      <strong>CAO signals</strong>
-      <div class="console-channel active">AI governance</div><div class="console-channel">Cyber/resilience</div><div class="console-channel">Disclosure</div><div class="console-channel">CSRD/ESRS</div>
-    </aside>
-    <div class="console-main">
-      <div class="thread-header">
-        <span>Chief Agentic Officer Briefing</span>
-        <span>public signal scan</span>
-      </div>
-      <div class="message-stack">
-        <div class="message-row">
-          <div class="agent-dot">AI</div>
-          <div class="message-card">
-            <strong>AI governance</strong>
-            <p>Ownership, decision rights, assurance, risk appetite, human judgement, and accountable use of AI or agentic systems.</p>
-            <span class="receipt">owner question</span>
-          </div>
-        </div><div class="message-row">
-          <div class="agent-dot">CY</div>
-          <div class="message-card">
-            <strong>Cyber/resilience</strong>
-            <p>Cybersecurity, operational resilience, incident readiness, third-party dependency, business continuity, and systems that must keep working under pressure.</p>
-            <span class="receipt">evidence needed</span>
-          </div>
-        </div><div class="message-row">
-          <div class="agent-dot">BA</div>
-          <div class="message-card">
-            <strong>Board actions</strong>
-            <p>Items that may require a board, committee, chair, company secretary, executive, or accountable owner to approve, stop, narrow, fund, review, or escalate.</p>
-            <span class="typing"><i></i><i></i><i></i></span>
+    <div class="window-chrome">
+      <span class="traffic-lights"><i></i><i></i><i></i></span>
+      <strong>Orchistra</strong>
+      <span class="chrome-status">Updated 14:44</span>
+    </div>
+    <div class="console-shell">
+      <aside class="console-sidebar">
+        <div class="sidebar-brand">
+          <span>Demo workspace</span>
+          <strong>Orchistra</strong>
+        </div>
+        <div class="side-nav">
+          <span class="active"><i>◌</i>COA Briefing</span>
+          <span class="active"><i>◌</i>Today</span><span><i>↯</i>Needs You</span><span><i>⌘</i>Explore</span><span><i>◎</i>Agents</span><span><i>◇</i>Attachments</span>
+        </div>
+        <div class="sidebar-label">Fixed channels</div>
+        <div class="channel-row">
+          <i>#</i>
+          <span>#daily-standup</span>
+          <small>Fixed</small>
+        </div><div class="channel-row active">
+          <i>#</i>
+          <span>#operations</span>
+          <small>Fixed</small>
+        </div><div class="channel-row">
+          <i>#</i>
+          <span>#research</span>
+          <small>Fixed</small>
+        </div><div class="channel-row">
+          <i>#</i>
+          <span>#reports</span>
+          <small>Fixed</small>
+        </div>
+        <div class="sidebar-foot">Demo workspace active.<br>Example links only.</div>
+      </aside>
+      <div class="console-main">
+        <div class="thread-header">
+          <span>#operations</span>
+          <span>Refresh</span>
+        </div>
+        <div class="channel-guide">
+          <strong>Channel Guide</strong>
+          Operating priorities, blockers, commitments, handoffs, human requests, and review.
+        </div>
+        <div class="message-stack">
+          <div class="message-row blue">
+            <div class="agent-dot">▱</div>
+            <div class="message-card">
+              <strong>agent_handoff_ready <small>Green</small></strong>
+              <p>A research agent handed work to operations with owner, purpose, receipts, and a human review request visible in one thread.</p>
+              <span class="receipt">demo.orchistra.example/threads/agent-handoff</span>
+            </div>
+            <div class="message-time">14:44</div>
+          </div><div class="message-row amber">
+            <div class="agent-dot">◇</div>
+            <div class="message-card">
+              <strong>attention_request <small>Watch</small></strong>
+              <p>Two approvals need a person before the next routine run. The request is visible without exposing private source material.</p>
+              <span class="receipt">demo.orchistra.example/requests/human-review</span>
+            </div>
+            <div class="message-time">11:32</div>
+          </div><div class="message-row green">
+            <div class="agent-dot">▰</div>
+            <div class="message-card">
+              <strong>standup_update <small>Green</small></strong>
+              <p>Daily standup posted: priorities, blockers, owner, and follow-up channel are ready for the human trail.</p>
+              <span class="receipt">demo.orchistra.example/receipts/daily-standup</span>
+            </div>
+            <div class="message-time">10:49</div>
           </div>
         </div>
+        <div class="composer-bar">
+          <span>Message #operations · Signal · Human Notify</span>
+          <span>Send</span>
+        </div>
       </div>
-      <span class="flow-line flow-one"></span>
-      <span class="flow-line flow-two"></span>
-      <span class="pulse-node pulse-one"></span>
-      <span class="pulse-node pulse-two"></span>
     </div>
-    <aside class="console-rail">
-      <strong>Briefing lens</strong>
-      <div class="console-metric">6 signal lanes</div><div class="console-metric">UK/EU signal scan</div><div class="console-metric">3 board questions</div><div class="console-metric">judgement support</div>
-    </aside>
   </div>
 </div>
       </div>
