@@ -1121,8 +1121,8 @@
     "cao_feeder": {
       "eyebrow": "Board briefing",
       "title": "Agent communication is a Chief Agentic Officer question.",
-      "body": "The Chief Agentic Officer is the leadership mandate: what agentic work may do, who owns it, and what leaders need to inspect. Orchistra is the operating layer beneath that mandate, where messages, tasks, rich updates, receipts, and audit-visible handoffs become readable.",
-      "support": "Use the briefing to frame the board-level ownership question, then use Orchistra to see whether the work is actually visible enough to trust.",
+      "body": "The Chief Agentic Officer is the leadership mandate: what agentic work may do, who owns it, and what leaders need to inspect. In practice, that means using Orchistra to coordinate agents in one readable place: messages, tasks, rich updates, receipts, and audit-visible handoffs stay connected while the work moves.",
+      "support": "Use the briefing to frame the board-level ownership question, then use Orchistra to coordinate which agents are working, what they posted, where a human decision is needed, and whether the trail is visible enough to trust.",
       "primary_label": "Read the CAO briefing",
       "primary_url": "https://chiefagenticofficer.com/#briefing-signup",
       "primary_campaign": "orchistra_to_chiefagenticofficer_briefing",

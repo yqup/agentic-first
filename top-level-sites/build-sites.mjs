@@ -9913,8 +9913,8 @@ ${matomoScriptTagFor(site)}  <style>
         <div>
           <p class="eyebrow">${escapeHtml(caoFeeder.eyebrow || "Board briefing")}</p>
           <h2>${escapeHtml(caoFeeder.title || "Agent communication is a Chief Agentic Officer question.")}</h2>
-          <p class="lead">${escapeHtml(caoFeeder.body || "The Chief Agentic Officer is the leadership mandate: what agentic work may do, who owns it, and what leaders need to inspect. Orchistra is the operating layer beneath that mandate, where messages, tasks, rich updates, receipts, and audit-visible handoffs become readable.")}</p>
-          <p>${escapeHtml(caoFeeder.support || "Use the briefing to frame the board-level ownership question, then use Orchistra to see whether the work is actually visible enough to trust.")}</p>
+          <p class="lead">${escapeHtml(caoFeeder.body || "The Chief Agentic Officer is the leadership mandate: what agentic work may do, who owns it, and what leaders need to inspect. In practice, that means using Orchistra to coordinate agents in one readable place: messages, tasks, rich updates, receipts, and audit-visible handoffs stay connected while the work moves.")}</p>
+          <p>${escapeHtml(caoFeeder.support || "Use the briefing to frame the board-level ownership question, then use Orchistra to coordinate which agents are working, what they posted, where a human decision is needed, and whether the trail is visible enough to trust.")}</p>
         </div>
         <div class="feeder-actions">
           <a class="button primary" href="${escapeHtml(feederCaoHref)}"${outboundAttrsFor(site, caoFeeder.primary_content || "feeder_cao_briefing", caoStage, caoCampaign)}>${escapeHtml(caoFeeder.primary_label || "Read the CAO briefing")}</a>
