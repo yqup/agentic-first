@@ -4943,7 +4943,1151 @@ function caoMandateSvg() {
 </svg>`;
 }
 
+function snaxkConceptPageFor(site) {
+  const title = site.title || "SNAXK | Judgement engine for agentic work";
+  const summary = site.summary || "SNAXK helps teams and leaders set boundaries, demand evidence, define stop conditions, and produce board-readable judgement.";
+  const lozenge = site.brand_assets?.lozenge || "/assets/snaxk-lozenge.png";
+  const badge = site.brand_assets?.badge || lozenge;
+  const logo = site.brand_assets?.logo || "/assets/snaxk-logo.png";
+  const milestone = site.research_milestone || "SNAXK 0.10.8";
+  const footerProductLine = site.footer_product_line || "A YQUP product";
+  const footerLegal = site.footer_legal || "Copyright (c) 2026 YQUP Ltd";
+  const caoFeeder = site.cao_feeder || {};
+  const caoUrl = caoFeeder.primary_url || "https://chiefagenticofficer.com/";
+  const caoCampaign = caoFeeder.primary_campaign || "snaxk_to_chiefagenticofficer";
+  const caoStage = caoFeeder.primary_stage || "source_to_chiefagenticofficer";
+  const advisoryUrl = caoFeeder.secondary_url || defaultTonywoodAdvisoryUrl;
+  const advisoryCampaign = caoFeeder.secondary_campaign || "snaxk_to_tonywood_advisory";
+  const advisoryStage = caoFeeder.secondary_stage || "source_to_tonywood_advisory";
+  const heroCaoHref = trackedOutboundUrlFor(site, caoUrl, caoFeeder.primary_content || "hero_cao_briefing", caoCampaign) || caoUrl;
+  const panelCaoHref = trackedOutboundUrlFor(site, caoUrl, "cao_briefing_panel", caoCampaign) || caoUrl;
+  const engineInterestHref = trackedOutboundUrlFor(site, advisoryUrl, caoFeeder.engine_content || "snaxk_engine_interest", advisoryCampaign) || advisoryUrl;
+  const advisoryHref = trackedOutboundUrlFor(site, advisoryUrl, "footer_tonywood_advisory", advisoryCampaign) || advisoryUrl;
+  const loopSteps = [
+    {
+      number: "1",
+      label: "Sense",
+      title: "Sense",
+      body: "Collect signals from people, agents, systems and context.",
+      tone: "sage",
+      icon: "M11 14c4-4 8 4 12 0M11 22c4-4 8 4 12 0M11 30c4-4 8 4 12 0",
+    },
+    {
+      number: "2",
+      label: "Assess",
+      title: "Assess",
+      body: "Test evidence against intent, boundaries and risk.",
+      tone: "sage",
+      icon: "M12 12h20v20H12zM16 16h12M16 22h7",
+    },
+    {
+      number: "3",
+      label: "Judge",
+      title: "Judge",
+      body: "Decide: proceed, adjust, escalate, or stop.",
+      tone: "gold",
+      icon: "M22 9l13 13-13 13L9 22zM22 15l7 7-7 7-7-7z",
+    },
+    {
+      number: "4",
+      label: "Act",
+      title: "Act",
+      body: "Execute within boundaries with measurements.",
+      tone: "red",
+      icon: "M22 10l10 6v12l-10 6-10-6V16z",
+    },
+    {
+      number: "5",
+      label: "Review",
+      title: "Review",
+      body: "Compare outcomes, capture learning, tighten the loop.",
+      tone: "outline",
+      icon: "M15 18a8 8 0 0114-2M29 16h-5v-5M29 26a8 8 0 01-14 2M15 28h5v5",
+    },
+  ];
+  const boundaryCards = [
+    {
+      title: "Ownership",
+      body: "Clear accountable owner for the outcome and the call.",
+      icon: "M13 20h18v14H13zM17 20v-4a5 5 0 0110 0v4M22 25v4",
+    },
+    {
+      title: "Scope",
+      body: "What's in, what's out, and what needs human judgement.",
+      icon: "M12 15h20M12 22h20M12 29h20M16 12v6M27 19v6M20 26v6",
+    },
+    {
+      title: "Evidence",
+      body: "Minimum evidence required to justify the next step.",
+      icon: "M22 10l11 5v8c0 7-5 11-11 13-6-2-11-6-11-13v-8z",
+    },
+    {
+      title: "Stop Conditions",
+      body: "Trigger points that pause or stop automated work.",
+      icon: "M22 10l10 6v12l-10 6-10-6V16zM22 21v5",
+    },
+    {
+      title: "Review Cadence",
+      body: "How often we renew, revalidate, and recalibrate.",
+      icon: "M22 11a11 11 0 1011 11A11 11 0 0022 11zM22 15v8l6 3",
+    },
+  ];
+  const engineRows = [
+    ["Signals", "Live"],
+    ["Evidence", "Strong"],
+    ["Boundaries", "Within limits"],
+    ["Stop Condition", "Not met"],
+    ["Judgement", "Proceed"],
+  ];
+  const featureCards = [
+    {
+      title: "Clarity",
+      body: "See the real state of the work.",
+      icon: "M15 30l5-18M29 30l-5-18M12 30h20M14 14a3 3 0 106 0 3 3 0 00-6 0zM26 14a3 3 0 106 0 3 3 0 00-6 0z",
+    },
+    {
+      title: "Control",
+      body: "Define boundaries and stop conditions.",
+      icon: "M22 10l11 5v8c0 7-5 11-11 13-6-2-11-6-11-13v-8z",
+    },
+    {
+      title: "Confidence",
+      body: "Make decisions you can stand behind.",
+      icon: "M14 30c0-5 4-8 8-8s8 3 8 8M16 17a6 6 0 1012 0M8 31c0-4 3-7 7-7M30 24c4 0 7 3 7 7",
+    },
+  ];
+  const arrowSvg = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const fieldSketch = `<svg class="field-sketch" viewBox="0 0 760 520" role="img" aria-label="Line sketch of fields used as a judgement map">
+    <defs>
+      <linearGradient id="snaxk-paper-fade" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0" stop-color="#fffaf0" stop-opacity=".1"/>
+        <stop offset="1" stop-color="#d8cfb7" stop-opacity=".34"/>
+      </linearGradient>
+    </defs>
+    <rect width="760" height="520" fill="url(#snaxk-paper-fade)"/>
+    <g fill="none" stroke="#9c9a83" stroke-linecap="round" stroke-linejoin="round" opacity=".42">
+      <path d="M52 366C164 300 246 296 330 230c78-61 159-96 266-99"/>
+      <path d="M40 398c111-65 218-66 318-140 74-55 151-91 330-104"/>
+      <path d="M74 424c117-64 232-74 330-139 96-64 167-95 297-107"/>
+      <path d="M92 454c150-61 222-73 336-139 99-57 180-88 296-96"/>
+      <path d="M126 188c93-46 186-54 278-40 80 12 155 4 254-40"/>
+      <path d="M94 154c96-32 197-42 296-32 83 9 166-2 278-46"/>
+      <path d="M166 90c88-18 181-17 280 4 95 20 168 10 249-28"/>
+      <path d="M86 292c96-33 195-42 292-28 87 13 168 2 284-41"/>
+      <path d="M132 252c75-28 157-32 251-18 102 15 188 3 292-42"/>
+    </g>
+    <g fill="none" stroke="#72765b" stroke-width="7" stroke-linecap="round" opacity=".42">
+      <path d="M46 386c68-36 136-55 210-55 61 0 112-17 154-49 69-52 153-78 270-89"/>
+      <path d="M104 184c105-43 202-44 294-27 92 18 179 1 265-45"/>
+      <path d="M83 300c90-28 188-27 286-12 82 13 160 1 282-44"/>
+      <path d="M188 83c102-16 190-9 264 7 93 20 170 9 244-27"/>
+    </g>
+    <g fill="none" stroke="#b9ad8b" stroke-width="1.4" opacity=".55">
+      <path d="M190 70c70 38 130 81 187 149 57 67 117 117 201 159"/>
+      <path d="M304 64c30 70 63 132 101 190 46 70 105 123 177 166"/>
+      <path d="M76 240c111 15 214 28 307 40 112 15 214 22 314 15"/>
+      <path d="M130 118c90 45 170 92 239 144 77 58 163 98 258 119"/>
+    </g>
+    <g fill="none" stroke="#a6a891" stroke-width="1" opacity=".5">
+      <path d="M562 88c37 6 70 15 100 29"/>
+      <path d="M582 72c28 8 58 19 89 34"/>
+      <path d="M600 58c24 9 49 21 74 37"/>
+      <path d="M72 438c33-10 73-17 119-21"/>
+      <path d="M96 460c45-12 88-18 130-18"/>
+    </g>
+  </svg>`;
+  const lowerSketch = `<svg class="lower-sketch" viewBox="0 0 310 185" aria-hidden="true">
+    <g fill="none" stroke="#9b9981" stroke-linecap="round" opacity=".52">
+      <path d="M12 126c40-36 88-44 142-37 48 6 88-3 139-35"/>
+      <path d="M3 150c54-35 107-42 159-34 49 7 91-1 139-28"/>
+      <path d="M39 83c42-20 84-24 126-14 52 12 94 4 133-23"/>
+      <path d="M85 35c36-8 75-4 116 10 39 14 72 9 104-8"/>
+      <path d="M23 171c73-26 121-33 173-23 42 8 76 0 103-16"/>
+    </g>
+  </svg>`;
+  const iconSvg = (path, className = "") => `<svg class="${className}" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="${path}" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const brandMark = (variant = "") => `<span class="snaxk-brandmark ${variant}" aria-label="SNAXK">
+    <span class="snaxk-emblem"><img src="${escapeHtml(logo)}" alt=""></span>
+    <span class="snaxk-word">SNAXK</span>
+  </span>`;
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(summary)}">
+  <link rel="preload" as="image" href="${escapeHtml(badge)}">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${matomoScriptTagFor(site)}  <style>
+    :root {
+      color-scheme: light;
+      --ink: #171613;
+      --muted: #504b43;
+      --paper: #fffaf0;
+      --paper-2: #f7efe0;
+      --line: #d7cbb7;
+      --line-soft: rgba(112, 90, 55, 0.18);
+      --sage: #727c48;
+      --gold: #b77a18;
+      --gold-soft: #e4b658;
+      --red: #9b2d2c;
+      --dark: #151715;
+      --dark-2: #20221f;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 68% 10%, rgba(228, 182, 88, 0.08), transparent 32%),
+        var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; }
+
+    .site-header {
+      min-height: 76px;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto minmax(170px, 1fr);
+      align-items: center;
+      gap: 24px;
+      padding: 12px 40px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 250, 240, 0.94);
+    }
+
+    .brand {
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      min-width: 0;
+      text-decoration: none;
+    }
+
+    .snaxk-brandmark {
+      width: 176px;
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 5px 14px 5px 7px;
+      border: 1px solid #dda12e;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fff6cc 0%, #ffd968 58%, #f0a52d 100%);
+      color: #9b4f0c;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 6px 18px rgba(146, 93, 21, 0.08);
+      overflow: hidden;
+    }
+
+    .snaxk-emblem {
+      position: relative;
+      width: 48px;
+      height: 44px;
+      flex: 0 0 48px;
+      overflow: hidden;
+      border-radius: 999px;
+    }
+
+    .snaxk-emblem img {
+      position: absolute;
+      width: 80px;
+      max-width: none;
+      height: auto;
+      left: -16px;
+      top: -7px;
+      display: block;
+    }
+
+    .snaxk-word {
+      display: block;
+      color: #9d4e0b;
+      font-family: var(--sans);
+      font-size: 30px;
+      font-weight: 860;
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+
+    nav {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      color: #161410;
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    nav a { text-decoration: none; }
+
+    .version-pill {
+      justify-self: end;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding: 0 15px;
+      border: 1px solid #c9b99d;
+      border-radius: 999px;
+      background: rgba(255, 250, 240, 0.72);
+      color: #3b3020;
+      font-size: 13px;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .version-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(183, 122, 24, 0.12);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(430px, 0.9fr) minmax(0, 1.1fr);
+      gap: 30px;
+      align-items: center;
+      min-height: 575px;
+      padding: 58px 48px 46px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffdf7, var(--paper));
+    }
+
+    .hero-copy { max-width: 560px; }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 19ch;
+      font-family: var(--serif);
+      font-size: clamp(38px, 3.8vw, 64px);
+      line-height: 0.98;
+      font-weight: 760;
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(31px, 3.2vw, 44px);
+      line-height: 1.08;
+      font-weight: 720;
+    }
+
+    h3 {
+      font-family: var(--serif);
+      font-size: 21px;
+      line-height: 1.2;
+      font-weight: 720;
+    }
+
+    .rule {
+      width: 44px;
+      height: 3px;
+      margin: 24px 0 24px;
+      background: var(--gold);
+    }
+
+    .hero-copy p {
+      max-width: 390px;
+      margin: 0 0 22px;
+      color: #24221d;
+      font-size: 18px;
+      line-height: 1.58;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 24px;
+      margin-top: 28px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 19px;
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      background: var(--gold);
+      color: #fffaf0;
+      text-decoration: none;
+      font-family: var(--serif);
+      font-weight: 720;
+      white-space: nowrap;
+    }
+
+    .button svg,
+    .text-link svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .text-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--red);
+      text-decoration: none;
+      font-family: var(--serif);
+      font-weight: 720;
+      white-space: nowrap;
+    }
+
+    .hero-art {
+      position: relative;
+      min-height: 455px;
+      overflow: hidden;
+    }
+
+    .field-sketch {
+      position: absolute;
+      inset: -22px -14px auto 0;
+      width: 100%;
+      height: 490px;
+      opacity: 0.98;
+    }
+
+    .path-line {
+      position: absolute;
+      border: 0;
+      border-top: 3px dashed currentColor;
+      border-radius: 999px;
+      opacity: 0.82;
+    }
+
+    .path-one {
+      color: #6f7b44;
+      width: 260px;
+      left: 170px;
+      top: 170px;
+      transform: rotate(28deg);
+    }
+
+    .path-two {
+      color: var(--red);
+      width: 218px;
+      left: 230px;
+      top: 280px;
+      transform: rotate(68deg);
+    }
+
+    .path-three {
+      color: #bd821d;
+      width: 260px;
+      right: 160px;
+      top: 245px;
+      transform: rotate(78deg);
+    }
+
+    .map-marker {
+      position: absolute;
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      color: #25231e;
+      font-family: var(--serif);
+      font-size: 13px;
+      font-weight: 760;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .marker-dot {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 3px solid currentColor;
+      border-radius: 999px;
+      background: #fffaf0;
+      box-shadow: 0 2px 10px rgba(23, 22, 19, 0.12);
+    }
+
+    .marker-dot svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .m-signal { left: 210px; top: 78px; color: var(--sage); }
+    .m-boundary { left: 352px; top: 202px; color: var(--sage); }
+    .m-evidence { right: 176px; top: 86px; color: var(--sage); }
+    .m-stop { left: 226px; top: 310px; color: var(--red); }
+    .m-judge { right: 285px; top: 410px; color: var(--gold); }
+    .m-judge .marker-dot { border-radius: 6px; transform: rotate(45deg); }
+    .m-judge .marker-dot svg { transform: rotate(-45deg); }
+
+    .console-panel {
+      position: absolute;
+      right: 16px;
+      top: 132px;
+      width: min(268px, 49%);
+      padding: 16px;
+      border: 1px solid rgba(255, 250, 240, 0.12);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #151715, #20221f);
+      color: rgba(255, 250, 240, 0.88);
+      box-shadow: 0 28px 54px rgba(23, 22, 19, 0.32);
+      z-index: 3;
+    }
+
+    .console-head,
+    .console-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .console-head {
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 250, 240, 0.12);
+      color: var(--gold-soft);
+      font-size: 12px;
+      font-weight: 820;
+      text-transform: uppercase;
+    }
+
+    .console-head span:last-child {
+      color: rgba(255, 250, 240, 0.78);
+      font-weight: 680;
+      text-transform: none;
+    }
+
+    .console-row {
+      min-height: 44px;
+      border-bottom: 1px solid rgba(255, 250, 240, 0.08);
+      font-size: 13px;
+    }
+
+    .console-row strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 680;
+    }
+
+    .console-row i {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 250, 240, 0.18);
+      border-radius: 999px;
+      color: var(--gold-soft);
+      font-style: normal;
+    }
+
+    .console-row small {
+      color: rgba(255, 250, 240, 0.84);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .console-row small::after,
+    .console-head span:last-child::after {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-left: 7px;
+      border-radius: 999px;
+      background: #8ea35d;
+      vertical-align: middle;
+    }
+
+    .console-summary {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid rgba(255, 250, 240, 0.14);
+      border-radius: 6px;
+      color: rgba(255, 250, 240, 0.76);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .console-summary strong {
+      display: block;
+      margin-bottom: 5px;
+      color: rgba(255, 250, 240, 0.9);
+      font-weight: 680;
+    }
+
+    .signal-band {
+      display: grid;
+      grid-template-columns: minmax(330px, 1fr) repeat(3, minmax(116px, 0.82fr));
+      gap: 16px;
+      align-items: center;
+      padding: 38px 48px 40px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .signal-intro {
+      display: grid;
+      grid-template-columns: 74px minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
+    }
+
+    .leaf-icon {
+      width: 72px;
+      height: 72px;
+      color: var(--sage);
+    }
+
+    .signal-intro p,
+    .feature p,
+    .loop-step p,
+    .boundary-card p,
+    .panel p,
+    footer p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .feature {
+      min-height: 96px;
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding-left: 14px;
+      border-left: 1px dotted #c8baa4;
+    }
+
+    .feature svg {
+      width: 36px;
+      height: 36px;
+      color: var(--sage);
+    }
+
+    .section {
+      padding: 38px 48px 50px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .loop-row {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      align-items: start;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .loop-step {
+      display: grid;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .loop-step .step-number {
+      margin-bottom: 10px;
+      color: #6e5d36;
+      font-family: var(--serif);
+      font-size: 16px;
+    }
+
+    .step-icon {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 14px;
+      border-radius: 999px;
+      color: #fffaf0;
+      background: var(--sage);
+    }
+
+    .step-icon.gold { background: var(--gold); border-radius: 9px; transform: rotate(45deg); }
+    .step-icon.gold svg { transform: rotate(-45deg); }
+    .step-icon.red { background: var(--red); }
+    .step-icon.outline { background: transparent; color: var(--sage); border: 3px solid var(--sage); }
+
+    .step-icon svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    .loop-step strong {
+      display: block;
+      color: #161410;
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .loop-arrow {
+      align-self: center;
+      justify-self: center;
+      color: #a7782c;
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .boundary-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 26px;
+    }
+
+    .boundary-card,
+    .panel {
+      border: 1px solid #cab99f;
+      border-radius: 7px;
+      background: rgba(255, 253, 247, 0.62);
+      box-shadow: 0 14px 34px rgba(58, 44, 24, 0.05);
+    }
+
+    .boundary-card {
+      min-height: 156px;
+      padding: 20px;
+    }
+
+    .boundary-card svg {
+      width: 34px;
+      height: 34px;
+      margin-bottom: 14px;
+      color: var(--sage);
+    }
+
+    .boundary-card:nth-child(4) svg { color: var(--red); }
+    .boundary-card:nth-child(5) svg { color: var(--gold); }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+      gap: 22px;
+      margin-top: 22px;
+    }
+
+    .panel {
+      position: relative;
+      min-height: 260px;
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: 26px;
+      align-items: center;
+      padding: 22px;
+      overflow: hidden;
+    }
+
+    .panel.interest {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .panel.interest > div {
+      position: relative;
+      z-index: 1;
+      max-width: 330px;
+    }
+
+    .panel.interest .lower-sketch {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      width: 210px;
+      opacity: 0.72;
+    }
+
+    .panel h3 {
+      font-size: 27px;
+    }
+
+    .panel ul {
+      display: grid;
+      gap: 7px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+      color: #2f2b24;
+      font-size: 14px;
+    }
+
+    .panel li::before {
+      content: "✓";
+      margin-right: 9px;
+      color: var(--gold);
+      font-weight: 900;
+    }
+
+    .panel .text-link {
+      margin-top: 18px;
+      max-width: 100%;
+      white-space: normal;
+      justify-content: flex-start;
+    }
+
+    .panel .button {
+      margin-top: 18px;
+      min-height: 42px;
+    }
+
+    .lower-sketch {
+      width: 100%;
+      max-width: 230px;
+      height: auto;
+      opacity: 0.88;
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: minmax(250px, 1fr) repeat(3, minmax(120px, 0.55fr)) minmax(190px, 0.8fr);
+      gap: 30px;
+      align-items: start;
+      padding: 34px 42px;
+      background: linear-gradient(90deg, #151715, #1e211f);
+      color: rgba(255, 250, 240, 0.82);
+    }
+
+    footer img {
+      display: block;
+    }
+
+    footer p {
+      color: rgba(255, 250, 240, 0.72);
+    }
+
+    footer .snaxk-brandmark {
+      width: 158px;
+      min-height: 48px;
+      margin-bottom: 18px;
+      padding: 4px 12px 4px 6px;
+    }
+
+    footer .snaxk-emblem {
+      width: 42px;
+      height: 38px;
+      flex-basis: 42px;
+    }
+
+    footer .snaxk-emblem img {
+      width: 70px;
+      left: -14px;
+      top: -6px;
+    }
+
+    footer .snaxk-word {
+      font-size: 25px;
+    }
+
+    footer strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--gold-soft);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    footer a {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255, 250, 240, 0.82);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .footer-product {
+      justify-self: end;
+      align-self: center;
+      color: #fffaf0;
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.8;
+      text-align: right;
+    }
+
+    .footer-product div:first-child {
+      color: rgba(255, 250, 240, 0.9);
+    }
+
+    @media (max-width: 860px) {
+      .site-header,
+      .hero,
+      .signal-band,
+      .panel-grid,
+      footer {
+        grid-template-columns: 1fr;
+      }
+
+      nav,
+      .version-pill,
+      .brand,
+      .footer-product {
+        justify-self: start;
+      }
+
+      .hero-art {
+        min-height: 520px;
+      }
+
+      .boundary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .loop-row {
+        grid-template-columns: 1fr;
+      }
+
+      .loop-arrow {
+        transform: rotate(90deg);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .site-header,
+      .hero,
+      .signal-band,
+      .section,
+      footer {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+
+      nav {
+        gap: 14px;
+        font-size: 15px;
+      }
+
+      h1 {
+        font-size: 48px;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-art {
+        min-height: 560px;
+      }
+
+      .console-panel {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        margin-top: 280px;
+      }
+
+      .map-marker {
+        font-size: 12px;
+      }
+
+      .m-signal { left: 26%; top: 66px; }
+      .m-boundary { left: 45%; top: 168px; }
+      .m-evidence { right: 14%; top: 76px; }
+      .m-stop { left: 24%; top: 278px; }
+      .m-judge { right: 24%; top: 366px; }
+
+      .signal-intro,
+      .feature,
+      .panel,
+      .panel.interest {
+        grid-template-columns: 1fr;
+      }
+
+      .boundary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .button,
+      .text-link {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
+      ${brandMark()}
+    </a>
+    <nav aria-label="Primary">
+      <a href="#engine">Engine</a>
+      <a href="#boundaries">Boundaries</a>
+      <a href="#cao-briefing">CAO Briefing</a>
+      <a href="#conversation">Interest</a>
+    </nav>
+    <div class="version-pill">${escapeHtml(milestone)}</div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <h1 id="page-title">${escapeHtml(site.heading || "A judgement engine for agentic work.")}</h1>
+        <div class="rule"></div>
+        <p>SNAXK helps teams and leaders set boundaries, demand evidence, define stop conditions, and produce board-readable judgement.</p>
+        <p>From signals to decisions, in a loop you can trust: people and agents.</p>
+        <div class="hero-actions">
+          <a class="button" href="#engine">See the engine ${arrowSvg}</a>
+          <a class="text-link" href="${escapeHtml(heroCaoHref)}"${outboundAttrsFor(site, caoFeeder.primary_content || "hero_cao_briefing", caoStage, caoCampaign)}>Read the CAO briefing ${arrowSvg}</a>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-label="SNAXK judgement map">
+        ${fieldSketch}
+        <div class="path-line path-one"></div>
+        <div class="path-line path-two"></div>
+        <div class="path-line path-three"></div>
+        <div class="map-marker m-signal"><span class="marker-dot">${iconSvg("M22 13v18M13 22h18M16 16l12 12M28 16L16 28")}</span><span>Signals</span></div>
+        <div class="map-marker m-boundary"><span class="marker-dot">${iconSvg("M16 16h12v12H16zM22 11v5M22 28v5M11 22h5M28 22h5")}</span><span>Boundaries</span></div>
+        <div class="map-marker m-evidence"><span class="marker-dot">${iconSvg("M22 12l3 7 7 3-7 3-3 7-3-7-7-3 7-3z")}</span><span>Evidence</span></div>
+        <div class="map-marker m-stop"><span class="marker-dot">${iconSvg("M22 14l8 5v8l-8 5-8-5v-8z")}</span><span>Stop Condition</span></div>
+        <div class="map-marker m-judge"><span class="marker-dot">${iconSvg("M22 14l8 8-8 8-8-8z")}</span><span>Judgement</span></div>
+        <aside class="console-panel" aria-label="SNAXK engine status">
+          <div class="console-head"><span>SNAXK Engine</span><span>All quiet</span></div>
+          ${engineRows.map(([name, value]) => `<div class="console-row"><strong><i>${escapeHtml(name.slice(0, 1))}</i>${escapeHtml(name)}</strong><small>${escapeHtml(value)}</small></div>`).join("")}
+          <div class="console-summary"><strong>Judgement Summary</strong>Proceed within boundaries. Review at next cadence.</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="signal-band" id="signal">
+      <div class="signal-intro">
+        <svg class="leaf-icon" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <path d="M16 66c15-24 29-39 49-51M24 54c-6-7-10-16-8-27 12 2 20 9 25 18M35 41c-2-10 2-21 13-31 9 12 8 23 2 33M30 61c11 0 20 4 27 13-14 4-25 2-34-7" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <h2>Signal before action.</h2>
+          <p>SNAXK surfaces what matters before work runs: risk, context, constraints, intent, and evidence.</p>
+        </div>
+      </div>
+      ${featureCards.map((feature) => `<article class="feature">
+        ${iconSvg(feature.icon)}
+        <div>
+          <h3>${escapeHtml(feature.title)}</h3>
+          <p>${escapeHtml(feature.body)}</p>
+        </div>
+      </article>`).join("")}
+    </section>
+
+    <section class="section" id="engine">
+      <h2>The SNAXK judgement loop.</h2>
+      <div class="loop-row">
+        ${loopSteps.map((step, index) => `<article class="loop-step">
+          <div class="step-number">${escapeHtml(step.number)}</div>
+          <div class="step-icon ${escapeHtml(step.tone)}">${iconSvg(step.icon)}</div>
+          <strong>${escapeHtml(step.label)}</strong>
+          <p>${escapeHtml(step.body)}</p>
+        </article>${index < loopSteps.length - 1 ? `<div class="loop-arrow" aria-hidden="true">→</div>` : ""}`).join("")}
+      </div>
+    </section>
+
+    <section class="section" id="boundaries">
+      <h2>Boundaries make it safe to move fast.</h2>
+      <div class="boundary-grid">
+        ${boundaryCards.map((card) => `<article class="boundary-card">
+          ${iconSvg(card.icon)}
+          <h3>${escapeHtml(card.title)}</h3>
+          <p>${escapeHtml(card.body)}</p>
+        </article>`).join("")}
+      </div>
+      <div class="panel-grid">
+        <article class="panel" id="cao-briefing">
+          ${lowerSketch}
+          <div>
+            <h3>Built for the Chief Agentic Officer.</h3>
+            <div class="rule"></div>
+            <p>SNAXK gives CAOs and boards a judgement layer they can read and rely on.</p>
+            <ul>
+              <li>Board-readable judgement summaries</li>
+              <li>Decision trails people and agents can both read</li>
+              <li>Bounded autonomy with clear escalation paths</li>
+              <li>Signals that surface risk before it becomes cost</li>
+              <li>Operational cadence that sustains performance</li>
+            </ul>
+            <a class="text-link" href="${escapeHtml(panelCaoHref)}"${outboundAttrsFor(site, "cao_briefing_panel", caoStage, caoCampaign)}>Read the Chief Agentic Officer briefing ${arrowSvg}</a>
+          </div>
+        </article>
+        <article class="panel interest" id="conversation">
+          <div>
+            <h3>Register interest in the SNAXK engine.</h3>
+            <div class="rule"></div>
+            <p>Want to explore how SNAXK could support your organisation's agentic work and governance?</p>
+            <ul>
+              <li>Discuss use cases and fit</li>
+              <li>Understand deployment and integration</li>
+              <li>See roadmaps and governance approach</li>
+              <li>Join early collaboration conversations</li>
+            </ul>
+            <a class="button" href="${escapeHtml(engineInterestHref)}"${outboundAttrsFor(site, caoFeeder.engine_content || "snaxk_engine_interest", advisoryStage, advisoryCampaign)}>Register interest ${arrowSvg}</a>
+          </div>
+          ${lowerSketch}
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      ${brandMark("footer-mark")}
+      <p>A judgement engine for agentic work.</p>
+      <p>Signal before action.<br>Boundaries make it safe.<br>Judgement you can stand behind.</p>
+    </div>
+    <div>
+      <strong>Engine</strong>
+      <a href="#engine">How it works</a>
+      <a href="#boundaries">Boundaries</a>
+      <a href="#engine">Loop</a>
+      <a href="/healthz">Status</a>
+    </div>
+    <div>
+      <strong>CAO Briefing</strong>
+      <a href="${escapeHtml(panelCaoHref)}"${outboundAttrsFor(site, "footer_cao_briefing", caoStage, caoCampaign)}>Why it matters</a>
+      <a href="${escapeHtml(caoUrl)}">Using SNAXK</a>
+      <a href="${escapeHtml(caoUrl)}">Board view</a>
+      <a href="${escapeHtml(caoUrl)}">Case notes</a>
+    </div>
+    <div>
+      <strong>Connect</strong>
+      <a href="${escapeHtml(engineInterestHref)}"${outboundAttrsFor(site, caoFeeder.engine_content || "snaxk_engine_interest", advisoryStage, advisoryCampaign)}>Register interest</a>
+      <a href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, "footer_tonywood_advisory", advisoryStage, advisoryCampaign)}>Talk to Tony</a>
+      <a href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, "footer_tonywood_advisory", advisoryStage, advisoryCampaign)}>Tonywood Advisory →</a>
+    </div>
+    <div class="footer-product">
+      <div>${escapeHtml(footerProductLine)}</div>
+      <div>${escapeHtml(footerLegal)}</div>
+    </div>
+  </footer>
+</body>
+</html>
+`;
+}
+
 function snaxkPageFor(site) {
+  return snaxkConceptPageFor(site);
   const title = site.title || "SNAXK | Judgement for long-running agents";
   const summary = site.summary || "SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review.";
   const lozenge = site.brand_assets?.lozenge || "/assets/snaxk-lozenge.png";

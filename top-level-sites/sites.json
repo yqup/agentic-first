@@ -238,6 +238,7 @@
     },
     "brand_assets": {
       "lozenge": "/assets/snaxk-lozenge.png",
+      "badge": "/assets/snaxk-badge.png",
       "logo": "/assets/snaxk-logo.png"
     },
     "research_milestone": "SNAXK 0.10.8",
@@ -260,6 +261,10 @@
       {
         "source": "assets/snaxk-lozenge.png",
         "target": "assets/snaxk-lozenge.png"
+      },
+      {
+        "source": "assets/snaxk-badge.png",
+        "target": "assets/snaxk-badge.png"
       },
       {
         "source": "assets/snaxk-logo.png",

@@ -5,159 +5,161 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SNAXK | Judgement engine for agentic work</title>
   <meta name="description" content="SNAXK helps surface the judgement a Chief Agentic Officer needs to inspect: ownership, boundaries, stop conditions, evidence, review, and measurable trust for long-running agentic systems.">
-  <link rel="preload" as="image" href="/assets/snaxk-lozenge.png">
+  <link rel="preload" as="image" href="/assets/snaxk-badge.png">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script defer src="/static/js/matomo-loader.js"></script>
   <style>
     :root {
       color-scheme: light;
-      --ink: #191814;
-      --muted: #5c564b;
-      --paper: #f8f1e3;
-      --cream: #fffaf0;
-      --brown: #4b2f1b;
-      --brown-soft: #754c22;
-      --gold: #f2b84b;
-      --honey: #f7d487;
-      --sage: #617d66;
-      --field: #26392f;
-      --hedge: #1e2a23;
-      --charcoal: #181b19;
-      --oxblood: #8f342d;
-      --mist: #dbe6e0;
-      --line: rgba(25, 24, 20, 0.15);
-      --line-light: rgba(255, 250, 240, 0.18);
-      --shadow: rgba(25, 24, 20, 0.15);
+      --ink: #171613;
+      --muted: #504b43;
+      --paper: #fffaf0;
+      --paper-2: #f7efe0;
+      --line: #d7cbb7;
+      --line-soft: rgba(112, 90, 55, 0.18);
+      --sage: #727c48;
+      --gold: #b77a18;
+      --gold-soft: #e4b658;
+      --red: #9b2d2c;
+      --dark: #151715;
+      --dark-2: #20221f;
       --serif: Georgia, "Times New Roman", serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       margin: 0;
-      color: var(--ink);
-      background:
-        linear-gradient(90deg, rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 28px 28px,
-        linear-gradient(rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 28px 28px,
-        linear-gradient(180deg, var(--paper) 0, #eee0c7 100%);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      letter-spacing: 0;
       overflow-x: hidden;
+      background:
+        radial-gradient(circle at 68% 10%, rgba(228, 182, 88, 0.08), transparent 32%),
+        var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: 0;
     }
 
-    a {
-      color: inherit;
-    }
+    a { color: inherit; }
 
     .site-header {
-      min-height: 70px;
-      display: flex;
+      min-height: 76px;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto minmax(170px, 1fr);
       align-items: center;
-      justify-content: space-between;
       gap: 24px;
-      padding: 14px 42px;
-      background: var(--hedge);
-      border-bottom: 1px solid var(--line-light);
-      color: var(--cream);
+      padding: 12px 40px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 250, 240, 0.94);
     }
 
     .brand {
-      display: flex;
+      justify-self: start;
+      display: inline-flex;
       align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      font-weight: 860;
-    }
-
-    .brand img {
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-      object-fit: contain;
-      background: var(--cream);
-      box-shadow: 0 0 0 1px rgba(255, 250, 240, 0.28);
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 8px 22px;
-      color: rgba(255, 250, 240, 0.78);
-      font-size: 14px;
-      font-weight: 780;
-    }
-
-    nav a {
+      min-width: 0;
       text-decoration: none;
     }
 
-    main {
+    .snaxk-brandmark {
+      width: 176px;
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 5px 14px 5px 7px;
+      border: 1px solid #dda12e;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fff6cc 0%, #ffd968 58%, #f0a52d 100%);
+      color: #9b4f0c;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 6px 18px rgba(146, 93, 21, 0.08);
       overflow: hidden;
     }
 
-    .hero {
+    .snaxk-emblem {
       position: relative;
-      min-height: clamp(640px, 82svh, 780px);
-      display: grid;
-      grid-template-columns: minmax(0, 0.92fr) minmax(390px, 0.78fr);
-      gap: 48px;
-      align-items: center;
-      padding: 72px 42px 82px;
-      color: var(--cream);
-      background:
-        radial-gradient(circle at 75% 24%, rgba(242, 184, 75, 0.24), transparent 30%),
-        linear-gradient(90deg, rgba(24, 27, 25, 0.98), rgba(24, 27, 25, 0.78) 48%, rgba(38, 57, 47, 0.62)),
-        linear-gradient(135deg, #181b19 0%, #26392f 58%, #7d5a22 132%);
-      isolation: isolate;
+      width: 48px;
+      height: 44px;
+      flex: 0 0 48px;
+      overflow: hidden;
+      border-radius: 999px;
     }
 
-    .hero::before {
-      content: "";
+    .snaxk-emblem img {
       position: absolute;
-      inset: 0;
-      z-index: -1;
-      background:
-        radial-gradient(ellipse at 88% 58%, transparent 0 18%, rgba(255, 250, 240, 0.10) 18.3% 18.6%, transparent 18.9% 100%),
-        radial-gradient(ellipse at 81% 51%, transparent 0 28%, rgba(255, 250, 240, 0.08) 28.3% 28.6%, transparent 28.9% 100%),
-        radial-gradient(ellipse at 73% 46%, transparent 0 38%, rgba(255, 250, 240, 0.06) 38.3% 38.6%, transparent 38.9% 100%),
-        linear-gradient(90deg, rgba(255, 250, 240, 0.035) 1px, transparent 1px) 0 0 / 34px 34px,
-        linear-gradient(rgba(255, 250, 240, 0.035) 1px, transparent 1px) 0 0 / 34px 34px;
-      opacity: 0.84;
+      width: 80px;
+      max-width: none;
+      height: auto;
+      left: -16px;
+      top: -7px;
+      display: block;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0;
-      height: 90px;
-      z-index: -1;
-      background: linear-gradient(0deg, rgba(248, 241, 227, 0.92), transparent);
-    }
-
-    .hero-copy,
-    .judgement-map {
-      position: relative;
-      z-index: 1;
-    }
-
-    .eyebrow {
-      margin: 0 0 14px;
-      color: var(--oxblood);
-      font-size: 13px;
-      line-height: 1.2;
+    .snaxk-word {
+      display: block;
+      color: #9d4e0b;
+      font-family: var(--sans);
+      font-size: 30px;
       font-weight: 860;
-      text-transform: uppercase;
-      letter-spacing: 0;
+      line-height: 1;
+      letter-spacing: 0.02em;
     }
+
+    nav {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      color: #161410;
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    nav a { text-decoration: none; }
+
+    .version-pill {
+      justify-self: end;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding: 0 15px;
+      border: 1px solid #c9b99d;
+      border-radius: 999px;
+      background: rgba(255, 250, 240, 0.72);
+      color: #3b3020;
+      font-size: 13px;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .version-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(183, 122, 24, 0.12);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(430px, 0.9fr) minmax(0, 1.1fr);
+      gap: 30px;
+      align-items: center;
+      min-height: 575px;
+      padding: 58px 48px 46px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffdf7, var(--paper));
+    }
+
+    .hero-copy { max-width: 560px; }
 
     h1,
     h2,
@@ -167,47 +169,48 @@
     }
 
     h1 {
-      max-width: 10.5ch;
-      color: var(--cream);
+      max-width: 19ch;
       font-family: var(--serif);
-      font-size: clamp(50px, 7vw, 88px);
-      line-height: 0.96;
-      font-weight: 700;
+      font-size: clamp(38px, 3.8vw, 64px);
+      line-height: 0.98;
+      font-weight: 760;
     }
 
     h2 {
-      color: var(--charcoal);
       font-family: var(--serif);
-      font-size: 46px;
-      line-height: 1.05;
-      font-weight: 700;
+      font-size: clamp(31px, 3.2vw, 44px);
+      line-height: 1.08;
+      font-weight: 720;
     }
 
     h3 {
-      color: var(--ink);
-      font-size: 20px;
+      font-family: var(--serif);
+      font-size: 21px;
       line-height: 1.2;
-      font-weight: 820;
+      font-weight: 720;
     }
 
-    .lede {
-      max-width: 700px;
-      margin: 24px 0 0;
-      color: var(--muted);
-      font-size: 20px;
-      line-height: 1.55;
+    .rule {
+      width: 44px;
+      height: 3px;
+      margin: 24px 0 24px;
+      background: var(--gold);
     }
 
-    .hero .lede {
-      color: rgba(255, 250, 240, 0.84);
-      font-size: clamp(18px, 2vw, 22px);
+    .hero-copy p {
+      max-width: 390px;
+      margin: 0 0 22px;
+      color: #24221d;
+      font-size: 18px;
+      line-height: 1.58;
     }
 
-    .actions {
+    .hero-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 30px;
+      align-items: center;
+      gap: 24px;
+      margin-top: 28px;
     }
 
     .button {
@@ -215,731 +218,601 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 0 18px;
-      border: 1px solid var(--brown);
+      gap: 12px;
+      padding: 0 19px;
+      border: 1px solid var(--gold);
       border-radius: 4px;
-      background: var(--cream);
-      color: var(--charcoal);
+      background: var(--gold);
+      color: #fffaf0;
       text-decoration: none;
-      font-weight: 820;
+      font-family: var(--serif);
+      font-weight: 720;
       white-space: nowrap;
     }
 
-    .button svg {
-      width: 17px;
-      height: 17px;
+    .button svg,
+    .text-link svg {
+      width: 18px;
+      height: 18px;
       flex: 0 0 auto;
     }
 
-    .button.secondary {
-      background: transparent;
-      color: var(--charcoal);
-    }
-
-    .hero .button {
-      border-color: var(--cream);
-      background: var(--cream);
-      color: var(--charcoal);
-    }
-
-    .hero .button.secondary {
-      background: rgba(255, 250, 240, 0.08);
-      color: var(--cream);
-    }
-
-    .research-strip {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 30px;
-    }
-
-    .research-strip span {
+    .text-link {
       display: inline-flex;
       align-items: center;
-      min-height: 34px;
-      padding: 0 12px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: rgba(255, 250, 240, 0.74);
-      color: var(--muted);
+      gap: 10px;
+      color: var(--red);
+      text-decoration: none;
+      font-family: var(--serif);
+      font-weight: 720;
+      white-space: nowrap;
+    }
+
+    .hero-art {
+      position: relative;
+      min-height: 455px;
+      overflow: hidden;
+    }
+
+    .field-sketch {
+      position: absolute;
+      inset: -22px -14px auto 0;
+      width: 100%;
+      height: 490px;
+      opacity: 0.98;
+    }
+
+    .path-line {
+      position: absolute;
+      border: 0;
+      border-top: 3px dashed currentColor;
+      border-radius: 999px;
+      opacity: 0.82;
+    }
+
+    .path-one {
+      color: #6f7b44;
+      width: 260px;
+      left: 170px;
+      top: 170px;
+      transform: rotate(28deg);
+    }
+
+    .path-two {
+      color: var(--red);
+      width: 218px;
+      left: 230px;
+      top: 280px;
+      transform: rotate(68deg);
+    }
+
+    .path-three {
+      color: #bd821d;
+      width: 260px;
+      right: 160px;
+      top: 245px;
+      transform: rotate(78deg);
+    }
+
+    .map-marker {
+      position: absolute;
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      color: #25231e;
+      font-family: var(--serif);
       font-size: 13px;
       font-weight: 760;
+      text-align: center;
+      z-index: 2;
     }
 
-    .hero .research-strip span {
-      border-color: rgba(255, 250, 240, 0.18);
-      background: rgba(255, 250, 240, 0.08);
-      color: rgba(255, 250, 240, 0.76);
-    }
-
-    .judgement-map {
-      position: relative;
-      display: grid;
-      gap: 16px;
-      min-height: 520px;
-      padding: 20px;
-      border: 1px solid rgba(255, 250, 240, 0.18);
-      border-radius: 8px;
-      background:
-        linear-gradient(135deg, rgba(255, 250, 240, 0.94), rgba(234, 226, 207, 0.88)),
-        var(--cream);
-      color: var(--ink);
-      box-shadow: 0 42px 95px rgba(0, 0, 0, 0.30);
-      overflow: hidden;
-    }
-
-    .judgement-map::before {
-      content: "";
-      position: absolute;
-      inset: 16px;
-      border-radius: 8px;
-      background:
-        radial-gradient(ellipse at 68% 32%, transparent 0 19%, rgba(111, 127, 97, 0.35) 19.5% 20%, transparent 20.5% 100%),
-        radial-gradient(ellipse at 54% 45%, transparent 0 30%, rgba(111, 127, 97, 0.24) 30.5% 31%, transparent 31.5% 100%),
-        radial-gradient(ellipse at 45% 56%, transparent 0 42%, rgba(111, 127, 97, 0.18) 42.5% 43%, transparent 43.5% 100%),
-        linear-gradient(90deg, rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 26px 26px,
-        linear-gradient(rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 26px 26px;
-      pointer-events: none;
-    }
-
-    .map-top {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--line);
-      color: var(--brown);
-      font-size: 13px;
-      font-weight: 880;
-      text-transform: uppercase;
-    }
-
-    .map-top img {
-      width: 78px;
-      height: auto;
-      display: block;
-    }
-
-    .field-nodes {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 4px;
-    }
-
-    .field-node {
-      min-height: 108px;
-      display: grid;
-      align-content: start;
-      gap: 8px;
-      padding: 14px;
-      border: 1px solid rgba(25, 24, 20, 0.13);
-      border-radius: 8px;
-      background: rgba(255, 250, 240, 0.76);
-      box-shadow: 0 10px 28px rgba(25, 24, 20, 0.06);
-    }
-
-    .field-node span,
-    .engine-card span,
-    .console-card span {
-      color: var(--oxblood);
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0;
-    }
-
-    .field-node strong {
-      color: var(--ink);
-      font-size: 17px;
-      line-height: 1.2;
-    }
-
-    .field-node p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.42;
-    }
-
-    .engine-console {
-      position: relative;
-      z-index: 1;
-      margin-top: 2px;
-      border: 1px solid rgba(255, 250, 240, 0.14);
-      border-radius: 8px;
-      background:
-        linear-gradient(135deg, rgba(242, 184, 75, 0.12), transparent 45%),
-        #151715;
-      color: rgba(255, 250, 240, 0.9);
-      overflow: hidden;
-    }
-
-    .console-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 40px;
-      padding: 0 14px;
-      border-bottom: 1px solid rgba(255, 250, 240, 0.10);
-      color: rgba(255, 250, 240, 0.62);
-      font-size: 12px;
-      font-weight: 820;
-    }
-
-    .console-dots {
-      display: inline-flex;
-      gap: 7px;
-    }
-
-    .console-dots i {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: var(--gold);
-    }
-
-    .console-dots i:nth-child(2) {
-      background: var(--sage);
-    }
-
-    .console-dots i:nth-child(3) {
-      background: var(--oxblood);
-    }
-
-    .console-stack {
-      display: grid;
-      gap: 10px;
-      padding: 14px;
-    }
-
-    .console-card {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      padding: 12px;
-      border: 1px solid rgba(255, 250, 240, 0.10);
-      border-left: 4px solid var(--gold);
-      border-radius: 8px;
-      background: rgba(255, 250, 240, 0.045);
-    }
-
-    .console-card strong {
-      display: block;
-      margin-top: 3px;
-      color: var(--cream);
-      font-size: 14px;
-      line-height: 1.25;
-    }
-
-    .console-card em {
-      align-self: start;
-      padding: 4px 7px;
-      border-radius: 999px;
-      background: rgba(111, 127, 97, 0.22);
-      color: var(--honey);
-      font-size: 10px;
-      font-style: normal;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .hero-lab {
-      position: relative;
-      display: grid;
-      gap: 18px;
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background:
-        linear-gradient(180deg, rgba(255, 253, 247, 0.96), rgba(245, 240, 228, 0.94));
-      box-shadow: 0 24px 70px var(--shadow);
-    }
-
-    .lozenge {
+    .marker-dot {
+      width: 34px;
+      height: 34px;
       display: grid;
       place-items: center;
-      min-height: 230px;
+      border: 3px solid currentColor;
+      border-radius: 999px;
+      background: #fffaf0;
+      box-shadow: 0 2px 10px rgba(23, 22, 19, 0.12);
+    }
+
+    .marker-dot svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .m-signal { left: 210px; top: 78px; color: var(--sage); }
+    .m-boundary { left: 352px; top: 202px; color: var(--sage); }
+    .m-evidence { right: 176px; top: 86px; color: var(--sage); }
+    .m-stop { left: 226px; top: 310px; color: var(--red); }
+    .m-judge { right: 285px; top: 410px; color: var(--gold); }
+    .m-judge .marker-dot { border-radius: 6px; transform: rotate(45deg); }
+    .m-judge .marker-dot svg { transform: rotate(-45deg); }
+
+    .console-panel {
+      position: absolute;
+      right: 16px;
+      top: 132px;
+      width: min(268px, 49%);
+      padding: 16px;
+      border: 1px solid rgba(255, 250, 240, 0.12);
       border-radius: 8px;
-      background:
-        linear-gradient(180deg, rgba(246, 217, 141, 0.28), rgba(219, 230, 224, 0.36)),
-        #fffdf7;
-      border: 1px solid rgba(75, 47, 27, 0.12);
+      background: linear-gradient(180deg, #151715, #20221f);
+      color: rgba(255, 250, 240, 0.88);
+      box-shadow: 0 28px 54px rgba(23, 22, 19, 0.32);
+      z-index: 3;
     }
 
-    .lozenge img {
-      width: min(280px, 82%);
-      height: auto;
-      display: block;
-    }
-
-    .lab-copy p,
-    .section-copy p,
-    .step p,
-    .boundary p,
-    .measure-panel p,
-    .status-panel p {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.56;
-    }
-
-    .mini-loop {
+    .console-head,
+    .console-row {
       display: grid;
-      gap: 8px;
-      margin: 2px 0 0;
-    }
-
-    .mini-loop span {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      grid-template-columns: minmax(0, 1fr) auto;
       gap: 12px;
-      min-height: 34px;
-      padding: 0 12px;
-      border-radius: 6px;
-      background: #f3ead8;
-      color: var(--brown);
+      align-items: center;
+    }
+
+    .console-head {
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 250, 240, 0.12);
+      color: var(--gold-soft);
+      font-size: 12px;
+      font-weight: 820;
+      text-transform: uppercase;
+    }
+
+    .console-head span:last-child {
+      color: rgba(255, 250, 240, 0.78);
+      font-weight: 680;
+      text-transform: none;
+    }
+
+    .console-row {
+      min-height: 44px;
+      border-bottom: 1px solid rgba(255, 250, 240, 0.08);
       font-size: 13px;
-      font-weight: 790;
     }
 
-    .section {
-      padding: 76px 40px;
-      border-top: 1px solid var(--line);
+    .console-row strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 680;
     }
 
-    .section-inner {
-      width: min(1180px, 100%);
-      margin: 0 auto;
+    .console-row i {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 250, 240, 0.18);
+      border-radius: 999px;
+      color: var(--gold-soft);
+      font-style: normal;
+    }
+
+    .console-row small {
+      color: rgba(255, 250, 240, 0.84);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .console-row small::after,
+    .console-head span:last-child::after {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-left: 7px;
+      border-radius: 999px;
+      background: #8ea35d;
+      vertical-align: middle;
+    }
+
+    .console-summary {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid rgba(255, 250, 240, 0.14);
+      border-radius: 6px;
+      color: rgba(255, 250, 240, 0.76);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .console-summary strong {
+      display: block;
+      margin-bottom: 5px;
+      color: rgba(255, 250, 240, 0.9);
+      font-weight: 680;
     }
 
     .signal-band {
-      background: var(--paper);
-    }
-
-    .signal-grid {
       display: grid;
-      grid-template-columns: minmax(0, 0.8fr) minmax(420px, 1fr);
-      gap: 46px;
-      align-items: start;
+      grid-template-columns: minmax(330px, 1fr) repeat(3, minmax(116px, 0.82fr));
+      gap: 16px;
+      align-items: center;
+      padding: 38px 48px 40px;
+      border-bottom: 1px solid var(--line);
     }
 
-    .lozenge-panel {
+    .signal-intro {
       display: grid;
-      align-content: center;
-      justify-items: center;
-      min-height: 290px;
-      padding: 30px;
-      border: 1px solid rgba(75, 47, 27, 0.12);
-      border-radius: 8px;
-      background:
-        radial-gradient(circle at 50% 30%, rgba(242, 184, 75, 0.26), transparent 42%),
-        linear-gradient(180deg, rgba(255, 250, 240, 0.92), rgba(235, 224, 204, 0.92));
-      box-shadow: 0 22px 70px var(--shadow);
-      text-align: center;
+      grid-template-columns: 74px minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
     }
 
-    .lozenge-panel img {
-      width: min(310px, 86%);
-      height: auto;
-      display: block;
-      margin-bottom: 18px;
+    .leaf-icon {
+      width: 72px;
+      height: 72px;
+      color: var(--sage);
     }
 
-    .lozenge-panel p {
-      max-width: 460px;
-      margin: 10px 0 0;
+    .signal-intro p,
+    .feature p,
+    .loop-step p,
+    .boundary-card p,
+    .panel p,
+    footer p {
+      margin: 8px 0 0;
       color: var(--muted);
-      font-size: 15px;
-      line-height: 1.56;
+      font-size: 14px;
+      line-height: 1.55;
     }
 
-    .split {
+    .feature {
+      min-height: 96px;
       display: grid;
-      grid-template-columns: minmax(0, 0.85fr) minmax(420px, 1fr);
-      gap: 44px;
+      grid-template-columns: 38px minmax(0, 1fr);
+      gap: 12px;
       align-items: start;
+      padding-left: 14px;
+      border-left: 1px dotted #c8baa4;
     }
 
-    .section-copy {
+    .feature svg {
+      width: 36px;
+      height: 36px;
+      color: var(--sage);
+    }
+
+    .section {
+      padding: 38px 48px 50px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .loop-row {
       display: grid;
-      gap: 18px;
-    }
-
-    .section-copy article {
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--cream);
-    }
-
-    .loop-band {
-      background:
-        linear-gradient(180deg, #fffaf0, #f2e6cf);
-    }
-
-    .loop-grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      align-items: start;
+      gap: 12px;
       margin-top: 30px;
     }
 
-    .step {
-      min-height: 230px;
+    .loop-step {
       display: grid;
-      align-content: start;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 250, 240, 0.82);
+      justify-items: center;
+      text-align: center;
     }
 
-    .step span {
-      width: 38px;
-      height: 38px;
+    .loop-step .step-number {
+      margin-bottom: 10px;
+      color: #6e5d36;
+      font-family: var(--serif);
+      font-size: 16px;
+    }
+
+    .step-icon {
+      width: 56px;
+      height: 56px;
       display: grid;
       place-items: center;
-      margin-bottom: 32px;
-      border-radius: 8px;
-      background: var(--charcoal);
-      color: var(--cream);
-      font-size: 13px;
-      font-weight: 850;
+      margin-bottom: 14px;
+      border-radius: 999px;
+      color: #fffaf0;
+      background: var(--sage);
     }
 
-    .boundary-band {
-      background:
-        linear-gradient(180deg, rgba(219, 230, 224, 0.64), rgba(245, 240, 228, 0.82));
+    .step-icon.gold { background: var(--gold); border-radius: 9px; transform: rotate(45deg); }
+    .step-icon.gold svg { transform: rotate(-45deg); }
+    .step-icon.red { background: var(--red); }
+    .step-icon.outline { background: transparent; color: var(--sage); border: 3px solid var(--sage); }
+
+    .step-icon svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    .loop-step strong {
+      display: block;
+      color: #161410;
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .loop-arrow {
+      align-self: center;
+      justify-self: center;
+      color: #a7782c;
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 1;
     }
 
     .boundary-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 30px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 26px;
     }
 
-    .boundary {
-      min-height: 180px;
-      padding: 18px;
-      border: 1px solid rgba(75, 47, 27, 0.18);
-      border-radius: 8px;
-      background: rgba(255, 250, 240, 0.82);
+    .boundary-card,
+    .panel {
+      border: 1px solid #cab99f;
+      border-radius: 7px;
+      background: rgba(255, 253, 247, 0.62);
+      box-shadow: 0 14px 34px rgba(58, 44, 24, 0.05);
     }
 
-    .boundary::before {
-      content: "";
-      display: block;
-      width: 42px;
-      height: 5px;
-      margin-bottom: 28px;
-      border-radius: 999px;
-      background: var(--gold);
+    .boundary-card {
+      min-height: 156px;
+      padding: 20px;
     }
 
-    .measure {
+    .boundary-card svg {
+      width: 34px;
+      height: 34px;
+      margin-bottom: 14px;
+      color: var(--sage);
+    }
+
+    .boundary-card:nth-child(4) svg { color: var(--red); }
+    .boundary-card:nth-child(5) svg { color: var(--gold); }
+
+    .panel-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
-      gap: 28px;
-      align-items: stretch;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+      gap: 22px;
+      margin-top: 22px;
     }
 
-    .measure-panel {
-      padding: 26px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--cream);
-    }
-
-    .measure-list {
+    .panel {
+      position: relative;
+      min-height: 260px;
       display: grid;
-      gap: 10px;
-      margin: 24px 0 0;
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: 26px;
+      align-items: center;
+      padding: 22px;
+      overflow: hidden;
+    }
+
+    .panel.interest {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .panel.interest > div {
+      position: relative;
+      z-index: 1;
+      max-width: 330px;
+    }
+
+    .panel.interest .lower-sketch {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      width: 210px;
+      opacity: 0.72;
+    }
+
+    .panel h3 {
+      font-size: 27px;
+    }
+
+    .panel ul {
+      display: grid;
+      gap: 7px;
+      margin: 14px 0 0;
       padding: 0;
       list-style: none;
+      color: #2f2b24;
+      font-size: 14px;
     }
 
-    .measure-list li {
-      display: grid;
-      grid-template-columns: 20px minmax(0, 1fr);
-      gap: 10px;
-      align-items: start;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.45;
+    .panel li::before {
+      content: "✓";
+      margin-right: 9px;
+      color: var(--gold);
+      font-weight: 900;
     }
 
-    .measure-list li::before {
-      content: "";
-      width: 10px;
-      height: 10px;
-      margin-top: 6px;
-      border-radius: 999px;
-      background: var(--sage);
-      box-shadow: 0 0 0 4px rgba(100, 118, 92, 0.15);
-    }
-
-    .status-panel {
-      display: grid;
-      align-content: center;
-      justify-items: center;
-      gap: 20px;
-      padding: 26px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background:
-        linear-gradient(180deg, rgba(246, 217, 141, 0.28), rgba(255, 250, 240, 0.94));
-      text-align: center;
-    }
-
-    .status-panel img {
-      width: min(240px, 84%);
-      height: auto;
-      display: block;
-    }
-
-    .cta {
-      background:
-        radial-gradient(circle at 78% 18%, rgba(242, 184, 75, 0.18), transparent 32%),
-        var(--charcoal);
-      color: var(--cream);
-    }
-
-    .cta h2,
-    .cta h3 {
-      color: var(--cream);
-    }
-
-    .cta .eyebrow {
-      color: var(--honey);
-    }
-
-    .cta p {
-      max-width: 700px;
-      color: rgba(255, 250, 240, 0.82);
-      font-size: 18px;
-      line-height: 1.58;
-    }
-
-    .cta .button {
-      border-color: var(--cream);
-      background: var(--cream);
-      color: var(--charcoal);
-    }
-
-    .briefing-band {
-      background: #fbf8ef;
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .briefing-panel {
-      display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.58fr);
-      gap: 34px;
-      align-items: end;
-      padding: 30px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--cream);
-      box-shadow: 0 20px 58px var(--shadow);
-    }
-
-    .briefing-panel h2 {
-      max-width: 760px;
-      font-size: 44px;
-    }
-
-    .briefing-panel p {
-      max-width: 780px;
-      color: var(--muted);
-      font-size: 19px;
-      line-height: 1.55;
-    }
-
-    .briefing-panel .lead {
-      color: var(--ink);
-      font-size: 21px;
-    }
-
-    .briefing-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    .panel .text-link {
+      margin-top: 18px;
+      max-width: 100%;
+      white-space: normal;
       justify-content: flex-start;
     }
 
-    .briefing-actions .button.primary {
-      background: var(--field);
-      color: var(--cream);
-      border-color: var(--field);
+    .panel .button {
+      margin-top: 18px;
+      min-height: 42px;
     }
 
-    .briefing-actions .button.secondary {
-      color: var(--field);
-    }
-
-    .engine-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 30px;
-    }
-
-    .engine-card {
-      min-height: 186px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--cream);
-    }
-
-    .engine-card span {
-      display: block;
-      margin-bottom: 28px;
-      color: var(--oxblood);
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .engine-card p {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.55;
+    .lower-sketch {
+      width: 100%;
+      max-width: 230px;
+      height: auto;
+      opacity: 0.88;
     }
 
     footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 30px 40px;
-      color: rgba(255, 250, 240, 0.74);
-      background: #24150d;
-      font-size: 14px;
-      line-height: 1.5;
+      display: grid;
+      grid-template-columns: minmax(250px, 1fr) repeat(3, minmax(120px, 0.55fr)) minmax(190px, 0.8fr);
+      gap: 30px;
+      align-items: start;
+      padding: 34px 42px;
+      background: linear-gradient(90deg, #151715, #1e211f);
+      color: rgba(255, 250, 240, 0.82);
+    }
+
+    footer img {
+      display: block;
+    }
+
+    footer p {
+      color: rgba(255, 250, 240, 0.72);
+    }
+
+    footer .snaxk-brandmark {
+      width: 158px;
+      min-height: 48px;
+      margin-bottom: 18px;
+      padding: 4px 12px 4px 6px;
+    }
+
+    footer .snaxk-emblem {
+      width: 42px;
+      height: 38px;
+      flex-basis: 42px;
+    }
+
+    footer .snaxk-emblem img {
+      width: 70px;
+      left: -14px;
+      top: -6px;
+    }
+
+    footer .snaxk-word {
+      font-size: 25px;
     }
 
     footer strong {
       display: block;
-      color: var(--cream);
+      margin-bottom: 10px;
+      color: var(--gold-soft);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    footer a {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255, 250, 240, 0.82);
+      text-decoration: none;
+      font-size: 13px;
     }
 
     .footer-product {
-      margin-top: 10px;
-      color: var(--honey);
-      font-weight: 860;
+      justify-self: end;
+      align-self: center;
+      color: #fffaf0;
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.8;
+      text-align: right;
     }
 
-    .footer-legal {
-      color: rgba(255, 250, 240, 0.66);
+    .footer-product div:first-child {
+      color: rgba(255, 250, 240, 0.9);
     }
 
-    @media (max-width: 1060px) {
+    @media (max-width: 860px) {
+      .site-header,
       .hero,
-      .signal-grid,
-      .split,
-      .measure,
-      .briefing-panel {
+      .signal-band,
+      .panel-grid,
+      footer {
         grid-template-columns: 1fr;
       }
 
-      h1 {
-        font-size: 64px;
+      nav,
+      .version-pill,
+      .brand,
+      .footer-product {
+        justify-self: start;
       }
 
-      h2 {
-        font-size: 40px;
-      }
-
-      .loop-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+      .hero-art {
+        min-height: 520px;
       }
 
       .boundary-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .engine-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .loop-row {
+        grid-template-columns: 1fr;
+      }
+
+      .loop-arrow {
+        transform: rotate(90deg);
       }
     }
 
     @media (max-width: 720px) {
-      .site-header {
-        min-height: auto;
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 18px 22px;
+      .site-header,
+      .hero,
+      .signal-band,
+      .section,
+      footer {
+        padding-left: 22px;
+        padding-right: 22px;
       }
 
       nav {
-        width: 100%;
-        flex-wrap: wrap;
         gap: 14px;
-      }
-
-      .hero,
-      .section {
-        padding: 48px 22px;
-      }
-
-      .hero {
-        min-height: auto;
+        font-size: 15px;
       }
 
       h1 {
         font-size: 48px;
       }
 
-      h2 {
-        font-size: 34px;
-      }
-
-      .lede {
-        font-size: 18px;
-      }
-
-      .actions,
-      .button {
-        width: 100%;
-      }
-
-      .hero-lab {
-        padding: 16px;
-      }
-
-      .judgement-map {
+      .hero {
         min-height: auto;
-        padding: 16px;
       }
 
-      .field-nodes,
-      .signal-grid {
+      .hero-art {
+        min-height: 560px;
+      }
+
+      .console-panel {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        margin-top: 280px;
+      }
+
+      .map-marker {
+        font-size: 12px;
+      }
+
+      .m-signal { left: 26%; top: 66px; }
+      .m-boundary { left: 45%; top: 168px; }
+      .m-evidence { right: 14%; top: 76px; }
+      .m-stop { left: 24%; top: 278px; }
+      .m-judge { right: 24%; top: 366px; }
+
+      .signal-intro,
+      .feature,
+      .panel,
+      .panel.interest {
         grid-template-columns: 1fr;
       }
 
-      .loop-grid,
-      .boundary-grid,
-      .engine-grid {
+      .boundary-grid {
         grid-template-columns: 1fr;
       }
 
-      footer {
-        flex-direction: column;
-        padding: 26px 22px;
+      .button,
+      .text-link {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
@@ -947,304 +820,262 @@
 <body>
   <header class="site-header">
     <a class="brand" href="/" aria-label="SNAXK home">
-      <img src="/assets/snaxk-lozenge.png" alt="">
-      <span>SNAXK</span>
+      <span class="snaxk-brandmark " aria-label="SNAXK">
+    <span class="snaxk-emblem"><img src="/assets/snaxk-logo.png" alt=""></span>
+    <span class="snaxk-word">SNAXK</span>
+  </span>
     </a>
     <nav aria-label="Primary">
-      <a href="#signal">Signal</a>
-      <a href="#cao-briefing">CAO briefing</a>
       <a href="#engine">Engine</a>
       <a href="#boundaries">Boundaries</a>
-      <a href="#measurement">Measure</a>
+      <a href="#cao-briefing">CAO Briefing</a>
       <a href="#conversation">Interest</a>
     </nav>
+    <div class="version-pill">SNAXK 0.10.8</div>
   </header>
 
   <main>
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy">
-        <p class="eyebrow">SNAXK</p>
         <h1 id="page-title">A judgement engine for agentic work.</h1>
-        <p class="lede">SNAXK helps surface the judgement a Chief Agentic Officer needs to inspect: ownership, boundaries, stop conditions, evidence, review, and measurable trust for long-running agentic systems.</p>
-        <div class="actions">
-          <a class="button" href="https://chiefagenticofficer.com/?mtm_campaign=snaxk_to_chiefagenticofficer&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=hero_cao_briefing" data-funnel-category="Source site funnel" data-funnel-stage="source_to_chiefagenticofficer" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_chiefagenticofficer" data-funnel-content="hero_cao_briefing">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Open the CAO briefing
-          </a>
-          <a class="button secondary" href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=hero_tonywood_advisory" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="hero_tonywood_advisory">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
-              <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
-            </svg>
-            Discuss with Tony Wood
-          </a>
-        </div>
-        <div class="research-strip" aria-label="Research status">
-          <span>SNAXK 0.10.8</span>
-          <span>Chief Agentic Officer feeder</span>
-          <span>Judgement engine interest</span>
+        <div class="rule"></div>
+        <p>SNAXK helps teams and leaders set boundaries, demand evidence, define stop conditions, and produce board-readable judgement.</p>
+        <p>From signals to decisions, in a loop you can trust: people and agents.</p>
+        <div class="hero-actions">
+          <a class="button" href="#engine">See the engine <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="text-link" href="https://chiefagenticofficer.com/?mtm_campaign=snaxk_to_chiefagenticofficer&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=hero_cao_briefing" data-funnel-category="Source site funnel" data-funnel-stage="source_to_chiefagenticofficer" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_chiefagenticofficer" data-funnel-content="hero_cao_briefing">Read the CAO briefing <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </div>
 
-      <aside class="judgement-map" aria-label="SNAXK judgement engine map">
-        <div class="map-top">
-          <img src="/assets/snaxk-lozenge.png" alt="SNAXK lozenge">
-          <span>SNAXK 0.10.8</span>
-        </div>
-        <div class="field-nodes" aria-label="Judgement map">
-          <article class="field-node">
-            <span>01</span>
-            <strong>Fast heuristic pass</strong>
-            <p>Scan messages, events, and signals before action. The first pass asks whether anything meaningful is happening.</p>
-          </article>
-          <article class="field-node">
-            <span>02</span>
-            <strong>Meaning check</strong>
-            <p>Separate routine noise from work that is risky, surprising, sensitive, valuable, or likely to affect a human.</p>
-          </article>
-          <article class="field-node">
-            <span>03</span>
-            <strong>Bounded route</strong>
-            <p>Triggered cases move through judgement boundaries: slow down, stop, escalate, adapt, or ask for human review.</p>
-          </article>
-          <article class="field-node">
-            <span>04</span>
-            <strong>Reflect overnight</strong>
-            <p>The system does not carry every reaction forward. It reflects, compares, and waits before changing behaviour.</p>
-          </article>
-        </div>
-        <div class="engine-console" aria-label="Judgement console">
-          <div class="console-bar">
-            <span class="console-dots"><i></i><i></i><i></i></span>
-            <span>signal / boundary / review</span>
-          </div>
-          <div class="console-stack">
-            <article class="console-card">
-              <div>
-                <span>Signal</span>
-                <strong>Notice before action</strong>
-              </div>
-              <em>watch</em>
-            </article>
-            <article class="console-card">
-              <div>
-                <span>Boundary</span>
-                <strong>Slow, stop, adapt</strong>
-              </div>
-              <em>watch</em>
-            </article>
-            <article class="console-card">
-              <div>
-                <span>Evidence</span>
-                <strong>Carry the trail</strong>
-              </div>
-              <em>watch</em>
-            </article>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="section signal-band" id="signal" aria-labelledby="thesis-title">
-      <div class="section-inner signal-grid">
-        <div>
-          <p class="eyebrow">The feeder role</p>
-          <h2 id="thesis-title">SNAXK points people toward the Chief Agentic Officer question.</h2>
-          <p class="lede">If agentic work is becoming real work, someone has to own the boundary, the stop condition, the evidence, and the review. SNAXK makes that need visible.</p>
-          <div class="engine-grid">
-            <article class="engine-card">
-              <span>Signal</span>
-              <h3>Notice before action</h3>
-              <p>Read the signal, the consequence, and the uncertainty before work moves on.</p>
-            </article>
-            <article class="engine-card">
-              <span>Boundary</span>
-              <h3>Slow, stop, adapt</h3>
-              <p>Make the pause points visible enough for a human to inspect later.</p>
-            </article>
-            <article class="engine-card">
-              <span>Evidence</span>
-              <h3>Carry the trail</h3>
-              <p>Keep the record of why the system changed course or decided not to.</p>
-            </article>
-          </div>
-        </div>
-        <aside class="lozenge-panel" aria-label="SNAXK identity">
-          <img src="/assets/snaxk-lozenge.png" alt="SNAXK lozenge">
-          <h3>The engine layer beneath the mandate.</h3>
-          <p>ChiefAgenticOfficer.com names the leadership question. SNAXK explores how an agent slows down, stops, adapts, escalates, and leaves evidence of its judgement.</p>
+      <div class="hero-art" aria-label="SNAXK judgement map">
+        <svg class="field-sketch" viewBox="0 0 760 520" role="img" aria-label="Line sketch of fields used as a judgement map">
+    <defs>
+      <linearGradient id="snaxk-paper-fade" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0" stop-color="#fffaf0" stop-opacity=".1"/>
+        <stop offset="1" stop-color="#d8cfb7" stop-opacity=".34"/>
+      </linearGradient>
+    </defs>
+    <rect width="760" height="520" fill="url(#snaxk-paper-fade)"/>
+    <g fill="none" stroke="#9c9a83" stroke-linecap="round" stroke-linejoin="round" opacity=".42">
+      <path d="M52 366C164 300 246 296 330 230c78-61 159-96 266-99"/>
+      <path d="M40 398c111-65 218-66 318-140 74-55 151-91 330-104"/>
+      <path d="M74 424c117-64 232-74 330-139 96-64 167-95 297-107"/>
+      <path d="M92 454c150-61 222-73 336-139 99-57 180-88 296-96"/>
+      <path d="M126 188c93-46 186-54 278-40 80 12 155 4 254-40"/>
+      <path d="M94 154c96-32 197-42 296-32 83 9 166-2 278-46"/>
+      <path d="M166 90c88-18 181-17 280 4 95 20 168 10 249-28"/>
+      <path d="M86 292c96-33 195-42 292-28 87 13 168 2 284-41"/>
+      <path d="M132 252c75-28 157-32 251-18 102 15 188 3 292-42"/>
+    </g>
+    <g fill="none" stroke="#72765b" stroke-width="7" stroke-linecap="round" opacity=".42">
+      <path d="M46 386c68-36 136-55 210-55 61 0 112-17 154-49 69-52 153-78 270-89"/>
+      <path d="M104 184c105-43 202-44 294-27 92 18 179 1 265-45"/>
+      <path d="M83 300c90-28 188-27 286-12 82 13 160 1 282-44"/>
+      <path d="M188 83c102-16 190-9 264 7 93 20 170 9 244-27"/>
+    </g>
+    <g fill="none" stroke="#b9ad8b" stroke-width="1.4" opacity=".55">
+      <path d="M190 70c70 38 130 81 187 149 57 67 117 117 201 159"/>
+      <path d="M304 64c30 70 63 132 101 190 46 70 105 123 177 166"/>
+      <path d="M76 240c111 15 214 28 307 40 112 15 214 22 314 15"/>
+      <path d="M130 118c90 45 170 92 239 144 77 58 163 98 258 119"/>
+    </g>
+    <g fill="none" stroke="#a6a891" stroke-width="1" opacity=".5">
+      <path d="M562 88c37 6 70 15 100 29"/>
+      <path d="M582 72c28 8 58 19 89 34"/>
+      <path d="M600 58c24 9 49 21 74 37"/>
+      <path d="M72 438c33-10 73-17 119-21"/>
+      <path d="M96 460c45-12 88-18 130-18"/>
+    </g>
+  </svg>
+        <div class="path-line path-one"></div>
+        <div class="path-line path-two"></div>
+        <div class="path-line path-three"></div>
+        <div class="map-marker m-signal"><span class="marker-dot"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 13v18M13 22h18M16 16l12 12M28 16L16 28" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Signals</span></div>
+        <div class="map-marker m-boundary"><span class="marker-dot"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M16 16h12v12H16zM22 11v5M22 28v5M11 22h5M28 22h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Boundaries</span></div>
+        <div class="map-marker m-evidence"><span class="marker-dot"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 12l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Evidence</span></div>
+        <div class="map-marker m-stop"><span class="marker-dot"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 14l8 5v8l-8 5-8-5v-8z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Stop Condition</span></div>
+        <div class="map-marker m-judge"><span class="marker-dot"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 14l8 8-8 8-8-8z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Judgement</span></div>
+        <aside class="console-panel" aria-label="SNAXK engine status">
+          <div class="console-head"><span>SNAXK Engine</span><span>All quiet</span></div>
+          <div class="console-row"><strong><i>S</i>Signals</strong><small>Live</small></div><div class="console-row"><strong><i>E</i>Evidence</strong><small>Strong</small></div><div class="console-row"><strong><i>B</i>Boundaries</strong><small>Within limits</small></div><div class="console-row"><strong><i>S</i>Stop Condition</strong><small>Not met</small></div><div class="console-row"><strong><i>J</i>Judgement</strong><small>Proceed</small></div>
+          <div class="console-summary"><strong>Judgement Summary</strong>Proceed within boundaries. Review at next cadence.</div>
         </aside>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="surface-title">
-      <div class="section-inner">
-        <p class="eyebrow">What it surfaces</p>
-        <h2 id="surface-title">Judgement that people and boards can inspect.</h2>
-        <div class="section-copy">
-          <article>
-            <h3>Why this matters to a Chief Agentic Officer</h3>
-            <p>The Chief Agentic Officer needs to know what agentic work exists, what it may do, who owns the boundary, and what evidence leaders can inspect afterwards.</p>
-          </article>
-          <article>
-            <h3>What the judgement engine helps surface</h3>
-            <p>SNAXK is the control layer idea beneath that mandate: notice signal before action, route uncertainty through boundaries, and carry forward only changes that survive review.</p>
-          </article>
-          <article>
-            <h3>Use this with the CAO briefing</h3>
-            <p>Read ChiefAgenticOfficer.com for the board-level mandate, then use SNAXK as the practical question: how will the system slow down, stop, adapt, escalate, and show its judgement?</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section briefing-band" id="cao-briefing" aria-labelledby="cao-title">
-      <div class="section-inner briefing-panel">
+    <section class="signal-band" id="signal">
+      <div class="signal-intro">
+        <svg class="leaf-icon" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <path d="M16 66c15-24 29-39 49-51M24 54c-6-7-10-16-8-27 12 2 20 9 25 18M35 41c-2-10 2-21 13-31 9 12 8 23 2 33M30 61c11 0 20 4 27 13-14 4-25 2-34-7" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
         <div>
-          <p class="eyebrow">Use this with the CAO briefing</p>
-          <h2 id="cao-title">The Chief Agentic Officer owns the mandate. SNAXK explores the judgement engine.</h2>
-          <p class="lead">ChiefAgenticOfficer.com is the primary next step for leaders who need the board-facing frame: what agentic work may do, who owns it, and what can be inspected afterwards.</p>
-          <p>SNAXK is the feeder idea below that frame. It asks whether long-running agentic systems can make their judgement more visible before leaders are asked to trust them.</p>
+          <h2>Signal before action.</h2>
+          <p>SNAXK surfaces what matters before work runs: risk, context, constraints, intent, and evidence.</p>
         </div>
-        <div class="briefing-actions">
-          <a class="button primary" href="https://chiefagenticofficer.com/?mtm_campaign=snaxk_to_chiefagenticofficer&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=cao_briefing_panel" data-funnel-category="Source site funnel" data-funnel-stage="source_to_chiefagenticofficer" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_chiefagenticofficer" data-funnel-content="cao_briefing_panel">Read ChiefAgenticOfficer.com</a>
-          <a class="button secondary" href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=cao_panel_tonywood_advisory" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="cao_panel_tonywood_advisory">Talk to Tony Wood</a>
+      </div>
+      <article class="feature">
+        <svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M15 30l5-18M29 30l-5-18M12 30h20M14 14a3 3 0 106 0 3 3 0 00-6 0zM26 14a3 3 0 106 0 3 3 0 00-6 0z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <h3>Clarity</h3>
+          <p>See the real state of the work.</p>
         </div>
+      </article><article class="feature">
+        <svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 10l11 5v8c0 7-5 11-11 13-6-2-11-6-11-13v-8z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <h3>Control</h3>
+          <p>Define boundaries and stop conditions.</p>
+        </div>
+      </article><article class="feature">
+        <svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M14 30c0-5 4-8 8-8s8 3 8 8M16 17a6 6 0 1012 0M8 31c0-4 3-7 7-7M30 24c4 0 7 3 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <h3>Confidence</h3>
+          <p>Make decisions you can stand behind.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="engine">
+      <h2>The SNAXK judgement loop.</h2>
+      <div class="loop-row">
+        <article class="loop-step">
+          <div class="step-number">1</div>
+          <div class="step-icon sage"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M11 14c4-4 8 4 12 0M11 22c4-4 8 4 12 0M11 30c4-4 8 4 12 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <strong>Sense</strong>
+          <p>Collect signals from people, agents, systems and context.</p>
+        </article><div class="loop-arrow" aria-hidden="true">→</div><article class="loop-step">
+          <div class="step-number">2</div>
+          <div class="step-icon sage"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M12 12h20v20H12zM16 16h12M16 22h7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <strong>Assess</strong>
+          <p>Test evidence against intent, boundaries and risk.</p>
+        </article><div class="loop-arrow" aria-hidden="true">→</div><article class="loop-step">
+          <div class="step-number">3</div>
+          <div class="step-icon gold"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 9l13 13-13 13L9 22zM22 15l7 7-7 7-7-7z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <strong>Judge</strong>
+          <p>Decide: proceed, adjust, escalate, or stop.</p>
+        </article><div class="loop-arrow" aria-hidden="true">→</div><article class="loop-step">
+          <div class="step-number">4</div>
+          <div class="step-icon red"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 10l10 6v12l-10 6-10-6V16z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <strong>Act</strong>
+          <p>Execute within boundaries with measurements.</p>
+        </article><div class="loop-arrow" aria-hidden="true">→</div><article class="loop-step">
+          <div class="step-number">5</div>
+          <div class="step-icon outline"><svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M15 18a8 8 0 0114-2M29 16h-5v-5M29 26a8 8 0 01-14 2M15 28h5v5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <strong>Review</strong>
+          <p>Compare outcomes, capture learning, tighten the loop.</p>
+        </article>
       </div>
     </section>
 
-    <section class="section loop-band" id="engine" aria-labelledby="engine-title">
-      <div class="section-inner">
-        <p class="eyebrow">What the engine helps surface</p>
-        <h2 id="engine-title">Board-readable judgement before long-running agents change course.</h2>
-        <p class="lede">The hypothesis is simple: agents behave better when they do not jump straight from input to action.</p>
-        <div class="engine-grid">
-          <article class="engine-card">
-            <span>Ownership</span>
-            <h3>Who owns this work?</h3>
-            <p>The engine should make it clearer which human or mandate owns the agentic work, the decision, and the follow-through.</p>
-          </article>
-          <article class="engine-card">
-            <span>Stop condition</span>
-            <h3>When should it pause?</h3>
-            <p>Useful autonomy needs visible boundaries: slow down, stop, adapt, escalate, or ask for review before risk becomes hidden.</p>
-          </article>
-          <article class="engine-card">
-            <span>Evidence</span>
-            <h3>What can leaders inspect?</h3>
-            <p>The judgement only matters if people can see what changed, why it changed, and what was deliberately not carried forward.</p>
-          </article>
-        </div>
-        <div class="loop-grid">
-          <article class="step">
-            <span>01</span>
-            <h3>Fast heuristic pass</h3>
-            <p>Scan messages, events, and signals before action. The first pass asks whether anything meaningful is happening.</p>
-          </article>
-          <article class="step">
-            <span>02</span>
-            <h3>Meaning check</h3>
-            <p>Separate routine noise from work that is risky, surprising, sensitive, valuable, or likely to affect a human.</p>
-          </article>
-          <article class="step">
-            <span>03</span>
-            <h3>Bounded route</h3>
-            <p>Triggered cases move through judgement boundaries: slow down, stop, escalate, adapt, or ask for human review.</p>
-          </article>
-          <article class="step">
-            <span>04</span>
-            <h3>Reflect overnight</h3>
-            <p>The system does not carry every reaction forward. It reflects, compares, and waits before changing behaviour.</p>
-          </article>
-          <article class="step">
-            <span>05</span>
-            <h3>Reviewed carry-forward</h3>
-            <p>Only changes that survive review become part of the agent's future judgement.</p>
-          </article>
-        </div>
+    <section class="section" id="boundaries">
+      <h2>Boundaries make it safe to move fast.</h2>
+      <div class="boundary-grid">
+        <article class="boundary-card">
+          <svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M13 20h18v14H13zM17 20v-4a5 5 0 0110 0v4M22 25v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Ownership</h3>
+          <p>Clear accountable owner for the outcome and the call.</p>
+        </article><article class="boundary-card">
+          <svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M12 15h20M12 22h20M12 29h20M16 12v6M27 19v6M20 26v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Scope</h3>
+          <p>What's in, what's out, and what needs human judgement.</p>
+        </article><article class="boundary-card">
+          <svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 10l11 5v8c0 7-5 11-11 13-6-2-11-6-11-13v-8z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Evidence</h3>
+          <p>Minimum evidence required to justify the next step.</p>
+        </article><article class="boundary-card">
+          <svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 10l10 6v12l-10 6-10-6V16zM22 21v5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Stop Conditions</h3>
+          <p>Trigger points that pause or stop automated work.</p>
+        </article><article class="boundary-card">
+          <svg class="" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M22 11a11 11 0 1011 11A11 11 0 0022 11zM22 15v8l6 3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Review Cadence</h3>
+          <p>How often we renew, revalidate, and recalibrate.</p>
+        </article>
       </div>
-    </section>
-
-    <section class="section boundary-band" id="boundaries" aria-labelledby="boundary-title">
-      <div class="section-inner">
-        <p class="eyebrow">Boundary checks</p>
-        <h2 id="boundary-title">The judgement questions are practical.</h2>
-        <p class="lede">Good agentic control is not just a policy document. It is a set of everyday decisions the system can surface and a human can inspect.</p>
-        <div class="boundary-grid">
-          <article class="boundary">
-            <h3>When to slow down</h3>
-            <p>High consequence, weak evidence, unfamiliar context, or mismatched confidence.</p>
-          </article>
-          <article class="boundary">
-            <h3>When to stop</h3>
-            <p>A request crosses permission, privacy, safety, spending, publishing, or accountability boundaries.</p>
-          </article>
-          <article class="boundary">
-            <h3>What to share</h3>
-            <p>Judgement includes deciding what is appropriate to reveal, quote, remember, or pass to another system.</p>
-          </article>
-          <article class="boundary">
-            <h3>How to adapt</h3>
-            <p>The same action may be right for one person, wrong for another, and unclear until the context is reviewed.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="measurement" aria-labelledby="measure-title">
-      <div class="section-inner measure">
-        <div class="measure-panel">
-          <p class="eyebrow">Review and measurement</p>
-          <h2 id="measure-title">Better judgement has to be observable.</h2>
-          <p>SNAXK is useful only if it can be compared with simpler alternatives and if humans can see how the system is changing.</p>
-          <ul class="measure-list">
-            <li>Is this safer?</li>
-            <li>Is it more understandable to humans?</li>
-            <li>Is it better than a simpler alternative?</li>
-            <li>Can we see when the system becomes too cautious?</li>
-            <li>Can we see when the system becomes too permissive?</li>
-            <li>Can we measure trustworthiness over time?</li>
-          </ul>
-        </div>
-        <aside class="status-panel" aria-label="Judgement engine status">
-          <img src="/assets/snaxk-logo.png" alt="SNAXK logo">
+      <div class="panel-grid">
+        <article class="panel" id="cao-briefing">
+          <svg class="lower-sketch" viewBox="0 0 310 185" aria-hidden="true">
+    <g fill="none" stroke="#9b9981" stroke-linecap="round" opacity=".52">
+      <path d="M12 126c40-36 88-44 142-37 48 6 88-3 139-35"/>
+      <path d="M3 150c54-35 107-42 159-34 49 7 91-1 139-28"/>
+      <path d="M39 83c42-20 84-24 126-14 52 12 94 4 133-23"/>
+      <path d="M85 35c36-8 75-4 116 10 39 14 72 9 104-8"/>
+      <path d="M23 171c73-26 121-33 173-23 42 8 76 0 103-16"/>
+    </g>
+  </svg>
           <div>
-            <p class="eyebrow">Judgement engine</p>
-            <h3>SNAXK 0.10.8</h3>
+            <h3>Built for the Chief Agentic Officer.</h3>
+            <div class="rule"></div>
+            <p>SNAXK gives CAOs and boards a judgement layer they can read and rely on.</p>
+            <ul>
+              <li>Board-readable judgement summaries</li>
+              <li>Decision trails people and agents can both read</li>
+              <li>Bounded autonomy with clear escalation paths</li>
+              <li>Signals that surface risk before it becomes cost</li>
+              <li>Operational cadence that sustains performance</li>
+            </ul>
+            <a class="text-link" href="https://chiefagenticofficer.com/?mtm_campaign=snaxk_to_chiefagenticofficer&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=cao_briefing_panel" data-funnel-category="Source site funnel" data-funnel-stage="source_to_chiefagenticofficer" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_chiefagenticofficer" data-funnel-content="cao_briefing_panel">Read the Chief Agentic Officer briefing <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section cta" id="conversation">
-      <div class="section-inner">
-        <p class="eyebrow">Register interest in the judgement engine</p>
-        <h2>Want to explore whether this engine could help your agentic work?</h2>
-        <p>SNAXK is not being sold as a packaged product today. This is a tracked interest route for leaders and builders who want to discuss judgement boundaries, board-readable evidence, and whether a SNAXK-style engine should exist separately in future.</p>
-        <div class="actions">
-          <a class="button" href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=snaxk_engine_interest" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="snaxk_engine_interest">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
-              <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
-            </svg>
-            Register judgement-engine interest
-          </a>
-          <a class="button secondary" href="https://chiefagenticofficer.com/?mtm_campaign=snaxk_to_chiefagenticofficer&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=final_cao_briefing" data-funnel-category="Source site funnel" data-funnel-stage="source_to_chiefagenticofficer" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_chiefagenticofficer" data-funnel-content="final_cao_briefing">Open the CAO briefing</a>
-        </div>
+        </article>
+        <article class="panel interest" id="conversation">
+          <div>
+            <h3>Register interest in the SNAXK engine.</h3>
+            <div class="rule"></div>
+            <p>Want to explore how SNAXK could support your organisation's agentic work and governance?</p>
+            <ul>
+              <li>Discuss use cases and fit</li>
+              <li>Understand deployment and integration</li>
+              <li>See roadmaps and governance approach</li>
+              <li>Join early collaboration conversations</li>
+            </ul>
+            <a class="button" href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=snaxk_engine_interest" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="snaxk_engine_interest">Register interest <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+          <svg class="lower-sketch" viewBox="0 0 310 185" aria-hidden="true">
+    <g fill="none" stroke="#9b9981" stroke-linecap="round" opacity=".52">
+      <path d="M12 126c40-36 88-44 142-37 48 6 88-3 139-35"/>
+      <path d="M3 150c54-35 107-42 159-34 49 7 91-1 139-28"/>
+      <path d="M39 83c42-20 84-24 126-14 52 12 94 4 133-23"/>
+      <path d="M85 35c36-8 75-4 116 10 39 14 72 9 104-8"/>
+      <path d="M23 171c73-26 121-33 173-23 42 8 76 0 103-16"/>
+    </g>
+  </svg>
+        </article>
       </div>
     </section>
   </main>
 
   <footer>
     <div>
-      <strong>SNAXK</strong>
-      <div>snaxk.com</div>
-      <div class="footer-product">A YQUP product</div>
-      <div class="footer-legal">Copyright (c) 2026 YQUP Ltd</div>
+      <span class="snaxk-brandmark footer-mark" aria-label="SNAXK">
+    <span class="snaxk-emblem"><img src="/assets/snaxk-logo.png" alt=""></span>
+    <span class="snaxk-word">SNAXK</span>
+  </span>
+      <p>A judgement engine for agentic work.</p>
+      <p>Signal before action.<br>Boundaries make it safe.<br>Judgement you can stand behind.</p>
     </div>
-    <div>Judgement, boundaries, review, and measurable trust for long-running agents.</div>
+    <div>
+      <strong>Engine</strong>
+      <a href="#engine">How it works</a>
+      <a href="#boundaries">Boundaries</a>
+      <a href="#engine">Loop</a>
+      <a href="/healthz">Status</a>
+    </div>
+    <div>
+      <strong>CAO Briefing</strong>
+      <a href="https://chiefagenticofficer.com/?mtm_campaign=snaxk_to_chiefagenticofficer&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=cao_briefing_panel" data-funnel-category="Source site funnel" data-funnel-stage="source_to_chiefagenticofficer" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_chiefagenticofficer" data-funnel-content="footer_cao_briefing">Why it matters</a>
+      <a href="https://chiefagenticofficer.com/">Using SNAXK</a>
+      <a href="https://chiefagenticofficer.com/">Board view</a>
+      <a href="https://chiefagenticofficer.com/">Case notes</a>
+    </div>
+    <div>
+      <strong>Connect</strong>
+      <a href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=snaxk_engine_interest" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="snaxk_engine_interest">Register interest</a>
+      <a href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=footer_tonywood_advisory" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="footer_tonywood_advisory">Talk to Tony</a>
+      <a href="https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&amp;mtm_source=snaxk.com&amp;mtm_medium=owned-referral&amp;mtm_content=footer_tonywood_advisory" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="snaxk.com" data-funnel-campaign="snaxk_to_tonywood_advisory" data-funnel-content="footer_tonywood_advisory">Tonywood Advisory →</a>
+    </div>
+    <div class="footer-product">
+      <div>A YQUP product</div>
+      <div>Copyright (c) 2026 YQUP Ltd</div>
+    </div>
   </footer>
 </body>
 </html>

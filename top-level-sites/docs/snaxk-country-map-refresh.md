@@ -18,6 +18,7 @@ The visual direction uses warm paper, hedgerow green, honey-gold, charcoal, and 
 - `/favicon.svg`
 - `/assets/snaxk-logo.png`
 - `/assets/snaxk-lozenge.png`
+- `/assets/snaxk-badge.png`
 
 ## Analytics
 
@@ -35,12 +36,13 @@ The footer now includes:
 
 ## Release
 
-- Planned release ID: `top-level-sites-20260708T144135Z`
+- Previous release ID: `top-level-sites-20260708T144135Z`
+- Corrective release ID: `top-level-sites-20260708T152257Z`
 - Deployment target: ANI via `top-level-sites-deploy-ani`
 
 ## Verification
 
-Local verification before deploy:
+Local verification before corrective deploy:
 
 - `node --check top-level-sites/build-sites.mjs`
 - `node top-level-sites/build-sites.mjs`
@@ -48,4 +50,10 @@ Local verification before deploy:
 - Local Node fetch checks for `/`, `/healthz`, `/matomo-config.json`, `/llms.txt`, `/.well-known/agentic-profile.json`, and `/favicon.svg`
 - Generated HTML checks for SNAXK logo assets, Matomo loader, tracked CAO/advisory links, country-map hero, and footer wording
 
-Chrome headless screenshot capture was blocked by the desktop command policy in this lane, so visual verification was limited to the accepted concept and generated HTML/CSS inspection before deployment.
+Visual verification was completed in the in-app browser against the accepted country-map concept:
+
+- Desktop/laptop viewport: `1037x898`
+- Mobile viewport: `390x844`
+- Verified no horizontal overflow.
+- Verified the first viewport uses the planned light paper background, wide SNAXK mark, two-line hero, field-map judgement graphic, dark engine console, CAO CTA, signal strip, loop, boundary cards, lower panels, and dark YQUP footer.
+- Verified footer text: `A YQUP product` and `Copyright (c) 2026 YQUP Ltd`.
