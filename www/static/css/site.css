@@ -331,12 +331,25 @@ h2 {
 }
 
 .footer {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 18px;
   padding: 28px 0 0;
   color: var(--muted);
   font-size: 0.95rem;
+}
+
+.footer-links,
+.footer-owner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.footer-owner {
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  color: #30343a;
+  font-weight: 750;
 }
 
 .footer a {

@@ -4,6 +4,11 @@ Canonical site:
 
 - https://agentic-first.co/
 
+Owner:
+
+- A YQUP product
+- Copyright (c) 2026 YQUP Ltd
+
 Alternate domain:
 
 - https://agent-first.co/ redirects to https://agentic-first.co/
