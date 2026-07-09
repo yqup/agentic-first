@@ -1101,6 +1101,13 @@
     "title": "Orchistra | Coordination for trusted agentic systems",
     "heading": "Orchistra",
     "summary": "Orchistra makes agent work visible enough to manage: messages, tasks, rich updates, receipts, handoffs, and decisions in one calm operating layer.",
+    "social_preview": {
+      "title": "Orchistra | Visible agent work for people in charge",
+      "description": "Messages, tasks, rich updates, receipts, handoffs, human requests, and audit-visible decisions in one calm operating layer.",
+      "image_title": "Agent work people can follow",
+      "node_labels": ["Updates", "Requests", "Evidence", "Learning"],
+      "node_status": "visible"
+    },
     "eyebrow": "Coordination for trusted agents",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "orchestration", "operations", "governance"],

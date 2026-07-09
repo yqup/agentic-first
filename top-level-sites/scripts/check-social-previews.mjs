@@ -12,8 +12,11 @@ const requiredProperties = [
   "og:description",
   "og:url",
   "og:image",
+  "og:image:secure_url",
+  "og:image:type",
   "og:image:width",
   "og:image:height",
+  "og:image:alt",
 ];
 
 const requiredNames = [
@@ -48,6 +51,14 @@ for (const site of sites) {
   const twitterImage = metaContent(html, "name", "twitter:image");
   if (twitterImage !== expectedImage) {
     failures.push(`${site.domain}: expected twitter:image ${expectedImage}, got ${twitterImage || "<missing>"}`);
+  }
+  const secureImage = metaContent(html, "property", "og:image:secure_url");
+  if (secureImage !== expectedImage) {
+    failures.push(`${site.domain}: expected og:image:secure_url ${expectedImage}, got ${secureImage || "<missing>"}`);
+  }
+  const imageType = metaContent(html, "property", "og:image:type");
+  if (imageType !== "image/png") {
+    failures.push(`${site.domain}: expected og:image:type image/png, got ${imageType || "<missing>"}`);
   }
 
   const width = metaContent(html, "property", "og:image:width");

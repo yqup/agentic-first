@@ -246,14 +246,18 @@ function socialMetaTagsFor(site, options = {}) {
   const description = options.description || site.ogDescription || site.social_preview?.description || site.summary || site.heading || site.name;
   const url = options.url || absoluteSiteUrl(site, options.path || "/");
   const image = absoluteSiteUrl(site, options.image || site.ogImage || site.social_preview?.image || "/assets/og-image.png");
+  const imageAlt = options.imageAlt || site.social_preview?.image_alt || `${site.name || site.domain} preview card`;
   return [
     `  <meta property="og:type" content="website">`,
     `  <meta property="og:title" content="${escapeHtml(title)}">`,
     `  <meta property="og:description" content="${escapeHtml(description)}">`,
     `  <meta property="og:url" content="${escapeHtml(url)}">`,
     `  <meta property="og:image" content="${escapeHtml(image)}">`,
+    `  <meta property="og:image:secure_url" content="${escapeHtml(image)}">`,
+    `  <meta property="og:image:type" content="image/png">`,
     `  <meta property="og:image:width" content="1200">`,
     `  <meta property="og:image:height" content="627">`,
+    `  <meta property="og:image:alt" content="${escapeHtml(imageAlt)}">`,
     `  <meta name="twitter:card" content="summary_large_image">`,
     `  <meta name="twitter:title" content="${escapeHtml(title)}">`,
     `  <meta name="twitter:description" content="${escapeHtml(description)}">`,
@@ -293,7 +297,8 @@ function socialPreviewSvgFor(site) {
   const descriptionLines = wrapForSvg(description, 58, 3);
   const domain = site.domain;
   const initials = initialsFor(site.name || domain);
-  const nodeLabels = ["Profile", "llms.txt", "Health", "Matomo"];
+  const nodeLabels = site.social_preview?.node_labels || ["Profile", "llms.txt", "Health", "Matomo"];
+  const nodeStatus = site.social_preview?.node_status || "ready";
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="627" viewBox="0 0 1200 627">
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
@@ -319,7 +324,7 @@ function socialPreviewSvgFor(site) {
   </g>
   <text x="232" y="122" font-size="28" font-weight="800" fill="${escapeHtml(theme)}">${escapeHtml(site.name || domain)}</text>
   <text x="232" y="160" font-size="24" fill="#4b514a">${escapeHtml(domain)}</text>
-  <g transform="translate(96 228)">
+  <g transform="translate(96 282)">
     ${titleLines.map((line, index) => `<text x="0" y="${index * 64}" font-size="58" font-weight="700" fill="#111713">${escapeHtml(line)}</text>`).join("\n    ")}
   </g>
   <rect x="98" y="${260 + (titleLines.length * 64)}" width="70" height="5" fill="${escapeHtml(accent)}"/>
@@ -334,7 +339,7 @@ function socialPreviewSvgFor(site) {
         <circle cx="38" cy="38" r="34" fill="${escapeHtml(theme)}" opacity="0.94"/>
         <circle cx="38" cy="38" r="18" fill="none" stroke="${escapeHtml(accent)}" stroke-width="4"/>
         <text x="84" y="32" font-size="22" font-weight="800" fill="#171b17">${escapeHtml(label)}</text>
-        <text x="84" y="62" font-size="18" fill="#4b514a">ready</text>
+        <text x="84" y="62" font-size="18" fill="#4b514a">${escapeHtml(nodeStatus)}</text>
       </g>`;
     }).join("\n    ")}
   </g>

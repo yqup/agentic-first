@@ -46,8 +46,11 @@ Generated head tags:
 <meta property="og:description" content="...">
 <meta property="og:url" content="https://example.com/">
 <meta property="og:image" content="https://example.com/assets/og-image.png">
+<meta property="og:image:secure_url" content="https://example.com/assets/og-image.png">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="627">
+<meta property="og:image:alt" content="Example preview card">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="...">
 <meta name="twitter:description" content="...">
@@ -58,7 +61,8 @@ Preview image requirements now enforced:
 
 - Use one 1200 x 627 PNG per site.
 - Keep each image below 5 MB.
-- Use an absolute HTTPS URL in `og:image`.
+- Use an absolute HTTPS URL in `og:image`, `og:image:secure_url`, and
+  `twitter:image`.
 - Make the card readable at LinkedIn thumbnail size.
 
 ## Implementation
@@ -77,6 +81,27 @@ Preview image requirements now enforced:
 
 - Release ID: `top-level-sites-20260709T083629Z`
 - Deployment target: ANI via `top-level-sites-deploy-ani`
+
+## YQUP Card Correction
+
+On 2026-07-09, the generated YQUP social preview card was corrected after the
+LinkedIn media editor showed a broken-looking YQUP item. The live page metadata
+was reachable, but the generated card layout allowed the large `AI is not the
+problem. Lack of clarity is.` headline to collide with the logo block. The
+shared card template now starts the headline lower, and the generated metadata
+includes `og:image:secure_url`, `og:image:type`, and `og:image:alt` so crawler
+tools have less room to misread the preview image.
+
+## Orchistra Card Refresh
+
+On 2026-07-09, `orchistra.com` received an Orchistra-specific social preview
+refresh so LinkedIn cards describe the product rather than the generic
+agent-readable site infrastructure.
+
+- Title: `Orchistra | Visible agent work for people in charge`
+- Description: `Messages, tasks, rich updates, receipts, handoffs, human requests, and audit-visible decisions in one calm operating layer.`
+- Image title: `Agent work people can follow`
+- Image feature labels: `Updates`, `Requests`, `Evidence`, `Learning`
 
 ## Verification
 
