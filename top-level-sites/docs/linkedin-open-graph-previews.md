@@ -1,8 +1,8 @@
 # LinkedIn Open Graph Previews
 
-Status: next site-change task.
+Status: implemented for generated top-level sites.
 
-Date: 2026-07-08
+Date: 2026-07-09
 
 ## Why This Exists
 
@@ -32,12 +32,13 @@ Apply this to every generated top-level public site that we maintain in Matomo:
 `https://chiefagenticofficer.com/` repo also have their own LinkedIn/Open Graph
 next-step notes in their respective site repositories.
 
-## Next Change Requirement
+## Implemented Change
 
-The next change to the top-level site generator should add first-class social
-preview metadata to each generated home page.
+The top-level site generator now adds first-class social preview metadata to
+each generated home page and creates one local 1200 x 627 PNG preview image
+per site at `/assets/og-image.png`.
 
-Required head tags:
+Generated head tags:
 
 ```html
 <meta property="og:type" content="website">
@@ -53,24 +54,47 @@ Required head tags:
 <meta name="twitter:image" content="https://example.com/assets/og-image.png">
 ```
 
-Preview image requirements:
+Preview image requirements now enforced:
 
 - Use one 1200 x 627 PNG per site.
 - Keep each image below 5 MB.
 - Use an absolute HTTPS URL in `og:image`.
 - Make the card readable at LinkedIn thumbnail size.
 
-## Suggested Implementation
+## Implementation
 
-- Add `ogTitle`, `ogDescription`, and `ogImage` fields to `sites.json`.
-- Update `top-level-sites/build-sites.mjs` so every generated page emits Open
-  Graph and Twitter card tags.
-- Add or generate site-specific preview images under the relevant static
-  assets path.
-- Add a small smoke check that fetches each generated page and asserts the
-  required metadata exists.
+- `top-level-sites/build-sites.mjs` emits canonical Open Graph and Twitter card
+  tags for every generated page.
+- Gamma-derived snapshots have partial or stale `og:*` / `twitter:*` tags
+  stripped and replaced with the canonical generated metadata.
+- `top-level-sites/build-sites.mjs` generates the PNG card for each site during
+  the local build using macOS `sips`.
+- `top-level-sites/scripts/check-social-previews.mjs` verifies every generated
+  site has the required metadata, an absolute `https://<domain>/assets/og-image.png`
+  image URL, a 1200 x 627 PNG, and a file size below 5 MB.
+
+## Release
+
+- Release ID: `top-level-sites-20260709T083629Z`
+- Deployment target: ANI via `top-level-sites-deploy-ani`
 
 ## Verification
+
+Local verification:
+
+- `node --check top-level-sites/build-sites.mjs`
+- `node --check top-level-sites/scripts/check-social-previews.mjs`
+- `node top-level-sites/build-sites.mjs`
+- `node top-level-sites/scripts/check-social-previews.mjs`
+- `git diff --check`
+
+Public verification after deploy:
+
+- Fetch `https://<domain>/` and assert `og:title`, `og:description`, `og:url`,
+  `og:image`, `og:image:width`, `og:image:height`, `twitter:card`,
+  `twitter:title`, `twitter:description`, and `twitter:image`.
+- Fetch `https://<domain>/assets/og-image.png` and assert HTTP 200 plus PNG
+  dimensions `1200 x 627`.
 
 After deployment, refresh LinkedIn's cache for each URL using:
 

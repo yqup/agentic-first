@@ -1,9 +1,12 @@
+import { execFile } from "node:child_process";
 import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { request as httpsRequest } from "node:https";
 import path from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const execFileAsync = promisify(execFile);
 const sitesPath = path.join(__dirname, "sites.json");
 const distDir = path.join(__dirname, "dist");
 const edgeCaddyDir = path.join(__dirname, "infra", "caddy", "sites");
@@ -57,6 +60,7 @@ for (const site of sites) {
   await writeFile(path.join(wwwRoot, "llms.txt"), llmsFor(site, profile), "utf8");
   await writeFile(path.join(wwwRoot, "robots.txt"), "User-agent: *\nAllow: /\n", "utf8");
   await copySiteAssets(site, wwwRoot);
+  await generateSocialPreviewImage(site, wwwRoot);
   if (site.mode === "yqup") {
     await writeFile(path.join(wwwRoot, "index.html"), yqupPageFor(site), "utf8");
   }
@@ -220,6 +224,158 @@ async function copySiteAssets(site, wwwRoot) {
     await mkdir(path.dirname(target), { recursive: true });
     await copyFile(source, target);
   }
+}
+
+async function generateSocialPreviewImage(site, wwwRoot) {
+  const assetsDir = path.join(wwwRoot, "assets");
+  const svgPath = path.join(assetsDir, "og-image.svg");
+  const pngPath = path.join(assetsDir, "og-image.png");
+  await mkdir(assetsDir, { recursive: true });
+  await writeFile(svgPath, socialPreviewSvgFor(site), "utf8");
+  try {
+    await execFileAsync("sips", ["-s", "format", "png", svgPath, "--out", pngPath], { timeout: 15000 });
+  } catch (error) {
+    throw new Error(`Could not generate Open Graph PNG for ${site.domain}: ${error.message}`);
+  } finally {
+    await rm(svgPath, { force: true });
+  }
+}
+
+function socialMetaTagsFor(site, options = {}) {
+  const title = options.title || site.ogTitle || site.social_preview?.title || site.title || site.name;
+  const description = options.description || site.ogDescription || site.social_preview?.description || site.summary || site.heading || site.name;
+  const url = options.url || absoluteSiteUrl(site, options.path || "/");
+  const image = absoluteSiteUrl(site, options.image || site.ogImage || site.social_preview?.image || "/assets/og-image.png");
+  return [
+    `  <meta property="og:type" content="website">`,
+    `  <meta property="og:title" content="${escapeHtml(title)}">`,
+    `  <meta property="og:description" content="${escapeHtml(description)}">`,
+    `  <meta property="og:url" content="${escapeHtml(url)}">`,
+    `  <meta property="og:image" content="${escapeHtml(image)}">`,
+    `  <meta property="og:image:width" content="1200">`,
+    `  <meta property="og:image:height" content="627">`,
+    `  <meta name="twitter:card" content="summary_large_image">`,
+    `  <meta name="twitter:title" content="${escapeHtml(title)}">`,
+    `  <meta name="twitter:description" content="${escapeHtml(description)}">`,
+    `  <meta name="twitter:image" content="${escapeHtml(image)}">`,
+  ].join("\n") + "\n";
+}
+
+function injectSocialMetaTags(html, site, options = {}) {
+  const cleanHtml = stripSocialMetaTags(html);
+  const tags = socialMetaTagsFor(site, options).trim();
+  if (/<\/head\s*>/i.test(cleanHtml)) {
+    return cleanHtml.replace(/<\/head\s*>/i, `${tags}\n</head>`);
+  }
+  return `${tags}\n${cleanHtml}`;
+}
+
+function stripSocialMetaTags(html) {
+  return html
+    .replace(/^[ \t]*<meta\b[^>]*(?:property=["']og:[^"']+["']|name=["']twitter:[^"']+["'])[^>]*>\s*$/gim, "")
+    .replace(/\n{3,}/g, "\n\n");
+}
+
+function absoluteSiteUrl(site, value) {
+  if (!value) return `https://${site.domain}/`;
+  if (/^https?:\/\//i.test(value)) return value;
+  const pathValue = value.startsWith("/") ? value : `/${value}`;
+  return `https://${site.domain}${pathValue}`;
+}
+
+function socialPreviewSvgFor(site) {
+  const title = site.social_preview?.image_title || site.heading || site.ogTitle || site.social_preview?.title || site.title || site.name;
+  const description = site.ogDescription || site.social_preview?.description || site.summary || site.heading || "";
+  const theme = normalizeHex(site.theme, "#16201b");
+  const accent = normalizeHex(site.accent, "#b98222");
+  const bg = socialBackgroundFor(site);
+  const titleLines = wrapForSvg(title, 24, 2);
+  const descriptionLines = wrapForSvg(description, 58, 3);
+  const domain = site.domain;
+  const initials = initialsFor(site.name || domain);
+  const nodeLabels = ["Profile", "llms.txt", "Health", "Matomo"];
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="627" viewBox="0 0 1200 627">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="${bg.start}"/>
+      <stop offset="1" stop-color="${bg.end}"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="627" fill="url(#bg)"/>
+  <g opacity="0.22" fill="none" stroke="${escapeHtml(accent)}" stroke-width="2">
+    <path d="M718 96 C790 62 887 72 1008 48"/>
+    <path d="M692 158 C804 103 912 139 1118 84"/>
+    <path d="M738 248 C840 200 948 226 1160 158"/>
+    <path d="M684 413 C811 358 950 378 1158 303"/>
+    <path d="M754 497 C862 454 985 460 1138 397"/>
+  </g>
+  <rect x="54" y="54" width="1092" height="519" rx="30" fill="rgba(255,255,255,0.78)" stroke="rgba(0,0,0,0.10)" filter="url(#shadow)"/>
+  <g transform="translate(96 92)">
+    <rect width="112" height="112" rx="28" fill="${escapeHtml(theme)}"/>
+    <text x="56" y="69" text-anchor="middle" font-size="38" font-weight="800" fill="#ffffff">${escapeHtml(initials)}</text>
+  </g>
+  <text x="232" y="122" font-size="28" font-weight="800" fill="${escapeHtml(theme)}">${escapeHtml(site.name || domain)}</text>
+  <text x="232" y="160" font-size="24" fill="#4b514a">${escapeHtml(domain)}</text>
+  <g transform="translate(96 228)">
+    ${titleLines.map((line, index) => `<text x="0" y="${index * 64}" font-size="58" font-weight="700" fill="#111713">${escapeHtml(line)}</text>`).join("\n    ")}
+  </g>
+  <rect x="98" y="${260 + (titleLines.length * 64)}" width="70" height="5" fill="${escapeHtml(accent)}"/>
+  <g transform="translate(96 ${310 + (titleLines.length * 64)})">
+    ${descriptionLines.map((line, index) => `<text x="0" y="${index * 33}" font-size="26" fill="#232923">${escapeHtml(line)}</text>`).join("\n    ")}
+  </g>
+  <g transform="translate(746 214)">
+    ${nodeLabels.map((label, index) => {
+      const x = (index % 2) * 172;
+      const y = Math.floor(index / 2) * 138;
+      return `<g transform="translate(${x} ${y})">
+        <circle cx="38" cy="38" r="34" fill="${escapeHtml(theme)}" opacity="0.94"/>
+        <circle cx="38" cy="38" r="18" fill="none" stroke="${escapeHtml(accent)}" stroke-width="4"/>
+        <text x="84" y="32" font-size="22" font-weight="800" fill="#171b17">${escapeHtml(label)}</text>
+        <text x="84" y="62" font-size="18" fill="#4b514a">ready</text>
+      </g>`;
+    }).join("\n    ")}
+  </g>
+  <text x="96" y="535" font-size="21" font-weight="800" fill="${escapeHtml(theme)}">Agent-readable. Human-visible. LinkedIn-ready.</text>
+  <text x="1104" y="535" text-anchor="end" font-size="21" fill="#4b514a">https://${escapeHtml(domain)}/</text>
+</svg>`;
+}
+
+function socialBackgroundFor(site) {
+  const mode = site.mode || "gamma";
+  if (mode === "snaxk") return { start: "#fffaf0", end: "#f2dfb5" };
+  if (mode === "yqup") return { start: "#f8f8f6", end: "#e6ebe3" };
+  if (mode === "orchistra") return { start: "#f8f4e9", end: "#dce6d5" };
+  if (mode === "holding") return { start: "#f7f8ff", end: "#e9ecff" };
+  if (mode === "ai_ops") return { start: "#f3f7f3", end: "#dfe8ef" };
+  return { start: "#fbfaf4", end: "#e6ecdf" };
+}
+
+function normalizeHex(value, fallback) {
+  return /^#[0-9a-f]{6}$/i.test(value || "") ? value : fallback;
+}
+
+function wrapForSvg(text, maxChars, maxLines) {
+  const words = String(text || "").replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
+  const lines = [];
+  let line = "";
+  for (const word of words) {
+    const next = line ? `${line} ${word}` : word;
+    if (next.length > maxChars && line) {
+      lines.push(line);
+      line = word;
+      if (lines.length === maxLines) break;
+    } else {
+      line = next;
+    }
+  }
+  if (line && lines.length < maxLines) lines.push(line);
+  if (lines.length === maxLines && words.join(" ").length > lines.join(" ").length) {
+    lines[lines.length - 1] = `${lines[lines.length - 1].replace(/[.,;:!?]+$/, "")}...`;
+  }
+  return lines.length ? lines : ["Agent-readable system site"];
 }
 
 function matomoConfigFor(site) {
@@ -1368,7 +1524,7 @@ async function gammaSnapshotPageFor(site, fallbackHtml) {
     console.warn(`Gamma snapshot unavailable for ${site.domain}; using previous generated snapshot.`);
     html = fallbackHtml;
   }
-  return injectSourceFunnelStrip(injectFaviconLink(injectMatomoScriptTag(html, site), site), site, "gamma_advisory_strip");
+  return injectSourceFunnelStrip(injectFaviconLink(injectSocialMetaTags(injectMatomoScriptTag(html, site), site), site), site, "gamma_advisory_strip");
 }
 
 function fetchGammaHtml(site) {
@@ -1562,7 +1718,7 @@ function yqupPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(site.title || site.name)}</title>
   <meta name="description" content="${escapeHtml(site.summary)}">
-  <link rel="canonical" href="https://${escapeHtml(site.domain)}/">
+${socialMetaTagsFor(site)}  <link rel="canonical" href="https://${escapeHtml(site.domain)}/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
@@ -2279,7 +2435,7 @@ function holdingPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(site.title || site.name)}</title>
   <meta name="description" content="${escapeHtml(site.summary)}">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${socialMetaTagsFor(site)}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
       color-scheme: light;
@@ -2558,7 +2714,7 @@ function countryPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(site.title || site.name)}</title>
   <meta name="description" content="${escapeHtml(site.summary)}">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${socialMetaTagsFor(site)}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="${escapeHtml(heroImage)}">
 ${matomoScriptTagFor(site)}  <style>
     :root {
@@ -3237,7 +3393,7 @@ function chiefAgenticOfficerPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(site.title || site.name)}</title>
   <meta name="description" content="${escapeHtml(site.summary)}">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${socialMetaTagsFor(site)}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
       color-scheme: light;
@@ -4460,7 +4616,11 @@ function chiefAgenticOfficerForAgentsPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)} | ${escapeHtml(site.name)}</title>
   <meta name="description" content="${escapeHtml(summary)}">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${socialMetaTagsFor(site, {
+    title: `${title} | ${site.name}`,
+    description: summary,
+    path: "/for-agents/",
+  })}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
       color-scheme: light;
@@ -5118,7 +5278,7 @@ function snaxkConceptPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(summary)}">
-  <link rel="preload" as="image" href="${escapeHtml(badge)}">
+${socialMetaTagsFor(site, { title, description: summary })}  <link rel="preload" as="image" href="${escapeHtml(badge)}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
@@ -6170,7 +6330,7 @@ function snaxkPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(summary)}">
-  <link rel="preload" as="image" href="${escapeHtml(lozenge)}">
+${socialMetaTagsFor(site, { title, description: summary })}  <link rel="preload" as="image" href="${escapeHtml(lozenge)}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
@@ -7405,7 +7565,7 @@ function agenticLeaderPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(summary)}">
-  <link rel="preload" as="image" href="${escapeHtml(heroImage)}">
+${socialMetaTagsFor(site, { title, description: summary })}  <link rel="preload" as="image" href="${escapeHtml(heroImage)}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
@@ -8242,7 +8402,7 @@ function aiOperationsPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(summary)}">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${socialMetaTagsFor(site, { title, description: summary })}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
       color-scheme: light;
@@ -9012,7 +9172,7 @@ function agenticsHomePageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(summary)}">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${socialMetaTagsFor(site, { title, description: summary })}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
       color-scheme: light;
@@ -9793,7 +9953,7 @@ function orchistraPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(site.title || site.name)}</title>
   <meta name="description" content="${escapeHtml(site.summary)}">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${socialMetaTagsFor(site)}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
       color-scheme: light;
@@ -12001,7 +12161,8 @@ function logoHoldingPageFor(site, page) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
-  <meta name="robots" content="noindex, follow">
+  <meta name="description" content="${escapeHtml(page.note || page.message || site.summary || title)}">
+${socialMetaTagsFor(site, { title, description: page.note || page.message || site.summary || title })}  <meta name="robots" content="noindex, follow">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${matomoScriptTagFor(site)}  <style>
     :root {
