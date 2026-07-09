@@ -1695,24 +1695,30 @@ function yqupPageFor(site) {
   const systemHref = tonywoodFunnelUrlFor(site, "system_site_build") || defaultTonywoodAdvisoryUrl;
   const finalHref = tonywoodFunnelUrlFor(site, "final_consulting_enquiry") || defaultTonywoodAdvisoryUrl;
   const tonywoodHomeHref = trackedOutboundUrlFor(site, "https://www.tonywood.org/", "final_tonywood_home", "yqup_to_tonywood") || "https://www.tonywood.org/";
+  const decisionQuestions = [
+    "What are you trying to decide?",
+    "What evidence would change the decision?",
+    "Who owns the outcome after the meeting?",
+    "Where must human judgement stay visible?",
+  ];
   const publicFiles = [
-    { path: "/llms.txt", label: "Agent instructions" },
-    { path: "/.well-known/agentic-profile.json", label: "Agentic profile" },
-    { path: "/matomo-config.json", label: "Analytics intent" },
-    { path: "/healthz", label: "Service health" },
+    { path: "/llms.txt", label: "Context for assistants" },
+    { path: "/.well-known/agentic-profile.json", label: "Public operating profile" },
+    { path: "/matomo-config.json", label: "Measurement intent" },
+    { path: "/healthz", label: "Service check" },
   ];
   const systemNotes = [
     {
-      title: "Agent-readable",
-      body: "Publish the plain facts, routes, owners, boundaries, and source context that assistants and agents can safely consume."
+      title: "Know what is being approved",
+      body: "Name the outcome, the risk, the owner, the cost, and the evidence before the work becomes another AI initiative drifting through the organisation."
     },
     {
-      title: "Human-visible",
-      body: "Keep the same facts readable to boards, CEOs, operators, advisers, and teams, so automation does not disappear into private chats."
+      title: "Keep ownership visible",
+      body: "Make it clear who can proceed, who can stop the work, who reviews the result, and where judgement belongs."
     },
     {
-      title: "Governed",
-      body: "Add enough structure for accountability: decision trails, stop lines, review cadence, evidence, analytics, and ownership."
+      title: "Leave evidence behind",
+      body: "Create a practical record that a board, CEO, operator, adviser, or assistant can return to when the next decision arrives."
     },
   ];
 
@@ -1803,7 +1809,7 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .brand-logo {
-      width: 112px;
+      width: 88px;
       height: auto;
       display: block;
     }
@@ -1830,31 +1836,24 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .hero {
-      padding: 82px 40px 64px;
+      padding: 96px 40px 82px;
       border-bottom: 1px solid var(--line);
-      background: #000000;
-      color: #f4f4f0;
+      background:
+        linear-gradient(120deg, rgba(247, 245, 239, 0.98), rgba(255, 255, 255, 0.92)),
+        radial-gradient(circle at 82% 16%, rgba(111, 127, 103, 0.16), transparent 32%),
+        linear-gradient(165deg, transparent 0 62%, rgba(111, 127, 103, 0.13) 62% 64%, transparent 64% 100%);
+      color: var(--ink);
     }
 
     .hero .eyebrow,
     .hero .lead {
-      color: rgba(255, 255, 255, 0.72);
-    }
-
-    .hero .button {
-      border-color: #f4f4f0;
-      color: #f4f4f0;
-    }
-
-    .hero .button.primary {
-      background: #f4f4f0;
-      color: #111111;
+      color: var(--ink-soft);
     }
 
     .hero .field-rule {
-      border-color: rgba(255, 255, 255, 0.25);
+      border-color: rgba(17, 17, 17, 0.18);
       background:
-        linear-gradient(90deg, transparent 0 12px, rgba(255, 255, 255, 0.2) 12px 13px, transparent 13px 28px);
+        linear-gradient(90deg, transparent 0 12px, rgba(111, 127, 103, 0.28) 12px 13px, transparent 13px 28px);
       background-size: 28px 100%;
     }
 
@@ -1871,9 +1870,9 @@ ${matomoScriptTagFor(site)}  <style>
     .hero-grid {
       width: min(100%, 1160px);
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(310px, 410px);
-      gap: 48px;
-      align-items: end;
+      grid-template-columns: minmax(0, 1.05fr) minmax(310px, 0.62fr);
+      gap: 58px;
+      align-items: center;
       margin: 0 auto;
     }
 
@@ -1956,9 +1955,10 @@ ${matomoScriptTagFor(site)}  <style>
       display: inline-flex;
       align-items: center;
       padding: 6px 9px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      border: 1px solid var(--line);
       border-radius: 4px;
-      color: rgba(255, 255, 255, 0.62);
+      background: rgba(255, 255, 255, 0.52);
+      color: var(--ink-soft);
       font-size: 12px;
       font-weight: 680;
     }
@@ -1980,7 +1980,52 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .hero-aside {
-      padding: 24px;
+      padding: 28px;
+      background: #111111;
+      color: #f8f7f1;
+      box-shadow: 0 26px 68px rgba(17, 17, 17, 0.16);
+    }
+
+    .hero-aside .eyebrow {
+      color: #dfe8d9;
+    }
+
+    .hero-aside h2 {
+      margin-bottom: 16px;
+      color: #ffffff;
+      font-size: 34px;
+    }
+
+    .hero-aside p,
+    .hero-aside li {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .decision-list {
+      display: grid;
+      gap: 11px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .decision-list li {
+      padding: 0 0 11px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      position: relative;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .decision-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--sage);
+      border-radius: 50%;
     }
 
     .route-list,
@@ -2010,6 +2055,18 @@ ${matomoScriptTagFor(site)}  <style>
       font-size: 13px;
       text-decoration: none;
       overflow-wrap: anywhere;
+    }
+
+    .proof-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(300px, 0.52fr);
+      gap: 30px;
+      align-items: center;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
     }
 
     .route-list span {
@@ -2176,7 +2233,8 @@ ${matomoScriptTagFor(site)}  <style>
 
     @media (max-width: 1080px) {
       .hero-grid,
-      .section-heading {
+      .section-heading,
+      .proof-panel {
         grid-template-columns: 1fr;
       }
 
@@ -2253,11 +2311,11 @@ ${matomoScriptTagFor(site)}  <style>
       <img class="brand-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)}">
     </a>
     <nav aria-label="Primary navigation">
-      <a href="#system-sites">System sites</a>
-      <a href="#consulting">Consulting</a>
-      <a href="#ecosystem">Ecosystem</a>
+      <a href="#system-sites">Board work</a>
+      <a href="#consulting">Ways to work</a>
+      <a href="#ecosystem">YQUP world</a>
       <a href="#thinking">Thinking</a>
-      <a href="${escapeHtml(navHref)}"${funnelAttrsFor(site, "nav_advisory")}>Advisory</a>
+      <a href="${escapeHtml(navHref)}"${funnelAttrsFor(site, "nav_advisory")}>Contact</a>
     </nav>
   </header>
 
@@ -2265,25 +2323,24 @@ ${matomoScriptTagFor(site)}  <style>
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-grid">
         <div>
-          <img class="hero-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)} logo">
           <p class="eyebrow">YQUP &middot; ADVISORY</p>
           <h1 id="page-title">${escapeHtml(site.heading)}</h1>
           <p class="lead">${escapeHtml(site.summary)}</p>
           <div class="hero-actions">
             <a class="button primary" href="${escapeHtml(heroHref)}"${funnelAttrsFor(site, "hero_discuss_advisory")}>${escapeHtml(site.primary_action_label || "Discuss advisory")}</a>
-            <a class="button" href="#system-sites">Build a system site</a>
+            <a class="button" href="#consulting">See ways to work</a>
           </div>
           <ul class="queue-phrases" aria-label="Why queue up prompts">
             ${queueUpPhrases.map((phrase) => `<li>${escapeHtml(phrase)}</li>`).join("")}
           </ul>
           <div class="field-rule" aria-hidden="true"></div>
         </div>
-        <aside class="hero-aside" aria-label="Agent-readable public routes">
-          <p class="eyebrow">Readable by agents and people</p>
-          <h2>Small public surfaces for serious work.</h2>
-          <p>YQUP treats every owned site as part of the operating system: clear enough for a person to trust, structured enough for an agent to use.</p>
-          <ul class="route-list">
-            ${publicFiles.map((item) => `<li><a href="${escapeHtml(item.path)}"><code>${escapeHtml(item.path)}</code><span>${escapeHtml(item.label)}</span></a></li>`).join("")}
+        <aside class="hero-aside" aria-label="Board advisory focus">
+          <p class="eyebrow">Board-level help</p>
+          <h2>Bring the decision that is stuck.</h2>
+          <p>YQUP is useful when the demo is impressive but the organisation still needs a clear answer: approve it, narrow it, stop it, fund it, govern it, or turn it into normal work.</p>
+          <ul class="decision-list">
+            ${decisionQuestions.map((question) => `<li>${escapeHtml(question)}</li>`).join("")}
           </ul>
         </aside>
       </div>
@@ -2293,10 +2350,10 @@ ${matomoScriptTagFor(site)}  <style>
       <div class="section-inner">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">System sites</p>
-            <h2>Information agents can read, with human visibility around it.</h2>
+            <p class="eyebrow">Board work</p>
+            <h2>Make AI work visible enough to decide on.</h2>
           </div>
-          <p>These are not brochure pages with a hidden automation layer. They are deliberately small, owned surfaces for context, routes, governance, status, and decision support.</p>
+          <p>The useful work is not the website. It is the clarity around ownership, risk, evidence, cost, cadence and what happens after the meeting.</p>
         </div>
         <div class="system-grid">
           ${systemNotes.map((item) => `<article class="panel">
@@ -2305,8 +2362,23 @@ ${matomoScriptTagFor(site)}  <style>
           </article>`).join("")}
         </div>
         <div class="action-row">
-          <a class="button primary" href="${escapeHtml(systemHref)}"${funnelAttrsFor(site, "system_site_build")}>Talk about a system site</a>
-          <a class="button" href="/llms.txt">Open llms.txt</a>
+          <a class="button primary" href="${escapeHtml(systemHref)}"${funnelAttrsFor(site, "system_site_build")}>Talk through a live decision</a>
+          <a class="button" href="#contact">Contact Tony</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="proof-title">
+      <div class="section-inner">
+        <div class="proof-panel">
+          <div>
+            <p class="eyebrow">Quiet discipline underneath</p>
+            <h2 id="proof-title">When the work needs a record, YQUP leaves one.</h2>
+            <p class="lead">Some clients need a public page, some need a controlled briefing, and some simply need a better decision trail. The point is the same: people can understand it, and their assistants can find the right context later.</p>
+          </div>
+          <ul class="route-list" aria-label="Readable public routes">
+            ${publicFiles.map((item) => `<li><a href="${escapeHtml(item.path)}"><code>${escapeHtml(item.path)}</code><span>${escapeHtml(item.label)}</span></a></li>`).join("")}
+          </ul>
         </div>
       </div>
     </section>

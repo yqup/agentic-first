@@ -133,3 +133,47 @@ Public checks passed for both `https://yqup.com/` and `https://www.yqup.com/`:
 ## Note
 
 The old Gamma page did not expose a separate logo image file. The restored asset is a local SVG recreation of the visible original wordmark treatment from the old YQUP screenshot: thin `YQUP` text on a black hero, with `YQUP · ADVISORY` beneath it.
+
+## Human Advisory Refresh - 2026-07-09
+
+The YQUP homepage was softened after review in LinkedIn/profile context. The
+previous first viewport was technically correct but led with `system sites`,
+agent-readable routes, and the line `Small public surfaces for serious work`,
+which made the page feel too technical for a board-level buyer considering
+whether to hire Tony.
+
+Changes made:
+
+- Reframed the page title and description around AI clarity for boards, CEOs,
+  and operators.
+- Kept the core line: `AI is not the problem. Lack of clarity is.`
+- Replaced the first-viewport technical route panel with a board decision
+  panel: `Bring the decision that is stuck.`
+- Changed the prompt chips to buyer questions: what to approve, who owns it,
+  where evidence sits, when to stop, and how people trust it.
+- Moved `llms.txt`, agentic profile, Matomo config, and health-route links into
+  a lower `Quiet discipline underneath` proof section.
+- Changed navigation from technical nouns to buyer-facing labels: `Board work`,
+  `Ways to work`, `YQUP world`, `Thinking`, and `Contact`.
+- Kept Matomo site ID `5`, the Tonywood advisory funnel, and all public static
+  interfaces unchanged.
+
+Local verification included:
+
+```bash
+node --check top-level-sites/build-sites.mjs
+node --check top-level-sites/scripts/check-social-previews.mjs
+node top-level-sites/build-sites.mjs
+node top-level-sites/scripts/check-social-previews.mjs
+git diff --check
+```
+
+Local browser review used the generated YQUP static preview at:
+
+```text
+http://127.0.0.1:8338/
+```
+
+Desktop and mobile screenshots confirmed the first viewport no longer exposes
+the technical route panel and the old `Small public surfaces for serious work`
+phrase is absent.

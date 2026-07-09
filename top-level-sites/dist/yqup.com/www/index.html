@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>YQUP | Agent-readable system sites and AI governance consulting</title>
-  <meta name="description" content="YQUP builds agent-readable system sites and human-visible governance surfaces so boards, CEOs, and operators can make AI and agentic work useful, governed, and operationally real.">
+  <title>YQUP | AI clarity for boards, CEOs and operators</title>
+  <meta name="description" content="YQUP helps boards, CEOs and operators turn AI ambition into clear decisions, visible ownership and practical operating rhythm.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="YQUP | Agent-readable system sites and AI governance consulting">
-  <meta property="og:description" content="YQUP builds agent-readable system sites and human-visible governance surfaces so boards, CEOs, and operators can make AI and agentic work useful, governed, and operationally real.">
+  <meta property="og:title" content="YQUP | AI clarity for boards, CEOs and operators">
+  <meta property="og:description" content="YQUP helps boards, CEOs and operators turn AI ambition into clear decisions, visible ownership and practical operating rhythm.">
   <meta property="og:url" content="https://yqup.com/">
   <meta property="og:image" content="https://yqup.com/assets/og-image.png">
   <meta property="og:image:secure_url" content="https://yqup.com/assets/og-image.png">
@@ -16,8 +16,8 @@
   <meta property="og:image:height" content="627">
   <meta property="og:image:alt" content="YQUP preview card">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="YQUP | Agent-readable system sites and AI governance consulting">
-  <meta name="twitter:description" content="YQUP builds agent-readable system sites and human-visible governance surfaces so boards, CEOs, and operators can make AI and agentic work useful, governed, and operationally real.">
+  <meta name="twitter:title" content="YQUP | AI clarity for boards, CEOs and operators">
+  <meta name="twitter:description" content="YQUP helps boards, CEOs and operators turn AI ambition into clear decisions, visible ownership and practical operating rhythm.">
   <meta name="twitter:image" content="https://yqup.com/assets/og-image.png">
   <link rel="canonical" href="https://yqup.com/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -100,7 +100,7 @@
     }
 
     .brand-logo {
-      width: 112px;
+      width: 88px;
       height: auto;
       display: block;
     }
@@ -127,31 +127,24 @@
     }
 
     .hero {
-      padding: 82px 40px 64px;
+      padding: 96px 40px 82px;
       border-bottom: 1px solid var(--line);
-      background: #000000;
-      color: #f4f4f0;
+      background:
+        linear-gradient(120deg, rgba(247, 245, 239, 0.98), rgba(255, 255, 255, 0.92)),
+        radial-gradient(circle at 82% 16%, rgba(111, 127, 103, 0.16), transparent 32%),
+        linear-gradient(165deg, transparent 0 62%, rgba(111, 127, 103, 0.13) 62% 64%, transparent 64% 100%);
+      color: var(--ink);
     }
 
     .hero .eyebrow,
     .hero .lead {
-      color: rgba(255, 255, 255, 0.72);
-    }
-
-    .hero .button {
-      border-color: #f4f4f0;
-      color: #f4f4f0;
-    }
-
-    .hero .button.primary {
-      background: #f4f4f0;
-      color: #111111;
+      color: var(--ink-soft);
     }
 
     .hero .field-rule {
-      border-color: rgba(255, 255, 255, 0.25);
+      border-color: rgba(17, 17, 17, 0.18);
       background:
-        linear-gradient(90deg, transparent 0 12px, rgba(255, 255, 255, 0.2) 12px 13px, transparent 13px 28px);
+        linear-gradient(90deg, transparent 0 12px, rgba(111, 127, 103, 0.28) 12px 13px, transparent 13px 28px);
       background-size: 28px 100%;
     }
 
@@ -168,9 +161,9 @@
     .hero-grid {
       width: min(100%, 1160px);
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(310px, 410px);
-      gap: 48px;
-      align-items: end;
+      grid-template-columns: minmax(0, 1.05fr) minmax(310px, 0.62fr);
+      gap: 58px;
+      align-items: center;
       margin: 0 auto;
     }
 
@@ -253,9 +246,10 @@
       display: inline-flex;
       align-items: center;
       padding: 6px 9px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      border: 1px solid var(--line);
       border-radius: 4px;
-      color: rgba(255, 255, 255, 0.62);
+      background: rgba(255, 255, 255, 0.52);
+      color: var(--ink-soft);
       font-size: 12px;
       font-weight: 680;
     }
@@ -277,7 +271,52 @@
     }
 
     .hero-aside {
-      padding: 24px;
+      padding: 28px;
+      background: #111111;
+      color: #f8f7f1;
+      box-shadow: 0 26px 68px rgba(17, 17, 17, 0.16);
+    }
+
+    .hero-aside .eyebrow {
+      color: #dfe8d9;
+    }
+
+    .hero-aside h2 {
+      margin-bottom: 16px;
+      color: #ffffff;
+      font-size: 34px;
+    }
+
+    .hero-aside p,
+    .hero-aside li {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .decision-list {
+      display: grid;
+      gap: 11px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .decision-list li {
+      padding: 0 0 11px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      position: relative;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .decision-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--sage);
+      border-radius: 50%;
     }
 
     .route-list,
@@ -307,6 +346,18 @@
       font-size: 13px;
       text-decoration: none;
       overflow-wrap: anywhere;
+    }
+
+    .proof-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(300px, 0.52fr);
+      gap: 30px;
+      align-items: center;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
     }
 
     .route-list span {
@@ -473,7 +524,8 @@
 
     @media (max-width: 1080px) {
       .hero-grid,
-      .section-heading {
+      .section-heading,
+      .proof-panel {
         grid-template-columns: 1fr;
       }
 
@@ -550,11 +602,11 @@
       <img class="brand-logo" src="/assets/yqup-logo.svg" alt="YQUP">
     </a>
     <nav aria-label="Primary navigation">
-      <a href="#system-sites">System sites</a>
-      <a href="#consulting">Consulting</a>
-      <a href="#ecosystem">Ecosystem</a>
+      <a href="#system-sites">Board work</a>
+      <a href="#consulting">Ways to work</a>
+      <a href="#ecosystem">YQUP world</a>
       <a href="#thinking">Thinking</a>
-      <a href="https://www.tonywood.org/advisory/?mtm_campaign=yqup_to_tonywood_advisory&amp;mtm_source=yqup.com&amp;mtm_medium=owned-referral&amp;mtm_content=nav_advisory" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="yqup.com" data-funnel-campaign="yqup_to_tonywood_advisory" data-funnel-content="nav_advisory">Advisory</a>
+      <a href="https://www.tonywood.org/advisory/?mtm_campaign=yqup_to_tonywood_advisory&amp;mtm_source=yqup.com&amp;mtm_medium=owned-referral&amp;mtm_content=nav_advisory" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="yqup.com" data-funnel-campaign="yqup_to_tonywood_advisory" data-funnel-content="nav_advisory">Contact</a>
     </nav>
   </header>
 
@@ -562,25 +614,24 @@
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-grid">
         <div>
-          <img class="hero-logo" src="/assets/yqup-logo.svg" alt="YQUP logo">
           <p class="eyebrow">YQUP &middot; ADVISORY</p>
           <h1 id="page-title">AI is not the problem. Lack of clarity is.</h1>
-          <p class="lead">YQUP builds agent-readable system sites and human-visible governance surfaces so boards, CEOs, and operators can make AI and agentic work useful, governed, and operationally real.</p>
+          <p class="lead">YQUP helps boards, CEOs and operators turn AI ambition into clear decisions, visible ownership and practical operating rhythm.</p>
           <div class="hero-actions">
             <a class="button primary" href="https://www.tonywood.org/advisory/?mtm_campaign=yqup_to_tonywood_advisory&amp;mtm_source=yqup.com&amp;mtm_medium=owned-referral&amp;mtm_content=hero_discuss_advisory" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="yqup.com" data-funnel-campaign="yqup_to_tonywood_advisory" data-funnel-content="hero_discuss_advisory">Discuss advisory</a>
-            <a class="button" href="#system-sites">Build a system site</a>
+            <a class="button" href="#consulting">See ways to work</a>
           </div>
           <ul class="queue-phrases" aria-label="Why queue up prompts">
-            <li>AI governance</li><li>Board clarity</li><li>Agent-readable system sites</li><li>Operational adoption</li><li>Decision trails for people and agents</li>
+            <li>What should we approve?</li><li>Who owns the outcome?</li><li>Where is the evidence?</li><li>When do we stop?</li><li>How do people trust it?</li>
           </ul>
           <div class="field-rule" aria-hidden="true"></div>
         </div>
-        <aside class="hero-aside" aria-label="Agent-readable public routes">
-          <p class="eyebrow">Readable by agents and people</p>
-          <h2>Small public surfaces for serious work.</h2>
-          <p>YQUP treats every owned site as part of the operating system: clear enough for a person to trust, structured enough for an agent to use.</p>
-          <ul class="route-list">
-            <li><a href="/llms.txt"><code>/llms.txt</code><span>Agent instructions</span></a></li><li><a href="/.well-known/agentic-profile.json"><code>/.well-known/agentic-profile.json</code><span>Agentic profile</span></a></li><li><a href="/matomo-config.json"><code>/matomo-config.json</code><span>Analytics intent</span></a></li><li><a href="/healthz"><code>/healthz</code><span>Service health</span></a></li>
+        <aside class="hero-aside" aria-label="Board advisory focus">
+          <p class="eyebrow">Board-level help</p>
+          <h2>Bring the decision that is stuck.</h2>
+          <p>YQUP is useful when the demo is impressive but the organisation still needs a clear answer: approve it, narrow it, stop it, fund it, govern it, or turn it into normal work.</p>
+          <ul class="decision-list">
+            <li>What are you trying to decide?</li><li>What evidence would change the decision?</li><li>Who owns the outcome after the meeting?</li><li>Where must human judgement stay visible?</li>
           </ul>
         </aside>
       </div>
@@ -590,26 +641,41 @@
       <div class="section-inner">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">System sites</p>
-            <h2>Information agents can read, with human visibility around it.</h2>
+            <p class="eyebrow">Board work</p>
+            <h2>Make AI work visible enough to decide on.</h2>
           </div>
-          <p>These are not brochure pages with a hidden automation layer. They are deliberately small, owned surfaces for context, routes, governance, status, and decision support.</p>
+          <p>The useful work is not the website. It is the clarity around ownership, risk, evidence, cost, cadence and what happens after the meeting.</p>
         </div>
         <div class="system-grid">
           <article class="panel">
-            <h3>Agent-readable</h3>
-            <p>Publish the plain facts, routes, owners, boundaries, and source context that assistants and agents can safely consume.</p>
+            <h3>Know what is being approved</h3>
+            <p>Name the outcome, the risk, the owner, the cost, and the evidence before the work becomes another AI initiative drifting through the organisation.</p>
           </article><article class="panel">
-            <h3>Human-visible</h3>
-            <p>Keep the same facts readable to boards, CEOs, operators, advisers, and teams, so automation does not disappear into private chats.</p>
+            <h3>Keep ownership visible</h3>
+            <p>Make it clear who can proceed, who can stop the work, who reviews the result, and where judgement belongs.</p>
           </article><article class="panel">
-            <h3>Governed</h3>
-            <p>Add enough structure for accountability: decision trails, stop lines, review cadence, evidence, analytics, and ownership.</p>
+            <h3>Leave evidence behind</h3>
+            <p>Create a practical record that a board, CEO, operator, adviser, or assistant can return to when the next decision arrives.</p>
           </article>
         </div>
         <div class="action-row">
-          <a class="button primary" href="https://www.tonywood.org/advisory/?mtm_campaign=yqup_to_tonywood_advisory&amp;mtm_source=yqup.com&amp;mtm_medium=owned-referral&amp;mtm_content=system_site_build" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="yqup.com" data-funnel-campaign="yqup_to_tonywood_advisory" data-funnel-content="system_site_build">Talk about a system site</a>
-          <a class="button" href="/llms.txt">Open llms.txt</a>
+          <a class="button primary" href="https://www.tonywood.org/advisory/?mtm_campaign=yqup_to_tonywood_advisory&amp;mtm_source=yqup.com&amp;mtm_medium=owned-referral&amp;mtm_content=system_site_build" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="yqup.com" data-funnel-campaign="yqup_to_tonywood_advisory" data-funnel-content="system_site_build">Talk through a live decision</a>
+          <a class="button" href="#contact">Contact Tony</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="proof-title">
+      <div class="section-inner">
+        <div class="proof-panel">
+          <div>
+            <p class="eyebrow">Quiet discipline underneath</p>
+            <h2 id="proof-title">When the work needs a record, YQUP leaves one.</h2>
+            <p class="lead">Some clients need a public page, some need a controlled briefing, and some simply need a better decision trail. The point is the same: people can understand it, and their assistants can find the right context later.</p>
+          </div>
+          <ul class="route-list" aria-label="Readable public routes">
+            <li><a href="/llms.txt"><code>/llms.txt</code><span>Context for assistants</span></a></li><li><a href="/.well-known/agentic-profile.json"><code>/.well-known/agentic-profile.json</code><span>Public operating profile</span></a></li><li><a href="/matomo-config.json"><code>/matomo-config.json</code><span>Measurement intent</span></a></li><li><a href="/healthz"><code>/healthz</code><span>Service check</span></a></li>
+          </ul>
         </div>
       </div>
     </section>
@@ -626,7 +692,7 @@
         <div class="services-grid">
           <article class="service-card">
             <span class="service-label">AI governance</span>
-            <p>Clarify which AI and agentic work can be approved, narrowed, stopped, explained, funded, or operationalised, then publish the right agent-readable context around it.</p>
+            <p>Clarify which AI and agentic work can be approved, narrowed, stopped, explained, funded, or operationalised, without losing the judgement trail.</p>
           </article><article class="service-card">
             <span class="service-label">Board decision trails</span>
             <p>Turn concern into a defensible next move, with ownership, evidence, risk appetite, and a clear record of the judgement.</p>
@@ -661,8 +727,8 @@
             <p>Review access, accountability, data boundaries, finance controls, workflow ownership, review rhythm, and escalation paths.</p>
           </article><article class="service-card">
             <span class="service-label">System site build</span>
-            <h3>Make the work readable to agents and humans.</h3>
-            <p>Design and build small public or controlled system sites with llms.txt, agentic profiles, source context, clear routes, and human-readable pages.</p>
+            <h3>Leave a clear record people can rely on.</h3>
+            <p>Design small public or controlled decision surfaces that explain the work, the owner, the boundary, the evidence, and the next route.</p>
           </article><article class="service-card">
             <span class="service-label">Agentic systems workshop</span>
             <h3>Give teams a working language.</h3>
@@ -693,7 +759,7 @@
           <article class="ecosystem-card">
               <span class="ecosystem-label">Advisory and thinking</span>
               <h3><a href="https://www.tonywood.org/?mtm_campaign=yqup_to_tonywood&amp;mtm_source=yqup.com&amp;mtm_medium=owned-referral&amp;mtm_content=ecosystem_tonywood" data-funnel-category="Source site funnel" data-funnel-stage="source_to_yqup_ecosystem" data-funnel-source="yqup.com" data-funnel-campaign="yqup_to_tonywood" data-funnel-content="ecosystem_tonywood">Tony Wood</a></h3>
-              <p>The public home for Tony's writing, research, advisory offer, and agent-readable context.</p>
+              <p>The public home for Tony's writing, research, advisory offer, and practical operating view.</p>
             </article><article class="ecosystem-card">
               <span class="ecosystem-label">Board-level mandate</span>
               <h3><a href="https://chiefagenticofficer.com/?mtm_campaign=yqup_to_chiefagenticofficer&amp;mtm_source=yqup.com&amp;mtm_medium=owned-referral&amp;mtm_content=ecosystem_chiefagenticofficer" data-funnel-category="Source site funnel" data-funnel-stage="source_to_yqup_ecosystem" data-funnel-source="yqup.com" data-funnel-campaign="yqup_to_chiefagenticofficer" data-funnel-content="ecosystem_chiefagenticofficer">Chief Agentic Officer</a></h3>

@@ -3,9 +3,9 @@
     "domain": "yqup.com",
     "mode": "yqup",
     "name": "YQUP",
-    "title": "YQUP | Agent-readable system sites and AI governance consulting",
+    "title": "YQUP | AI clarity for boards, CEOs and operators",
     "heading": "AI is not the problem. Lack of clarity is.",
-    "summary": "YQUP builds agent-readable system sites and human-visible governance surfaces so boards, CEOs, and operators can make AI and agentic work useful, governed, and operationally real.",
+    "summary": "YQUP helps boards, CEOs and operators turn AI ambition into clear decisions, visible ownership and practical operating rhythm.",
     "eyebrow": "YQUP Advisory",
     "jurisdiction": "GB",
     "industry": ["ai-governance", "board-advisory", "agentic-ai"],
@@ -38,16 +38,16 @@
     "primary_action_label": "Discuss advisory",
     "secondary_action_label": "Explore the work",
     "queue_up_phrases": [
-      "AI governance",
-      "Board clarity",
-      "Agent-readable system sites",
-      "Operational adoption",
-      "Decision trails for people and agents"
+      "What should we approve?",
+      "Who owns the outcome?",
+      "Where is the evidence?",
+      "When do we stop?",
+      "How do people trust it?"
     ],
     "sections": [
       {
         "title": "AI governance",
-        "body": "Clarify which AI and agentic work can be approved, narrowed, stopped, explained, funded, or operationalised, then publish the right agent-readable context around it."
+        "body": "Clarify which AI and agentic work can be approved, narrowed, stopped, explained, funded, or operationalised, without losing the judgement trail."
       },
       {
         "title": "Board decision trails",
@@ -75,8 +75,8 @@
       },
       {
         "label": "System site build",
-        "title": "Make the work readable to agents and humans.",
-        "body": "Design and build small public or controlled system sites with llms.txt, agentic profiles, source context, clear routes, and human-readable pages."
+        "title": "Leave a clear record people can rely on.",
+        "body": "Design small public or controlled decision surfaces that explain the work, the owner, the boundary, the evidence, and the next route."
       },
       {
         "label": "Agentic systems workshop",
@@ -101,7 +101,7 @@
         "campaign": "yqup_to_tonywood",
         "content": "ecosystem_tonywood",
         "label": "Advisory and thinking",
-        "body": "The public home for Tony's writing, research, advisory offer, and agent-readable context."
+        "body": "The public home for Tony's writing, research, advisory offer, and practical operating view."
       },
       {
         "name": "Chief Agentic Officer",
