@@ -28,11 +28,46 @@
     "brand_assets": {
       "logo": "/assets/yqup-logo.svg"
     },
+    "social_preview": {
+      "title": "YQUP | AI clarity for boards, CEOs and operators",
+      "description": "Board-level AI clarity, visible ownership and practical operating rhythm.",
+      "image_title": "AI is not the problem. Lack of clarity is.",
+      "image_alt": "YQUP decision briefing in a modern English-country boardroom.",
+      "asset": "assets/yqup/social-preview.png"
+    },
+    "hero_background_image": "/assets/yqup/hero-boardroom.webp",
+    "hero_background_image_mobile": "/assets/yqup/hero-boardroom-mobile.webp",
+    "decision_brief_image": "/assets/yqup/decision-brief.webp",
+    "contact_background_image": "/assets/yqup/contact-boardroom.webp",
     "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/w5cb4nim4hs17oq/5415qe362jaqfkz/slide/grjI7EPE0TIuq1P42_mCpX8pgnU",
     "assets": [
       {
         "source": "assets/yqup-logo.svg",
         "target": "assets/yqup-logo.svg"
+      },
+      {
+        "source": "assets/yqup/hero-boardroom.webp",
+        "target": "assets/yqup/hero-boardroom.webp"
+      },
+      {
+        "source": "assets/yqup/hero-boardroom-mobile.webp",
+        "target": "assets/yqup/hero-boardroom-mobile.webp"
+      },
+      {
+        "source": "assets/yqup/decision-brief.webp",
+        "target": "assets/yqup/decision-brief.webp"
+      },
+      {
+        "source": "assets/yqup/contact-boardroom.webp",
+        "target": "assets/yqup/contact-boardroom.webp"
+      },
+      {
+        "source": "assets/orchistra/instrument-sans-latin-variable.woff2",
+        "target": "assets/yqup/instrument-sans-latin-variable.woff2"
+      },
+      {
+        "source": "assets/orchistra/newsreader-latin-variable.woff2",
+        "target": "assets/yqup/newsreader-latin-variable.woff2"
       }
     ],
     "primary_action_label": "Discuss advisory",
@@ -74,19 +109,14 @@
         "body": "Review access, accountability, data boundaries, finance controls, workflow ownership, review rhythm, and escalation paths."
       },
       {
-        "label": "System site build",
+        "label": "Decision and system-site build",
         "title": "Leave a clear record people can rely on.",
-        "body": "Design small public or controlled decision surfaces that explain the work, the owner, the boundary, the evidence, and the next route."
+        "body": "Design decision rights, rituals, and small public or controlled surfaces that make the owner, boundary, evidence, and next route clear."
       },
       {
-        "label": "Agentic systems workshop",
-        "title": "Give teams a working language.",
-        "body": "A practical session for leaders and operators on outcomes, boundaries, evidence, cadence, human gates, and agent-ready ways of working."
-      },
-      {
-        "label": "Leadership and town halls",
+        "label": "Leadership workshop or town hall",
         "title": "Explain the work without hype.",
-        "body": "Help teams understand what AI is for, how agentic work should be directed, and where human judgement remains essential."
+        "body": "Align the team, surface concerns, and give leaders and operators a working language for outcomes, boundaries, evidence, and human judgement."
       },
       {
         "label": "Ongoing advisory",

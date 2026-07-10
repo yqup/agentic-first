@@ -231,6 +231,10 @@ async function generateSocialPreviewImage(site, wwwRoot) {
   const svgPath = path.join(assetsDir, "og-image.svg");
   const pngPath = path.join(assetsDir, "og-image.png");
   await mkdir(assetsDir, { recursive: true });
+  if (site.social_preview?.asset) {
+    await copyFile(path.join(__dirname, site.social_preview.asset), pngPath);
+    return;
+  }
   await writeFile(svgPath, socialPreviewSvgFor(site), "utf8");
   try {
     await execFileAsync("sips", ["-s", "format", "png", svgPath, "--out", pngPath], { timeout: 15000 });
@@ -1679,17 +1683,15 @@ function hasFaviconReference(html) {
 }
 
 function yqupPageFor(site) {
-  const sections = site.sections || [];
   const offers = site.offers || [];
   const featured = site.ecosystem_featured || [];
   const secondary = site.ecosystem_secondary || [];
   const thinkingLinks = site.thinking_links || [];
-  const queueUpPhrases = site.queue_up_phrases || [
-    "AI governance",
-    "Board clarity",
-    "Agent-readable system sites",
-  ];
   const logo = site.brand_assets?.logo || "/assets/yqup-logo.svg";
+  const heroImage = site.hero_background_image || "/assets/yqup/hero-boardroom.webp";
+  const heroImageMobile = site.hero_background_image_mobile || heroImage;
+  const decisionImage = site.decision_brief_image || "/assets/yqup/decision-brief.webp";
+  const contactImage = site.contact_background_image || "/assets/yqup/contact-boardroom.webp";
   const heroHref = tonywoodFunnelUrlFor(site, "hero_discuss_advisory") || defaultTonywoodAdvisoryUrl;
   const navHref = tonywoodFunnelUrlFor(site, "nav_advisory") || defaultTonywoodAdvisoryUrl;
   const systemHref = tonywoodFunnelUrlFor(site, "system_site_build") || defaultTonywoodAdvisoryUrl;
@@ -1701,26 +1703,21 @@ function yqupPageFor(site) {
     "Who owns the outcome after the meeting?",
     "Where must human judgement stay visible?",
   ];
-  const publicFiles = [
-    { path: "/llms.txt", label: "Context for assistants" },
-    { path: "/.well-known/agentic-profile.json", label: "Public operating profile" },
-    { path: "/matomo-config.json", label: "Measurement intent" },
-    { path: "/healthz", label: "Service check" },
-  ];
   const systemNotes = [
     {
       title: "Know what is being approved",
-      body: "Name the outcome, the risk, the owner, the cost, and the evidence before the work becomes another AI initiative drifting through the organisation."
+      body: "Name the outcome, risk, owner, cost and evidence before the work drifts through the organisation."
     },
     {
       title: "Keep ownership visible",
-      body: "Make it clear who can proceed, who can stop the work, who reviews the result, and where judgement belongs."
+      body: "Make it clear who can proceed, who can stop, who reviews the result and where judgement belongs."
     },
     {
       title: "Leave evidence behind",
-      body: "Create a practical record that a board, CEO, operator, adviser, or assistant can return to when the next decision arrives."
+      body: "Create a practical record that the board and operating team can return to when the next decision arrives."
     },
   ];
+  const arrowIcon = `<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
   return `<!doctype html>
 <html lang="en">
@@ -1731,28 +1728,50 @@ function yqupPageFor(site) {
   <meta name="description" content="${escapeHtml(site.summary)}">
 ${socialMetaTagsFor(site)}  <link rel="canonical" href="https://${escapeHtml(site.domain)}/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="${escapeHtml(heroImage)}" as="image" fetchpriority="high">
+  <link rel="preload" href="/assets/yqup/instrument-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/yqup/newsreader-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
 ${matomoScriptTagFor(site)}  <style>
-    :root {
-      color-scheme: light;
-      --ink: #111111;
-      --ink-soft: #4f514b;
-      --paper: #f7f5ef;
-      --surface: #ffffff;
-      --surface-soft: #eeebe2;
-      --line: rgba(17, 17, 17, 0.15);
-      --line-strong: rgba(17, 17, 17, 0.34);
-      --sage: #6f7f67;
-      --sage-dark: #475642;
-      --field: #c8bea6;
-      --shadow: 0 22px 58px rgba(17, 17, 17, 0.08);
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --serif: Georgia, "Times New Roman", serif;
+    @font-face {
+      font-family: "Instrument Sans";
+      src: url("/assets/yqup/instrument-sans-latin-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
     }
 
-    * { box-sizing: border-box; }
+    @font-face {
+      font-family: "Newsreader";
+      src: url("/assets/yqup/newsreader-latin-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 300 700;
+      font-display: swap;
+    }
+
+    :root {
+      color-scheme: dark light;
+      --ink: #11120f;
+      --ink-soft: #4f514b;
+      --paper: #fbfaf6;
+      --paper-warm: #f4f0e8;
+      --night: #080b0a;
+      --hedge: #1c2821;
+      --brass: #c7a35b;
+      --brass-soft: #dfc98f;
+      --line: rgba(17, 18, 15, 0.15);
+      --line-light: rgba(255, 253, 247, 0.18);
+      --white: #fffdf7;
+      --sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+      --serif: "Newsreader", Georgia, serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
 
     html {
       scroll-behavior: smooth;
+      background: var(--night);
     }
 
     body {
@@ -1760,8 +1779,8 @@ ${matomoScriptTagFor(site)}  <style>
       background: var(--paper);
       color: var(--ink);
       font-family: var(--sans);
-      font-size: 16px;
-      line-height: 1.58;
+      font-size: 17px;
+      line-height: 1.55;
       letter-spacing: 0;
     }
 
@@ -1773,7 +1792,8 @@ ${matomoScriptTagFor(site)}  <style>
     p,
     h1,
     h2,
-    h3 {
+    h3,
+    blockquote {
       margin-top: 0;
     }
 
@@ -1785,435 +1805,645 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .site-header {
-      position: sticky;
+      position: absolute;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 10;
-      min-height: 68px;
+      min-height: 82px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      padding: 14px 40px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(247, 245, 239, 0.95);
-      backdrop-filter: blur(12px);
+      padding: 16px clamp(22px, 4vw, 68px);
+      border-bottom: 1px solid rgba(255, 253, 247, 0.14);
+      color: var(--white);
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      color: var(--ink);
-      font-weight: 880;
       text-decoration: none;
     }
 
     .brand-logo {
-      width: 88px;
+      width: 100px;
       height: auto;
       display: block;
-    }
-
-    .hero-logo {
-      width: min(100%, 260px);
-      height: auto;
-      display: block;
-      margin: 0 0 34px;
     }
 
     nav {
       display: flex;
-      flex-wrap: wrap;
       justify-content: flex-end;
-      gap: 8px 22px;
-      color: var(--ink-soft);
-      font-size: 14px;
-      font-weight: 760;
+      gap: 28px;
+      align-items: center;
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 620;
     }
 
     nav a {
       text-decoration: none;
     }
 
-    .hero {
-      padding: 96px 40px 82px;
-      border-bottom: 1px solid var(--line);
-      background:
-        linear-gradient(120deg, rgba(247, 245, 239, 0.98), rgba(255, 255, 255, 0.92)),
-        radial-gradient(circle at 82% 16%, rgba(111, 127, 103, 0.16), transparent 32%),
-        linear-gradient(165deg, transparent 0 62%, rgba(111, 127, 103, 0.13) 62% 64%, transparent 64% 100%);
+    nav a:not(.nav-contact) {
+      opacity: 0.84;
+    }
+
+    nav a:hover,
+    nav a:focus-visible {
+      opacity: 1;
+    }
+
+    .nav-contact {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 18px;
+      border: 1px solid var(--white);
+      border-radius: 6px;
+      background: var(--white);
       color: var(--ink);
+      font-weight: 700;
     }
 
-    .hero .eyebrow,
-    .hero .lead {
-      color: var(--ink-soft);
+    .mobile-menu {
+      display: none;
+      position: relative;
     }
 
-    .hero .field-rule {
-      border-color: rgba(17, 17, 17, 0.18);
-      background:
-        linear-gradient(90deg, transparent 0 12px, rgba(111, 127, 103, 0.28) 12px 13px, transparent 13px 28px);
-      background-size: 28px 100%;
+    .mobile-menu summary {
+      list-style: none;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .mobile-menu summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-menu-panel {
+      position: absolute;
+      top: calc(100% + 14px);
+      right: 0;
+      width: min(270px, calc(100vw - 36px));
+      display: grid;
+      padding: 10px;
+      border: 1px solid var(--line-light);
+      border-radius: 6px;
+      background: rgba(8, 11, 10, 0.98);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+    }
+
+    .mobile-menu-panel a {
+      padding: 12px;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .hero {
+      position: relative;
+      min-height: min(820px, 92vh);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 132px clamp(24px, 5.5vw, 90px) 78px;
+      background: var(--night);
+      color: var(--white);
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.015);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 650px);
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--serif);
+    }
+
+    h1 {
+      max-width: 650px;
+      margin-bottom: 24px;
+      color: var(--white);
+      font-size: clamp(58px, 6.2vw, 96px);
+      font-weight: 540;
+      line-height: 0.93;
+    }
+
+    h2 {
+      margin-bottom: 18px;
+      font-size: clamp(42px, 4vw, 66px);
+      font-weight: 480;
+      line-height: 0.98;
+    }
+
+    h3 {
+      margin-bottom: 12px;
+      font-size: 29px;
+      font-weight: 480;
+      line-height: 1.04;
+    }
+
+    .hero-copy {
+      max-width: 610px;
+      margin-bottom: 0;
+      color: rgba(255, 253, 247, 0.84);
+      font-size: 22px;
+      line-height: 1.5;
     }
 
     .section {
-      padding: 72px 40px;
+      padding: 84px clamp(24px, 5.5vw, 90px);
       border-bottom: 1px solid var(--line);
     }
 
     .section-inner {
-      width: min(100%, 1160px);
+      width: min(100%, 1420px);
       margin: 0 auto;
-    }
-
-    .hero-grid {
-      width: min(100%, 1160px);
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(310px, 0.62fr);
-      gap: 58px;
-      align-items: center;
-      margin: 0 auto;
-    }
-
-    .eyebrow {
-      margin-bottom: 14px;
-      color: var(--sage-dark);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      max-width: 870px;
-      margin-bottom: 24px;
-      font-family: var(--serif);
-      font-size: clamp(48px, 7vw, 92px);
-      line-height: 0.96;
-      font-weight: 700;
-    }
-
-    h2 {
-      max-width: 820px;
-      margin-bottom: 18px;
-      font-family: var(--serif);
-      font-size: 44px;
-      line-height: 1.06;
-      font-weight: 700;
-    }
-
-    h3 {
-      margin-bottom: 10px;
-      font-size: 22px;
-      line-height: 1.16;
-    }
-
-    .lead {
-      max-width: 820px;
-      color: var(--ink-soft);
-      font-size: 21px;
-      line-height: 1.48;
     }
 
     .hero-actions,
     .action-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 14px;
       align-items: center;
-      margin-top: 28px;
+      margin-top: 30px;
     }
 
     .button {
-      min-height: 46px;
+      min-height: 52px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0 17px;
-      border: 1px solid var(--ink);
-      border-radius: 4px;
+      gap: 12px;
+      padding: 0 22px;
+      border: 1px solid currentColor;
+      border-radius: 6px;
       background: transparent;
-      color: var(--ink);
-      font-size: 15px;
-      font-weight: 820;
+      color: inherit;
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 680;
       text-decoration: none;
       white-space: nowrap;
+      transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
     }
 
-    .queue-phrases {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin: 24px 0 0;
-      padding: 0;
-      list-style: none;
+    .button svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
     }
 
-    .queue-phrases li {
-      min-height: 34px;
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 9px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.52);
-      color: var(--ink-soft);
-      font-size: 12px;
-      font-weight: 680;
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-2px);
     }
 
-    .button.primary {
-      background: var(--ink);
-      color: var(--surface);
+    .hero .button.primary,
+    .contact-band .button.primary {
+      border-color: var(--white);
+      background: var(--white);
+      color: var(--ink);
     }
 
-    .hero-aside,
-    .panel,
-    .service-card,
-    .ecosystem-card,
-    .thinking-card {
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
+    .hero .button.secondary,
+    .contact-band .button.secondary {
+      border-color: rgba(255, 253, 247, 0.76);
+      color: var(--white);
     }
 
-    .hero-aside {
-      padding: 28px;
-      background: #111111;
-      color: #f8f7f1;
-      box-shadow: 0 26px 68px rgba(17, 17, 17, 0.16);
+    .decision-band {
+      background: var(--paper);
     }
 
-    .hero-aside .eyebrow {
-      color: #dfe8d9;
+    .decision-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.82fr) minmax(440px, 1.25fr);
+      gap: clamp(46px, 8vw, 130px);
+      align-items: start;
     }
 
-    .hero-aside h2 {
-      margin-bottom: 16px;
-      color: #ffffff;
-      font-size: 34px;
-    }
-
-    .hero-aside p,
-    .hero-aside li {
-      color: rgba(255, 255, 255, 0.78);
+    .decision-layout h2 {
+      max-width: 460px;
+      margin-bottom: 0;
     }
 
     .decision-list {
-      display: grid;
-      gap: 11px;
-      margin: 22px 0 0;
+      margin: 0;
       padding: 0;
       list-style: none;
     }
 
     .decision-list li {
-      padding: 0 0 11px 24px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
       position: relative;
-      font-size: 15px;
-      font-weight: 650;
+      padding: 16px 0 16px 30px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 17px;
+    }
+
+    .decision-list li {
+      font-weight: 520;
     }
 
     .decision-list li::before {
       content: "";
       position: absolute;
       left: 0;
-      top: 0.62em;
-      width: 10px;
-      height: 10px;
-      border: 2px solid var(--sage);
+      top: 24px;
+      width: 8px;
+      height: 8px;
+      border: 1.5px solid var(--brass);
       border-radius: 50%;
     }
 
-    .route-list,
-    .plain-list {
+    .clarity-band {
+      position: relative;
+      overflow: hidden;
+      padding-top: 96px;
+      padding-bottom: 96px;
+      background: var(--paper);
+    }
+
+    .clarity-layout {
       display: grid;
-      gap: 10px;
-      margin: 0;
+      grid-template-columns: minmax(280px, 0.88fr) minmax(520px, 1.42fr) minmax(300px, 0.9fr);
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .clarity-intro {
+      padding-right: clamp(30px, 4vw, 64px);
+    }
+
+    .clarity-intro h2 {
+      max-width: 380px;
+      font-size: clamp(44px, 3.5vw, 58px);
+    }
+
+    .clarity-intro p {
+      max-width: 410px;
+      color: var(--ink-soft);
+      font-size: 18px;
+    }
+
+    .clarity-intro .button {
+      margin-top: 18px;
+      background: var(--night);
+      color: var(--white);
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .principle {
+      min-width: 0;
+      padding: 8px 28px;
+      border-left: 1px solid var(--line);
+    }
+
+    .principle-number,
+    .ecosystem-number,
+    .article-number {
+      display: block;
+      margin-bottom: 26px;
+      color: #a37a2f;
+      font-family: var(--serif);
+      font-size: 16px;
+    }
+
+    .principle p {
+      margin-bottom: 0;
+      color: var(--ink-soft);
+    }
+
+    .clarity-media {
+      min-height: 390px;
+      margin-left: 18px;
+      overflow: hidden;
+    }
+
+    .clarity-media img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: 60% center;
+    }
+
+    .ways-band {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line-light);
+      background: var(--night);
+      color: var(--white);
+    }
+
+    .ways-band::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 0 55%;
+      background: url("${escapeHtml(contactImage)}") center / cover no-repeat;
+      opacity: 0.28;
+      mask-image: linear-gradient(90deg, transparent, #000 32%);
+      pointer-events: none;
+    }
+
+    .ways-band .section-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .ways-intro {
+      max-width: 520px;
+    }
+
+    .ways-intro p {
+      color: rgba(255, 253, 247, 0.72);
+      font-size: 19px;
+    }
+
+    .offer-list {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0;
+      margin: 52px 0 0;
       padding: 0;
       list-style: none;
     }
 
-    .route-list {
-      margin-top: 18px;
+    .offer-list::before {
+      content: "";
+      position: absolute;
+      top: 39px;
+      left: 8px;
+      right: 8px;
+      height: 1px;
+      background: rgba(255, 253, 247, 0.4);
     }
 
-    .route-list a {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 11px 12px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      background: #fbfaf6;
-      color: var(--ink);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    .offer-item {
+      position: relative;
+      min-width: 0;
+      padding: 0 28px 0 0;
+    }
+
+    .offer-number {
+      display: block;
+      height: 54px;
+      color: var(--brass-soft);
+      font-family: var(--serif);
+      font-size: 21px;
+    }
+
+    .offer-number::after {
+      content: "";
+      position: absolute;
+      top: 33px;
+      left: 0;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--brass);
+    }
+
+    .offer-item h3 {
+      min-height: 62px;
+      color: var(--white);
+      font-size: 25px;
+    }
+
+    .offer-item p {
+      margin-bottom: 0;
+      color: rgba(255, 253, 247, 0.68);
+      font-size: 15px;
+    }
+
+    .ways-band .button {
+      margin-top: 42px;
+      border-color: rgba(255, 253, 247, 0.7);
+      color: var(--white);
+    }
+
+    .ecosystem-band {
+      background: var(--paper);
+    }
+
+    .section-kicker {
+      margin: 0 0 14px;
+      color: #916f32;
       font-size: 13px;
-      text-decoration: none;
-      overflow-wrap: anywhere;
-    }
-
-    .proof-panel {
-      display: grid;
-      grid-template-columns: minmax(0, 0.78fr) minmax(300px, 0.52fr);
-      gap: 30px;
-      align-items: center;
-      padding: 28px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
-    }
-
-    .route-list span {
-      color: var(--ink-soft);
-      font-family: var(--sans);
-      font-size: 12px;
-      font-weight: 760;
-      text-align: right;
-    }
-
-    .field-rule {
-      height: 12px;
-      margin: 34px 0 0;
-      border-top: 1px solid var(--line-strong);
-      border-bottom: 1px solid var(--line);
-      background:
-        linear-gradient(90deg, transparent 0 12px, rgba(111, 127, 103, 0.22) 12px 13px, transparent 13px 28px);
-      background-size: 28px 100%;
-    }
-
-    .section-heading {
-      display: grid;
-      grid-template-columns: minmax(0, 0.82fr) minmax(260px, 0.42fr);
-      gap: 36px;
-      align-items: end;
-      margin-bottom: 30px;
-    }
-
-    .section-heading p {
-      color: var(--ink-soft);
-    }
-
-    .system-grid,
-    .services-grid,
-    .ecosystem-grid,
-    .thinking-grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .system-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .services-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .ecosystem-grid {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-    }
-
-    .thinking-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .panel,
-    .service-card,
-    .ecosystem-card,
-    .thinking-card {
-      padding: 22px;
-    }
-
-    .service-card,
-    .ecosystem-card,
-    .thinking-card {
-      min-height: 100%;
-    }
-
-    .panel p,
-    .service-card p,
-    .ecosystem-card p,
-    .thinking-card p {
-      color: var(--ink-soft);
-    }
-
-    .service-label,
-    .ecosystem-label {
-      display: inline-flex;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--sage);
-      color: var(--sage-dark);
-      font-size: 12px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
-    .ecosystem-card a,
-    .thinking-card a {
-      font-weight: 850;
-      text-decoration-thickness: 1px;
+    .section-lead {
+      max-width: 680px;
+      margin-bottom: 0;
+      color: var(--ink-soft);
+      font-size: 19px;
+    }
+
+    .ecosystem-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 54px;
+    }
+
+    .ecosystem-item {
+      min-width: 0;
+      padding: 0 26px;
+      border-left: 1px solid var(--line);
+    }
+
+    .ecosystem-item:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .ecosystem-mark {
+      min-height: 70px;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--hedge);
+      font-family: var(--serif);
+      font-size: clamp(34px, 3.2vw, 52px);
+      line-height: 0.9;
+    }
+
+    .ecosystem-item h3 {
+      margin: 16px 0 5px;
+      font-size: 26px;
+    }
+
+    .ecosystem-item h3 a {
+      text-decoration: none;
+    }
+
+    .ecosystem-item p {
+      margin-bottom: 0;
+      color: var(--ink-soft);
+      font-size: 15px;
     }
 
     .directory-strip {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 22px;
-      padding-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      margin-top: 38px;
+      padding-top: 18px;
       border-top: 1px solid var(--line);
     }
 
     .directory-strip a {
-      min-height: 40px;
-      display: inline-flex;
-      align-items: center;
-      padding: 0 12px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      background: var(--surface);
+      min-width: 0;
+      padding: 0 18px;
+      border-left: 1px solid var(--line);
       color: var(--ink);
       font-size: 14px;
-      font-weight: 780;
+      font-weight: 620;
+      text-align: center;
       text-decoration: none;
     }
 
-    .black-band {
-      background: var(--ink);
-      color: var(--surface);
+    .directory-strip a:first-child {
+      border-left: 0;
     }
 
-    .black-band .eyebrow {
-      color: #d8dfd3;
+    .thinking-band {
+      border-color: var(--line-light);
+      background: #0a0d0c;
+      color: var(--white);
     }
 
-    .black-band .lead,
-    .black-band p {
-      color: rgba(255, 255, 255, 0.76);
+    .thinking-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.68fr) minmax(0, 1.55fr) auto;
+      gap: clamp(38px, 6vw, 92px);
+      align-items: start;
     }
 
-    .black-band .button {
-      border-color: var(--surface);
-      color: var(--surface);
+    .thinking-layout h2 {
+      margin-bottom: 0;
+      color: var(--white);
     }
 
-    .black-band .button.primary {
-      background: var(--surface);
-      color: var(--ink);
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .country-note {
-      border-left: 3px solid var(--sage);
-      padding: 18px 0 18px 20px;
-      color: var(--ink-soft);
+    .article-item {
+      min-width: 0;
+      padding: 0 26px;
+      border-left: 1px solid var(--line-light);
+    }
+
+    .article-item:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .article-item h3 {
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 253, 247, 0.42);
+      color: var(--white);
+      font-size: 25px;
+    }
+
+    .article-item h3 a {
+      text-decoration: none;
+    }
+
+    .article-item p {
+      margin-bottom: 0;
+      color: rgba(255, 253, 247, 0.68);
       font-size: 15px;
+    }
+
+    .thinking-link {
+      align-self: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--brass-soft);
+      font-weight: 650;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .thinking-link svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .contact-band {
+      position: relative;
+      min-height: 560px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 92px clamp(24px, 5.5vw, 90px);
+      background: var(--night);
+      color: var(--white);
+    }
+
+    .contact-media {
+      position: absolute;
+      inset: 0;
+    }
+
+    .contact-media img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .contact-inner {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 1420px);
+      margin: 0 auto;
+    }
+
+    .contact-copy {
+      width: min(100%, 620px);
+    }
+
+    .contact-copy h2 {
+      color: var(--white);
+    }
+
+    .contact-copy p {
+      color: rgba(255, 253, 247, 0.84);
+      font-size: 20px;
     }
 
     footer {
@@ -2221,65 +2451,222 @@ ${matomoScriptTagFor(site)}  <style>
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 24px;
-      padding: 30px 40px;
-      background: var(--paper);
-      color: var(--ink-soft);
+      padding: 24px clamp(24px, 5.5vw, 90px);
+      border-top: 1px solid var(--line-light);
+      background: var(--night);
+      color: rgba(255, 253, 247, 0.66);
       font-size: 14px;
     }
 
-    footer strong {
-      color: var(--ink);
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 22px;
     }
 
-    @media (max-width: 1080px) {
-      .hero-grid,
-      .section-heading,
-      .proof-panel {
-        grid-template-columns: 1fr;
+    .footer-logo {
+      width: 108px;
+      height: auto;
+      display: block;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-inner {
+        animation: hero-copy-in 720ms ease-out both;
+      }
+
+      .hero-media img {
+        animation: hero-breathe 16s 1s ease-in-out infinite;
+      }
+    }
+
+    @keyframes hero-copy-in {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+    }
+
+    @keyframes hero-breathe {
+      50% {
+        transform: scale(1.025);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+    @media (max-width: 1180px) {
+      nav {
+        gap: 18px;
+      }
+
+      .clarity-layout {
+        grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+      }
+
+      .clarity-media {
+        grid-column: 1 / -1;
+        min-height: 340px;
+        margin: 46px 0 0;
       }
 
       .ecosystem-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        row-gap: 46px;
       }
 
-      .thinking-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 820px) {
-      .site-header {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 14px 22px;
+      .ecosystem-item:nth-child(4) {
+        border-left: 0;
       }
 
-      nav {
-        justify-content: flex-start;
-      }
-
-      .hero,
-      .section {
-        padding: 56px 22px;
-      }
-
-      .system-grid,
-      .services-grid,
-      .ecosystem-grid,
-      .thinking-grid {
+      .thinking-layout {
         grid-template-columns: 1fr;
       }
 
-      h2 {
-        font-size: 34px;
-      }
-
-      .lead {
-        font-size: 19px;
+      .thinking-link {
+        align-self: start;
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 900px) {
+      .desktop-nav {
+        display: none;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .hero {
+        min-height: 760px;
+        align-items: flex-start;
+        padding-top: 138px;
+      }
+
+      .hero-inner {
+        width: min(100%, 560px);
+      }
+
+      h1 {
+        font-size: clamp(56px, 10vw, 78px);
+      }
+
+      .decision-layout,
+      .clarity-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .decision-layout {
+        gap: 34px;
+      }
+
+      .principles {
+        margin-top: 44px;
+      }
+
+      .offer-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: 44px;
+      }
+
+      .offer-list::before {
+        display: none;
+      }
+
+      .offer-item {
+        padding: 0 26px 0 0;
+        border-top: 1px solid var(--line-light);
+        padding-top: 18px;
+      }
+
+      .offer-number {
+        height: auto;
+        margin-bottom: 12px;
+      }
+
+      .offer-number::after {
+        display: none;
+      }
+
+      .offer-item h3 {
+        min-height: 0;
+      }
+
+      .directory-strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        row-gap: 18px;
+      }
+
+      .directory-strip a:nth-child(4) {
+        border-left: 0;
+      }
+
+      .article-grid {
+        grid-template-columns: 1fr;
+        gap: 34px;
+      }
+
+      .article-item,
+      .article-item:first-child {
+        padding: 0;
+        border-left: 0;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        font-size: 16px;
+      }
+
+      .site-header {
+        min-height: 70px;
+        padding: 12px 18px;
+      }
+
+      .brand-logo {
+        width: 82px;
+      }
+
+      .hero {
+        min-height: 790px;
+        padding: 118px 18px 48px;
+      }
+
+      .hero-media img {
+        object-position: center bottom;
+      }
+
+      h1 {
+        max-width: 360px;
+        font-size: 58px;
+      }
+
+      h2 {
+        font-size: 44px;
+      }
+
+      .hero-copy {
+        max-width: 350px;
+        font-size: 18px;
+      }
+
+      .section {
+        padding: 66px 18px;
+      }
+
       .button {
         width: 100%;
       }
@@ -2290,17 +2677,68 @@ ${matomoScriptTagFor(site)}  <style>
         flex-direction: column;
       }
 
-      .queue-phrases li {
-        width: 100%;
+      .principles,
+      .offer-list,
+      .ecosystem-grid,
+      .directory-strip {
+        grid-template-columns: 1fr;
       }
 
-      .route-list a {
+      .principle,
+      .principle:first-child,
+      .ecosystem-item,
+      .ecosystem-item:first-child,
+      .ecosystem-item:nth-child(4) {
+        padding: 28px 0;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .principle:first-child,
+      .ecosystem-item:first-child {
+        border-top: 0;
+      }
+
+      .clarity-media {
+        min-height: 280px;
+      }
+
+      .ways-band::after {
+        inset: 0;
+        opacity: 0.16;
+        mask-image: linear-gradient(180deg, transparent 0, #000 45%);
+      }
+
+      .offer-item {
+        padding-right: 0;
+      }
+
+      .directory-strip a,
+      .directory-strip a:nth-child(4) {
+        padding: 10px 0;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        text-align: left;
+      }
+
+      .contact-band {
+        min-height: 620px;
+        align-items: flex-start;
+        padding: 72px 18px;
+      }
+
+      .contact-media img {
+        object-position: 58% center;
+      }
+
+      .contact-copy {
+        width: min(100%, 360px);
+      }
+
+      footer,
+      .footer-brand {
         align-items: flex-start;
         flex-direction: column;
-      }
-
-      .route-list span {
-        text-align: left;
       }
     }
   </style>
@@ -2310,132 +2748,101 @@ ${matomoScriptTagFor(site)}  <style>
     <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
       <img class="brand-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)}">
     </a>
-    <nav aria-label="Primary navigation">
+    <nav class="desktop-nav" aria-label="Primary navigation">
       <a href="#system-sites">Board work</a>
       <a href="#consulting">Ways to work</a>
       <a href="#ecosystem">YQUP world</a>
       <a href="#thinking">Thinking</a>
-      <a href="${escapeHtml(navHref)}"${funnelAttrsFor(site, "nav_advisory")}>Contact</a>
+      <a class="nav-contact" href="${escapeHtml(navHref)}"${funnelAttrsFor(site, "nav_advisory")}>Contact</a>
     </nav>
+    <details class="mobile-menu">
+      <summary>Menu</summary>
+      <nav class="mobile-menu-panel" aria-label="Mobile navigation">
+        <a href="#system-sites">Board work</a>
+        <a href="#consulting">Ways to work</a>
+        <a href="#ecosystem">YQUP world</a>
+        <a href="#thinking">Thinking</a>
+        <a href="${escapeHtml(navHref)}"${funnelAttrsFor(site, "nav_advisory")}>Contact</a>
+      </nav>
+    </details>
   </header>
 
   <main>
     <section class="hero" aria-labelledby="page-title">
-      <div class="hero-grid">
-        <div>
-          <p class="eyebrow">YQUP &middot; ADVISORY</p>
-          <h1 id="page-title">${escapeHtml(site.heading)}</h1>
-          <p class="lead">${escapeHtml(site.summary)}</p>
-          <div class="hero-actions">
-            <a class="button primary" href="${escapeHtml(heroHref)}"${funnelAttrsFor(site, "hero_discuss_advisory")}>${escapeHtml(site.primary_action_label || "Discuss advisory")}</a>
-            <a class="button" href="#consulting">See ways to work</a>
-          </div>
-          <ul class="queue-phrases" aria-label="Why queue up prompts">
-            ${queueUpPhrases.map((phrase) => `<li>${escapeHtml(phrase)}</li>`).join("")}
-          </ul>
-          <div class="field-rule" aria-hidden="true"></div>
+      <picture class="hero-media" aria-hidden="true">
+        <source media="(max-width: 620px)" srcset="${escapeHtml(heroImageMobile)}">
+        <img src="${escapeHtml(heroImage)}" alt="" width="1672" height="941" fetchpriority="high">
+      </picture>
+      <div class="hero-inner">
+        <h1 id="page-title">${escapeHtml(site.heading)}</h1>
+        <p class="hero-copy">${escapeHtml(site.summary)}</p>
+        <div class="hero-actions">
+          <a class="button primary" href="${escapeHtml(heroHref)}"${funnelAttrsFor(site, "hero_discuss_advisory")}>${escapeHtml(site.primary_action_label || "Discuss advisory")}</a>
+          <a class="button secondary" href="#consulting">See ways to work</a>
         </div>
-        <aside class="hero-aside" aria-label="Board advisory focus">
-          <p class="eyebrow">Board-level help</p>
-          <h2>Bring the decision that is stuck.</h2>
-          <p>YQUP is useful when the demo is impressive but the organisation still needs a clear answer: approve it, narrow it, stop it, fund it, govern it, or turn it into normal work.</p>
-          <ul class="decision-list">
-            ${decisionQuestions.map((question) => `<li>${escapeHtml(question)}</li>`).join("")}
-          </ul>
-        </aside>
       </div>
     </section>
 
-    <section class="section" id="system-sites">
-      <div class="section-inner">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Board work</p>
-            <h2>Make AI work visible enough to decide on.</h2>
-          </div>
-          <p>The useful work is not the website. It is the clarity around ownership, risk, evidence, cost, cadence and what happens after the meeting.</p>
+    <section class="section decision-band" id="system-sites">
+      <div class="section-inner decision-layout">
+        <h2>Bring the decision that is stuck.</h2>
+        <ul class="decision-list">
+          ${decisionQuestions.map((question) => `<li>${escapeHtml(question)}</li>`).join("")}
+        </ul>
+      </div>
+    </section>
+
+    <section class="section clarity-band">
+      <div class="section-inner clarity-layout">
+        <div class="clarity-intro">
+          <h2>Make AI work visible enough to decide on.</h2>
+          <p>The useful work is the clarity around ownership, risk, evidence, cost, cadence and what happens after the meeting.</p>
+          <a class="button" href="${escapeHtml(systemHref)}"${funnelAttrsFor(site, "system_site_build")}>Talk through a live decision ${arrowIcon}</a>
         </div>
-        <div class="system-grid">
-          ${systemNotes.map((item) => `<article class="panel">
+        <div class="principles">
+          ${systemNotes.map((item, index) => `<article class="principle">
+            <span class="principle-number">${String(index + 1).padStart(2, "0")}.</span>
             <h3>${escapeHtml(item.title)}</h3>
             <p>${escapeHtml(item.body)}</p>
           </article>`).join("")}
         </div>
-        <div class="action-row">
-          <a class="button primary" href="${escapeHtml(systemHref)}"${funnelAttrsFor(site, "system_site_build")}>Talk through a live decision</a>
-          <a class="button" href="#contact">Contact Tony</a>
+        <div class="clarity-media">
+          <img src="${escapeHtml(decisionImage)}" alt="An ivory decision brief with a hedgerow branch beside an English-country view." width="1536" height="1024" loading="lazy" decoding="async">
         </div>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="proof-title">
+    <section class="section ways-band" id="consulting">
       <div class="section-inner">
-        <div class="proof-panel">
-          <div>
-            <p class="eyebrow">Quiet discipline underneath</p>
-            <h2 id="proof-title">When the work needs a record, YQUP leaves one.</h2>
-            <p class="lead">Some clients need a public page, some need a controlled briefing, and some simply need a better decision trail. The point is the same: people can understand it, and their assistants can find the right context later.</p>
-          </div>
-          <ul class="route-list" aria-label="Readable public routes">
-            ${publicFiles.map((item) => `<li><a href="${escapeHtml(item.path)}"><code>${escapeHtml(item.path)}</code><span>${escapeHtml(item.label)}</span></a></li>`).join("")}
-          </ul>
+        <div class="ways-intro">
+          <h2>Ways to work.</h2>
+          <p>YQUP is practical advisory for boards, CEOs and operators who need a clearer decision, a more honest operating picture or a calm outside view.</p>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="consulting">
-      <div class="section-inner">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Where YQUP helps</p>
-            <h2>Consulting for boards, CEOs, operators, and agentic systems.</h2>
-          </div>
-          <p class="country-note">A calm English-country bias: walk the ground, name the boundary, inspect the evidence, and leave the work clearer than you found it.</p>
-        </div>
-        <div class="services-grid">
-          ${sections.map((item) => `<article class="service-card">
-            <span class="service-label">${escapeHtml(item.title)}</span>
+        <ol class="offer-list">
+          ${offers.map((item, index) => `<li class="offer-item">
+            <span class="offer-number">${String(index + 1).padStart(2, "0")}.</span>
+            <h3>${escapeHtml(item.label)}</h3>
             <p>${escapeHtml(item.body)}</p>
-          </article>`).join("")}
-        </div>
+          </li>`).join("")}
+        </ol>
+        <a class="button" href="${escapeHtml(heroHref)}"${funnelAttrsFor(site, "hero_discuss_advisory")}>Discuss advisory ${arrowIcon}</a>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section ecosystem-band" id="ecosystem">
       <div class="section-inner">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Ways to work</p>
-            <h2>Advisory that turns unclear AI work into owned operating moves.</h2>
-          </div>
-          <p>Use YQUP for a focused board decision, an operating-model review, a system-site build, a practical workshop, a town hall, or ongoing outside counsel.</p>
-        </div>
-        <div class="services-grid">
-          ${offers.map((item) => `<article class="service-card">
-            <span class="service-label">${escapeHtml(item.label)}</span>
-            <h3>${escapeHtml(item.title)}</h3>
-            <p>${escapeHtml(item.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="ecosystem">
-      <div class="section-inner">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">YQUP ecosystem</p>
-            <h2>Owned sites for the work YQUP is building around.</h2>
-          </div>
-          <p>Each site is a doorway for a specific agentic-system question: board mandate, orchestration, judgement, training, operations, governance, funding, or the agent profile itself.</p>
-        </div>
+        <p class="section-kicker">YQUP world</p>
+        <h2>A connected body of work.</h2>
+        <p class="section-lead">Each YQUP site explores one part of making agentic work useful, governed and visible.</p>
         <div class="ecosystem-grid">
-          ${featured.map((item) => {
+          ${featured.map((item, index) => {
             const href = trackedOutboundUrlFor(site, item.url, item.content, item.campaign) || item.url;
-            return `<article class="ecosystem-card">
-              <span class="ecosystem-label">${escapeHtml(item.label)}</span>
+            const mark = ["TW", "CAO", "O", "S", "SAS"][index] || item.name.slice(0, 2).toUpperCase();
+            return `<article class="ecosystem-item">
+              <span class="ecosystem-number">${String(index + 1).padStart(2, "0")}.</span>
+              <div class="ecosystem-mark" aria-hidden="true">${escapeHtml(mark)}</div>
               <h3><a href="${escapeHtml(href)}"${outboundAttrsFor(site, item.content, "source_to_yqup_ecosystem", item.campaign)}>${escapeHtml(item.name)}</a></h3>
-              <p>${escapeHtml(item.body)}</p>
+              <p>${escapeHtml(item.label)}</p>
             </article>`;
           }).join("")}
         </div>
@@ -2448,46 +2855,46 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
-    <section class="section" id="thinking">
-      <div class="section-inner">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Thinking behind the work</p>
-            <h2>Writing and research that shapes the YQUP operating view.</h2>
-          </div>
-          <p>These pieces explain the judgement behind YQUP: management literacy, governance slop, agentic language, trigger systems, attention, and getting practical work done with agents.</p>
-        </div>
-        <div class="thinking-grid">
-          ${thinkingLinks.map((item) => {
+    <section class="section thinking-band" id="thinking">
+      <div class="section-inner thinking-layout">
+        <h2>Thinking behind the work.</h2>
+        <div class="article-grid">
+          ${thinkingLinks.slice(0, 3).map((item, index) => {
             const href = tonywoodWritingUrlFor(site, item.url, item.content) || item.url;
-            return `<article class="thinking-card">
+            return `<article class="article-item">
+              <span class="article-number">${String(index + 1).padStart(2, "0")}.</span>
               <h3><a href="${escapeHtml(href)}"${funnelAttrsFor(site, item.content, "source_to_tonywood_writing")}>${escapeHtml(item.title)}</a></h3>
               <p>${escapeHtml(item.body)}</p>
             </article>`;
           }).join("")}
         </div>
+        <a class="thinking-link" href="${escapeHtml(tonywoodHomeHref)}"${outboundAttrsFor(site, "thinking_tonywood_home", "source_to_tonywood_home", "yqup_to_tonywood")}>Read more on Tonywood.org ${arrowIcon}</a>
       </div>
     </section>
 
-    <section class="section black-band" id="contact">
-      <div class="section-inner">
-        <p class="eyebrow">Bring a live question</p>
-        <h2>Use YQUP when you need AI clarity that agents and people can both work from.</h2>
-        <p class="lead">Start with the real decision: what needs to be understood, owned, governed, published, stopped, funded, explained, or turned into an operating rhythm.</p>
+    <section class="contact-band" id="contact">
+      <picture class="contact-media" aria-hidden="true">
+        <img src="${escapeHtml(contactImage)}" alt="" width="1672" height="941" loading="lazy" decoding="async">
+      </picture>
+      <div class="contact-inner">
+        <div class="contact-copy">
+          <h2>Bring the live question.</h2>
+          <p>Start with the decision that needs to be understood, owned, governed, stopped, funded or turned into an operating rhythm.</p>
+        </div>
         <div class="action-row">
-          <a class="button primary" href="${escapeHtml(finalHref)}"${funnelAttrsFor(site, "final_consulting_enquiry")}>Contact through Tonywood advisory</a>
-          <a class="button" href="${escapeHtml(tonywoodHomeHref)}"${outboundAttrsFor(site, "final_tonywood_home", "source_to_tonywood_home", "yqup_to_tonywood")}>Read Tonywood.org</a>
+          <a class="button primary" href="${escapeHtml(finalHref)}"${funnelAttrsFor(site, "final_consulting_enquiry")}>Contact Tony ${arrowIcon}</a>
+          <a class="button secondary" href="${escapeHtml(tonywoodHomeHref)}"${outboundAttrsFor(site, "final_tonywood_home", "source_to_tonywood_home", "yqup_to_tonywood")}>Read Tonywood.org ${arrowIcon}</a>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div>
-      <strong>${escapeHtml(site.name)}</strong>
-      <div>${escapeHtml(site.domain)}</div>
+    <div class="footer-brand">
+      <img class="footer-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)}">
+      <span>YQUP Ltd &middot; London and the English countryside</span>
     </div>
-    <div>Agent-readable system sites, human-visible governance, and practical AI advisory.</div>
+    <div>Copyright (c) 2026 YQUP Ltd</div>
   </footer>
 </body>
 </html>

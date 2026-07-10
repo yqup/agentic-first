@@ -43,12 +43,11 @@ Preserved:
 - `/favicon.svg`
 - `/assets/yqup-logo.svg`
 
-## Next site-change task
+## LinkedIn/Open Graph status
 
-Add LinkedIn/Open Graph preview metadata for `https://yqup.com/` before or
-during the next YQUP site change. This should include `og:title`,
-`og:description`, `og:url`, `og:image`, Twitter card tags, and a 1200 x 627
-preview image that LinkedIn can use without manual correction.
+LinkedIn/Open Graph preview metadata is now generated for `https://yqup.com/`.
+The page includes `og:title`, `og:description`, `og:url`, `og:image`, Twitter
+card tags, and a 1200 x 627 preview image at `/assets/og-image.png`.
 
 Canonical task note:
 
@@ -177,3 +176,69 @@ http://127.0.0.1:8338/
 Desktop and mobile screenshots confirmed the first viewport no longer exposes
 the technical route panel and the old `Small public surfaces for serious work`
 phrase is absent.
+
+## Modern British Advisory Refresh - 2026-07-10
+
+The YQUP homepage now uses the approved Modern British advisory design. It
+borrows Orchistra's visual confidence and dimensional finish while presenting
+YQUP as a human, board-level advisory business rather than a software product.
+
+Visual changes:
+
+- Added a cinematic glasshouse boardroom hero with the original YQUP logo.
+- Added the open editorial `Bring the decision that is stuck` section.
+- Rebuilt the decision principles as ruled columns beside a photographic brief.
+- Rebuilt `Ways to work` as a five-stage dark service ledger.
+- Replaced ecosystem and article cards with an editorial index and magazine rail.
+- Added a countryside contact scene and restrained YQUP Ltd footer.
+- Added self-hosted Instrument Sans and Newsreader fonts using the existing
+  licensed font sources already shipped with Orchistra.
+- Added subtle hero entrance and image movement with a reduced-motion fallback.
+- Added a compact mobile navigation and dedicated mobile hero image.
+- Removed visible technical route links from the commercial homepage while
+  preserving every direct public interface.
+
+Production assets live under `top-level-sites/assets/yqup/` and contain no
+people, private data, internal system details, readable client material, or
+technology screenshots. Page copy and controls remain native HTML.
+
+Public interfaces preserved:
+
+- `/`
+- `/healthz`
+- `/llms.txt`
+- `/.well-known/agentic-profile.json`
+- `/matomo-config.json`
+- `/favicon.svg`
+- `/assets/og-image.png`
+- `/assets/yqup-logo.svg`
+
+Analytics remains Matomo site ID `5`; existing Tonywood advisory, ecosystem,
+directory, and writing campaign parameters remain in place.
+
+Local verification:
+
+```bash
+node --check top-level-sites/build-sites.mjs
+node top-level-sites/build-sites.mjs
+node top-level-sites/scripts/check-social-previews.mjs
+git diff --check
+```
+
+Rendered QA used `http://127.0.0.1:8338/` at 1600 x 1000 and 390 x 844.
+Checks covered first-viewport balance, full-page section rhythm, mobile menu,
+CTA navigation, console errors, horizontal overflow, lazy image loading, and
+reduced-motion CSS. The implementation was compared directly with all three
+approved concept images.
+
+Deployment release:
+
+```text
+top-level-sites-20260710T203436Z
+```
+
+Expected ANI receipt:
+
+```text
+/srv/deploy-state/top-level-sites/receipts/top-level-sites-20260710T203436Z.yaml
+```
