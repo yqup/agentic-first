@@ -242,3 +242,28 @@ Expected ANI receipt:
 ```text
 /srv/deploy-state/top-level-sites/receipts/top-level-sites-20260710T203436Z.yaml
 ```
+
+## Navigation Contrast Fix - 2026-07-10
+
+The desktop navigation now sits on a restrained translucent charcoal header
+with a light blur. Ordinary navigation links use full opacity and a subtle text
+shadow, keeping `Board work` and its neighbouring labels readable as they cross
+the brighter glasshouse windows. The hero image, original YQUP logo, copy,
+campaign tracking, Matomo site ID `5`, and public machine-readable routes are
+unchanged.
+
+Rendered QA covered the reported 1106 x 898 desktop viewport and the 390 x 844
+mobile viewport. The compact mobile header and first-viewport layout remain
+clear with no overflow.
+
+Deployment release:
+
+```text
+top-level-sites-20260710T210726Z
+```
+
+Expected ANI receipt:
+
+```text
+/srv/deploy-state/top-level-sites/receipts/top-level-sites-20260710T210726Z.yaml
+```

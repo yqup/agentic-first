@@ -1817,6 +1817,9 @@ ${matomoScriptTagFor(site)}  <style>
       gap: 24px;
       padding: 16px clamp(22px, 4vw, 68px);
       border-bottom: 1px solid rgba(255, 253, 247, 0.14);
+      background: rgba(8, 11, 10, 0.74);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
       color: var(--white);
     }
 
@@ -1847,7 +1850,8 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     nav a:not(.nav-contact) {
-      opacity: 0.84;
+      opacity: 1;
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
     }
 
     nav a:hover,
