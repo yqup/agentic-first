@@ -10022,6 +10022,10 @@ function orchistraPageFor(site) {
   const quoteSourceStage = fieldNote.quote_source_stage || "source_to_shepherd";
   const quoteSourceContent = fieldNote.quote_source_content || "field_quote_shepherd";
   const quoteSourceHref = trackedOutboundUrlFor(site, quoteSourceUrl, quoteSourceContent, quoteSourceCampaign) || quoteSourceUrl;
+  const heroBackgroundImage = site.hero_background_image || "/assets/orchistra/hero-conservatory.webp";
+  const heroBackgroundImageMobile = site.hero_background_image_mobile || heroBackgroundImage;
+  const heroProductImage = site.hero_product_image || "/assets/orchistra/hero-console.webp";
+  const heroProductImageMobile = site.hero_product_image_mobile || heroProductImage;
 
   return `<!doctype html>
 <html lang="en">
@@ -10031,7 +10035,27 @@ function orchistraPageFor(site) {
   <title>${escapeHtml(site.title || site.name)}</title>
   <meta name="description" content="${escapeHtml(site.summary)}">
 ${socialMetaTagsFor(site)}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="${escapeHtml(heroBackgroundImage)}" as="image" type="image/webp">
+  <link rel="preload" href="${escapeHtml(heroProductImage)}" as="image" type="image/webp">
+  <link rel="preload" href="/assets/orchistra/instrument-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/orchistra/newsreader-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
 ${matomoScriptTagFor(site)}  <style>
+    @font-face {
+      font-family: "Instrument Sans";
+      src: url("/assets/orchistra/instrument-sans-latin-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Newsreader";
+      src: url("/assets/orchistra/newsreader-latin-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
+
     :root {
       color-scheme: light;
       --ink: #171512;
@@ -10049,9 +10073,10 @@ ${matomoScriptTagFor(site)}  <style>
       --panel: rgba(255, 250, 242, 0.9);
       --line: rgba(23, 21, 18, 0.16);
       --line-light: rgba(255, 253, 247, 0.18);
-      --shadow: 0 18px 55px rgba(23, 21, 18, 0.14);
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --serif: Georgia, "Times New Roman", serif;
+      --shadow: 0 24px 70px rgba(23, 21, 18, 0.12);
+      --shadow-deep: 0 50px 120px rgba(0, 0, 0, 0.46);
+      --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Newsreader", Georgia, "Times New Roman", serif;
     }
 
     * {
@@ -10084,22 +10109,26 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .site-header {
-      min-height: 68px;
+      position: absolute;
+      inset: 0 0 auto;
+      z-index: 20;
+      min-height: 76px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 28px;
-      padding: 14px 40px;
-      border-bottom: 1px solid var(--line-light);
-      background: var(--hedge);
+      padding: 18px clamp(24px, 4vw, 72px);
+      border-bottom: 1px solid rgba(255, 253, 247, 0.12);
+      background: rgba(8, 13, 12, 0.74);
       color: var(--white);
+      backdrop-filter: blur(20px) saturate(1.08);
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      font-weight: 860;
+      font-weight: 700;
       text-decoration: none;
     }
 
@@ -10109,7 +10138,7 @@ ${matomoScriptTagFor(site)}  <style>
       display: grid;
       place-items: center;
       border: 1px solid rgba(255, 253, 247, 0.72);
-      border-radius: 10px;
+      border-radius: 8px;
       background: var(--paper);
       color: var(--hedge);
       font-size: 20px;
@@ -10120,28 +10149,114 @@ ${matomoScriptTagFor(site)}  <style>
     nav {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       justify-content: flex-end;
-      gap: 8px 22px;
+      gap: 8px 26px;
       font-size: 14px;
-      font-weight: 780;
+      font-weight: 600;
     }
 
-    nav a {
+    nav a,
+    .more-nav summary {
+      position: relative;
       text-decoration: none;
+      cursor: pointer;
+    }
+
+    nav > a::after,
+    .more-nav summary::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: -8px;
+      left: 0;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 180ms ease;
+    }
+
+    nav > a:hover::after,
+    nav > a:focus-visible::after,
+    .more-nav summary:hover::after,
+    .more-nav summary:focus-visible::after {
+      transform: scaleX(1);
+    }
+
+    .more-nav {
+      position: relative;
+    }
+
+    .more-nav summary {
+      list-style: none;
+    }
+
+    .more-nav summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .more-nav-panel {
+      position: absolute;
+      top: calc(100% + 18px);
+      right: 0;
+      width: 210px;
+      display: grid;
+      gap: 2px;
+      padding: 8px;
+      border: 1px solid rgba(255, 253, 247, 0.16);
+      border-radius: 8px;
+      background: rgba(11, 16, 15, 0.96);
+      box-shadow: var(--shadow-deep);
+      backdrop-filter: blur(20px);
+    }
+
+    .more-nav-panel a {
+      padding: 9px 10px;
+      border-radius: 6px;
+      color: rgba(255, 253, 247, 0.76);
+    }
+
+    .more-nav-panel a:hover,
+    .more-nav-panel a:focus-visible {
+      background: rgba(255, 253, 247, 0.08);
+      color: var(--white);
+    }
+
+    .mobile-primary {
+      display: none;
     }
 
     .hero {
       position: relative;
-      min-height: 78svh;
+      min-height: clamp(690px, 78svh, 790px);
       display: grid;
-      align-items: end;
-      padding: 72px 40px 92px;
+      align-items: center;
+      padding: 148px clamp(24px, 6vw, 96px) 98px;
       overflow: hidden;
-      background:
-        linear-gradient(90deg, rgba(23, 21, 18, 0.96), rgba(23, 21, 18, 0.72) 42%, rgba(23, 21, 18, 0.18) 78%),
-        linear-gradient(135deg, #171512 0%, #20352c 46%, #d2a84b 112%);
+      background-color: #0b100f;
+      background-image: url("${escapeHtml(heroBackgroundImage)}");
+      background-position: center;
+      background-size: cover;
       color: var(--white);
       isolation: isolate;
+    }
+
+    .hero-product {
+      position: absolute;
+      z-index: 1;
+      top: 132px;
+      right: clamp(-120px, -3vw, -28px);
+      width: min(62vw, 980px);
+      margin: 0;
+      filter: drop-shadow(0 54px 90px rgba(0, 0, 0, 0.52));
+      mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 94%, transparent 100%);
+    }
+
+    .hero-product img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
     .console-stage {
@@ -10643,16 +10758,17 @@ ${matomoScriptTagFor(site)}  <style>
       content: "";
       position: absolute;
       inset: 0;
-      z-index: -1;
+      z-index: 0;
       background:
-        linear-gradient(90deg, rgba(23, 21, 18, 0.96), rgba(23, 21, 18, 0.78) 44%, rgba(23, 21, 18, 0.22) 78%),
-        linear-gradient(180deg, rgba(23, 21, 18, 0.08), rgba(23, 21, 18, 0.58));
+        linear-gradient(90deg, rgba(6, 10, 9, 0.54), transparent 50%),
+        linear-gradient(180deg, rgba(6, 10, 9, 0.08), rgba(6, 10, 9, 0.34));
+      pointer-events: none;
     }
 
     .hero-inner {
       position: relative;
-      z-index: 1;
-      width: min(100%, 760px);
+      z-index: 2;
+      width: min(100%, 620px);
     }
 
     .eyebrow {
@@ -10683,33 +10799,37 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     h1 {
-      max-width: 11ch;
-      margin-bottom: 22px;
-      font-size: 92px;
-      line-height: 0.94;
-      font-weight: 920;
+      max-width: 9ch;
+      margin-bottom: 24px;
+      font-family: var(--serif);
+      font-size: clamp(76px, 9vw, 132px);
+      line-height: 0.88;
+      font-weight: 500;
     }
 
     h2 {
       max-width: 900px;
       margin-bottom: 18px;
-      font-size: 52px;
-      line-height: 1.02;
-      font-weight: 900;
+      font-family: var(--serif);
+      font-size: clamp(42px, 5vw, 64px);
+      line-height: 0.98;
+      font-weight: 500;
     }
 
     h3 {
       margin-bottom: 10px;
-      font-size: 22px;
+      font-family: var(--serif);
+      font-size: 24px;
       line-height: 1.18;
+      font-weight: 550;
     }
 
     .hero-copy {
       max-width: 680px;
       margin: 0;
       color: rgba(255, 253, 247, 0.88);
-      font-size: 22px;
-      line-height: 1.46;
+      font-size: 21px;
+      line-height: 1.52;
     }
 
     .hero-actions,
@@ -10728,8 +10848,10 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 12px 18px;
       border: 1px solid currentColor;
       border-radius: 8px;
-      font-weight: 820;
+      font-size: 15px;
+      font-weight: 650;
       text-decoration: none;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
     }
 
     .button.primary {
@@ -10740,6 +10862,17 @@ ${matomoScriptTagFor(site)}  <style>
 
     .button.secondary {
       color: var(--white);
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2);
+    }
+
+    :focus-visible {
+      outline: 3px solid #88b8ff;
+      outline-offset: 4px;
     }
 
     .section {
@@ -10754,60 +10887,70 @@ ${matomoScriptTagFor(site)}  <style>
     .outcome-band {
       position: relative;
       z-index: 2;
-      margin-top: -62px;
-      padding: 0 40px 40px;
+      margin-top: 0;
+      padding: 0 clamp(24px, 4vw, 64px);
+      border-top: 1px solid rgba(255, 253, 247, 0.12);
+      border-bottom: 1px solid rgba(255, 253, 247, 0.12);
+      background: #0b100f;
+      color: var(--white);
     }
 
     .summary-strip {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
+      gap: 0;
     }
 
     .metric {
       min-width: 0;
-      min-height: 146px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 250, 242, 0.96);
-      box-shadow: var(--shadow);
+      min-height: 176px;
+      padding: 36px 30px 34px;
+      border-right: 1px solid rgba(255, 253, 247, 0.16);
+      background: transparent;
+    }
+
+    .metric:first-child {
+      border-left: 1px solid rgba(255, 253, 247, 0.16);
     }
 
     .metric strong {
       display: block;
-      max-width: 10ch;
+      max-width: 13ch;
       margin-bottom: 10px;
-      color: var(--ink);
-      font-size: 25px;
+      color: var(--white);
+      font-family: var(--serif);
+      font-size: 27px;
       line-height: 1.05;
-      font-weight: 900;
+      font-weight: 520;
     }
 
     .metric span {
       display: block;
-      color: var(--ink-soft);
+      color: rgba(255, 253, 247, 0.68);
       font-size: 15px;
       line-height: 1.42;
-      font-weight: 650;
+      font-weight: 450;
     }
 
     .service-flow-band {
-      padding-top: 42px;
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 250, 242, 0.62);
+      padding-top: 92px;
+      padding-bottom: 92px;
+      border-top: 1px solid rgba(255, 253, 247, 0.12);
+      border-bottom: 1px solid rgba(255, 253, 247, 0.12);
+      background: #0b100f;
+      color: var(--white);
     }
 
     .field-note-band {
-      padding-top: 50px;
+      padding-top: 96px;
+      padding-bottom: 96px;
       background: var(--paper);
     }
 
     .field-note {
       display: grid;
       grid-template-columns: minmax(300px, 0.92fr) minmax(0, 1.08fr);
-      gap: 42px;
+      gap: clamp(42px, 6vw, 88px);
       align-items: center;
     }
 
@@ -10822,7 +10965,7 @@ ${matomoScriptTagFor(site)}  <style>
       object-fit: cover;
       border: 1px solid var(--line);
       border-radius: 8px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 32px 80px rgba(23, 21, 18, 0.18);
     }
 
     .field-note-copy p:not(.eyebrow) {
@@ -10835,11 +10978,11 @@ ${matomoScriptTagFor(site)}  <style>
     .field-quote {
       max-width: 720px;
       margin: 24px 0 0;
-      padding: 22px;
-      border-left: 6px solid var(--gold);
-      background: var(--white);
+      padding: 22px 0 8px 24px;
+      border-left: 2px solid var(--gold);
+      background: transparent;
       color: var(--ink);
-      box-shadow: 0 12px 34px rgba(23, 21, 18, 0.08);
+      box-shadow: none;
     }
 
     .field-quote p {
@@ -10881,14 +11024,38 @@ ${matomoScriptTagFor(site)}  <style>
 
     .service-flow {
       display: grid;
-      grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
-      gap: 42px;
+      grid-template-columns: 1fr;
+      gap: 46px;
       align-items: center;
+    }
+
+    .flow-copy {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(320px, 0.68fr);
+      gap: 60px;
+      align-items: end;
+    }
+
+    .service-flow-band .eyebrow {
+      color: #a9d397;
+    }
+
+    .flow-copy .eyebrow,
+    .flow-copy h2 {
+      grid-column: 1;
+    }
+
+    .service-flow-band h2 {
+      color: var(--white);
     }
 
     .flow-copy p:not(.eyebrow) {
       max-width: 720px;
-      color: var(--ink-soft);
+      align-self: end;
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      margin-bottom: 18px;
+      color: rgba(255, 253, 247, 0.7);
       font-size: 20px;
       line-height: 1.58;
     }
@@ -10897,13 +11064,16 @@ ${matomoScriptTagFor(site)}  <style>
       min-width: 0;
       display: grid;
       grid-template-columns: minmax(150px, 0.72fr) minmax(210px, 0.92fr) minmax(190px, 0.84fr);
-      gap: 18px;
+      gap: 34px;
       align-items: center;
-      padding: 18px;
-      border: 1px solid var(--line);
+      padding: 36px;
+      border: 1px solid rgba(255, 253, 247, 0.14);
       border-radius: 8px;
-      background: var(--white);
-      box-shadow: var(--shadow);
+      background:
+        linear-gradient(90deg, rgba(255, 253, 247, 0.025) 1px, transparent 1px) 0 0 / 34px 34px,
+        linear-gradient(rgba(255, 253, 247, 0.025) 1px, transparent 1px) 0 0 / 34px 34px,
+        #0f1514;
+      box-shadow: var(--shadow-deep);
     }
 
     .flow-stack {
@@ -10914,9 +11084,9 @@ ${matomoScriptTagFor(site)}  <style>
     .flow-card,
     .flow-core {
       min-width: 0;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(255, 253, 247, 0.14);
       border-radius: 8px;
-      background: rgba(255, 250, 242, 0.88);
+      background: rgba(255, 253, 247, 0.045);
     }
 
     .flow-card {
@@ -10926,7 +11096,7 @@ ${matomoScriptTagFor(site)}  <style>
     .flow-card strong,
     .flow-core strong {
       display: block;
-      color: var(--ink);
+      color: var(--white);
       font-size: 17px;
       line-height: 1.18;
     }
@@ -10934,17 +11104,20 @@ ${matomoScriptTagFor(site)}  <style>
     .flow-card p,
     .flow-core p {
       margin: 7px 0 0;
-      color: var(--ink-soft);
+      color: rgba(255, 253, 247, 0.64);
       font-size: 14px;
       line-height: 1.42;
     }
 
     .flow-core {
       position: relative;
-      padding: 22px;
-      background: var(--night);
+      padding: 30px 24px;
+      background:
+        linear-gradient(145deg, rgba(67, 118, 255, 0.12), transparent 44%),
+        rgba(255, 253, 247, 0.05);
       color: var(--white);
       text-align: center;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.36), 0 0 44px rgba(80, 128, 255, 0.08);
     }
 
     .flow-core strong {
@@ -10976,7 +11149,7 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .message-model-band {
-      background: var(--mist);
+      background: var(--paper);
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
@@ -10998,20 +11171,24 @@ ${matomoScriptTagFor(site)}  <style>
     .message-steps {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--white);
-      box-shadow: var(--shadow);
+      gap: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     .message-step {
       min-width: 0;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 250, 242, 0.82);
+      padding: 6px 22px 8px;
+      border: 0;
+      border-left: 1px solid var(--line);
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .message-step:last-child {
+      border-right: 1px solid var(--line);
     }
 
     .message-step span {
@@ -11094,12 +11271,14 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .product-signal strong {
-      font-size: 24px;
-      line-height: 1;
+      font-family: var(--serif);
+      font-size: 21px;
+      font-weight: 520;
+      line-height: 1.08;
     }
 
     .feeder-band {
-      background: #fbf8ef;
+      background: var(--mist);
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
@@ -11109,11 +11288,12 @@ ${matomoScriptTagFor(site)}  <style>
       grid-template-columns: minmax(0, 0.92fr) minmax(300px, 0.58fr);
       gap: 36px;
       align-items: end;
-      padding: 30px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--white);
-      box-shadow: var(--shadow);
+      padding: 8px 0 8px 30px;
+      border: 0;
+      border-left: 2px solid var(--gold);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     .feeder-panel h2 {
@@ -11153,7 +11333,7 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .work-band {
-      background: var(--mist);
+      background: var(--paper);
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
@@ -11161,46 +11341,30 @@ ${matomoScriptTagFor(site)}  <style>
     .route-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+      gap: 0;
       margin-top: 32px;
     }
 
     .route-card,
     .note-panel {
       min-width: 0;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--white);
-      box-shadow: var(--shadow);
+      border: 0;
+      border-left: 1px solid var(--line);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     .route-card {
-      min-height: 286px;
+      min-height: 0;
       display: grid;
       align-content: space-between;
-      padding: 24px;
-      border-top: 6px solid var(--field);
-    }
-
-    .route-card:nth-child(2) {
-      border-top-color: var(--signal);
-    }
-
-    .route-card:nth-child(3) {
-      border-top-color: var(--gold);
+      padding: 8px 32px;
+      border-top: 0;
     }
 
     .route-card::before {
-      content: "";
-      width: 100%;
-      height: 54px;
-      display: block;
-      margin-bottom: 18px;
-      border-radius: 8px;
-      background:
-        linear-gradient(90deg, var(--sky) 0 22%, transparent 22% 28%, rgba(16, 34, 31, 0.1) 28% 100%),
-        linear-gradient(var(--white), var(--white));
-      border: 1px solid var(--line);
+      display: none;
     }
 
     .route-card span,
@@ -11248,7 +11412,7 @@ ${matomoScriptTagFor(site)}  <style>
     .use-case-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: 0;
       margin-top: 24px;
     }
 
@@ -11257,11 +11421,12 @@ ${matomoScriptTagFor(site)}  <style>
       display: grid;
       grid-template-columns: 58px minmax(0, 1fr);
       gap: 16px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--white);
-      box-shadow: 0 12px 34px rgba(23, 21, 18, 0.08);
+      padding: 24px 26px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     .use-case-number {
@@ -11269,10 +11434,13 @@ ${matomoScriptTagFor(site)}  <style>
       place-items: center;
       width: 48px;
       height: 48px;
-      border-radius: 50%;
-      background: var(--ink);
-      color: var(--white);
-      font-weight: 900;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--field);
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
       line-height: 1;
     }
 
@@ -11307,7 +11475,7 @@ ${matomoScriptTagFor(site)}  <style>
     .journey-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+      gap: 0;
       margin-top: 28px;
     }
 
@@ -11318,11 +11486,12 @@ ${matomoScriptTagFor(site)}  <style>
     .research-card,
     .journey-card {
       min-width: 0;
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--white);
-      box-shadow: var(--shadow);
+      padding: 8px 26px;
+      border: 0;
+      border-left: 1px solid var(--line);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     .research-card p,
@@ -11366,23 +11535,62 @@ ${matomoScriptTagFor(site)}  <style>
     .roadmap-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+      gap: 0;
       margin-top: 30px;
+    }
+
+    .capability-band,
+    .journey-band {
+      background: #0b100f;
+      color: var(--white);
+    }
+
+    .capability-band {
+      border-top: 1px solid rgba(255, 253, 247, 0.12);
+      padding-bottom: 52px;
+    }
+
+    .journey-band {
+      border-bottom: 1px solid rgba(255, 253, 247, 0.12);
+      padding-top: 52px;
+    }
+
+    .capability-band .eyebrow,
+    .journey-band .eyebrow,
+    .journey-band .journey-card span {
+      color: #a9d397;
+    }
+
+    .journey-band .journey-head p:not(.eyebrow),
+    .capability-band .feature-card p,
+    .journey-band .journey-card p {
+      color: rgba(255, 253, 247, 0.68);
     }
 
     .feature-card,
     .roadmap-card,
     .release-panel {
       min-width: 0;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--white);
-      box-shadow: var(--shadow);
+      border: 0;
+      border-left: 1px solid var(--line);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     .feature-card,
     .roadmap-card {
-      padding: 22px;
+      padding: 8px 26px;
+    }
+
+    .capability-band .feature-card,
+    .journey-band .journey-card {
+      border-left-color: rgba(255, 253, 247, 0.16);
+    }
+
+    .capability-band .feature-card h3,
+    .journey-band .journey-card h3 {
+      color: var(--white);
     }
 
     .feature-card span,
@@ -11411,6 +11619,8 @@ ${matomoScriptTagFor(site)}  <style>
     .release-panel {
       margin-top: 18px;
       padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
       background: var(--panel);
     }
 
@@ -11427,14 +11637,14 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     .skills-band {
-      background: var(--night);
-      color: var(--white);
-      border-top: 1px solid var(--line-light);
-      border-bottom: 1px solid var(--line-light);
+      background: var(--paper);
+      color: var(--ink);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
     }
 
     .skills-band .eyebrow {
-      color: #ffd083;
+      color: var(--signal);
     }
 
     .skills-head {
@@ -11447,7 +11657,7 @@ ${matomoScriptTagFor(site)}  <style>
     .skills-head p:not(.eyebrow) {
       max-width: 720px;
       margin-bottom: 0;
-      color: rgba(255, 253, 247, 0.82);
+      color: var(--ink-soft);
       font-size: 20px;
       line-height: 1.5;
     }
@@ -11455,17 +11665,18 @@ ${matomoScriptTagFor(site)}  <style>
     .skills-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+      gap: 0;
       margin-top: 30px;
     }
 
     .skill-card {
       min-width: 0;
-      min-height: 226px;
-      padding: 22px;
-      border: 1px solid rgba(255, 253, 247, 0.18);
-      border-radius: 8px;
-      background: rgba(255, 253, 247, 0.08);
+      min-height: 0;
+      padding: 8px 26px;
+      border: 0;
+      border-left: 1px solid var(--line);
+      border-radius: 0;
+      background: transparent;
     }
 
     .skill-meta {
@@ -11481,7 +11692,7 @@ ${matomoScriptTagFor(site)}  <style>
       display: inline-flex;
       align-items: center;
       min-height: 24px;
-      color: #ffd083;
+      color: var(--field);
       font-size: 12px;
       font-weight: 900;
       letter-spacing: 0.08em;
@@ -11493,18 +11704,18 @@ ${matomoScriptTagFor(site)}  <style>
       padding: 3px 8px;
       border: 1px solid rgba(146, 199, 214, 0.36);
       border-radius: 999px;
-      color: var(--sky);
+      color: #3469ba;
       letter-spacing: 0;
       text-transform: none;
     }
 
     .skill-card h3 {
-      color: var(--white);
+      color: var(--ink);
     }
 
     .skill-card p {
       margin-bottom: 0;
-      color: rgba(255, 253, 247, 0.78);
+      color: var(--ink-soft);
     }
 
     .quote-band {
@@ -11577,14 +11788,14 @@ ${matomoScriptTagFor(site)}  <style>
       justify-content: space-between;
       gap: 24px;
       padding: 30px 40px;
-      border-top: 1px solid var(--line);
-      background: var(--white);
-      color: var(--ink-soft);
+      border-top: 1px solid rgba(255, 253, 247, 0.12);
+      background: #0b100f;
+      color: rgba(255, 253, 247, 0.62);
       font-size: 14px;
     }
 
     footer strong {
-      color: var(--ink);
+      color: var(--white);
     }
 
     .footer-brand {
@@ -11598,6 +11809,14 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     @media (prefers-reduced-motion: no-preference) {
+      .hero-inner {
+        animation: hero-copy-in 720ms ease-out both;
+      }
+
+      .hero-product {
+        animation: hero-product-in 900ms 120ms ease-out both, hero-breathe 14s 1.2s ease-in-out infinite;
+      }
+
       .flow-line {
         background-size: 160% 100%;
         animation: flow 5.5s linear infinite;
@@ -11641,36 +11860,83 @@ ${matomoScriptTagFor(site)}  <style>
       }
     }
 
+    @keyframes hero-copy-in {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+    }
+
+    @keyframes hero-product-in {
+      from {
+        opacity: 0;
+        transform: translate3d(38px, 18px, 0) scale(0.98);
+      }
+    }
+
+    @keyframes hero-breathe {
+      50% {
+        transform: translate3d(0, -5px, 0);
+        filter: drop-shadow(0 62px 104px rgba(0, 0, 0, 0.58));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
     @media (max-width: 1080px) {
-      .console-scene {
-        right: -160px;
-        width: 680px;
-        opacity: 0.42;
+      .hero-product {
+        right: -350px;
+        width: 820px;
+        opacity: 0.62;
+      }
+
+      .hero-inner {
+        width: min(100%, 560px);
       }
 
       .hero::after {
-        background: linear-gradient(90deg, rgba(23, 21, 18, 0.96), rgba(23, 21, 18, 0.8));
+        background: linear-gradient(90deg, rgba(6, 10, 9, 0.72), rgba(6, 10, 9, 0.2));
       }
     }
 
     @media (max-width: 980px) {
       .site-header {
-        align-items: flex-start;
-        flex-direction: column;
+        align-items: center;
+        flex-direction: row;
         padding: 14px 22px;
       }
 
       nav {
-        justify-content: flex-start;
+        justify-content: flex-end;
+        gap: 8px 16px;
       }
 
       .hero {
-        min-height: 80svh;
-        padding: 60px 22px 38px;
+        min-height: 780px;
+        padding: 138px 22px 64px;
+      }
+
+      .hero-product {
+        right: -380px;
+        width: 780px;
+        opacity: 0.38;
       }
 
       h1 {
-        font-size: 64px;
+        font-size: 82px;
       }
 
       h2 {
@@ -11687,6 +11953,7 @@ ${matomoScriptTagFor(site)}  <style>
       .summary-strip,
       .field-note,
       .service-flow,
+      .flow-copy,
       .flow-diagram,
       .message-model,
       .message-steps,
@@ -11716,7 +11983,20 @@ ${matomoScriptTagFor(site)}  <style>
 
       .outcome-band {
         margin-top: 0;
-        padding: 22px;
+        padding: 0 22px;
+      }
+
+      .summary-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .flow-copy p:not(.eyebrow) {
+        grid-column: 1;
+        grid-row: auto;
+      }
+
+      .metric:nth-child(3) {
+        border-left: 1px solid rgba(255, 253, 247, 0.16);
       }
 
       .route-card,
@@ -11727,15 +12007,48 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     @media (max-width: 560px) {
-      .console-scene {
-        right: -310px;
-        top: 110px;
-        width: 620px;
-        opacity: 0.28;
+      .site-header {
+        min-height: 66px;
+        padding: 12px 18px;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        font-size: 18px;
+      }
+
+      nav > a {
+        display: none;
+      }
+
+      .more-nav-panel {
+        right: 0;
+        width: min(250px, calc(100vw - 36px));
+      }
+
+      .mobile-primary {
+        display: block;
+      }
+
+      .hero {
+        min-height: 760px;
+        align-items: start;
+        padding: 132px 18px 46px;
+        background-image: url("${escapeHtml(heroBackgroundImageMobile)}");
+        background-position: 60% center;
+      }
+
+      .hero-product {
+        top: auto;
+        right: -275px;
+        bottom: 4px;
+        width: 720px;
+        opacity: 0.38;
       }
 
       h1 {
-        font-size: 48px;
+        font-size: 68px;
       }
 
       h2 {
@@ -11759,6 +12072,23 @@ ${matomoScriptTagFor(site)}  <style>
         grid-template-columns: 1fr;
       }
 
+      .summary-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .metric,
+      .metric:first-child,
+      .metric:nth-child(3) {
+        min-height: 0;
+        padding: 26px 4px;
+        border: 0;
+        border-bottom: 1px solid rgba(255, 253, 247, 0.16);
+      }
+
+      .metric:last-child {
+        border-bottom: 0;
+      }
+
       .button {
         width: 100%;
       }
@@ -11772,28 +12102,38 @@ ${matomoScriptTagFor(site)}  <style>
       <span>${escapeHtml(site.name)}</span>
     </a>
     <nav aria-label="Primary navigation">
-      <a href="#map">Map</a>
-      <a href="#field-note">Field note</a>
-      <a href="#cao-briefing">CAO Briefing</a>
+      <a href="#map">Model</a>
       <a href="#work">Work</a>
-      <a href="#use-cases">Use cases</a>
-      <a href="#research">Research</a>
       <a href="#features">Features</a>
-      <a href="#journeys">Journeys</a>
-      <a href="#skills">Skills</a>
-      <a href="#cadence">Cadence</a>
-      <a href="#roadmap">Roadmap</a>
-      <a href="#conversation">Conversation</a>
+      <a href="#research">Research</a>
+      <a href="#conversation">Interest</a>
+      <details class="more-nav">
+        <summary>More</summary>
+        <div class="more-nav-panel">
+          <a class="mobile-primary" href="#map">Model</a>
+          <a class="mobile-primary" href="#work">Work</a>
+          <a class="mobile-primary" href="#features">Features</a>
+          <a class="mobile-primary" href="#research">Research</a>
+          <a class="mobile-primary" href="#conversation">Interest</a>
+          <a href="#field-note">Field note</a>
+          <a href="#cao-briefing">CAO briefing</a>
+          <a href="#use-cases">Use cases</a>
+          <a href="#journeys">Journeys</a>
+          <a href="#skills">Skills</a>
+          <a href="#cadence">Cadence</a>
+          <a href="#roadmap">Roadmap</a>
+        </div>
+      </details>
     </nav>
   </header>
 
   <main>
     <section class="hero" aria-labelledby="page-title">
-      <div class="console-stage" aria-hidden="true">
-        ${orchistraHeroConsole(site)}
-      </div>
+      <picture class="hero-product" aria-hidden="true">
+        <source media="(max-width: 560px)" srcset="${escapeHtml(heroProductImageMobile)}">
+        <img src="${escapeHtml(heroProductImage)}" alt="" width="1586" height="992">
+      </picture>
       <div class="hero-inner">
-        <p class="eyebrow">${escapeHtml(site.eyebrow || "Shepherds of agentic systems")}</p>
         <h1 id="page-title">${escapeHtml(site.heading || site.name)}</h1>
         <p class="hero-copy">${escapeHtml(site.summary)}</p>
         <div class="hero-actions">
@@ -11815,7 +12155,7 @@ ${matomoScriptTagFor(site)}  <style>
     <section class="section field-note-band" id="field-note">
       <div class="section-inner field-note">
         <div class="field-note-media">
-          <img src="${escapeHtml(fieldNote.image_url || site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg")}" alt="${escapeHtml(fieldNote.image_alt || "English countryside field used as a visual cue for calm agent oversight.")}" loading="lazy">
+          <img src="${escapeHtml(fieldNote.image_url || site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg")}" alt="${escapeHtml(fieldNote.image_alt || "English countryside field used as a visual cue for calm agent oversight.")}" width="1672" height="941" loading="lazy" decoding="async">
         </div>
         <div class="field-note-copy">
           <p class="eyebrow">${escapeHtml(fieldNote.eyebrow || "In the field")}</p>
@@ -11889,13 +12229,13 @@ ${matomoScriptTagFor(site)}  <style>
           <p>${escapeHtml(site.brief_support || "The work is simple to say and hard to do: know what is moving, give it useful boundaries, watch the weak signals, and bring outcomes back into human judgement.")}</p>
           <div class="product-panel" aria-label="Gateway model">
             <div class="product-panel-header">
-              <strong>Gateway model</strong>
-              <span>channels / tasks / audit</span>
+              <strong>Visible operating layer</strong>
+              <span>messages / requests / evidence</span>
             </div>
             <div class="product-panel-grid">
-              <div class="product-signal"><span>Agents</span><strong>12</strong></div>
-              <div class="product-signal"><span>Threads</span><strong>84</strong></div>
-              <div class="product-signal"><span>Escalations</span><strong>03</strong></div>
+              <div class="product-signal"><span>Channels</span><strong>Readable work</strong></div>
+              <div class="product-signal"><span>Requests</span><strong>Human attention</strong></div>
+              <div class="product-signal"><span>Evidence</span><strong>Visible decisions</strong></div>
             </div>
           </div>
         </div>
@@ -11976,7 +12316,7 @@ ${matomoScriptTagFor(site)}  <style>
       </div>
     </section>
 
-    <section class="section" id="features">
+    <section class="section capability-band" id="features">
       <div class="section-inner">
         <p class="eyebrow">${escapeHtml(site.features_eyebrow || "Feature list")}</p>
         <h2>${escapeHtml(site.features_title || "What Orchistra gives the agent system.")}</h2>
@@ -12110,104 +12450,6 @@ ${matomoScriptTagFor(site)}  <style>
 </body>
 </html>
 `;
-}
-
-function orchistraHeroConsole(site) {
-  const navItems = [
-    { icon: "◌", label: "Today", active: true },
-    { icon: "↯", label: "Needs You" },
-    { icon: "⌘", label: "Explore" },
-    { icon: "◎", label: "Agents" },
-    { icon: "◇", label: "Attachments" },
-  ];
-  const channels = [
-    { icon: "#", label: "#daily-standup", status: "Fixed", active: false },
-    { icon: "#", label: "#operations", status: "Fixed", active: true },
-    { icon: "#", label: "#research", status: "Fixed", active: false },
-    { icon: "#", label: "#reports", status: "Fixed", active: false },
-  ];
-  const cards = [
-    {
-      tone: "blue",
-      dot: "▱",
-      name: "agent_handoff_ready",
-      status: "Green",
-      body: "A research agent handed work to operations with owner, purpose, receipts, and a human review request visible in one thread.",
-      receipt: "demo.orchistra.example/threads/agent-handoff",
-      time: "14:44",
-    },
-    {
-      tone: "amber",
-      dot: "◇",
-      name: "attention_request",
-      status: "Watch",
-      body: "Two approvals need a person before the next routine run. The request is visible without exposing private source material.",
-      receipt: "demo.orchistra.example/requests/human-review",
-      time: "11:32",
-    },
-    {
-      tone: "green",
-      dot: "▰",
-      name: "standup_update",
-      status: "Green",
-      body: "Daily standup posted: priorities, blockers, owner, and follow-up channel are ready for the human trail.",
-      receipt: "demo.orchistra.example/receipts/daily-standup",
-      time: "10:49",
-    },
-  ];
-  return `<div class="console-scene">
-  <div class="console-window">
-    <div class="window-chrome">
-      <span class="traffic-lights"><i></i><i></i><i></i></span>
-      <strong>Orchistra</strong>
-      <span class="chrome-status">Updated 14:44</span>
-    </div>
-    <div class="console-shell">
-      <aside class="console-sidebar">
-        <div class="sidebar-brand">
-          <span>Demo workspace</span>
-          <strong>${escapeHtml(site.name || "Orchistra")}</strong>
-        </div>
-        <div class="side-nav">
-          <span class="active"><i>◌</i>COA Briefing</span>
-          ${navItems.map((item) => `<span${item.active ? " class=\"active\"" : ""}><i>${escapeHtml(item.icon)}</i>${escapeHtml(item.label)}</span>`).join("")}
-        </div>
-        <div class="sidebar-label">Fixed channels</div>
-        ${channels.map((channel) => `<div class="channel-row${channel.active ? " active" : ""}">
-          <i>${escapeHtml(channel.icon)}</i>
-          <span>${escapeHtml(channel.label)}</span>
-          <small>${escapeHtml(channel.status)}</small>
-        </div>`).join("")}
-        <div class="sidebar-foot">Demo workspace active.<br>Example links only.</div>
-      </aside>
-      <div class="console-main">
-        <div class="thread-header">
-          <span>#operations</span>
-          <span>Refresh</span>
-        </div>
-        <div class="channel-guide">
-          <strong>Channel Guide</strong>
-          Operating priorities, blockers, commitments, handoffs, human requests, and review.
-        </div>
-        <div class="message-stack">
-          ${cards.map((card) => `<div class="message-row ${escapeHtml(card.tone)}">
-            <div class="agent-dot">${escapeHtml(card.dot)}</div>
-            <div class="message-card">
-              <strong>${escapeHtml(card.name)} <small>${escapeHtml(card.status)}</small></strong>
-              <p>${escapeHtml(card.body)}</p>
-              <span class="receipt">${escapeHtml(card.receipt)}</span>
-            </div>
-            <div class="message-time">${escapeHtml(card.time)}</div>
-          </div>`).join("")}
-        </div>
-        <div class="composer-bar">
-          <span>Message #operations · Signal · Human Notify</span>
-          <span>Send</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>`;
 }
 
 function logoHoldingPageFor(site, page) {

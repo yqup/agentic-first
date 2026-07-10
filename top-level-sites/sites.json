@@ -1115,7 +1115,41 @@
     "accent": "#e05d45",
     "matomo_site_id": "14",
     "brand_mark": "O",
-    "hero_image": "https://www.tonywood.org/assets/countryside-hero.jpg",
+    "hero_image": "/assets/orchistra/countryside-field.webp",
+    "hero_background_image": "/assets/orchistra/hero-conservatory.webp",
+    "hero_background_image_mobile": "/assets/orchistra/hero-conservatory-mobile.webp",
+    "hero_product_image": "/assets/orchistra/hero-console.webp",
+    "hero_product_image_mobile": "/assets/orchistra/hero-console-mobile.webp",
+    "assets": [
+      {
+        "source": "assets/orchistra/countryside-field.webp",
+        "target": "assets/orchistra/countryside-field.webp"
+      },
+      {
+        "source": "assets/orchistra/hero-conservatory.webp",
+        "target": "assets/orchistra/hero-conservatory.webp"
+      },
+      {
+        "source": "assets/orchistra/hero-conservatory-mobile.webp",
+        "target": "assets/orchistra/hero-conservatory-mobile.webp"
+      },
+      {
+        "source": "assets/orchistra/hero-console.webp",
+        "target": "assets/orchistra/hero-console.webp"
+      },
+      {
+        "source": "assets/orchistra/hero-console-mobile.webp",
+        "target": "assets/orchistra/hero-console-mobile.webp"
+      },
+      {
+        "source": "assets/orchistra/instrument-sans-latin-variable.woff2",
+        "target": "assets/orchistra/instrument-sans-latin-variable.woff2"
+      },
+      {
+        "source": "assets/orchistra/newsreader-latin-variable.woff2",
+        "target": "assets/orchistra/newsreader-latin-variable.woff2"
+      }
+    ],
     "tonywood_funnel": {
       "target_url": "https://www.tonywood.org/advisory/",
       "source": "orchistra.com",
@@ -1275,7 +1309,7 @@
       "quote_source_campaign": "orchistra_to_shepherd",
       "quote_source_stage": "source_to_shepherd",
       "quote_source_content": "field_quote_shepherd",
-      "image_url": "https://www.tonywood.org/assets/countryside-hero.jpg",
+      "image_url": "/assets/orchistra/countryside-field.webp",
       "image_alt": "English countryside field used as a visual cue for calm agent oversight.",
       "primary_label": "Show interest",
       "secondary_label": "Read TonyWood.org",
