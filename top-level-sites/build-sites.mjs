@@ -11897,6 +11897,10 @@ ${matomoScriptTagFor(site)}  <style>
     }
 
     @media (max-width: 1080px) {
+      .message-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .hero-product {
         right: -350px;
         width: 820px;
@@ -12053,6 +12057,10 @@ ${matomoScriptTagFor(site)}  <style>
 
       h2 {
         font-size: 34px;
+      }
+
+      .feeder-panel h2 {
+        font-size: 30px;
       }
 
       .hero-copy,

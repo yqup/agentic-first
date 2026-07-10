@@ -26,7 +26,7 @@ scraping the page.
       "governance"
     ],
     "tagline": "Orchistra",
-    "summary": "Orchistra makes agent work visible enough to manage: messages, tasks, rich updates, receipts, handoffs, and decisions in one calm operating layer."
+    "summary": "Orchistra turns agent activity into work people can follow: messages, rich updates, human requests, approved work, evidence, and decisions in one calm operating layer."
   },
   "links": {
     "website": "https://orchistra.com"
@@ -38,7 +38,7 @@ scraping the page.
   },
   "analytics": {
     "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "site_goal": "Measure interest in Orchistra as a feeder for the Chief Agentic Officer briefing and as a platform for visible agent communication, handoffs, rich updates, and oversight.",
+    "site_goal": "Measure interest in Orchistra as a feeder for the Chief Agentic Officer briefing and as a platform for visible agent communication, MCP access, human attention, approved work, and oversight.",
     "primary_conversion": "agentic_coordination_product_interest",
     "primary_destination": "https://www.tonywood.org/advisory/",
     "campaign": "orchistra_to_tonywood_advisory"

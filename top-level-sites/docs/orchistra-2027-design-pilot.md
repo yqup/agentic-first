@@ -51,3 +51,23 @@ or private channel content. Font licence files remain beside the source assets.
 
 The pilot does not change Gateway, MCP, Docker, Caddy, DNS, APIs, or deployment
 gates. It remains local until Tony reviews the generated browser preview.
+
+## Feature marketing refresh
+
+The July 2026 feature refresh keeps the visual pilot intact while bringing its
+public product language into line with the current Gateway and Mac app. The
+marketing hierarchy is:
+
+1. visible conversations and evidence;
+2. permission-aware MCP access for people and agents;
+3. focused human attention, acknowledgement, and decisions;
+4. Shepherd-reviewed work packets and evidence-linked guidance;
+5. searchable operating context across work, strategy, relationships, routines,
+   and attachments.
+
+Public copy describes the outcome and operating boundary, not the private
+implementation. It must not publish endpoint paths, token handling, internal
+lane names, customer records, workspace content, recovery topology, deployment
+details, or confidential examples. Feature claims are grounded in the current
+Gateway and native Mac app repositories and remain subject to each caller's
+identity, permissions, and enabled capabilities.
