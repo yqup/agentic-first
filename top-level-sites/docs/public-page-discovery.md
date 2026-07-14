@@ -73,7 +73,7 @@ messages and posts normally retain their old cached preview.
 
 ## Deployment Receipt
 
-Planned ANI release:
+Deployed ANI release:
 
 ```text
 top-level-sites-20260714T093523Z
@@ -84,3 +84,19 @@ The receipt is written by the managed deployment gate under:
 ```text
 /srv/deploy-state/top-level-sites/receipts/top-level-sites-20260714T093523Z.yaml
 ```
+
+The managed gate checksum-verified the archive, recreated the nine containers
+owned by this lane, passed loopback health/profile checks, validated Caddy, and
+wrote the receipt. `chiefagenticofficer.com` remains intentionally owned by its
+standalone deployment lane.
+
+Crawler-style public checks passed for all ten apex and `www` hostnames. Every
+apex page, social image, `robots.txt`, sitemap, Atom feed, manifest, and Apple
+touch icon returned `200`; all `www` responses declared the matching apex URL
+as canonical. The standalone Chief Agentic Officer site already exposes the
+same contract with its own anonymous JPEG social card.
+
+Interactive WhatsApp composition and LinkedIn Post Inspector cache refresh
+remain manual acceptance checks because the signed-in browser-control
+connection was unavailable during this release. Use a newly composed message
+or inspection: existing messages and posts normally retain cached previews.
