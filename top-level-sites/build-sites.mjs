@@ -262,15 +262,12 @@ async function generateAppIcons(site, wwwRoot) {
     ["app-icon-192.png", 192],
     ["app-icon-512.png", 512],
   ];
-  const rasterSource = faviconFor(site)
-    .replace("<svg ", '<svg width="512" height="512" ')
-    .replace(/<text\b[^>]*>[\s\S]*?<\/text>/g, '<path d="M18 18h28v28H18z" fill="#fff" opacity=".94"/><path d="M25 25h14v14H25z" fill="none" stroke="currentColor" stroke-width="4"/>');
-  await writeFile(sourcePath, rasterSource, "utf8");
+  await writeFile(sourcePath, faviconFor(site), "utf8");
   try {
     for (const [filename, size] of icons) {
       await execFileAsync(
-        "magick",
-        ["-font", "/System/Library/Fonts/Supplemental/Verdana.ttf", "-background", "none", sourcePath, "-resize", `${size}x${size}`, path.join(wwwRoot, filename)],
+        "sips",
+        ["-s", "format", "png", "-z", String(size), String(size), sourcePath, "--out", path.join(wwwRoot, filename)],
         { timeout: 15000 },
       );
     }
