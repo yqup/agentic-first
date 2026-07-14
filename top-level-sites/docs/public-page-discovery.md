@@ -76,13 +76,13 @@ messages and posts normally retain their old cached preview.
 Deployed ANI release:
 
 ```text
-top-level-sites-20260714T093523Z
+top-level-sites-20260714T094217Z
 ```
 
 The receipt is written by the managed deployment gate under:
 
 ```text
-/srv/deploy-state/top-level-sites/receipts/top-level-sites-20260714T093523Z.yaml
+/srv/deploy-state/top-level-sites/receipts/top-level-sites-20260714T094217Z.yaml
 ```
 
 The managed gate checksum-verified the archive, recreated the nine containers
