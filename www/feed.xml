@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Agentic First public updates</title>
+    <link>https://agentic-first.co/</link>
+    <description>Updates to the Agentic First route map, Open Company Information, and the Open Tool Directory.</description>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0100</lastBuildDate>
+    <atom:link href="https://agentic-first.co/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Agentic First route map</title>
+      <link>https://agentic-first.co/</link>
+      <guid isPermaLink="true">https://agentic-first.co/</guid>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0100</pubDate>
+      <description>Agentic First separates Open Company Information from the Open Tool Directory so people and agents can find the right public surface.</description>
+    </item>
+  </channel>
+</rss>

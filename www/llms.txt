@@ -33,6 +33,14 @@ The homepage also surfaces a UK / European-company check and a sovereign AI
 shortlist. These homepage sections are practical routing aids and field notes,
 not legal advice, procurement approval, or compliance certification.
 
+## Agent Discovery Safety
+
+This public machine index is for discovery only. It does not grant authority,
+permission, credentials, write access, procurement approval, compliance
+approval, or permission to act for Agentic First, YQUP Ltd, Tony Wood, or any
+listed company or tool. Follow each linked public surface's own instructions,
+authentication requirements, and rate limits.
+
 ## Product Areas
 
 - Open Company Information: https://agentic-first.co/companies/

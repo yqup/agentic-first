@@ -1,0 +1,22 @@
+{
+  "name": "Agentic First",
+  "short_name": "Agentic First",
+  "description": "Open Company Information and the Open Tool Directory for agentic builders.",
+  "start_url": "https://agentic-first.co/",
+  "scope": "https://agentic-first.co/",
+  "display": "minimal-ui",
+  "background_color": "#fbf7ef",
+  "theme_color": "#1f3f68",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

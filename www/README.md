@@ -23,6 +23,21 @@ standards, models, runtimes, protocols, and operating patterns.
 The favicon is `favicon.svg` at the web root so browsers can load it from
 `https://agentic-first.co/favicon.svg`.
 
+Public crawler and preview assets are part of the release contract:
+
+- `robots.txt`
+- `sitemap.xml`
+- `feed.xml`
+- `site.webmanifest`
+- `apple-touch-icon.png`
+- `icon-192.png`
+- `icon-512.png`
+- `static/img/agentic-first-social.png`
+
+The social preview image is a dedicated 1200 x 627 PNG and is referenced from
+Open Graph, Twitter, and Article JSON-LD metadata in `index.html`. The metadata
+is rendered directly in the HTML head, not by JavaScript.
+
 `agent-first.co` is the memorable alternate domain and should redirect
 to `agentic-first.co`.
 # Analytics

@@ -116,11 +116,32 @@ of truth for the server-side deployment agent.
 
 ## Link Checks
 
+Run the public discovery check before packaging any public homepage change:
+
+```bash
+python3 deploy/check-public-page-discovery.py --root www
+```
+
+This fails the release if the homepage is missing required canonical, Open
+Graph, Twitter, social-image, JSON-LD, robots, sitemap, feed, favicon,
+Apple-touch-icon, manifest, or public-safe agent-discovery basics.
+
 Run `python3 deploy/check-homepage-links.py --root www` before packaging a
 homepage change. The checker parses `www/index.html`, verifies local
 static assets, and performs HTTP checks for public links such as
 Tonywood.org URLs. Do not publish a release with known broken homepage
 links.
+
+After deployment, run a crawler-style live check against the public page and
+social image:
+
+```bash
+python3 deploy/check-public-page-discovery.py --root www --live-url https://agentic-first.co/
+```
+
+Then test a newly composed WhatsApp message and LinkedIn Post Inspector entry.
+Existing social posts and old messages usually keep their cached previews, so
+use a fresh message or inspector scrape when validating the new metadata.
 
 ## Artifact Delivery Precondition
 

@@ -35,6 +35,8 @@ artifact:
     - deploy/deploy.yaml
     - deploy/README.md
     - deploy/check-homepage-links.py
+    - deploy/check-public-page-discovery.py
+    - deploy/generate-preview-assets.py
   exclude:
     - .git/
     - .DS_Store
@@ -71,6 +73,30 @@ smoke_tests:
     path: /favicon.svg
     expected_status: 200
     expected_body_contains: Agentic First
+  - name: robots
+    method: GET
+    path: /robots.txt
+    expected_status: 200
+    expected_body_contains: Sitemap: https://agentic-first.co/sitemap.xml
+  - name: sitemap
+    method: GET
+    path: /sitemap.xml
+    expected_status: 200
+    expected_body_contains: https://agentic-first.co/directory/
+  - name: rss_feed
+    method: GET
+    path: /feed.xml
+    expected_status: 200
+    expected_body_contains: https://agentic-first.co/
+  - name: web_manifest
+    method: GET
+    path: /site.webmanifest
+    expected_status: 200
+    expected_body_contains: Agentic First
+  - name: social_image
+    method: GET
+    path: /static/img/agentic-first-social.png
+    expected_status: 200
   - name: company_directory_link
     method: GET
     path: /
