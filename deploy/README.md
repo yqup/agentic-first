@@ -60,8 +60,8 @@ Ani writes server-side deploy receipts under:
 Current live release:
 
 ```text
-agentic-first-20260708T142448Z
-66f4d98194b3b66358e032b205c332e36821dc7b0a29780acc571e9018830f14
+agentic-first-20260714T095359Z
+100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
 ```
 
 ## Required Handoff Message

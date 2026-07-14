@@ -8,40 +8,41 @@ app:
 source:
   repo: https://github.com/yqup/agentic-first
   branch: main
-  commit_sha: 22a234e52b7c8507c85aaaf62f0a12d1fbc6b63c
+  commit_sha: a04f05041ecc00c7d68bb5c0bd4f8da8d365d524
   source_tree_state: clean
   note: The release archive was built from this committed source tree and is the immutable source of truth for this request.
 
 artifact:
-  version: agentic-first-20260708T142448Z
-  uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260708T142448Z/agentic-first-20260708T142448Z.tar.gz
-  local_path: deploy/releases/agentic-first-20260708T142448Z.tar.gz
+  version: agentic-first-20260714T095359Z
+  uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260714T095359Z/agentic-first-20260714T095359Z.tar.gz
+  local_path: deploy/releases/agentic-first-20260714T095359Z.tar.gz
   type: release_archive
   format: tar.gz
-  sha256: 66f4d98194b3b66358e032b205c332e36821dc7b0a29780acc571e9018830f14
-  checksum_uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260708T142448Z/agentic-first-20260708T142448Z.sha256
-  checksum_file: deploy/releases/agentic-first-20260708T142448Z.sha256
-  build_timestamp: "2026-07-08T14:24:48Z"
+  sha256: 100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
+  checksum_uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260714T095359Z/agentic-first-20260714T095359Z.sha256
+  checksum_file: deploy/releases/agentic-first-20260714T095359Z.sha256
+  build_timestamp: "2026-07-14T09:53:59Z"
   build_command: >-
     git archive --format=tar.gz --prefix=agentic-first/
-    -o deploy/releases/agentic-first-20260708T142448Z.tar.gz HEAD
+    -o deploy/releases/agentic-first-20260714T095359Z.tar.gz HEAD
     README.md BRAND-GUIDELINES.md ROUTING.md MIGRATION.md LICENSE llms.txt
     www deploy/deploy.yaml deploy/README.md deploy/check-homepage-links.py
+    deploy/check-public-page-discovery.py deploy/generate-preview-assets.py
     && cd deploy/releases
-    && shasum -a 256 agentic-first-20260708T142448Z.tar.gz >
-    agentic-first-20260708T142448Z.sha256
+    && shasum -a 256 agentic-first-20260714T095359Z.tar.gz >
+    agentic-first-20260714T095359Z.sha256
 
 preconditions:
   artifact_download:
     required: true
     source: github_release_asset
     required_downloads:
-      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260708T142448Z/agentic-first-20260708T142448Z.tar.gz
-        name: agentic-first-20260708T142448Z.tar.gz
-        sha256: 66f4d98194b3b66358e032b205c332e36821dc7b0a29780acc571e9018830f14
-      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260708T142448Z/agentic-first-20260708T142448Z.sha256
-        name: agentic-first-20260708T142448Z.sha256
-        contains: 66f4d98194b3b66358e032b205c332e36821dc7b0a29780acc571e9018830f14
+      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260714T095359Z/agentic-first-20260714T095359Z.tar.gz
+        name: agentic-first-20260714T095359Z.tar.gz
+        sha256: 100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
+      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260714T095359Z/agentic-first-20260714T095359Z.sha256
+        name: agentic-first-20260714T095359Z.sha256
+        contains: 100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
     stop_if_download_fails: true
     stop_if_checksum_fails: true
     note: Download the release assets from GitHub, verify SHA256 before inspection or staging, and stop without deploying if the download or checksum verification fails.
@@ -80,8 +81,8 @@ health_check:
 smoke_tests:
   - name: artifact_checksum
     action: verify_sha256
-    file: downloaded agentic-first-20260708T142448Z.tar.gz
-    sha256: 66f4d98194b3b66358e032b205c332e36821dc7b0a29780acc571e9018830f14
+    file: downloaded agentic-first-20260714T095359Z.tar.gz
+    sha256: 100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
   - name: deployed_home_file
     action: assert_file_exists
     path: /srv/apps/agentic-first/current/www/index.html
@@ -116,15 +117,31 @@ smoke_tests:
   - name: homepage_link_check
     action: run_command
     command: python3 deploy/check-homepage-links.py --root www --base-url https://agentic-first.co
+  - name: public_discovery_check
+    action: run_command
+    command: python3 deploy/check-public-page-discovery.py --root www
   - name: deployed_health_file
     action: assert_file_contains
     path: /srv/apps/agentic-first/current/www/healthz
     contains: '"app":"agentic-first"'
+  - name: deployed_social_image_file
+    action: assert_file_exists
+    path: /srv/apps/agentic-first/current/www/static/img/agentic-first-social.png
+  - name: deployed_robots_file
+    action: assert_file_contains
+    path: /srv/apps/agentic-first/current/www/robots.txt
+    contains: Sitemap: https://agentic-first.co/sitemap.xml
   - name: public_home
     method: GET
     url: https://agentic-first.co/
     expected_status: 200
     expected_body_contains: Company-first agentic creation
+    run_only_if_route_is_available: true
+  - name: public_home_metadata
+    method: GET
+    url: https://agentic-first.co/
+    expected_status: 200
+    expected_body_contains: https://agentic-first.co/static/img/agentic-first-social.png
     run_only_if_route_is_available: true
   - name: public_home_yqup_owner
     method: GET
@@ -149,6 +166,17 @@ smoke_tests:
     url: https://agentic-first.co/favicon.svg
     expected_status: 200
     expected_body_contains: Agentic First
+    run_only_if_route_is_available: true
+  - name: public_social_image
+    method: GET
+    url: https://agentic-first.co/static/img/agentic-first-social.png
+    expected_status: 200
+    run_only_if_route_is_available: true
+  - name: public_robots
+    method: GET
+    url: https://agentic-first.co/robots.txt
+    expected_status: 200
+    expected_body_contains: Sitemap: https://agentic-first.co/sitemap.xml
     run_only_if_route_is_available: true
   - name: public_health
     method: GET
