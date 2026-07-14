@@ -1,0 +1,31 @@
+{
+  "id": "/",
+  "name": "Chief Agentic Officer",
+  "short_name": "Chief Agentic Officer",
+  "description": "The board-level operating role for agentic AI: ownership, boundaries, assurance, value, and human judgement in one accountable mandate.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fffaf2",
+  "theme_color": "#202726",
+  "icons": [
+    {
+      "src": "/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

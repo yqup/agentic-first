@@ -24,6 +24,7 @@ const requiredNames = [
   "twitter:title",
   "twitter:description",
   "twitter:image",
+  "twitter:image:alt",
 ];
 
 const failures = [];
@@ -31,52 +32,41 @@ const failures = [];
 for (const site of sites) {
   const htmlPath = path.join(root, "dist", site.domain, "www", "index.html");
   const html = await readFile(htmlPath, "utf8");
+  const head = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] || "";
   for (const property of requiredProperties) {
-    if (!hasMeta(html, "property", property)) {
-      failures.push(`${site.domain}: missing meta property ${property}`);
-    }
+    if (!hasMeta(head, "property", property)) failures.push(`${site.domain}: missing meta property ${property}`);
   }
   for (const name of requiredNames) {
-    if (!hasMeta(html, "name", name)) {
-      failures.push(`${site.domain}: missing meta name ${name}`);
-    }
+    if (!hasMeta(head, "name", name)) failures.push(`${site.domain}: missing meta name ${name}`);
   }
 
-  const ogImage = metaContent(html, "property", "og:image");
   const expectedImage = `https://${site.domain}/assets/og-image.png`;
-  if (ogImage !== expectedImage) {
-    failures.push(`${site.domain}: expected og:image ${expectedImage}, got ${ogImage || "<missing>"}`);
+  for (const [label, attr, value] of [
+    ["og:image", "property", "og:image"],
+    ["og:image:secure_url", "property", "og:image:secure_url"],
+    ["twitter:image", "name", "twitter:image"],
+  ]) {
+    const actual = metaContent(head, attr, value);
+    if (actual !== expectedImage) failures.push(`${site.domain}: expected ${label} ${expectedImage}, got ${actual || "<missing>"}`);
   }
 
-  const twitterImage = metaContent(html, "name", "twitter:image");
-  if (twitterImage !== expectedImage) {
-    failures.push(`${site.domain}: expected twitter:image ${expectedImage}, got ${twitterImage || "<missing>"}`);
+  const ogTitle = metaContent(head, "property", "og:title");
+  const ogDescription = metaContent(head, "property", "og:description");
+  if (metaContent(head, "name", "twitter:title") !== ogTitle) failures.push(`${site.domain}: Twitter title does not match Open Graph`);
+  if (metaContent(head, "name", "twitter:description") !== ogDescription) failures.push(`${site.domain}: Twitter description does not match Open Graph`);
+  if (metaContent(head, "name", "twitter:card") !== "summary_large_image") failures.push(`${site.domain}: twitter:card must be summary_large_image`);
+  if (metaContent(head, "property", "og:image:type") !== "image/png") failures.push(`${site.domain}: og:image:type must be image/png`);
+  if (metaContent(head, "property", "og:image:width") !== "1200" || metaContent(head, "property", "og:image:height") !== "627") {
+    failures.push(`${site.domain}: expected Open Graph dimensions 1200x627`);
   }
-  const secureImage = metaContent(html, "property", "og:image:secure_url");
-  if (secureImage !== expectedImage) {
-    failures.push(`${site.domain}: expected og:image:secure_url ${expectedImage}, got ${secureImage || "<missing>"}`);
-  }
-  const imageType = metaContent(html, "property", "og:image:type");
-  if (imageType !== "image/png") {
-    failures.push(`${site.domain}: expected og:image:type image/png, got ${imageType || "<missing>"}`);
-  }
-
-  const width = metaContent(html, "property", "og:image:width");
-  const height = metaContent(html, "property", "og:image:height");
-  if (width !== "1200" || height !== "627") {
-    failures.push(`${site.domain}: expected og:image dimensions 1200x627, got ${width || "?"}x${height || "?"}`);
-  }
+  if (!metaContent(head, "property", "og:image:alt") || !metaContent(head, "name", "twitter:image:alt")) failures.push(`${site.domain}: social image alt text is missing`);
 
   const imagePath = path.join(root, "dist", site.domain, "www", "assets", "og-image.png");
   const image = await readFile(imagePath);
   const imageStat = await stat(imagePath);
   const dimensions = pngDimensions(image);
-  if (!dimensions || dimensions.width !== 1200 || dimensions.height !== 627) {
-    failures.push(`${site.domain}: PNG is not 1200x627`);
-  }
-  if (imageStat.size > 5 * 1024 * 1024) {
-    failures.push(`${site.domain}: PNG is larger than 5 MB`);
-  }
+  if (!dimensions || dimensions.width !== 1200 || dimensions.height !== 627) failures.push(`${site.domain}: PNG is not 1200x627`);
+  if (imageStat.size >= 1024 * 1024) failures.push(`${site.domain}: PNG must be below 1 MB`);
 }
 
 if (failures.length) {
@@ -97,12 +87,8 @@ function metaContent(html, attr, value) {
 }
 
 function pngDimensions(buffer) {
-  const signature = "89504e470d0a1a0a";
-  if (buffer.subarray(0, 8).toString("hex") !== signature) return null;
-  return {
-    width: buffer.readUInt32BE(16),
-    height: buffer.readUInt32BE(20),
-  };
+  if (buffer.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a") return null;
+  return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
 }
 
 function escapeRegExp(value) {

@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://syndesy.com/sitemap.xml

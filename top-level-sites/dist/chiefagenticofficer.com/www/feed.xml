@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Chief Agentic Officer updates</title>
+  <id>https://chiefagenticofficer.com/</id>
+  <link rel="alternate" href="https://chiefagenticofficer.com/"/>
+  <link rel="self" type="application/atom+xml" href="https://chiefagenticofficer.com/feed.xml"/>
+  <updated>2026-07-14T00:00:00Z</updated>
+  <entry>
+    <title>Chief Agentic Officer | Board mandate for agentic work</title>
+    <id>https://chiefagenticofficer.com/</id>
+    <link rel="alternate" href="https://chiefagenticofficer.com/"/>
+    <published>2026-05-26T00:00:00Z</published>
+    <updated>2026-07-14T00:00:00Z</updated>
+    <author><name>Tony Wood</name></author>
+    <summary>The board-level operating role for agentic AI: ownership, boundaries, assurance, value, and human judgement in one accountable mandate.</summary>
+  </entry>
+  <entry>
+    <title>For agents | Chief Agentic Officer</title>
+    <id>https://chiefagenticofficer.com/for-agents/</id>
+    <link rel="alternate" href="https://chiefagenticofficer.com/for-agents/"/>
+    <published>2026-05-26T00:00:00Z</published>
+    <updated>2026-07-14T00:00:00Z</updated>
+    <author><name>Tony Wood</name></author>
+    <summary>Use this page to understand the Chief Agentic Officer Briefing as public source context: what it covers, why it is UK/EU board-focused, and what the briefing categories mean.</summary>
+  </entry>
+</feed>

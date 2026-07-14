@@ -1,0 +1,31 @@
+{
+  "id": "/",
+  "name": "YQUP",
+  "short_name": "YQUP",
+  "description": "YQUP helps boards, CEOs and operators turn AI ambition into clear decisions, visible ownership and practical operating rhythm.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fffaf2",
+  "theme_color": "#111111",
+  "icons": [
+    {
+      "src": "/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

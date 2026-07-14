@@ -1135,8 +1135,17 @@
       "title": "Orchistra | Visible agent work for people in charge",
       "description": "Coordinate messages, rich updates, human requests, approved work, receipts, and decisions through one calm operating layer.",
       "image_title": "Agent work people can follow",
+      "image_alt": "Orchistra product preview showing agent attention, MCP access, approved work, and evidence.",
       "node_labels": ["Attention", "MCP access", "Approved work", "Evidence"],
       "node_status": "visible"
+    },
+    "public_discovery": {
+      "author_name": "Tony Wood",
+      "author_url": "https://www.tonywood.org/",
+      "publisher_name": "YQUP Ltd",
+      "publisher_url": "https://yqup.com/",
+      "published_at": "2026-06-03T00:00:00Z",
+      "modified_at": "2026-07-14T00:00:00Z"
     },
     "eyebrow": "Coordination for trusted agents",
     "jurisdiction": "GB",

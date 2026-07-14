@@ -9,7 +9,11 @@ machine-readable files from the owned domain:
 - `/healthz`
 - `/llms.txt`
 - `/robots.txt`
+- `/sitemap.xml`
+- `/feed.xml`
+- `/site.webmanifest`
 - `/favicon.svg`
+- `/apple-touch-icon.png`
 
 This is the intended deployment shape when DNS A records point these
 domains at the server.
@@ -36,6 +40,8 @@ Run on AKAAR:
 ```bash
 cd /Users/tonywood/agentic-first/agentic-first
 node top-level-sites/build-sites.mjs
+node top-level-sites/scripts/check-social-previews.mjs
+node top-level-sites/scripts/check-public-discovery.mjs
 ```
 
 This regenerates:
@@ -46,7 +52,8 @@ This regenerates:
 
 ## Change Notes
 
-- [LinkedIn Open Graph previews](docs/linkedin-open-graph-previews.md) - next site-change task.
+- [Public page discovery and preview contract](docs/public-page-discovery.md)
+- [LinkedIn Open Graph previews](docs/linkedin-open-graph-previews.md)
 - [SNAXK country-map refresh](docs/snaxk-country-map-refresh.md)
 - [YQUP consulting refresh](docs/yqup-consulting-refresh.md)
 - [Orchistra CAO feeder refresh](docs/orchistra-cao-feeder-refresh.md)

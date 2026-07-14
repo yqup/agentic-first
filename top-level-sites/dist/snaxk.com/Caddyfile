@@ -22,7 +22,7 @@
 		file_server
 	}
 
-	@local_assets path /llms.txt /robots.txt /favicon.svg /matomo-config.json /static/*
+	@local_assets path /llms.txt /robots.txt /sitemap.xml /feed.xml /site.webmanifest /favicon.svg /apple-touch-icon.png /app-icon-192.png /app-icon-512.png /matomo-config.json /static/*
 	handle @local_assets {
 		file_server
 	}

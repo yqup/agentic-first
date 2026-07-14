@@ -1,0 +1,31 @@
+{
+  "id": "/",
+  "name": "Syndesy",
+  "short_name": "Syndesy",
+  "description": "Syndesy is being prepared as a consulting space for businesses raising capital: connecting the story, evidence, operating plan, and investor conversation.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fffaf2",
+  "theme_color": "#154f5f",
+  "icons": [
+    {
+      "src": "/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

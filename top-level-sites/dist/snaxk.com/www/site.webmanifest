@@ -1,0 +1,31 @@
+{
+  "id": "/",
+  "name": "SNAXK",
+  "short_name": "SNAXK",
+  "description": "SNAXK helps surface the judgement a Chief Agentic Officer needs to inspect: ownership, boundaries, stop conditions, evidence, review, and measurable trust for long-running agentic systems.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fffaf2",
+  "theme_color": "#4b2f1b",
+  "icons": [
+    {
+      "src": "/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -18,7 +18,8 @@ const matomoLoaderPath = "/static/js/matomo-loader.js";
 const defaultTonywoodAdvisoryUrl = "https://www.tonywood.org/advisory/";
 const defaultAnalyticsNorthStar = "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.";
 const nodeServerPort = 8080;
-const updatedAt = "2026-05-26T00:00:00Z";
+const publishedAt = "2026-05-26T00:00:00Z";
+const updatedAt = "2026-07-14T00:00:00Z";
 const firstPort = 8211;
 
 const sites = JSON.parse(await readFile(sitesPath, "utf8")).map((site, index) => {
@@ -56,9 +57,13 @@ for (const site of sites) {
   await writeFile(path.join(wwwRoot, "matomo-config.json"), `${JSON.stringify(matomoConfigFor(site), null, 2)}\n`, "utf8");
   await writeFile(path.join(staticJsDir, "matomo-loader.js"), matomoLoaderSource(), "utf8");
   await writeFile(path.join(wwwRoot, "favicon.svg"), faviconFor(site), "utf8");
+  await generateAppIcons(site, wwwRoot);
   await writeFile(path.join(wwwRoot, "healthz"), healthFor(site), "utf8");
   await writeFile(path.join(wwwRoot, "llms.txt"), llmsFor(site, profile), "utf8");
-  await writeFile(path.join(wwwRoot, "robots.txt"), "User-agent: *\nAllow: /\n", "utf8");
+  await writeFile(path.join(wwwRoot, "robots.txt"), robotsFor(site), "utf8");
+  await writeFile(path.join(wwwRoot, "sitemap.xml"), sitemapFor(site), "utf8");
+  await writeFile(path.join(wwwRoot, "feed.xml"), atomFeedFor(site), "utf8");
+  await writeFile(path.join(wwwRoot, "site.webmanifest"), webManifestFor(site), "utf8");
   await copySiteAssets(site, wwwRoot);
   await generateSocialPreviewImage(site, wwwRoot);
   if (site.mode === "yqup") {
@@ -170,9 +175,14 @@ function profileFor(site) {
     : site.contact?.preferred_channel || "none";
   const profile = {
     schema_version: "0.2.0",
-    updated_at: updatedAt,
+    updated_at: publicDiscoveryFor(site).modifiedAt,
     profile_kind: "company",
     tier: "public",
+    access: {
+      visibility: "public",
+      authority: "none",
+      note: "Public information only. Discovery surfaces grant no authority to act and provide no private access, credentials, or permission.",
+    },
     company: {
       name: site.name,
       website: `https://${site.domain}`,
@@ -245,14 +255,122 @@ async function generateSocialPreviewImage(site, wwwRoot) {
   }
 }
 
+async function generateAppIcons(site, wwwRoot) {
+  const sourcePath = path.join(wwwRoot, ".app-icon-source.svg");
+  const icons = [
+    ["apple-touch-icon.png", 180],
+    ["app-icon-192.png", 192],
+    ["app-icon-512.png", 512],
+  ];
+  const rasterSource = faviconFor(site)
+    .replace("<svg ", '<svg width="512" height="512" ')
+    .replace(/<text\b[^>]*>[\s\S]*?<\/text>/g, '<path d="M18 18h28v28H18z" fill="#fff" opacity=".94"/><path d="M25 25h14v14H25z" fill="none" stroke="currentColor" stroke-width="4"/>');
+  await writeFile(sourcePath, rasterSource, "utf8");
+  try {
+    for (const [filename, size] of icons) {
+      await execFileAsync(
+        "magick",
+        ["-font", "/System/Library/Fonts/Supplemental/Verdana.ttf", "-background", "none", sourcePath, "-resize", `${size}x${size}`, path.join(wwwRoot, filename)],
+        { timeout: 15000 },
+      );
+    }
+  } catch (error) {
+    throw new Error(`Could not generate app icons for ${site.domain}: ${error.message}`);
+  } finally {
+    await rm(sourcePath, { force: true });
+  }
+}
+
+function publicDiscoveryFor(site) {
+  const discovery = site.public_discovery || {};
+  return {
+    authorName: discovery.author_name || "Tony Wood",
+    authorUrl: discovery.author_url || "https://www.tonywood.org/",
+    publisherName: discovery.publisher_name || "YQUP Ltd",
+    publisherUrl: discovery.publisher_url || "https://yqup.com/",
+    publishedAt: discovery.published_at || publishedAt,
+    modifiedAt: discovery.modified_at || discovery.published_at || updatedAt,
+  };
+}
+
+function publicPageEntriesFor(site) {
+  const discovery = publicDiscoveryFor(site);
+  const pages = [{
+    path: "/",
+    title: site.title || site.name,
+    description: site.summary || site.heading || site.name,
+    publishedAt: discovery.publishedAt,
+    modifiedAt: discovery.modifiedAt,
+  }];
+  if (site.mode === "cao") {
+    const title = site.for_agents?.title || "For agents";
+    pages.push({
+      path: "/for-agents/",
+      title: `${title} | ${site.name}`,
+      description: site.for_agents?.summary || "Public source context for agents reading the Chief Agentic Officer Briefing.",
+      publishedAt: discovery.publishedAt,
+      modifiedAt: discovery.modifiedAt,
+    });
+  }
+  return pages;
+}
+
+function robotsFor(site) {
+  return `User-agent: *\nAllow: /\n\nSitemap: https://${site.domain}/sitemap.xml\n`;
+}
+
+function sitemapFor(site) {
+  const urls = publicPageEntriesFor(site)
+    .map((page) => `  <url>\n    <loc>${xmlEscape(absoluteSiteUrl(site, page.path))}</loc>\n    <lastmod>${xmlEscape(page.modifiedAt.slice(0, 10))}</lastmod>\n  </url>`)
+    .join("\n");
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+}
+
+function atomFeedFor(site) {
+  const pages = publicPageEntriesFor(site);
+  const discovery = publicDiscoveryFor(site);
+  const canonical = absoluteSiteUrl(site, "/");
+  const feedUrl = absoluteSiteUrl(site, "/feed.xml");
+  const entries = pages.map((page) => {
+    const pageUrl = absoluteSiteUrl(site, page.path);
+    return `  <entry>\n    <title>${xmlEscape(page.title)}</title>\n    <id>${xmlEscape(pageUrl)}</id>\n    <link rel="alternate" href="${xmlEscape(pageUrl)}"/>\n    <published>${xmlEscape(page.publishedAt)}</published>\n    <updated>${xmlEscape(page.modifiedAt)}</updated>\n    <author><name>${xmlEscape(discovery.authorName)}</name></author>\n    <summary>${xmlEscape(page.description)}</summary>\n  </entry>`;
+  }).join("\n");
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<feed xmlns="http://www.w3.org/2005/Atom">\n  <title>${xmlEscape(site.name)} updates</title>\n  <id>${xmlEscape(canonical)}</id>\n  <link rel="alternate" href="${xmlEscape(canonical)}"/>\n  <link rel="self" type="application/atom+xml" href="${xmlEscape(feedUrl)}"/>\n  <updated>${xmlEscape(discovery.modifiedAt)}</updated>\n${entries}\n</feed>\n`;
+}
+
+function webManifestFor(site) {
+  return `${JSON.stringify({
+    id: "/",
+    name: site.name,
+    short_name: site.name,
+    description: site.summary || site.heading || site.name,
+    start_url: "/",
+    scope: "/",
+    display: "standalone",
+    background_color: "#fffaf2",
+    theme_color: normalizeHex(site.theme, "#16201b"),
+    icons: [
+      { src: "/app-icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/app-icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/favicon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
+    ],
+  }, null, 2)}\n`;
+}
+
 function socialMetaTagsFor(site, options = {}) {
-  const title = options.title || site.ogTitle || site.social_preview?.title || site.title || site.name;
-  const description = options.description || site.ogDescription || site.social_preview?.description || site.summary || site.heading || site.name;
+  const title = options.title || site.title || site.ogTitle || site.social_preview?.title || site.name;
+  const description = options.description || site.summary || site.ogDescription || site.social_preview?.description || site.heading || site.name;
   const url = options.url || absoluteSiteUrl(site, options.path || "/");
   const image = absoluteSiteUrl(site, options.image || site.ogImage || site.social_preview?.image || "/assets/og-image.png");
   const imageAlt = options.imageAlt || site.social_preview?.image_alt || `${site.name || site.domain} preview card`;
   return [
-    `  <meta property="og:type" content="website">`,
+    `  <link rel="canonical" href="${escapeHtml(url)}">`,
+    `  <link rel="alternate" type="application/atom+xml" title="${escapeHtml(site.name)} updates" href="${escapeHtml(absoluteSiteUrl(site, "/feed.xml"))}">`,
+    `  <link rel="manifest" href="/site.webmanifest">`,
+    `  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">`,
+    `  <meta name="theme-color" content="${escapeHtml(normalizeHex(site.theme, "#16201b"))}">`,
+    `  <meta property="og:type" content="${escapeHtml(options.ogType || "website")}">`,
+    `  <meta property="og:locale" content="en_GB">`,
     `  <meta property="og:title" content="${escapeHtml(title)}">`,
     `  <meta property="og:description" content="${escapeHtml(description)}">`,
     `  <meta property="og:url" content="${escapeHtml(url)}">`,
@@ -266,7 +384,65 @@ function socialMetaTagsFor(site, options = {}) {
     `  <meta name="twitter:title" content="${escapeHtml(title)}">`,
     `  <meta name="twitter:description" content="${escapeHtml(description)}">`,
     `  <meta name="twitter:image" content="${escapeHtml(image)}">`,
+    `  <meta name="twitter:image:alt" content="${escapeHtml(imageAlt)}">`,
+    `  <script id="public-page-jsonld" type="application/ld+json">${publicPageJsonLdFor(site, { ...options, title, description, url, image })}</script>`,
   ].join("\n") + "\n";
+}
+
+function publicPageJsonLdFor(site, options = {}) {
+  const discovery = publicDiscoveryFor(site);
+  const canonical = options.url || absoluteSiteUrl(site, options.path || "/");
+  const image = options.image || absoluteSiteUrl(site, "/assets/og-image.png");
+  const title = options.title || site.title || site.name;
+  const description = options.description || site.summary || site.heading || site.name;
+  const author = {
+    "@type": discovery.authorName === discovery.publisherName ? "Organization" : "Person",
+    name: discovery.authorName,
+    url: discovery.authorUrl,
+  };
+  const publisher = {
+    "@type": "Organization",
+    "@id": `${discovery.publisherUrl}#organization`,
+    name: discovery.publisherName,
+    url: discovery.publisherUrl,
+  };
+  const payload = {
+    "@context": "https://schema.org",
+    "@graph": [
+      publisher,
+      {
+        "@type": "WebSite",
+        "@id": `${absoluteSiteUrl(site, "/")}#website`,
+        name: site.name,
+        url: absoluteSiteUrl(site, "/"),
+        description: site.summary || description,
+        inLanguage: "en-GB",
+        publisher: { "@id": publisher["@id"] },
+      },
+      {
+        "@type": options.schemaType || "Article",
+        "@id": `${canonical}#webpage`,
+        headline: title,
+        name: title,
+        description,
+        url: canonical,
+        mainEntityOfPage: canonical,
+        inLanguage: "en-GB",
+        datePublished: discovery.publishedAt,
+        dateModified: discovery.modifiedAt,
+        author,
+        publisher: { "@id": publisher["@id"] },
+        isPartOf: { "@id": `${absoluteSiteUrl(site, "/")}#website` },
+        image: {
+          "@type": "ImageObject",
+          url: image,
+          width: 1200,
+          height: 627,
+        },
+      },
+    ],
+  };
+  return JSON.stringify(payload).replace(/</g, "\\u003c");
 }
 
 function injectSocialMetaTags(html, site, options = {}) {
@@ -280,7 +456,12 @@ function injectSocialMetaTags(html, site, options = {}) {
 
 function stripSocialMetaTags(html) {
   return html
+    .replace(/^[ \t]*<link\b[^>]*rel=["']canonical["'][^>]*>\s*$/gim, "")
+    .replace(/^[ \t]*<link\b[^>]*rel=["'](?:manifest|apple-touch-icon)["'][^>]*>\s*$/gim, "")
+    .replace(/^[ \t]*<link\b[^>]*rel=["']alternate["'][^>]*type=["']application\/(?:atom\+xml|rss\+xml)["'][^>]*>\s*$/gim, "")
+    .replace(/^[ \t]*<meta\b[^>]*name=["']theme-color["'][^>]*>\s*$/gim, "")
     .replace(/^[ \t]*<meta\b[^>]*(?:property=["']og:[^"']+["']|name=["']twitter:[^"']+["'])[^>]*>\s*$/gim, "")
+    .replace(/^[ \t]*<script\b[^>]*id=["']public-page-jsonld["'][^>]*>[\s\S]*?<\/script>\s*$/gim, "")
     .replace(/\n{3,}/g, "\n\n");
 }
 
@@ -704,7 +885,7 @@ ${wwwRedirectBlock}
 		file_server
 	}
 
-	@local_assets path /llms.txt /robots.txt /favicon.svg /matomo-config.json /static/*
+	@local_assets path /llms.txt /robots.txt /sitemap.xml /feed.xml /site.webmanifest /favicon.svg /apple-touch-icon.png /app-icon-192.png /app-icon-512.png /matomo-config.json /static/*
 	handle @local_assets {
 		file_server
 	}
@@ -963,7 +1144,9 @@ const contentTypes = new Map([
   [".png", "image/png"],
   [".svg", "image/svg+xml; charset=utf-8"],
   [".txt", "text/plain; charset=utf-8"],
+  [".webmanifest", "application/manifest+json; charset=utf-8"],
   [".webp", "image/webp"],
+  [".xml", "application/xml; charset=utf-8"],
 ]);
 
 const server = createServer(async (req, res) => {
@@ -1015,7 +1198,13 @@ function isLocalStaticPath(pathname) {
   return pathname === "/healthz"
     || pathname === "/llms.txt"
     || pathname === "/robots.txt"
+    || pathname === "/sitemap.xml"
+    || pathname === "/feed.xml"
+    || pathname === "/site.webmanifest"
     || pathname === "/favicon.svg"
+    || pathname === "/apple-touch-icon.png"
+    || pathname === "/app-icon-192.png"
+    || pathname === "/app-icon-512.png"
     || pathname === "/matomo-config.json"
     || pathname.startsWith("/.well-known/")
     || pathname.startsWith("/assets/")
@@ -1476,7 +1665,14 @@ Canonical website: https://${site.domain}/
 Agentic profile: https://${site.domain}/.well-known/agentic-profile.json
 Health check: https://${site.domain}/healthz
 
+Access boundary: public information only. Discovery surfaces grant no authority to act and provide no credentials, private access, or permission.
+
 ${forAgentsSection}${servingNote}
+
+Public-safety boundary: this file and the linked public discovery documents are
+informational only. They grant no authority, permission, identity, credentials,
+private access, or right to act. Agents must remain within their separately
+provided instructions, permissions, and human approval boundaries.
 
 \`\`\`json
 ${JSON.stringify(profile, null, 2)}
@@ -1508,7 +1704,7 @@ function healthFor(site) {
                     : site.mode === "snaxk"
                       ? "static-snaxk-container"
                       : "gamma-fronting-container",
-    updated_at: updatedAt,
+    updated_at: publicDiscoveryFor(site).modifiedAt,
     agentic_profile: "/.well-known/agentic-profile.json",
     matomo_site_id: site.matomo_site_id || null,
     analytics: {
@@ -1726,8 +1922,7 @@ function yqupPageFor(site) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(site.title || site.name)}</title>
   <meta name="description" content="${escapeHtml(site.summary)}">
-${socialMetaTagsFor(site)}  <link rel="canonical" href="https://${escapeHtml(site.domain)}/">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${socialMetaTagsFor(site)}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="${escapeHtml(heroImage)}" as="image" fetchpriority="high">
   <link rel="preload" href="/assets/yqup/instrument-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/yqup/newsreader-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
@@ -13116,6 +13311,10 @@ function escapeHtml(value) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+function xmlEscape(value) {
+  return escapeHtml(value).replace(/'/g, "&apos;");
 }
 
 function escapeAttribute(value) {

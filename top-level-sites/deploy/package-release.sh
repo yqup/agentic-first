@@ -12,6 +12,14 @@ ARCHIVE="${RELEASE_DIR}/${RELEASE_ID}.tar.gz"
 mkdir -p "${RELEASE_DIR}"
 
 cd "${REPO_ROOT}"
+node --check top-level-sites/build-sites.mjs
+node --check top-level-sites/scripts/check-social-previews.mjs
+node --check top-level-sites/scripts/check-public-discovery.mjs
+node top-level-sites/build-sites.mjs
+node top-level-sites/scripts/check-social-previews.mjs
+node top-level-sites/scripts/check-public-discovery.mjs
+find top-level-sites/dist -path '*/www/server.mjs' -print0 | xargs -0 -n1 node --check
+
 COPYFILE_DISABLE=1 tar --no-xattrs \
   --exclude='top-level-sites/deploy/releases' \
   -czf "${ARCHIVE}" \

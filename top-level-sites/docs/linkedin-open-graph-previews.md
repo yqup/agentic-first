@@ -41,6 +41,7 @@ per site at `/assets/og-image.png`.
 Generated head tags:
 
 ```html
+<link rel="canonical" href="https://example.com/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="...">
 <meta property="og:description" content="...">
@@ -55,12 +56,13 @@ Generated head tags:
 <meta name="twitter:title" content="...">
 <meta name="twitter:description" content="...">
 <meta name="twitter:image" content="https://example.com/assets/og-image.png">
+<meta name="twitter:image:alt" content="Example preview card">
 ```
 
 Preview image requirements now enforced:
 
 - Use one 1200 x 627 PNG per site.
-- Keep each image below 5 MB.
+- Keep each image below the 1 MB release target.
 - Use an absolute HTTPS URL in `og:image`, `og:image:secure_url`, and
   `twitter:image`.
 - Make the card readable at LinkedIn thumbnail size.
@@ -71,11 +73,16 @@ Preview image requirements now enforced:
   tags for every generated page.
 - Gamma-derived snapshots have partial or stale `og:*` / `twitter:*` tags
   stripped and replaced with the canonical generated metadata.
-- `top-level-sites/build-sites.mjs` generates the PNG card for each site during
-  the local build using macOS `sips`.
-- `top-level-sites/scripts/check-social-previews.mjs` verifies every generated
-  site has the required metadata, an absolute `https://<domain>/assets/og-image.png`
-  image URL, a 1200 x 627 PNG, and a file size below 5 MB.
+- `top-level-sites/build-sites.mjs` generates the PNG card with macOS `sips`
+  and the square app icons with ImageMagick during the AKAAR build.
+- `top-level-sites/scripts/check-social-previews.mjs` verifies matching Open
+  Graph and Twitter metadata plus a 1200 x 627 PNG below 1 MB.
+- `top-level-sites/scripts/check-public-discovery.mjs` verifies unique titles
+  and descriptions, one absolute canonical, Article JSON-LD, crawler discovery
+  files, app icons, and the public no-authority boundary.
+- `top-level-sites/deploy/package-release.sh` runs the build and validation
+  before creating a release archive, so incomplete discovery metadata fails
+  closed.
 
 ## Release
 
@@ -129,3 +136,6 @@ https://www.linkedin.com/post-inspector/
 
 Pass condition: LinkedIn shows the intended title, description, and preview
 image without manual correction.
+
+Test with a newly composed share. LinkedIn posts and WhatsApp messages that
+already exist normally keep their previously cached preview.

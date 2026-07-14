@@ -1,0 +1,31 @@
+{
+  "id": "/",
+  "name": "AI Operations Excellence",
+  "short_name": "AI Operations Excellence",
+  "description": "AIperations is a simple operating home for the practical discipline that turns AI demos into adopted, measurable, governed work.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fffaf2",
+  "theme_color": "#17312f",
+  "icons": [
+    {
+      "src": "/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

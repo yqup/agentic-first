@@ -38,7 +38,9 @@ const contentTypes = new Map([
   [".png", "image/png"],
   [".svg", "image/svg+xml; charset=utf-8"],
   [".txt", "text/plain; charset=utf-8"],
+  [".webmanifest", "application/manifest+json; charset=utf-8"],
   [".webp", "image/webp"],
+  [".xml", "application/xml; charset=utf-8"],
 ]);
 
 const server = createServer(async (req, res) => {
@@ -100,7 +102,13 @@ function isLocalStaticPath(pathname) {
   return pathname === "/healthz"
     || pathname === "/llms.txt"
     || pathname === "/robots.txt"
+    || pathname === "/sitemap.xml"
+    || pathname === "/feed.xml"
+    || pathname === "/site.webmanifest"
     || pathname === "/favicon.svg"
+    || pathname === "/apple-touch-icon.png"
+    || pathname === "/app-icon-192.png"
+    || pathname === "/app-icon-512.png"
     || pathname === "/matomo-config.json"
     || pathname.startsWith("/.well-known/")
     || pathname.startsWith("/assets/")
