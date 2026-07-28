@@ -53,3 +53,22 @@ curl -fsS https://www.emirorai.com/healthz
 
 Confirm the public page contains no email address, contact form, or TonyWood
 advisory strip, and that the Matomo loader is present.
+
+## Live deployment
+
+The holding page went live on ANI on 2026-07-28 through the app-scoped
+forced-command gate.
+
+```text
+release: top-level-sites-20260728T191406Z
+digest: e28519c1c422da31ce58f68f4e8d9af00c231e912d496d36bf87af1fb3b7fdea
+source commit: a757106
+receipt: /srv/deploy-state/top-level-sites/receipts/top-level-sites-20260728T191406Z.yaml
+result: pass
+rollback release: top-level-sites-20260714T094217Z
+```
+
+Post-deploy checks confirmed the `site-emirorai_com` container on loopback port
+`8216`, removal of `site-aiperations_com`, valid Caddy configuration, public
+HTTPS health on the apex and `www` hostnames, and Matomo site ID `10` bound to
+both hostnames.
