@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "trackerUrl": "https://tonywood.matomo.cloud/matomo.php",
+  "scriptUrl": "https://tonywood.matomo.cloud/matomo.js",
+  "siteId": "10",
+  "hostnames": [
+    "emirorai.com",
+    "www.emirorai.com"
+  ],
+  "northStar": {
+    "objective": "Measure aggregate public interest in Emiror AI while the holding page is live.",
+    "siteGoal": "Measure public interest in the Emiror AI holding page before launch.",
+    "primaryConversion": "return_visit_after_launch",
+    "primaryDestination": "https://emirorai.com/",
+    "source": "emirorai.com",
+    "campaign": "emirorai_holding_interest",
+    "measurementNote": "Use aggregate Matomo page views and return visits only; the holding page has no public contact or conversion action."
+  }
+}

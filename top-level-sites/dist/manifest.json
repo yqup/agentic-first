@@ -80,20 +80,20 @@
     "primary_conversion": "agentic_leadership_learning_progression"
   },
   {
-    "domain": "aiperations.com",
-    "service": "aiperations_com",
-    "mode": "ai_ops",
+    "domain": "emirorai.com",
+    "service": "emirorai_com",
+    "mode": "holding",
     "local_port": 8216,
     "local_preview": "http://127.0.0.1:8216/",
     "gamma_origin": null,
     "matomo_site_id": "10",
-    "document_root": "/srv/apps/top-level-sites/current/dist/aiperations.com/www",
-    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/aiperations.com/Caddyfile",
-    "profile": "https://aiperations.com/.well-known/agentic-profile.json",
-    "healthz": "https://aiperations.com/healthz",
-    "analytics_north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "analytics_site_goal": "Create qualified operations conversations around turning AI pilots into SOP-backed workflows, owners, gates, review cadence, and measurable outcomes.",
-    "primary_conversion": "ai_operations_workflow_review"
+    "document_root": "/srv/apps/top-level-sites/current/dist/emirorai.com/www",
+    "container_caddyfile": "/srv/apps/top-level-sites/current/dist/emirorai.com/Caddyfile",
+    "profile": "https://emirorai.com/.well-known/agentic-profile.json",
+    "healthz": "https://emirorai.com/healthz",
+    "analytics_north_star": "Measure aggregate public interest in Emiror AI while the holding page is live.",
+    "analytics_site_goal": "Measure public interest in the Emiror AI holding page before launch.",
+    "primary_conversion": "return_visit_after_launch"
   },
   {
     "domain": "agenticboard.com",

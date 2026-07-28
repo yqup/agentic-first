@@ -8,7 +8,7 @@ These snippets route each public hostname to its own local container:
 127.0.0.1:8213  my-agentic.com
 127.0.0.1:8214  chiefagenticofficer.com
 127.0.0.1:8215  agenticleader.com
-127.0.0.1:8216  aiperations.com
+127.0.0.1:8216  emirorai.com
 127.0.0.1:8217  agenticboard.com
 127.0.0.1:8218  dilijenz.com
 127.0.0.1:8219  syndesy.com

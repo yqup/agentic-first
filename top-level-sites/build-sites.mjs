@@ -71,9 +71,22 @@ for (const site of sites) {
   }
   if (site.mode === "holding") {
     const holdingPage = site.holding_page || {};
-    const html = holdingPage.template === "logo"
-      ? injectSourceFunnelStrip(logoHoldingPageFor(site, { title: site.title, ...holdingPage }), site, "logo_holding_advisory_strip")
-      : holdingPageFor(site);
+    let html;
+    if (holdingPage.template === "source") {
+      const sourceHtml = await readFile(path.join(__dirname, holdingPage.source), "utf8");
+      html = injectFaviconLink(
+        injectSocialMetaTags(injectMatomoScriptTag(sourceHtml, site), site),
+        site,
+      );
+    } else if (holdingPage.template === "logo") {
+      html = injectSourceFunnelStrip(
+        logoHoldingPageFor(site, { title: site.title, ...holdingPage }),
+        site,
+        "logo_holding_advisory_strip",
+      );
+    } else {
+      html = holdingPageFor(site);
+    }
     await writeFile(path.join(wwwRoot, "index.html"), html, "utf8");
   }
   if (site.mode === "country") {
@@ -169,7 +182,9 @@ async function loadPreviousGammaSnapshots(items) {
 }
 
 function profileFor(site) {
-  const profileFormUrl = site.contact?.form_url || tonywoodFunnelUrlFor(site, "profile_contact");
+  const profileFormUrl = site.public_contact_disabled
+    ? null
+    : site.contact?.form_url || tonywoodFunnelUrlFor(site, "profile_contact");
   const preferredChannel = profileFormUrl
     ? "form"
     : site.contact?.preferred_channel || "none";

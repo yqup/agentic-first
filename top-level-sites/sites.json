@@ -168,10 +168,10 @@
     ],
     "ecosystem_secondary": [
       {
-        "name": "AIperations",
-        "url": "https://aiperations.com/",
-        "campaign": "yqup_to_aiperations",
-        "content": "directory_aiperations"
+        "name": "Emiror AI",
+        "url": "https://emirorai.com/",
+        "campaign": "yqup_to_emiror_ai",
+        "content": "directory_emiror_ai"
       },
       {
         "name": "Agentic Leader",
@@ -957,41 +957,64 @@
     }
   },
   {
-    "domain": "aiperations.com",
-    "name": "AI Operations Excellence",
-    "mode": "ai_ops",
-    "title": "AIperations | AI operations that reach real work",
-    "heading": "Turn AI pilots into operating outcomes.",
-    "summary": "AIperations is a simple operating home for the practical discipline that turns AI demos into adopted, measurable, governed work.",
-    "eyebrow": "AI operations",
+    "domain": "emirorai.com",
+    "name": "Emiror AI",
+    "mode": "holding",
+    "title": "Emiror AI — Coming soon",
+    "heading": "We're working on something.",
+    "summary": "Come back soon.",
+    "eyebrow": "Holding page",
     "jurisdiction": "GB",
-    "industry": ["ai-operations", "automation", "operational-excellence"],
-    "theme": "#17312f",
-    "accent": "#d97745",
+    "industry": ["ai-operations", "automation", "research"],
+    "theme": "#0b2b26",
+    "accent": "#d8ff49",
     "matomo_site_id": "10",
-    "tonywood_funnel": {
-      "target_url": "https://www.tonywood.org/advisory/",
-      "source": "aiperations.com",
-      "campaign": "aiperations_to_tonywood_advisory"
-    },
     "analytics_goal": {
-      "site_goal": "Create qualified operations conversations around turning AI pilots into SOP-backed workflows, owners, gates, review cadence, and measurable outcomes.",
-      "primary_conversion": "ai_operations_workflow_review",
-      "measurement_note": "Track AIperations visitors who click workflow-review CTAs and arrive at Tonywood.org advisory with AI operations campaign parameters."
+      "north_star": "Measure aggregate public interest in Emiror AI while the holding page is live.",
+      "site_goal": "Measure public interest in the Emiror AI holding page before launch.",
+      "primary_conversion": "return_visit_after_launch",
+      "primary_destination": "https://emirorai.com/",
+      "campaign": "emirorai_holding_interest",
+      "measurement_note": "Use aggregate Matomo page views and return visits only; the holding page has no public contact or conversion action."
     },
-    "image_source": "https://assets.api.gamma.app/5q6puwhhx054y88/screenshots/z27miv4cxu2o27u/2reus8htgqhudk2/slide/JMCb0PziMkRFBxSPQz7v1_rJH88",
-    "sections": [
+    "holding_page": {
+      "template": "source",
+      "source": "assets/emiror-ai/index.html"
+    },
+    "assets": [
       {
-        "title": "Name the outcome",
-        "body": "Start with the business result, baseline, owner, and decision rights before the prototype becomes another promising demo."
+        "source": "assets/emiror-ai/styles.css",
+        "target": "assets/styles.css"
       },
       {
-        "title": "Change the work",
-        "body": "AI only becomes operational when workflows, manager capacity, escalation, training, and review rhythms are redesigned around it."
+        "source": "assets/emiror-ai/script.js",
+        "target": "assets/script.js"
+      },
+      {
+        "source": "assets/emiror-ai/emiror-ai-mark.png",
+        "target": "assets/emiror-ai-mark.png"
+      },
+      {
+        "source": "assets/emiror-ai/new-hope-morning-signal.jpg",
+        "target": "assets/new-hope-morning-signal.jpg"
       }
     ],
+    "social_preview": {
+      "asset": "assets/emiror-ai/social-preview.png",
+      "title": "Emiror AI — Coming soon",
+      "description": "We're working on something. Come back soon."
+    },
+    "public_discovery": {
+      "author_name": "Emiror AI",
+      "author_url": "https://emirorai.com/",
+      "publisher_name": "Emiror AI",
+      "publisher_url": "https://emirorai.com/",
+      "published_at": "2026-07-28T00:00:00Z",
+      "modified_at": "2026-07-28T00:00:00Z"
+    },
+    "public_contact_disabled": true,
     "contact": {
-      "preferred_channel": "form"
+      "preferred_channel": "none"
     }
   },
   {

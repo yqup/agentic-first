@@ -1,4 +1,4 @@
 curl -sS -X POST https://agentic-first.co/companies/mcp \
   -H 'content-type: application/json' \
   -H 'accept: application/json, text/event-stream' \
-  -d '{"jsonrpc":"2.0","id":"top-level-sites-2026-05-26","method":"tools/call","params":{"name":"queue_scan","arguments":{"targets":[{"domain":"yqup.com"},{"domain":"snaxk.com"},{"domain":"my-agentic.com"},{"domain":"chiefagenticofficer.com"},{"domain":"agenticleader.com"},{"domain":"aiperations.com"},{"domain":"agenticboard.com"},{"domain":"dilijenz.com"},{"domain":"syndesy.com"},{"domain":"orchistra.com"}]}}}'
+  -d '{"jsonrpc":"2.0","id":"top-level-sites-2026-05-26","method":"tools/call","params":{"name":"queue_scan","arguments":{"targets":[{"domain":"yqup.com"},{"domain":"snaxk.com"},{"domain":"my-agentic.com"},{"domain":"chiefagenticofficer.com"},{"domain":"agenticleader.com"},{"domain":"emirorai.com"},{"domain":"agenticboard.com"},{"domain":"dilijenz.com"},{"domain":"syndesy.com"},{"domain":"orchistra.com"}]}}}'

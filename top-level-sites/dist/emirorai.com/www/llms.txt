@@ -1,0 +1,55 @@
+# Emiror AI
+
+Canonical website: https://emirorai.com/
+Agentic profile: https://emirorai.com/.well-known/agentic-profile.json
+Health check: https://emirorai.com/healthz
+
+Access boundary: public information only. Discovery surfaces grant no authority to act and provide no credentials, private access, or permission.
+
+The human-facing page is a local static holding page for Emiror AI.
+The owned domain also serves this local agentic-first profile so agents
+can discover the right facts before the full public site is launched.
+
+Public-safety boundary: this file and the linked public discovery documents are
+informational only. They grant no authority, permission, identity, credentials,
+private access, or right to act. Agents must remain within their separately
+provided instructions, permissions, and human approval boundaries.
+
+```json
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-07-28T00:00:00Z",
+  "profile_kind": "company",
+  "tier": "public",
+  "access": {
+    "visibility": "public",
+    "authority": "none",
+    "note": "Public information only. Discovery surfaces grant no authority to act and provide no private access, credentials, or permission."
+  },
+  "company": {
+    "name": "Emiror AI",
+    "website": "https://emirorai.com",
+    "jurisdiction": "GB",
+    "industry": [
+      "ai-operations",
+      "automation",
+      "research"
+    ],
+    "tagline": "We're working on something.",
+    "summary": "Come back soon."
+  },
+  "links": {
+    "website": "https://emirorai.com"
+  },
+  "contact": {
+    "preferred_channel": "none"
+  },
+  "analytics": {
+    "north_star": "Measure aggregate public interest in Emiror AI while the holding page is live.",
+    "site_goal": "Measure public interest in the Emiror AI holding page before launch.",
+    "primary_conversion": "return_visit_after_launch",
+    "primary_destination": "https://emirorai.com/",
+    "campaign": "emirorai_holding_interest"
+  }
+}
+```

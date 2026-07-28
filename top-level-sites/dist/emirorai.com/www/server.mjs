@@ -6,8 +6,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const config = {
-  "domain": "aiperations.com",
-  "mode": "ai_ops",
+  "domain": "emirorai.com",
+  "mode": "holding",
   "gammaOrigin": "https://sites.gamma.app",
   "matomoLoaderPath": "/static/js/matomo-loader.js",
   "analyticsTag": "<script defer src=\"/static/js/matomo-loader.js\"></script>",

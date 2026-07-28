@@ -73,9 +73,9 @@ services:
     tmpfs:
       - /tmp
 
-  aiperations_com:
+  emirorai_com:
     image: node:20-alpine
-    container_name: site-aiperations_com
+    container_name: site-emirorai_com
     restart: unless-stopped
     read_only: true
     user: node
@@ -83,7 +83,7 @@ services:
     ports:
       - "127.0.0.1:8216:8080"
     volumes:
-      - ./dist/aiperations.com/www:/srv/site:ro
+      - ./dist/emirorai.com/www:/srv/site:ro
     tmpfs:
       - /tmp
 

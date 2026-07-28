@@ -1,13 +1,13 @@
 {
   "id": "/",
-  "name": "AI Operations Excellence",
-  "short_name": "AI Operations Excellence",
-  "description": "AIperations is a simple operating home for the practical discipline that turns AI demos into adopted, measurable, governed work.",
+  "name": "Emiror AI",
+  "short_name": "Emiror AI",
+  "description": "Come back soon.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#fffaf2",
-  "theme_color": "#17312f",
+  "theme_color": "#0b2b26",
   "icons": [
     {
       "src": "/app-icon-192.png",

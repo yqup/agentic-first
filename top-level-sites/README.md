@@ -27,7 +27,7 @@ domains at the server.
 | `my-agentic.com` | `8213` | `my_agentic_com` |
 | `chiefagenticofficer.com` | `8214` | `chiefagenticofficer_com` |
 | `agenticleader.com` | `8215` | `agenticleader_com` |
-| `aiperations.com` | `8216` | `aiperations_com` |
+| `emirorai.com` | `8216` | `emirorai_com` |
 | `agenticboard.com` | `8217` | `agenticboard_com` |
 | `dilijenz.com` | `8218` | `dilijenz_com` |
 | `syndesy.com` | `8219` | `syndesy_com` |
@@ -35,7 +35,7 @@ domains at the server.
 
 ## Build
 
-Run on AKAAR:
+Run on ROKY:
 
 ```bash
 cd /Users/tonywood/agentic-first/agentic-first
@@ -58,10 +58,11 @@ This regenerates:
 - [YQUP consulting refresh](docs/yqup-consulting-refresh.md)
 - [Orchistra CAO feeder refresh](docs/orchistra-cao-feeder-refresh.md)
 - [Chief Agentic Officer briefing signup](docs/chief-agentic-officer-briefing-signup.md)
+- [Emiror AI holding-page launch](docs/emiror-ai-holding-page-launch.md)
 
 ## Local Container Preview
 
-Run on AKAAR:
+Run on ROKY:
 
 ```bash
 cd /Users/tonywood/agentic-first/agentic-first/top-level-sites
