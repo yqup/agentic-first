@@ -110,7 +110,43 @@ parameters, reduced-motion handling, image loading, and clean browser consoles.
 ## Deployment
 
 - Target: ANI through the `top-level-sites-deploy-ani` forced-command gate.
-- Release ID: pending.
-- Public acceptance: pending.
+- Release ID: `top-level-sites-20260729T081923Z`.
+- Source commit: `a4d2222`.
+- Archive SHA-256:
+  `1ee1a6929367565c9e9be1fa624c8252ffb1743ec8459288200c0e4a90e1adb0`.
+- Current release:
+  `/srv/apps/top-level-sites/releases/top-level-sites-20260729T081923Z`.
+- Server receipt:
+  `/srv/deploy-state/top-level-sites/receipts/top-level-sites-20260729T081923Z.yaml`.
+
+The deploy gate checksum-verified the archive, recreated the managed site
+containers, passed loopback `/healthz` and agentic-profile smokes, validated and
+reloaded Caddy, switched the current release, and wrote the receipt.
+
+## Public Acceptance
+
+Crawler-style HTTPS checks passed for:
+
+- `https://snaxk.com/`
+- `https://www.snaxk.com/`
+- `https://orchistra.com/`
+- `https://www.orchistra.com/`
+
+For all four hosts, `/`, `/healthz`, `/llms.txt`,
+`/.well-known/agentic-profile.json`, `/matomo-config.json`, `/favicon.svg`,
+`/robots.txt`, `/sitemap.xml`, `/feed.xml`, `/site.webmanifest`, and
+`/assets/og-image.png` returned `200`.
+
+Public HTML checks confirmed canonical metadata, Open Graph and Twitter
+metadata, JSON-LD, the correct sibling campaign, and the expected headline.
+Matomo configuration remains site ID `6` for SNAXK and `14` for Orchistra.
+
+Live desktop visual checks confirmed:
+
+- the SNAXK judgement-room hero, original identity, readable navigation, and
+  visible `Before the work moves` section;
+- the Orchistra conservatory hero, clear product identity, readable
+  navigation, and visible `One calm operating layer` section;
+- no horizontal overflow at the tested `1440px` viewport.
 
 Do not deploy by directly changing Docker, Caddy, DNS, or files on ANI.
