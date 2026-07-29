@@ -72,3 +72,31 @@ Post-deploy checks confirmed the `site-emirorai_com` container on loopback port
 `8216`, removal of `site-aiperations_com`, valid Caddy configuration, public
 HTTPS health on the apex and `www` hostnames, and Matomo site ID `10` bound to
 both hostnames.
+
+## Matomo account registration
+
+On 2026-07-29, the Matomo account entry for site ID `10` was updated from the
+retired `aiperations.com` property to:
+
+```text
+name: Emiror AI
+main URL: https://emirorai.com
+alias URL: https://www.emirorai.com
+```
+
+The public page already contained the shared deferred cookieless loader and
+served `/matomo-config.json` with site ID `10`, so no website release was
+required for this account-side correction.
+
+Verification:
+
+- the public Matomo surface checker passed;
+- the Matomo API returned both apex and `www` URLs for site ID `10`;
+- one privacy-safe synthetic Emiror AI pageview was accepted by
+  `matomo.php` with HTTP `204`;
+- no token, visitor log, IP address, heatmap, or session recording was exposed.
+
+Three historical AIPerations goal definitions remain attached to the reused
+site ID. The current Emiror AI holding page has no matching calls to action, so
+those goals cannot be triggered by the live page. They were retained to avoid
+destructive alteration of historical analytics.
