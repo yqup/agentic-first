@@ -253,6 +253,21 @@
     "title": "SNAXK | Judgement engine for agentic work",
     "heading": "A judgement engine for agentic work.",
     "summary": "SNAXK helps surface the judgement a Chief Agentic Officer needs to inspect: ownership, boundaries, stop conditions, evidence, review, and measurable trust for long-running agentic systems.",
+    "social_preview": {
+      "title": "SNAXK | Judgement engine for agentic work",
+      "description": "Surface ownership, boundaries, stop conditions, evidence, review, and measurable trust before agentic work moves.",
+      "image_title": "A judgement engine for agentic work",
+      "image_alt": "SNAXK judgement workspace overlooking the English countryside, with evidence, boundaries, and review markers.",
+      "asset": "assets/snaxk/social-preview.png"
+    },
+    "public_discovery": {
+      "author_name": "Tony Wood",
+      "author_url": "https://www.tonywood.org/",
+      "publisher_name": "YQUP Ltd",
+      "publisher_url": "https://yqup.com/",
+      "published_at": "2026-05-26T00:00:00Z",
+      "modified_at": "2026-07-29T00:00:00Z"
+    },
     "eyebrow": "SNAXK",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "evaluation", "decision-support"],
@@ -270,6 +285,17 @@
       "lozenge": "/assets/snaxk-lozenge.png",
       "badge": "/assets/snaxk-badge.png",
       "logo": "/assets/snaxk-logo.png"
+    },
+    "hero_background_image": "/assets/snaxk/hero-judgement-room.webp",
+    "hero_background_image_mobile": "/assets/snaxk/hero-judgement-room-mobile.webp",
+    "evidence_image": "/assets/snaxk/evidence-table.webp",
+    "sibling_product": {
+      "name": "Orchistra",
+      "url": "https://orchistra.com/",
+      "campaign": "snaxk_to_orchistra",
+      "content": "sibling_orchistra",
+      "title": "Visible work and visible judgement belong beside one another.",
+      "body": "Orchistra keeps agent work visible and coordinated. SNAXK helps decide what may proceed, what should stop, and where human judgement is required."
     },
     "research_milestone": "SNAXK 0.10.8",
     "primary_action_label": "Open the CAO briefing",
@@ -299,6 +325,30 @@
       {
         "source": "assets/snaxk-logo.png",
         "target": "assets/snaxk-logo.png"
+      },
+      {
+        "source": "assets/snaxk/hero-judgement-room.webp",
+        "target": "assets/snaxk/hero-judgement-room.webp"
+      },
+      {
+        "source": "assets/snaxk/hero-judgement-room-mobile.webp",
+        "target": "assets/snaxk/hero-judgement-room-mobile.webp"
+      },
+      {
+        "source": "assets/snaxk/evidence-table.webp",
+        "target": "assets/snaxk/evidence-table.webp"
+      },
+      {
+        "source": "assets/snaxk/social-preview.png",
+        "target": "assets/snaxk/social-preview.png"
+      },
+      {
+        "source": "assets/orchistra/instrument-sans-latin-variable.woff2",
+        "target": "assets/system/instrument-sans-latin-variable.woff2"
+      },
+      {
+        "source": "assets/orchistra/newsreader-latin-variable.woff2",
+        "target": "assets/system/newsreader-latin-variable.woff2"
       }
     ],
     "sections": [
@@ -1160,7 +1210,8 @@
       "image_title": "Agent work people can follow",
       "image_alt": "Orchistra product preview showing agent attention, MCP access, approved work, and evidence.",
       "node_labels": ["Attention", "MCP access", "Approved work", "Evidence"],
-      "node_status": "visible"
+      "node_status": "visible",
+      "asset": "assets/orchistra/social-preview.png"
     },
     "public_discovery": {
       "author_name": "Tony Wood",
@@ -1168,7 +1219,7 @@
       "publisher_name": "YQUP Ltd",
       "publisher_url": "https://yqup.com/",
       "published_at": "2026-06-03T00:00:00Z",
-      "modified_at": "2026-07-14T00:00:00Z"
+      "modified_at": "2026-07-29T00:00:00Z"
     },
     "eyebrow": "Coordination for trusted agents",
     "jurisdiction": "GB",
@@ -1182,6 +1233,14 @@
     "hero_background_image_mobile": "/assets/orchistra/hero-conservatory-mobile.webp",
     "hero_product_image": "/assets/orchistra/hero-console.webp",
     "hero_product_image_mobile": "/assets/orchistra/hero-console-mobile.webp",
+    "sibling_product": {
+      "name": "SNAXK",
+      "url": "https://snaxk.com/",
+      "campaign": "orchistra_to_snaxk",
+      "content": "sibling_snaxk",
+      "title": "Coordination needs judgement beside it.",
+      "body": "Orchistra keeps agent work visible and coordinated. SNAXK helps decide what should happen next: proceed, pause, stop, or return to a human."
+    },
     "assets": [
       {
         "source": "assets/orchistra/countryside-field.webp",
@@ -1204,12 +1263,24 @@
         "target": "assets/orchistra/hero-console-mobile.webp"
       },
       {
+        "source": "assets/orchistra/social-preview.png",
+        "target": "assets/orchistra/social-preview.png"
+      },
+      {
         "source": "assets/orchistra/instrument-sans-latin-variable.woff2",
         "target": "assets/orchistra/instrument-sans-latin-variable.woff2"
       },
       {
         "source": "assets/orchistra/newsreader-latin-variable.woff2",
         "target": "assets/orchistra/newsreader-latin-variable.woff2"
+      },
+      {
+        "source": "assets/orchistra/instrument-sans-latin-variable.woff2",
+        "target": "assets/system/instrument-sans-latin-variable.woff2"
+      },
+      {
+        "source": "assets/orchistra/newsreader-latin-variable.woff2",
+        "target": "assets/system/newsreader-latin-variable.woff2"
       }
     ],
     "tonywood_funnel": {

@@ -262,7 +262,7 @@ async function generateSocialPreviewImage(site, wwwRoot) {
   }
   await writeFile(svgPath, socialPreviewSvgFor(site), "utf8");
   try {
-    await execFileAsync("sips", ["-s", "format", "png", svgPath, "--out", pngPath], { timeout: 15000 });
+    await rasterizeSvg(svgPath, pngPath);
   } catch (error) {
     throw new Error(`Could not generate Open Graph PNG for ${site.domain}: ${error.message}`);
   } finally {
@@ -280,16 +280,38 @@ async function generateAppIcons(site, wwwRoot) {
   await writeFile(sourcePath, faviconFor(site), "utf8");
   try {
     for (const [filename, size] of icons) {
-      await execFileAsync(
-        "sips",
-        ["-s", "format", "png", "-z", String(size), String(size), sourcePath, "--out", path.join(wwwRoot, filename)],
-        { timeout: 15000 },
-      );
+      await rasterizeSvg(sourcePath, path.join(wwwRoot, filename), size);
     }
   } catch (error) {
     throw new Error(`Could not generate app icons for ${site.domain}: ${error.message}`);
   } finally {
     await rm(sourcePath, { force: true });
+  }
+}
+
+async function rasterizeSvg(sourcePath, targetPath, size = null) {
+  const sipsArgs = ["-s", "format", "png"];
+  if (size) sipsArgs.push("-z", String(size), String(size));
+  sipsArgs.push(sourcePath, "--out", targetPath);
+  try {
+    await execFileAsync("sips", sipsArgs, { timeout: 15000 });
+    return;
+  } catch (sipsError) {
+    const magickArgs = [
+      "-font",
+      "/System/Library/Fonts/Supplemental/Verdana.ttf",
+      "-background",
+      "none",
+      sourcePath,
+    ];
+    if (size) magickArgs.push("-resize", `${size}x${size}!`);
+    magickArgs.push(targetPath);
+    try {
+      await execFileAsync("magick", magickArgs, { timeout: 15000 });
+      return;
+    } catch (magickError) {
+      throw new Error(`sips failed (${sipsError.message}); ImageMagick failed (${magickError.message})`);
+    }
   }
 }
 
@@ -6941,113 +6963,36 @@ ${matomoScriptTagFor(site)}  <style>
 `;
 }
 
-function snaxkPageFor(site) {
-  return snaxkConceptPageFor(site);
-  const title = site.title || "SNAXK | Judgement for long-running agents";
-  const summary = site.summary || "SNAXK is a research skill for OpenClaw testing whether a lightweight control layer can help long-running agents act with better judgement, better boundaries, and clearer review.";
-  const lozenge = site.brand_assets?.lozenge || "/assets/snaxk-lozenge.png";
-  const logo = site.brand_assets?.logo || "/assets/snaxk-logo.png";
-  const milestone = site.research_milestone || "SNAXK 0.10.8";
-  const footerProductLine = site.footer_product_line || "A YQUP product";
-  const footerLegal = site.footer_legal || "Copyright (c) 2026 YQUP Ltd";
-  const statusNote = site.status_note || "";
-  const statusNoteMarkup = statusNote
-    ? `\n            <p>${escapeHtml(statusNote)}</p>`
-    : "";
-  const caoFeeder = site.cao_feeder || {};
-  const caoUrl = caoFeeder.primary_url || "https://chiefagenticofficer.com/";
-  const caoCampaign = caoFeeder.primary_campaign || "snaxk_to_chiefagenticofficer";
-  const caoStage = caoFeeder.primary_stage || "source_to_chiefagenticofficer";
-  const caoHeroContent = caoFeeder.primary_content || "hero_cao_briefing";
-  const caoPanelContent = "cao_briefing_panel";
-  const advisoryUrl = caoFeeder.secondary_url || defaultTonywoodAdvisoryUrl;
-  const advisoryCampaign = caoFeeder.secondary_campaign || "snaxk_to_tonywood_advisory";
-  const advisoryStage = caoFeeder.secondary_stage || "source_to_tonywood_advisory";
-  const heroCaoHref = trackedOutboundUrlFor(site, caoUrl, caoHeroContent, caoCampaign) || caoUrl;
-  const panelCaoHref = trackedOutboundUrlFor(site, caoUrl, caoPanelContent, caoCampaign) || caoUrl;
-  const finalCaoHref = trackedOutboundUrlFor(site, caoUrl, "final_cao_briefing", caoCampaign) || caoUrl;
-  const advisoryHref = trackedOutboundUrlFor(site, advisoryUrl, "hero_tonywood_advisory", advisoryCampaign) || advisoryUrl;
-  const panelAdvisoryContent = "cao_panel_tonywood_advisory";
-  const panelAdvisoryHref = trackedOutboundUrlFor(site, advisoryUrl, panelAdvisoryContent, advisoryCampaign) || advisoryUrl;
-  const engineInterestContent = caoFeeder.engine_content || "snaxk_engine_interest";
-  const engineInterestHref = trackedOutboundUrlFor(site, advisoryUrl, engineInterestContent, advisoryCampaign) || advisoryUrl;
-  const loop = site.judgement_loop || [
-    { label: "01", title: "Fast heuristic pass", body: "Scan messages, events, and signals before action." },
-    { label: "02", title: "Meaning check", body: "Separate routine noise from work that deserves judgement." },
-    { label: "03", title: "Bounded route", body: "Move triggered cases through clear boundaries and guardrails." },
-    { label: "04", title: "Reflect overnight", body: "Compare, reflect, and wait before changing behaviour." },
-    { label: "05", title: "Reviewed carry-forward", body: "Only reviewed changes become future judgement." },
-  ];
-  const boundaries = site.boundary_checks || [
-    { title: "When to slow down", body: "High consequence, weak evidence, unfamiliar context, or mismatched confidence." },
-    { title: "When to stop", body: "A request crosses permission, privacy, safety, spending, publishing, or accountability boundaries." },
-    { title: "What to share", body: "Judgement includes deciding what is appropriate to reveal, quote, remember, or pass to another system." },
-    { title: "How to adapt", body: "The same action may be right for one person, wrong for another, and unclear until context is reviewed." },
-  ];
-  const measurements = site.measurement_checks || [
-    "Is this safer?",
-    "Is it more understandable to humans?",
-    "Is it better than a simpler alternative?",
-    "Can we measure trustworthiness over time?",
-  ];
-  const sections = site.sections || [
-    {
-      title: "Agents can produce output before they know how to judge it.",
-      body: "Most agent systems are already good at taking a task and producing an answer. The real gap is judgement.",
-    },
-    {
-      title: "The control layer should be lightweight.",
-      body: "SNAXK is testing whether a smaller research skill can help long-running agents notice when to continue, pause, escalate, or change course.",
-    },
-  ];
-  const engineCards = [
-    {
-      label: "Signal",
-      title: "Notice before action",
-      body: "Read the signal, the consequence, and the uncertainty before work moves on.",
-    },
-    {
-      label: "Boundary",
-      title: "Slow, stop, adapt",
-      body: "Make the pause points visible enough for a human to inspect later.",
-    },
-    {
-      label: "Evidence",
-      title: "Carry the trail",
-      body: "Keep the record of why the system changed course or decided not to.",
-    },
-  ];
+function siblingProductSharedStyles() {
+  return `
+    @font-face {
+      font-family: "Instrument Sans";
+      src: url("/assets/system/instrument-sans-latin-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
 
-  return `<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(title)}</title>
-  <meta name="description" content="${escapeHtml(summary)}">
-${socialMetaTagsFor(site, { title, description: summary })}  <link rel="preload" as="image" href="${escapeHtml(lozenge)}">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-${matomoScriptTagFor(site)}  <style>
+    @font-face {
+      font-family: "Newsreader";
+      src: url("/assets/system/newsreader-latin-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 300 700;
+      font-display: swap;
+    }
+
     :root {
-      color-scheme: light;
-      --ink: #191814;
-      --muted: #5c564b;
-      --paper: #f8f1e3;
-      --cream: #fffaf0;
-      --brown: #4b2f1b;
-      --brown-soft: #754c22;
-      --gold: #f2b84b;
-      --honey: #f7d487;
-      --sage: #617d66;
-      --field: #26392f;
-      --hedge: #1e2a23;
-      --charcoal: #181b19;
-      --oxblood: #8f342d;
-      --mist: #dbe6e0;
-      --line: rgba(25, 24, 20, 0.15);
-      --line-light: rgba(255, 250, 240, 0.18);
-      --shadow: rgba(25, 24, 20, 0.15);
-      --serif: Georgia, "Times New Roman", serif;
+      --sp-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+      --sp-serif: "Newsreader", Georgia, serif;
+      --sp-paper: #f8f6ef;
+      --sp-white: #fffdf7;
+      --sp-ink: #11130f;
+      --sp-muted: #5a5d55;
+      --sp-night: #080b09;
+      --sp-line: rgba(17, 19, 15, 0.16);
+      --sp-light-line: rgba(255, 253, 247, 0.2);
+      --sp-gutter: clamp(22px, 5vw, 76px);
+      --sp-max: 1240px;
     }
 
     * {
@@ -7056,1134 +7001,1233 @@ ${matomoScriptTagFor(site)}  <style>
 
     html {
       scroll-behavior: smooth;
+      background: var(--sp-night);
       overflow-x: hidden;
     }
 
     body {
       margin: 0;
-      color: var(--ink);
-      background:
-        linear-gradient(90deg, rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 28px 28px,
-        linear-gradient(rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 28px 28px,
-        linear-gradient(180deg, var(--paper) 0, #eee0c7 100%);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--sp-paper);
+      color: var(--sp-ink);
+      font-family: var(--sp-sans);
+      font-size: 17px;
+      line-height: 1.58;
       letter-spacing: 0;
       overflow-x: hidden;
     }
 
     a {
       color: inherit;
+      text-underline-offset: 0.2em;
     }
 
-    .site-header {
-      min-height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 14px 42px;
-      background: var(--hedge);
-      border-bottom: 1px solid var(--line-light);
-      color: var(--cream);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      font-weight: 860;
-    }
-
-    .brand img {
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-      object-fit: contain;
-      background: var(--cream);
-      box-shadow: 0 0 0 1px rgba(255, 250, 240, 0.28);
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 8px 22px;
-      color: rgba(255, 250, 240, 0.78);
-      font-size: 14px;
-      font-weight: 780;
-    }
-
-    nav a {
-      text-decoration: none;
-    }
-
-    main {
-      overflow: hidden;
-    }
-
-    .hero {
-      position: relative;
-      min-height: clamp(640px, 82svh, 780px);
-      display: grid;
-      grid-template-columns: minmax(0, 0.92fr) minmax(390px, 0.78fr);
-      gap: 48px;
-      align-items: center;
-      padding: 72px 42px 82px;
-      color: var(--cream);
-      background:
-        radial-gradient(circle at 75% 24%, rgba(242, 184, 75, 0.24), transparent 30%),
-        linear-gradient(90deg, rgba(24, 27, 25, 0.98), rgba(24, 27, 25, 0.78) 48%, rgba(38, 57, 47, 0.62)),
-        linear-gradient(135deg, #181b19 0%, #26392f 58%, #7d5a22 132%);
-      isolation: isolate;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background:
-        radial-gradient(ellipse at 88% 58%, transparent 0 18%, rgba(255, 250, 240, 0.10) 18.3% 18.6%, transparent 18.9% 100%),
-        radial-gradient(ellipse at 81% 51%, transparent 0 28%, rgba(255, 250, 240, 0.08) 28.3% 28.6%, transparent 28.9% 100%),
-        radial-gradient(ellipse at 73% 46%, transparent 0 38%, rgba(255, 250, 240, 0.06) 38.3% 38.6%, transparent 38.9% 100%),
-        linear-gradient(90deg, rgba(255, 250, 240, 0.035) 1px, transparent 1px) 0 0 / 34px 34px,
-        linear-gradient(rgba(255, 250, 240, 0.035) 1px, transparent 1px) 0 0 / 34px 34px;
-      opacity: 0.84;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0;
-      height: 90px;
-      z-index: -1;
-      background: linear-gradient(0deg, rgba(248, 241, 227, 0.92), transparent);
-    }
-
-    .hero-copy,
-    .judgement-map {
-      position: relative;
-      z-index: 1;
-    }
-
-    .eyebrow {
-      margin: 0 0 14px;
-      color: var(--oxblood);
-      font-size: 13px;
-      line-height: 1.2;
-      font-weight: 860;
-      text-transform: uppercase;
-      letter-spacing: 0;
+    h1,
+    h2,
+    h3,
+    p,
+    figure,
+    blockquote {
+      margin-top: 0;
     }
 
     h1,
     h2,
     h3 {
-      margin: 0;
       letter-spacing: 0;
+      overflow-wrap: anywhere;
     }
 
-    h1 {
-      max-width: 10.5ch;
-      color: var(--cream);
-      font-family: var(--serif);
-      font-size: clamp(50px, 7vw, 88px);
-      line-height: 0.96;
+    img {
+      max-width: 100%;
+    }
+
+    .sp-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      min-height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      padding: 14px var(--sp-gutter);
+      border-bottom: 1px solid var(--sp-light-line);
+      background: rgba(6, 9, 7, 0.8);
+      -webkit-backdrop-filter: blur(18px) saturate(125%);
+      backdrop-filter: blur(18px) saturate(125%);
+      color: var(--sp-white);
+    }
+
+    .sp-brand {
+      min-width: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 13px;
+      color: var(--sp-white);
+      text-decoration: none;
+    }
+
+    .sp-brand-copy {
+      display: grid;
+      gap: 1px;
+    }
+
+    .sp-brand-copy strong {
+      font-size: 16px;
+      line-height: 1.1;
+    }
+
+    .sp-brand-copy span {
+      color: rgba(255, 253, 247, 0.67);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .sp-nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: clamp(16px, 2.2vw, 30px);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .sp-nav a {
+      color: var(--sp-white);
+      text-decoration: none;
+      text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7);
+    }
+
+    .sp-nav a:hover,
+    .sp-nav a:focus-visible {
+      text-decoration: underline;
+    }
+
+    .sp-nav .sp-nav-cta {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 18px;
+      border: 1px solid var(--sp-white);
+      border-radius: 5px;
+      background: var(--sp-white);
+      color: var(--sp-ink);
+      text-shadow: none;
+    }
+
+    .sp-mobile-nav {
+      display: none;
+      position: relative;
+    }
+
+    .sp-mobile-nav summary {
+      min-width: 44px;
+      min-height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 253, 247, 0.5);
+      border-radius: 5px;
+      cursor: pointer;
+      list-style: none;
+      font-size: 14px;
       font-weight: 700;
     }
 
-    h2 {
-      color: var(--charcoal);
-      font-family: var(--serif);
-      font-size: 46px;
-      line-height: 1.05;
-      font-weight: 700;
+    .sp-mobile-nav summary::-webkit-details-marker {
+      display: none;
     }
 
-    h3 {
-      color: var(--ink);
-      font-size: 20px;
-      line-height: 1.2;
-      font-weight: 820;
+    .sp-mobile-nav-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: min(270px, calc(100vw - 44px));
+      display: grid;
+      padding: 10px;
+      border: 1px solid var(--sp-light-line);
+      border-radius: 6px;
+      background: rgba(8, 11, 9, 0.98);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
     }
 
-    .lede {
-      max-width: 700px;
-      margin: 24px 0 0;
-      color: var(--muted);
-      font-size: 20px;
-      line-height: 1.55;
+    .sp-mobile-nav-menu a {
+      padding: 12px;
+      color: var(--sp-white);
+      text-decoration: none;
     }
 
-    .hero .lede {
-      color: rgba(255, 250, 240, 0.84);
-      font-size: clamp(18px, 2vw, 22px);
+    .sp-hero {
+      position: relative;
+      min-height: clamp(650px, 88svh, 840px);
+      display: grid;
+      align-items: end;
+      isolation: isolate;
+      color: var(--sp-white);
+      background-color: var(--sp-night);
+      background-image: var(--sp-hero-image);
+      background-position: center;
+      background-size: cover;
+      overflow: hidden;
     }
 
-    .actions {
+    .sp-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(5, 8, 6, 0.88) 0%, rgba(5, 8, 6, 0.62) 45%, rgba(5, 8, 6, 0.12) 76%),
+        linear-gradient(0deg, rgba(5, 8, 6, 0.72) 0%, transparent 48%),
+        linear-gradient(180deg, rgba(5, 8, 6, 0.4) 0%, transparent 28%);
+    }
+
+    .sp-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(112deg, transparent 35%, rgba(255, 255, 255, 0.1) 48%, transparent 58%);
+      transform: translateX(-90%);
+      animation: sp-reflection 12s ease-in-out 1.4s infinite;
+      pointer-events: none;
+    }
+
+    .sp-hero-inner {
+      width: min(100%, var(--sp-max));
+      display: grid;
+      gap: 20px;
+      padding: 152px var(--sp-gutter) clamp(68px, 8vw, 96px);
+    }
+
+    .sp-eyebrow {
+      margin: 0;
+      color: var(--sp-accent);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .sp-hero h1 {
+      max-width: 790px;
+      margin-bottom: 0;
+      font-family: var(--sp-serif);
+      font-size: clamp(58px, 7vw, 104px);
+      font-weight: 430;
+      line-height: 0.91;
+    }
+
+    .sp-hero-lede {
+      max-width: 680px;
+      margin-bottom: 4px;
+      color: rgba(255, 253, 247, 0.86);
+      font-size: clamp(19px, 2vw, 25px);
+      line-height: 1.46;
+    }
+
+    .sp-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 30px;
+      align-items: center;
     }
 
-    .button {
-      min-height: 46px;
+    .sp-button {
+      min-height: 50px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 0 18px;
-      border: 1px solid var(--brown);
-      border-radius: 4px;
-      background: var(--cream);
-      color: var(--charcoal);
+      padding: 0 20px;
+      border: 1px solid currentColor;
+      border-radius: 5px;
       text-decoration: none;
-      font-weight: 820;
-      white-space: nowrap;
+      font-size: 15px;
+      font-weight: 720;
+      transition: transform 180ms ease, background 180ms ease, color 180ms ease;
     }
 
-    .button svg {
-      width: 17px;
-      height: 17px;
+    .sp-button:hover,
+    .sp-button:focus-visible {
+      transform: translateY(-2px);
+    }
+
+    .sp-button svg {
+      width: 18px;
+      height: 18px;
       flex: 0 0 auto;
     }
 
-    .button.secondary {
-      background: transparent;
-      color: var(--charcoal);
+    .sp-button-light {
+      border-color: var(--sp-white);
+      background: var(--sp-white);
+      color: var(--sp-ink);
     }
 
-    .hero .button {
-      border-color: var(--cream);
-      background: var(--cream);
-      color: var(--charcoal);
+    .sp-button-ghost {
+      border-color: rgba(255, 253, 247, 0.62);
+      color: var(--sp-white);
     }
 
-    .hero .button.secondary {
-      background: rgba(255, 250, 240, 0.08);
-      color: var(--cream);
+    .sp-button-dark {
+      border-color: var(--sp-ink);
+      background: var(--sp-ink);
+      color: var(--sp-white);
     }
 
-    .research-strip {
+    .sp-intro-rail {
+      min-height: 118px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 0.72fr));
+      align-items: stretch;
+      border-bottom: 1px solid var(--sp-line);
+      background: var(--sp-paper);
+    }
+
+    .sp-intro-rail > div {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 30px;
+      align-items: center;
+      padding: 24px clamp(22px, 3vw, 44px);
+      border-right: 1px solid var(--sp-line);
     }
 
-    .research-strip span {
-      display: inline-flex;
-      align-items: center;
-      min-height: 34px;
-      padding: 0 12px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: rgba(255, 250, 240, 0.74);
-      color: var(--muted);
+    .sp-intro-rail > div:last-child {
+      border-right: 0;
+    }
+
+    .sp-intro-rail strong {
+      display: block;
+      font-family: var(--sp-serif);
+      font-size: clamp(25px, 2.5vw, 38px);
+      font-weight: 450;
+      line-height: 1.05;
+    }
+
+    .sp-intro-rail span {
+      color: var(--sp-muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .sp-section {
+      padding: clamp(74px, 10vw, 138px) var(--sp-gutter);
+    }
+
+    .sp-section-inner {
+      width: min(100%, var(--sp-max));
+      margin: 0 auto;
+    }
+
+    .sp-section-heading {
+      max-width: 800px;
+      margin-bottom: clamp(44px, 6vw, 78px);
+    }
+
+    .sp-section-heading h2 {
+      margin: 12px 0 18px;
+      font-family: var(--sp-serif);
+      font-size: clamp(42px, 5.8vw, 78px);
+      font-weight: 430;
+      line-height: 0.98;
+    }
+
+    .sp-section-heading > p:last-child {
+      max-width: 680px;
+      margin-bottom: 0;
+      color: var(--sp-muted);
+      font-size: clamp(18px, 2vw, 22px);
+    }
+
+    .sp-numbered-list {
+      border-top: 1px solid var(--sp-line);
+    }
+
+    .sp-numbered-item {
+      display: grid;
+      grid-template-columns: 72px minmax(220px, 0.7fr) minmax(0, 1.2fr);
+      gap: 28px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--sp-line);
+      align-items: start;
+    }
+
+    .sp-numbered-item .sp-number {
+      color: var(--sp-accent-dark);
       font-size: 13px;
       font-weight: 760;
     }
 
-    .hero .research-strip span {
-      border-color: rgba(255, 250, 240, 0.18);
-      background: rgba(255, 250, 240, 0.08);
-      color: rgba(255, 250, 240, 0.76);
-    }
-
-    .judgement-map {
-      position: relative;
-      display: grid;
-      gap: 16px;
-      min-height: 520px;
-      padding: 20px;
-      border: 1px solid rgba(255, 250, 240, 0.18);
-      border-radius: 8px;
-      background:
-        linear-gradient(135deg, rgba(255, 250, 240, 0.94), rgba(234, 226, 207, 0.88)),
-        var(--cream);
-      color: var(--ink);
-      box-shadow: 0 42px 95px rgba(0, 0, 0, 0.30);
-      overflow: hidden;
-    }
-
-    .judgement-map::before {
-      content: "";
-      position: absolute;
-      inset: 16px;
-      border-radius: 8px;
-      background:
-        radial-gradient(ellipse at 68% 32%, transparent 0 19%, rgba(111, 127, 97, 0.35) 19.5% 20%, transparent 20.5% 100%),
-        radial-gradient(ellipse at 54% 45%, transparent 0 30%, rgba(111, 127, 97, 0.24) 30.5% 31%, transparent 31.5% 100%),
-        radial-gradient(ellipse at 45% 56%, transparent 0 42%, rgba(111, 127, 97, 0.18) 42.5% 43%, transparent 43.5% 100%),
-        linear-gradient(90deg, rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 26px 26px,
-        linear-gradient(rgba(25, 24, 20, 0.035) 1px, transparent 1px) 0 0 / 26px 26px;
-      pointer-events: none;
-    }
-
-    .map-top {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--line);
-      color: var(--brown);
-      font-size: 13px;
-      font-weight: 880;
-      text-transform: uppercase;
-    }
-
-    .map-top img {
-      width: 78px;
-      height: auto;
-      display: block;
-    }
-
-    .field-nodes {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 4px;
-    }
-
-    .field-node {
-      min-height: 108px;
-      display: grid;
-      align-content: start;
-      gap: 8px;
-      padding: 14px;
-      border: 1px solid rgba(25, 24, 20, 0.13);
-      border-radius: 8px;
-      background: rgba(255, 250, 240, 0.76);
-      box-shadow: 0 10px 28px rgba(25, 24, 20, 0.06);
-    }
-
-    .field-node span,
-    .engine-card span,
-    .console-card span {
-      color: var(--oxblood);
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0;
-    }
-
-    .field-node strong {
-      color: var(--ink);
-      font-size: 17px;
-      line-height: 1.2;
-    }
-
-    .field-node p {
+    .sp-numbered-item h3 {
       margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.42;
+      font-family: var(--sp-serif);
+      font-size: clamp(26px, 3vw, 37px);
+      font-weight: 470;
+      line-height: 1.05;
     }
 
-    .engine-console {
-      position: relative;
-      z-index: 1;
-      margin-top: 2px;
-      border: 1px solid rgba(255, 250, 240, 0.14);
-      border-radius: 8px;
-      background:
-        linear-gradient(135deg, rgba(242, 184, 75, 0.12), transparent 45%),
-        #151715;
-      color: rgba(255, 250, 240, 0.9);
-      overflow: hidden;
+    .sp-numbered-item p {
+      margin: 0;
+      color: var(--sp-muted);
     }
 
-    .console-bar {
-      display: flex;
+    .sp-dark {
+      background: var(--sp-night);
+      color: var(--sp-white);
+    }
+
+    .sp-dark .sp-eyebrow {
+      color: var(--sp-accent);
+    }
+
+    .sp-dark .sp-section-heading > p:last-child,
+    .sp-dark .sp-muted {
+      color: rgba(255, 253, 247, 0.68);
+    }
+
+    .sp-product-relationship {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(44px, 8vw, 110px);
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 40px;
-      padding: 0 14px;
-      border-bottom: 1px solid rgba(255, 250, 240, 0.10);
-      color: rgba(255, 250, 240, 0.62);
-      font-size: 12px;
-      font-weight: 820;
     }
 
-    .console-dots {
-      display: inline-flex;
-      gap: 7px;
+    .sp-product-relationship h2 {
+      margin: 12px 0 18px;
+      font-family: var(--sp-serif);
+      font-size: clamp(43px, 5.6vw, 76px);
+      font-weight: 430;
+      line-height: 0.98;
     }
 
-    .console-dots i {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: var(--gold);
+    .sp-product-relationship p {
+      color: rgba(255, 253, 247, 0.72);
+      font-size: clamp(18px, 2vw, 22px);
     }
 
-    .console-dots i:nth-child(2) {
-      background: var(--sage);
-    }
-
-    .console-dots i:nth-child(3) {
-      background: var(--oxblood);
-    }
-
-    .console-stack {
-      display: grid;
-      gap: 10px;
-      padding: 14px;
-    }
-
-    .console-card {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      padding: 12px;
-      border: 1px solid rgba(255, 250, 240, 0.10);
-      border-left: 4px solid var(--gold);
-      border-radius: 8px;
-      background: rgba(255, 250, 240, 0.045);
-    }
-
-    .console-card strong {
-      display: block;
-      margin-top: 3px;
-      color: var(--cream);
-      font-size: 14px;
-      line-height: 1.25;
-    }
-
-    .console-card em {
-      align-self: start;
-      padding: 4px 7px;
-      border-radius: 999px;
-      background: rgba(111, 127, 97, 0.22);
-      color: var(--honey);
-      font-size: 10px;
-      font-style: normal;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .hero-lab {
-      position: relative;
-      display: grid;
-      gap: 18px;
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background:
-        linear-gradient(180deg, rgba(255, 253, 247, 0.96), rgba(245, 240, 228, 0.94));
-      box-shadow: 0 24px 70px var(--shadow);
-    }
-
-    .lozenge {
-      display: grid;
-      place-items: center;
-      min-height: 230px;
-      border-radius: 8px;
-      background:
-        linear-gradient(180deg, rgba(246, 217, 141, 0.28), rgba(219, 230, 224, 0.36)),
-        #fffdf7;
-      border: 1px solid rgba(75, 47, 27, 0.12);
-    }
-
-    .lozenge img {
-      width: min(280px, 82%);
-      height: auto;
-      display: block;
-    }
-
-    .lab-copy p,
-    .section-copy p,
-    .step p,
-    .boundary p,
-    .measure-panel p,
-    .status-panel p {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.56;
-    }
-
-    .mini-loop {
-      display: grid;
-      gap: 8px;
-      margin: 2px 0 0;
-    }
-
-    .mini-loop span {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 34px;
-      padding: 0 12px;
-      border-radius: 6px;
-      background: #f3ead8;
-      color: var(--brown);
-      font-size: 13px;
-      font-weight: 790;
-    }
-
-    .section {
-      padding: 76px 40px;
-      border-top: 1px solid var(--line);
-    }
-
-    .section-inner {
-      width: min(1180px, 100%);
-      margin: 0 auto;
-    }
-
-    .signal-band {
-      background: var(--paper);
-    }
-
-    .signal-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 0.8fr) minmax(420px, 1fr);
-      gap: 46px;
-      align-items: start;
-    }
-
-    .lozenge-panel {
+    .sp-relationship-rule {
+      min-height: 320px;
       display: grid;
       align-content: center;
-      justify-items: center;
-      min-height: 290px;
-      padding: 30px;
-      border: 1px solid rgba(75, 47, 27, 0.12);
-      border-radius: 8px;
+      gap: 22px;
+      padding: clamp(28px, 5vw, 54px);
+      border: 1px solid rgba(255, 253, 247, 0.2);
       background:
-        radial-gradient(circle at 50% 30%, rgba(242, 184, 75, 0.26), transparent 42%),
-        linear-gradient(180deg, rgba(255, 250, 240, 0.92), rgba(235, 224, 204, 0.92));
-      box-shadow: 0 22px 70px var(--shadow);
-      text-align: center;
+        linear-gradient(135deg, rgba(255, 253, 247, 0.08), transparent 55%),
+        rgba(255, 253, 247, 0.03);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.09);
     }
 
-    .lozenge-panel img {
-      width: min(310px, 86%);
-      height: auto;
-      display: block;
-      margin-bottom: 18px;
+    .sp-relationship-rule strong {
+      font-family: var(--sp-serif);
+      font-size: clamp(26px, 3.5vw, 44px);
+      font-weight: 450;
+      line-height: 1.06;
     }
 
-    .lozenge-panel p {
-      max-width: 460px;
+    .sp-footer {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(130px, 0.55fr));
+      gap: 38px;
+      padding: 54px var(--sp-gutter);
+      border-top: 1px solid var(--sp-light-line);
+      background: #060806;
+      color: var(--sp-white);
+    }
+
+    .sp-footer p,
+    .sp-footer small {
+      color: rgba(255, 253, 247, 0.6);
+    }
+
+    .sp-footer p {
+      max-width: 340px;
       margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.56;
     }
 
-    .split {
-      display: grid;
-      grid-template-columns: minmax(0, 0.85fr) minmax(420px, 1fr);
-      gap: 44px;
-      align-items: start;
-    }
-
-    .section-copy {
-      display: grid;
-      gap: 18px;
-    }
-
-    .section-copy article {
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--cream);
-    }
-
-    .loop-band {
-      background:
-        linear-gradient(180deg, #fffaf0, #f2e6cf);
-    }
-
-    .loop-grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 30px;
-    }
-
-    .step {
-      min-height: 230px;
+    .sp-footer-col {
       display: grid;
       align-content: start;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 250, 240, 0.82);
+      gap: 9px;
     }
 
-    .step span {
-      width: 38px;
-      height: 38px;
+    .sp-footer-col strong {
+      margin-bottom: 4px;
+      color: rgba(255, 253, 247, 0.48);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .sp-footer-col a {
+      color: var(--sp-white);
+      text-decoration: none;
+    }
+
+    .sp-footer-legal {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px 26px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255, 253, 247, 0.12);
+      color: rgba(255, 253, 247, 0.56);
+      font-size: 13px;
+    }
+
+    .sp-reveal {
+      animation: sp-enter 760ms cubic-bezier(.2, .7, .25, 1) both;
+    }
+
+    @keyframes sp-enter {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes sp-reflection {
+      0%, 58%, 100% {
+        transform: translateX(-90%);
+        opacity: 0;
+      }
+      72% {
+        opacity: 0.5;
+      }
+      88% {
+        transform: translateX(90%);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .sp-nav {
+        display: none;
+      }
+
+      .sp-mobile-nav {
+        display: block;
+      }
+
+      .sp-intro-rail {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .sp-intro-rail > div:nth-child(2) {
+        border-right: 0;
+      }
+
+      .sp-intro-rail > div:nth-child(-n + 2) {
+        border-bottom: 1px solid var(--sp-line);
+      }
+
+      .sp-product-relationship {
+        grid-template-columns: 1fr;
+      }
+
+      .sp-footer {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        font-size: 16px;
+      }
+
+      .sp-header {
+        min-height: 74px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .sp-brand-copy span {
+        display: none;
+      }
+
+      .sp-hero {
+        min-height: 86svh;
+        background-image: var(--sp-hero-mobile-image, var(--sp-hero-image));
+        background-position: center;
+      }
+
+      .sp-hero::before {
+        background:
+          linear-gradient(90deg, rgba(5, 8, 6, 0.83), rgba(5, 8, 6, 0.25)),
+          linear-gradient(0deg, rgba(5, 8, 6, 0.84) 0%, rgba(5, 8, 6, 0.2) 72%),
+          linear-gradient(180deg, rgba(5, 8, 6, 0.45), transparent 32%);
+      }
+
+      .sp-hero-inner {
+        gap: 16px;
+        padding-top: 128px;
+        padding-bottom: 54px;
+      }
+
+      .sp-hero h1 {
+        font-size: clamp(48px, 14.5vw, 68px);
+      }
+
+      .sp-actions {
+        align-items: stretch;
+      }
+
+      .sp-actions .sp-button {
+        flex: 1 1 100%;
+      }
+
+      .sp-intro-rail {
+        grid-template-columns: 1fr;
+      }
+
+      .sp-intro-rail > div {
+        min-height: 86px;
+        border-right: 0;
+        border-bottom: 1px solid var(--sp-line);
+      }
+
+      .sp-intro-rail > div:last-child {
+        border-bottom: 0;
+      }
+
+      .sp-numbered-item {
+        grid-template-columns: 44px minmax(0, 1fr);
+        gap: 12px 16px;
+      }
+
+      .sp-numbered-item p {
+        grid-column: 2;
+      }
+
+      .sp-footer {
+        grid-template-columns: 1fr;
+      }
+
+      .sp-footer-legal {
+        grid-column: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  `;
+}
+
+function siblingArrowIcon() {
+  return `<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+function snaxkSiblingPageFor(site) {
+  const title = site.title || "SNAXK | Judgement engine for agentic work";
+  const summary = site.summary || "SNAXK surfaces ownership, boundaries, stop conditions, evidence, review, and measurable trust for agentic work.";
+  const badge = site.brand_assets?.badge || "/assets/snaxk-badge.png";
+  const heroImage = site.hero_background_image || "/assets/snaxk/hero-judgement-room.webp";
+  const heroImageMobile = site.hero_background_image_mobile || heroImage;
+  const evidenceImage = site.evidence_image || "/assets/snaxk/evidence-table.webp";
+  const milestone = site.research_milestone || "SNAXK 0.10.8";
+  const loop = site.judgement_loop || [];
+  const boundaries = site.boundary_checks || [];
+  const checks = [
+    ["Signal", "What changed?"],
+    ["Boundary", "What may happen?"],
+    ["Evidence", "What can be inspected?"],
+  ];
+  const caoFeeder = site.cao_feeder || {};
+  const caoUrl = caoFeeder.primary_url || "https://chiefagenticofficer.com/";
+  const caoCampaign = caoFeeder.primary_campaign || "snaxk_to_chiefagenticofficer";
+  const caoStage = caoFeeder.primary_stage || "source_to_chiefagenticofficer";
+  const caoHref = trackedOutboundUrlFor(site, caoUrl, caoFeeder.primary_content || "hero_cao_briefing", caoCampaign) || caoUrl;
+  const caoPanelHref = trackedOutboundUrlFor(site, caoUrl, "cao_judgement_briefing", caoCampaign) || caoUrl;
+  const advisoryUrl = caoFeeder.secondary_url || defaultTonywoodAdvisoryUrl;
+  const advisoryCampaign = caoFeeder.secondary_campaign || "snaxk_to_tonywood_advisory";
+  const advisoryStage = caoFeeder.secondary_stage || "source_to_tonywood_advisory";
+  const advisoryHref = trackedOutboundUrlFor(site, advisoryUrl, caoFeeder.engine_content || "snaxk_engine_interest", advisoryCampaign) || advisoryUrl;
+  const sibling = site.sibling_product || {
+    name: "Orchistra",
+    url: "https://orchistra.com/",
+    campaign: "snaxk_to_orchistra",
+    content: "sibling_orchistra",
+    title: "Visible work and visible judgement belong beside one another.",
+    body: "Orchistra keeps agent work visible and coordinated. SNAXK helps decide what may proceed, what should stop, and where human judgement is required.",
+  };
+  const siblingHref = trackedOutboundUrlFor(site, sibling.url, sibling.content, sibling.campaign) || sibling.url;
+  const arrow = siblingArrowIcon();
+  const loopMarkup = loop.map((item, index) => `
+            <article class="sp-numbered-item">
+              <span class="sp-number">${escapeHtml(item.label || String(index + 1).padStart(2, "0"))}</span>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.body)}</p>
+            </article>`).join("");
+  const boundaryMarkup = boundaries.map((item, index) => `
+              <li>
+                <span>${String(index + 1).padStart(2, "0")}</span>
+                <div><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.body)}</p></div>
+              </li>`).join("");
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(summary)}">
+${socialMetaTagsFor(site, { title, description: summary })}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="${escapeHtml(heroImage)}" as="image" fetchpriority="high">
+  <link rel="preload" href="/assets/system/instrument-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/system/newsreader-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+${matomoScriptTagFor(site)}  <style>
+${siblingProductSharedStyles().trim()}
+    :root {
+      --sp-accent: #f2bd59;
+      --sp-accent-dark: #9a5d20;
+      --snaxk-oxblood: #7b3029;
+      --snaxk-brown: #4b2f1b;
+      --snaxk-cream: #f6e9c9;
+    }
+
+    .snaxk-brand-badge {
+      width: 70px;
+      height: 46px;
+      display: block;
+      object-fit: cover;
+      border-radius: 9px;
+      box-shadow: 0 0 0 1px rgba(255, 253, 247, 0.3);
+    }
+
+    .snaxk-hero {
+      --sp-hero-image: url("${escapeHtml(heroImage)}");
+      --sp-hero-mobile-image: url("${escapeHtml(heroImageMobile)}");
+    }
+
+    .snaxk-hero .sp-hero-inner {
+      max-width: 900px;
+    }
+
+    .snaxk-hero .sp-eyebrow {
+      color: #ffd985;
+    }
+
+    .snaxk-milestone {
+      width: fit-content;
+      margin: 0;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 253, 247, 0.4);
+      color: rgba(255, 253, 247, 0.66);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .snaxk-thresholds {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--sp-line);
+      border-bottom: 1px solid var(--sp-line);
+    }
+
+    .snaxk-threshold {
+      min-height: 260px;
+      display: grid;
+      align-content: space-between;
+      gap: 34px;
+      padding: clamp(28px, 4vw, 48px);
+      border-right: 1px solid var(--sp-line);
+    }
+
+    .snaxk-threshold:last-child {
+      border-right: 0;
+    }
+
+    .snaxk-threshold span {
+      color: var(--sp-accent-dark);
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .snaxk-threshold h3 {
+      max-width: 310px;
+      margin: 0;
+      font-family: var(--sp-serif);
+      font-size: clamp(31px, 3.3vw, 45px);
+      font-weight: 450;
+      line-height: 1.04;
+    }
+
+    .snaxk-console-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(430px, 1.18fr);
+      gap: clamp(48px, 8vw, 110px);
+      align-items: center;
+    }
+
+    .snaxk-console-copy h2 {
+      margin: 12px 0 18px;
+      font-family: var(--sp-serif);
+      font-size: clamp(43px, 5.5vw, 72px);
+      font-weight: 430;
+      line-height: 0.97;
+    }
+
+    .snaxk-console-copy > p:last-of-type {
+      color: rgba(255, 253, 247, 0.7);
+      font-size: 19px;
+    }
+
+    .snaxk-console {
+      position: relative;
+      min-height: 520px;
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      padding: clamp(28px, 5vw, 52px);
+      border: 1px solid rgba(255, 253, 247, 0.2);
+      background:
+        radial-gradient(ellipse at 88% 15%, transparent 0 14%, rgba(242, 189, 89, 0.16) 14.4% 14.8%, transparent 15.2%),
+        radial-gradient(ellipse at 84% 18%, transparent 0 25%, rgba(242, 189, 89, 0.11) 25.4% 25.8%, transparent 26.2%),
+        linear-gradient(145deg, rgba(255, 253, 247, 0.08), transparent 52%),
+        #10130f;
+      box-shadow: 0 34px 80px rgba(0, 0, 0, 0.34), inset 0 1px rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .snaxk-console::after {
+      content: "CONCEPT MODEL";
+      position: absolute;
+      right: 20px;
+      bottom: 16px;
+      color: rgba(255, 253, 247, 0.38);
+      font-size: 10px;
+      font-weight: 730;
+      letter-spacing: 0.12em;
+    }
+
+    .snaxk-console-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 15px 16px;
+      border: 1px solid rgba(255, 253, 247, 0.12);
+      background: rgba(255, 253, 247, 0.045);
+    }
+
+    .snaxk-console-step span:first-child {
+      width: 30px;
+      height: 30px;
       display: grid;
       place-items: center;
-      margin-bottom: 32px;
-      border-radius: 8px;
-      background: var(--charcoal);
-      color: var(--cream);
-      font-size: 13px;
-      font-weight: 850;
+      border: 1px solid rgba(242, 189, 89, 0.52);
+      color: #f7d58e;
+      font-size: 11px;
+      font-weight: 760;
     }
 
-    .boundary-band {
-      background:
-        linear-gradient(180deg, rgba(219, 230, 224, 0.64), rgba(245, 240, 228, 0.82));
+    .snaxk-console-step strong {
+      font-family: var(--sp-serif);
+      font-size: 22px;
+      font-weight: 470;
     }
 
-    .boundary-grid {
+    .snaxk-console-step em {
+      color: rgba(255, 253, 247, 0.52);
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .snaxk-evidence-layout {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 30px;
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+      gap: clamp(42px, 7vw, 92px);
+      align-items: center;
     }
 
-    .boundary {
-      min-height: 180px;
-      padding: 18px;
-      border: 1px solid rgba(75, 47, 27, 0.18);
-      border-radius: 8px;
-      background: rgba(255, 250, 240, 0.82);
+    .snaxk-evidence-image {
+      position: relative;
+      min-height: 660px;
+      margin: 0;
+      overflow: hidden;
     }
 
-    .boundary::before {
-      content: "";
+    .snaxk-evidence-image img {
+      width: 100%;
+      height: 100%;
+      min-height: 660px;
       display: block;
-      width: 42px;
-      height: 5px;
-      margin-bottom: 28px;
-      border-radius: 999px;
-      background: var(--gold);
+      object-fit: cover;
     }
 
-    .measure {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
-      gap: 28px;
-      align-items: stretch;
+    .snaxk-evidence-image figcaption {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      padding: 9px 12px;
+      background: rgba(8, 11, 9, 0.82);
+      color: var(--sp-white);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .measure-panel {
-      padding: 26px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--cream);
+    .snaxk-boundaries h2 {
+      margin: 12px 0 22px;
+      font-family: var(--sp-serif);
+      font-size: clamp(42px, 5.3vw, 70px);
+      font-weight: 430;
+      line-height: 0.98;
     }
 
-    .measure-list {
-      display: grid;
-      gap: 10px;
-      margin: 24px 0 0;
+    .snaxk-boundaries > p {
+      color: var(--sp-muted);
+      font-size: 19px;
+    }
+
+    .snaxk-boundary-list {
+      margin: 34px 0 0;
       padding: 0;
+      border-top: 1px solid var(--sp-line);
       list-style: none;
     }
 
-    .measure-list li {
+    .snaxk-boundary-list li {
       display: grid;
-      grid-template-columns: 20px minmax(0, 1fr);
-      gap: 10px;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--sp-line);
+    }
+
+    .snaxk-boundary-list li > span {
+      color: var(--sp-accent-dark);
+      font-size: 11px;
+      font-weight: 760;
+    }
+
+    .snaxk-boundary-list strong {
+      display: block;
+      margin-bottom: 4px;
+      font-family: var(--sp-serif);
+      font-size: 24px;
+      font-weight: 480;
+    }
+
+    .snaxk-boundary-list p {
+      margin: 0;
+      color: var(--sp-muted);
+      font-size: 15px;
+    }
+
+    .snaxk-cao {
+      background: #e8d5a6;
+    }
+
+    .snaxk-cao-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 0.78fr);
+      gap: clamp(42px, 8vw, 110px);
       align-items: start;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.45;
     }
 
-    .measure-list li::before {
-      content: "";
-      width: 10px;
-      height: 10px;
-      margin-top: 6px;
-      border-radius: 999px;
-      background: var(--sage);
-      box-shadow: 0 0 0 4px rgba(100, 118, 92, 0.15);
+    .snaxk-cao h2 {
+      margin: 12px 0 18px;
+      font-family: var(--sp-serif);
+      font-size: clamp(43px, 5.7vw, 76px);
+      font-weight: 430;
+      line-height: 0.98;
     }
 
-    .status-panel {
+    .snaxk-cao-copy > p {
+      max-width: 720px;
+      color: #4d4537;
+      font-size: 20px;
+    }
+
+    .snaxk-cao-ledger {
+      border-top: 1px solid rgba(17, 19, 15, 0.25);
+    }
+
+    .snaxk-cao-ledger div {
       display: grid;
-      align-content: center;
-      justify-items: center;
-      gap: 20px;
-      padding: 26px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background:
-        linear-gradient(180deg, rgba(246, 217, 141, 0.28), rgba(255, 250, 240, 0.94));
-      text-align: center;
+      grid-template-columns: 34px 1fr;
+      gap: 14px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(17, 19, 15, 0.25);
     }
 
-    .status-panel img {
-      width: min(240px, 84%);
-      height: auto;
+    .snaxk-cao-ledger span {
+      color: var(--snaxk-oxblood);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .snaxk-cao-ledger strong {
+      font-family: var(--sp-serif);
+      font-size: 25px;
+      font-weight: 480;
+    }
+
+    .snaxk-footer-logo {
+      width: 96px;
+      height: 62px;
       display: block;
+      object-fit: cover;
+      border-radius: 9px;
     }
 
-    .cta {
-      background:
-        radial-gradient(circle at 78% 18%, rgba(242, 184, 75, 0.18), transparent 32%),
-        var(--charcoal);
-      color: var(--cream);
-    }
-
-    .cta h2,
-    .cta h3 {
-      color: var(--cream);
-    }
-
-    .cta .eyebrow {
-      color: var(--honey);
-    }
-
-    .cta p {
-      max-width: 700px;
-      color: rgba(255, 250, 240, 0.82);
-      font-size: 18px;
-      line-height: 1.58;
-    }
-
-    .cta .button {
-      border-color: var(--cream);
-      background: var(--cream);
-      color: var(--charcoal);
-    }
-
-    .briefing-band {
-      background: #fbf8ef;
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .briefing-panel {
-      display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.58fr);
-      gap: 34px;
-      align-items: end;
-      padding: 30px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--cream);
-      box-shadow: 0 20px 58px var(--shadow);
-    }
-
-    .briefing-panel h2 {
-      max-width: 760px;
-      font-size: 44px;
-    }
-
-    .briefing-panel p {
-      max-width: 780px;
-      color: var(--muted);
-      font-size: 19px;
-      line-height: 1.55;
-    }
-
-    .briefing-panel .lead {
-      color: var(--ink);
-      font-size: 21px;
-    }
-
-    .briefing-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: flex-start;
-    }
-
-    .briefing-actions .button.primary {
-      background: var(--field);
-      color: var(--cream);
-      border-color: var(--field);
-    }
-
-    .briefing-actions .button.secondary {
-      color: var(--field);
-    }
-
-    .engine-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 30px;
-    }
-
-    .engine-card {
-      min-height: 186px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--cream);
-    }
-
-    .engine-card span {
-      display: block;
-      margin-bottom: 28px;
-      color: var(--oxblood);
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .engine-card p {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.55;
-    }
-
-    footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 30px 40px;
-      color: rgba(255, 250, 240, 0.74);
-      background: #24150d;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    footer strong {
-      display: block;
-      color: var(--cream);
-    }
-
-    .footer-product {
-      margin-top: 10px;
-      color: var(--honey);
-      font-weight: 860;
-    }
-
-    .footer-legal {
-      color: rgba(255, 250, 240, 0.66);
-    }
-
-    @media (max-width: 1060px) {
-      .hero,
-      .signal-grid,
-      .split,
-      .measure,
-      .briefing-panel {
+    @media (max-width: 920px) {
+      .snaxk-console-layout,
+      .snaxk-evidence-layout,
+      .snaxk-cao-layout {
         grid-template-columns: 1fr;
       }
 
-      h1 {
-        font-size: 64px;
+      .snaxk-thresholds {
+        grid-template-columns: 1fr;
       }
 
-      h2 {
-        font-size: 40px;
-      }
-
-      .loop-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .boundary-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .engine-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .snaxk-threshold {
+        min-height: 200px;
+        border-right: 0;
+        border-bottom: 1px solid var(--sp-line);
       }
     }
 
-    @media (max-width: 720px) {
-      .site-header {
-        min-height: auto;
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 18px 22px;
+    @media (max-width: 680px) {
+      .snaxk-brand-badge {
+        width: 58px;
+        height: 38px;
       }
 
-      nav {
-        width: 100%;
-        flex-wrap: wrap;
-        gap: 14px;
+      .snaxk-console-layout {
+        gap: 36px;
       }
 
-      .hero,
-      .section {
-        padding: 48px 22px;
+      .snaxk-console {
+        min-height: 0;
+        padding: 20px;
       }
 
-      .hero {
-        min-height: auto;
+      .snaxk-console-step {
+        grid-template-columns: 34px 1fr;
       }
 
-      h1 {
-        font-size: 48px;
+      .snaxk-console-step em {
+        grid-column: 2;
       }
 
-      h2 {
-        font-size: 34px;
-      }
-
-      .lede {
-        font-size: 18px;
-      }
-
-      .actions,
-      .button {
-        width: 100%;
-      }
-
-      .hero-lab {
-        padding: 16px;
-      }
-
-      .judgement-map {
-        min-height: auto;
-        padding: 16px;
-      }
-
-      .field-nodes,
-      .signal-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .loop-grid,
-      .boundary-grid,
-      .engine-grid {
-        grid-template-columns: 1fr;
-      }
-
-      footer {
-        flex-direction: column;
-        padding: 26px 22px;
+      .snaxk-evidence-image,
+      .snaxk-evidence-image img {
+        min-height: 440px;
       }
     }
   </style>
 </head>
-<body>
-  <header class="site-header">
-    <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
-      <img src="${escapeHtml(lozenge)}" alt="">
-      <span>${escapeHtml(site.name)}</span>
+<body class="snaxk-sibling">
+  <header class="sp-header">
+    <a class="sp-brand" href="/" aria-label="SNAXK home">
+      <img class="snaxk-brand-badge" src="${escapeHtml(badge)}" alt="SNAXK">
+      <span class="sp-brand-copy"><strong>SNAXK</strong><span>Judgement engine</span></span>
     </a>
-    <nav aria-label="Primary">
-      <a href="#signal">Signal</a>
-      <a href="#cao-briefing">CAO briefing</a>
-      <a href="#engine">Engine</a>
-      <a href="#boundaries">Boundaries</a>
-      <a href="#measurement">Measure</a>
-      <a href="#conversation">Interest</a>
+    <nav class="sp-nav" aria-label="Primary navigation">
+      <a href="#approach">Approach</a>
+      <a href="#loop">Judgement loop</a>
+      <a href="#boundaries">Stop lines</a>
+      <a href="#relationship">Orchistra</a>
+      <a class="sp-nav-cta" href="${escapeHtml(caoHref)}"${outboundAttrsFor(site, caoFeeder.primary_content || "hero_cao_briefing", caoStage, caoCampaign)}>CAO briefing</a>
     </nav>
+    <details class="sp-mobile-nav">
+      <summary aria-label="Open navigation">Menu</summary>
+      <div class="sp-mobile-nav-menu">
+        <a href="#approach">Approach</a>
+        <a href="#loop">Judgement loop</a>
+        <a href="#boundaries">Stop lines</a>
+        <a href="#relationship">Orchistra</a>
+        <a href="${escapeHtml(caoHref)}"${outboundAttrsFor(site, caoFeeder.primary_content || "hero_cao_briefing", caoStage, caoCampaign)}>CAO briefing</a>
+      </div>
+    </details>
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="page-title">
-      <div class="hero-copy">
-        <p class="eyebrow">${escapeHtml(site.eyebrow || "SNAXK research")}</p>
-        <h1 id="page-title">${escapeHtml(site.heading || "Judgement for long-running agents.")}</h1>
-        <p class="lede">${escapeHtml(summary)}</p>
-        <div class="actions">
-          <a class="button" href="${escapeHtml(heroCaoHref)}"${outboundAttrsFor(site, caoHeroContent, caoStage, caoCampaign)}>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            ${escapeHtml(site.primary_action_label || "Open the CAO briefing")}
-          </a>
-          <a class="button secondary" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, "hero_tonywood_advisory", advisoryStage, advisoryCampaign)}>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
-              <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
-            </svg>
-            ${escapeHtml(site.secondary_action_label || "Discuss with Tony Wood")}
-          </a>
+    <section class="sp-hero snaxk-hero" aria-labelledby="snaxk-title">
+      <div class="sp-hero-inner sp-reveal">
+        <p class="sp-eyebrow">SNAXK · judgement before action</p>
+        <h1 id="snaxk-title">A judgement engine for agentic work.</h1>
+        <p class="sp-hero-lede">Surface the ownership, boundaries, stop conditions, evidence and review a person needs before long-running agentic work moves.</p>
+        <div class="sp-actions">
+          <a class="sp-button sp-button-light" href="${escapeHtml(caoHref)}"${outboundAttrsFor(site, caoFeeder.primary_content || "hero_cao_briefing", caoStage, caoCampaign)}>Open the CAO briefing ${arrow}</a>
+          <a class="sp-button sp-button-ghost" href="#loop">See the judgement loop</a>
         </div>
-        <div class="research-strip" aria-label="Research status">
-          <span>${escapeHtml(milestone)}</span>
-          <span>Chief Agentic Officer feeder</span>
-          <span>Judgement engine interest</span>
+        <p class="snaxk-milestone">${escapeHtml(milestone)}</p>
+      </div>
+    </section>
+
+    <section class="sp-intro-rail" aria-label="SNAXK judgement questions">
+      <div><strong>Before the work moves.</strong></div>
+      ${checks.map(([label, text]) => `<div><span>${escapeHtml(label)}<br>${escapeHtml(text)}</span></div>`).join("")}
+    </section>
+
+    <section class="sp-section" id="approach">
+      <div class="sp-section-inner">
+        <div class="sp-section-heading">
+          <p class="sp-eyebrow">The judgement layer</p>
+          <h2>Fast output is useful. Accountable judgement is what makes it operational.</h2>
+          <p>SNAXK asks a quieter set of questions before an agent continues: what changed, how much confidence is justified, which boundary applies, and what evidence must remain visible afterwards?</p>
+        </div>
+        <div class="snaxk-thresholds">
+          <article class="snaxk-threshold"><span>01 · signal</span><h3>Notice meaning before momentum.</h3></article>
+          <article class="snaxk-threshold"><span>02 · consequence</span><h3>Understand what this action could change.</h3></article>
+          <article class="snaxk-threshold"><span>03 · uncertainty</span><h3>Slow down when confidence and consequence do not match.</h3></article>
         </div>
       </div>
+    </section>
 
-      <aside class="judgement-map" aria-label="SNAXK judgement engine map">
-        <div class="map-top">
-          <img src="${escapeHtml(lozenge)}" alt="${escapeHtml(site.name)} lozenge">
-          <span>${escapeHtml(milestone)}</span>
-        </div>
-        <div class="field-nodes" aria-label="Judgement map">
-          ${loop.slice(0, 4).map((item) => `<article class="field-node">
-            <span>${escapeHtml(item.label)}</span>
-            <strong>${escapeHtml(item.title)}</strong>
-            <p>${escapeHtml(item.body)}</p>
-          </article>`).join("\n          ")}
-        </div>
-        <div class="engine-console" aria-label="Judgement console">
-          <div class="console-bar">
-            <span class="console-dots"><i></i><i></i><i></i></span>
-            <span>signal / boundary / review</span>
-          </div>
-          <div class="console-stack">
-            ${engineCards.map((card) => `<article class="console-card">
-              <div>
-                <span>${escapeHtml(card.label)}</span>
-                <strong>${escapeHtml(card.title)}</strong>
-              </div>
-              <em>watch</em>
-            </article>`).join("\n            ")}
+    <section class="sp-section sp-dark" id="loop">
+      <div class="sp-section-inner snaxk-console-layout">
+        <div class="snaxk-console-copy">
+          <p class="sp-eyebrow">Concept model</p>
+          <h2>A loop that can pause itself.</h2>
+          <p>Each move leaves a trail. Routine work can continue. Meaningful uncertainty reaches a boundary, and consequential work returns to review.</p>
+          <div class="sp-actions">
+            <a class="sp-button sp-button-ghost" href="#boundaries">Inspect the stop lines ${arrow}</a>
           </div>
         </div>
-      </aside>
-    </section>
-
-    <section class="section signal-band" id="signal" aria-labelledby="thesis-title">
-      <div class="section-inner signal-grid">
-        <div>
-          <p class="eyebrow">The feeder role</p>
-          <h2 id="thesis-title">SNAXK points people toward the Chief Agentic Officer question.</h2>
-          <p class="lede">If agentic work is becoming real work, someone has to own the boundary, the stop condition, the evidence, and the review. SNAXK makes that need visible.</p>
-          <div class="engine-grid">
-            ${engineCards.map((card) => `<article class="engine-card">
-              <span>${escapeHtml(card.label)}</span>
-              <h3>${escapeHtml(card.title)}</h3>
-              <p>${escapeHtml(card.body)}</p>
-            </article>`).join("\n            ")}
-          </div>
-        </div>
-        <aside class="lozenge-panel" aria-label="SNAXK identity">
-          <img src="${escapeHtml(lozenge)}" alt="${escapeHtml(site.name)} lozenge">
-          <h3>The engine layer beneath the mandate.</h3>
-          <p>ChiefAgenticOfficer.com names the leadership question. SNAXK explores how an agent slows down, stops, adapts, escalates, and leaves evidence of its judgement.</p>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="surface-title">
-      <div class="section-inner">
-        <p class="eyebrow">What it surfaces</p>
-        <h2 id="surface-title">Judgement that people and boards can inspect.</h2>
-        <div class="section-copy">
-          ${sections.map((section) => `<article>
-            <h3>${escapeHtml(section.title)}</h3>
-            <p>${escapeHtml(section.body)}</p>
-          </article>`).join("\n          ")}
+        <div class="snaxk-console" aria-label="Conceptual SNAXK judgement model">
+          <div class="snaxk-console-step"><span>01</span><strong>Signal arrives</strong><em>notice</em></div>
+          <div class="snaxk-console-step"><span>02</span><strong>Meaning is checked</strong><em>interpret</em></div>
+          <div class="snaxk-console-step"><span>03</span><strong>Boundary is applied</strong><em>slow · stop · ask</em></div>
+          <div class="snaxk-console-step"><span>04</span><strong>Evidence is carried</strong><em>record</em></div>
+          <div class="snaxk-console-step"><span>05</span><strong>Review changes the next move</strong><em>learn</em></div>
         </div>
       </div>
     </section>
 
-    <section class="section briefing-band" id="cao-briefing" aria-labelledby="cao-title">
-      <div class="section-inner briefing-panel">
-        <div>
-          <p class="eyebrow">Use this with the CAO briefing</p>
-          <h2 id="cao-title">The Chief Agentic Officer owns the mandate. SNAXK explores the judgement engine.</h2>
-          <p class="lead">ChiefAgenticOfficer.com is the primary next step for leaders who need the board-facing frame: what agentic work may do, who owns it, and what can be inspected afterwards.</p>
-          <p>SNAXK is the feeder idea below that frame. It asks whether long-running agentic systems can make their judgement more visible before leaders are asked to trust them.</p>
+    <section class="sp-section" aria-labelledby="loop-detail-title">
+      <div class="sp-section-inner">
+        <div class="sp-section-heading">
+          <p class="sp-eyebrow">Five deliberate moves</p>
+          <h2 id="loop-detail-title">Signal, meaning, boundary, reflection, review.</h2>
+          <p>The loop is intentionally smaller than the systems around it. Its job is to help people inspect why an agent continued, paused, escalated, or changed course.</p>
         </div>
-        <div class="briefing-actions">
-          <a class="button primary" href="${escapeHtml(panelCaoHref)}"${outboundAttrsFor(site, caoPanelContent, caoStage, caoCampaign)}>Read ChiefAgenticOfficer.com</a>
-          <a class="button secondary" href="${escapeHtml(panelAdvisoryHref)}"${outboundAttrsFor(site, panelAdvisoryContent, advisoryStage, advisoryCampaign)}>Talk to Tony Wood</a>
+        <div class="sp-numbered-list">
+${loopMarkup}
         </div>
       </div>
     </section>
 
-    <section class="section loop-band" id="engine" aria-labelledby="engine-title">
-      <div class="section-inner">
-        <p class="eyebrow">What the engine helps surface</p>
-        <h2 id="engine-title">Board-readable judgement before long-running agents change course.</h2>
-        <p class="lede">The hypothesis is simple: agents behave better when they do not jump straight from input to action.</p>
-        <div class="engine-grid">
-          <article class="engine-card">
-            <span>Ownership</span>
-            <h3>Who owns this work?</h3>
-            <p>The engine should make it clearer which human or mandate owns the agentic work, the decision, and the follow-through.</p>
-          </article>
-          <article class="engine-card">
-            <span>Stop condition</span>
-            <h3>When should it pause?</h3>
-            <p>Useful autonomy needs visible boundaries: slow down, stop, adapt, escalate, or ask for review before risk becomes hidden.</p>
-          </article>
-          <article class="engine-card">
-            <span>Evidence</span>
-            <h3>What can leaders inspect?</h3>
-            <p>The judgement only matters if people can see what changed, why it changed, and what was deliberately not carried forward.</p>
-          </article>
-        </div>
-        <div class="loop-grid">
-          ${loop.map((item) => `<article class="step">
-            <span>${escapeHtml(item.label)}</span>
-            <h3>${escapeHtml(item.title)}</h3>
-            <p>${escapeHtml(item.body)}</p>
-          </article>`).join("\n          ")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section boundary-band" id="boundaries" aria-labelledby="boundary-title">
-      <div class="section-inner">
-        <p class="eyebrow">Boundary checks</p>
-        <h2 id="boundary-title">The judgement questions are practical.</h2>
-        <p class="lede">Good agentic control is not just a policy document. It is a set of everyday decisions the system can surface and a human can inspect.</p>
-        <div class="boundary-grid">
-          ${boundaries.map((item) => `<article class="boundary">
-            <h3>${escapeHtml(item.title)}</h3>
-            <p>${escapeHtml(item.body)}</p>
-          </article>`).join("\n          ")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="measurement" aria-labelledby="measure-title">
-      <div class="section-inner measure">
-        <div class="measure-panel">
-          <p class="eyebrow">Review and measurement</p>
-          <h2 id="measure-title">Better judgement has to be observable.</h2>
-          <p>SNAXK is useful only if it can be compared with simpler alternatives and if humans can see how the system is changing.</p>
-          <ul class="measure-list">
-            ${measurements.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n            ")}
+    <section class="sp-section" id="boundaries">
+      <div class="sp-section-inner snaxk-evidence-layout">
+        <figure class="snaxk-evidence-image">
+          <img src="${escapeHtml(evidenceImage)}" alt="An evidence folio, field map, brass boundary rule, and review markers on a dark table." loading="lazy">
+          <figcaption>Evidence before carry-forward</figcaption>
+        </figure>
+        <div class="snaxk-boundaries">
+          <p class="sp-eyebrow">Stop lines</p>
+          <h2>A boundary should be visible before it is crossed.</h2>
+          <p>Permissions, privacy, safety, spending, publishing and accountability are not exceptions to tidy up later. They are part of the route.</p>
+          <ul class="snaxk-boundary-list">
+${boundaryMarkup}
           </ul>
         </div>
-        <aside class="status-panel" aria-label="Judgement engine status">
-          <img src="${escapeHtml(logo)}" alt="${escapeHtml(site.name)} logo">
-          <div>
-            <p class="eyebrow">Judgement engine</p>
-            <h3>${escapeHtml(milestone)}</h3>${statusNoteMarkup}
-          </div>
-        </aside>
       </div>
     </section>
 
-    <section class="section cta" id="conversation">
-      <div class="section-inner">
-        <p class="eyebrow">Register interest in the judgement engine</p>
-        <h2>Want to explore whether this engine could help your agentic work?</h2>
-        <p>SNAXK is not being sold as a packaged product today. This is a tracked interest route for leaders and builders who want to discuss judgement boundaries, board-readable evidence, and whether a SNAXK-style engine should exist separately in future.</p>
-        <div class="actions">
-          <a class="button" href="${escapeHtml(engineInterestHref)}"${outboundAttrsFor(site, engineInterestContent, advisoryStage, advisoryCampaign)}>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 6.8h16v10.4H4V6.8Z" stroke="currentColor" stroke-width="1.8"/>
-              <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8"/>
-            </svg>
-            Register judgement-engine interest
-          </a>
-          <a class="button secondary" href="${escapeHtml(finalCaoHref)}"${outboundAttrsFor(site, "final_cao_briefing", caoStage, caoCampaign)}>Open the CAO briefing</a>
+    <section class="sp-section snaxk-cao" id="cao">
+      <div class="sp-section-inner snaxk-cao-layout">
+        <div class="snaxk-cao-copy">
+          <p class="sp-eyebrow">Chief Agentic Officer</p>
+          <h2>The board needs to inspect the judgement, not just the output.</h2>
+          <p>A Chief Agentic Officer needs a clear view of what agentic work exists, who owns it, which boundaries apply, how uncertainty escalates, and what evidence survives after the work is done.</p>
+          <div class="sp-actions">
+            <a class="sp-button sp-button-dark" href="${escapeHtml(caoPanelHref)}"${outboundAttrsFor(site, "cao_judgement_briefing", caoStage, caoCampaign)}>Read the CAO briefing ${arrow}</a>
+            <a class="sp-button" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, caoFeeder.engine_content || "snaxk_engine_interest", advisoryStage, advisoryCampaign)}>Register interest</a>
+          </div>
+        </div>
+        <div class="snaxk-cao-ledger" aria-label="Chief Agentic Officer inspection areas">
+          <div><span>01</span><strong>Ownership</strong></div>
+          <div><span>02</span><strong>Boundaries</strong></div>
+          <div><span>03</span><strong>Evidence</strong></div>
+          <div><span>04</span><strong>Escalation</strong></div>
+          <div><span>05</span><strong>Measurable trust</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sp-section sp-dark" id="relationship">
+      <div class="sp-section-inner sp-product-relationship">
+        <div>
+          <p class="sp-eyebrow">Sibling systems</p>
+          <h2>${escapeHtml(sibling.title)}</h2>
+          <p>${escapeHtml(sibling.body)}</p>
+        </div>
+        <div class="sp-relationship-rule">
+          <span class="sp-eyebrow">Orchistra</span>
+          <strong>Keep the work visible. Let judgement decide what happens next.</strong>
+          <div class="sp-actions">
+            <a class="sp-button sp-button-light" href="${escapeHtml(siblingHref)}"${outboundAttrsFor(site, sibling.content, "source_to_sibling_product", sibling.campaign)}>Visit Orchistra ${arrow}</a>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
+  <footer class="sp-footer">
     <div>
-      <strong>${escapeHtml(site.name)}</strong>
-      <div>${escapeHtml(site.domain)}</div>
-      <div class="footer-product">${escapeHtml(footerProductLine)}</div>
-      <div class="footer-legal">${escapeHtml(footerLegal)}</div>
+      <img class="snaxk-footer-logo" src="${escapeHtml(badge)}" alt="SNAXK">
+      <p>A judgement engine for agentic work: signal before action, visible boundaries, and evidence people can inspect.</p>
     </div>
-    <div>Judgement, boundaries, review, and measurable trust for long-running agents.</div>
+    <div class="sp-footer-col">
+      <strong>SNAXK</strong>
+      <a href="#approach">Approach</a>
+      <a href="#loop">Judgement loop</a>
+      <a href="#boundaries">Stop lines</a>
+    </div>
+    <div class="sp-footer-col">
+      <strong>Sibling product</strong>
+      <a href="${escapeHtml(siblingHref)}"${outboundAttrsFor(site, "footer_orchistra", "source_to_sibling_product", sibling.campaign)}>Orchistra</a>
+      <a href="${escapeHtml(caoPanelHref)}"${outboundAttrsFor(site, "footer_cao_briefing", caoStage, caoCampaign)}>CAO briefing</a>
+    </div>
+    <div class="sp-footer-col">
+      <strong>Contact</strong>
+      <a href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, "footer_engine_interest", advisoryStage, advisoryCampaign)}>Discuss SNAXK</a>
+      <a href="/healthz">Status</a>
+    </div>
+    <div class="sp-footer-legal">
+      <span>${escapeHtml(site.footer_product_line || "A YQUP product")}</span>
+      <span>${escapeHtml(site.footer_legal || "Copyright (c) 2026 YQUP Ltd")}</span>
+    </div>
   </footer>
 </body>
-</html>
-`;
+</html>`;
+}
+
+function snaxkPageFor(site) {
+  return snaxkSiblingPageFor(site);
 }
 
 function agenticLeaderPageFor(site) {
@@ -10463,2619 +10507,542 @@ ${matomoScriptTagFor(site)}  <style>
 </html>`;
 }
 
-function orchistraPageFor(site) {
-  const outcomes = site.outcomes || [
-    {
-      title: "Clear coordination",
-      body: "Agents, routines, and human operators can see where work belongs and what has moved.",
-    },
-    {
-      title: "Human attention",
-      body: "Judgement points, approvals, blockers, and quiet escalations have somewhere visible to land.",
-    },
-    {
-      title: "Searchable evidence",
-      body: "Threads, receipts, rich updates, and audit-visible decisions stay available when people need the trail.",
-    },
-    {
-      title: "Reusable learning",
-      body: "Repeated questions, handoffs, and mistakes can become better guidance and operating practice.",
-    },
+function orchistraSiblingPageFor(site) {
+  const title = site.title || "Orchistra | Visible agent work for people in charge";
+  const summary = site.summary || "Orchistra turns agent activity into work people can follow.";
+  const heroImage = site.hero_background_image || "/assets/orchistra/hero-conservatory.webp";
+  const heroImageMobile = site.hero_background_image_mobile || heroImage;
+  const productImage = site.hero_product_image || "/assets/orchistra/hero-console.webp";
+  const productImageMobile = site.hero_product_image_mobile || productImage;
+  const fieldImage = site.hero_image || "/assets/orchistra/countryside-field.webp";
+  const outcomes = site.outcomes || [];
+  const flow = [
+    ["01", "Signals arrive", "Customer notes, research, operations, incidents, routines, and quiet changes enter one visible route."],
+    ["02", "Context stays attached", "Channels, threads, attachments, owners, and work packets keep meaning beside the work."],
+    ["03", "Human attention has a place", "Requests, blockers, acknowledgements, and decisions land where a responsible person can see them."],
+    ["04", "Approved work moves", "Agents and people can follow what was proposed, what was approved, and which boundary still applies."],
+    ["05", "Evidence remains", "Receipts, decisions, outcomes, and useful learning stay available after the work has moved on."],
   ];
-  const serviceFlow = site.service_flow || {
-    eyebrow: "Service model",
-    title: "Signals and workers become work people can follow.",
-    body: "Orchistra sits between the places work starts and the people responsible for it.",
-    inputs: [
-      { title: "Signals", body: "Customer notes, research, operations, incidents, and quiet changes." },
-      { title: "Workers", body: "Agents, automations, routines, humans, and tools doing the work." },
-    ],
-    core_title: "Orchistra",
-    core_body: "Shared channels, threads, rich updates, receipts, guidance, and audit-visible decisions.",
-    outputs: [
-      { title: "Clear action", body: "What happened, what changed, and what should happen next." },
-      { title: "Human control", body: "Attention, approval, and decisions recorded." },
-      { title: "Reusable learning", body: "Patterns become guidance, playbook candidates, and better handoffs." },
-    ],
+  const cao = site.cao_feeder || {};
+  const caoUrl = cao.primary_url || "https://chiefagenticofficer.com/#briefing-signup";
+  const caoCampaign = cao.primary_campaign || "orchistra_to_chiefagenticofficer_briefing";
+  const caoStage = cao.primary_stage || "source_to_chiefagenticofficer_briefing";
+  const caoContent = cao.primary_content || "feeder_cao_briefing";
+  const caoHref = trackedOutboundUrlFor(site, caoUrl, caoContent, caoCampaign) || caoUrl;
+  const advisoryUrl = cao.secondary_url || defaultTonywoodAdvisoryUrl;
+  const advisoryCampaign = cao.secondary_campaign || "orchistra_platform_interest_to_tonywood_advisory";
+  const advisoryStage = cao.secondary_stage || "source_to_tonywood_platform_interest";
+  const advisoryContent = cao.secondary_content || "feeder_platform_interest";
+  const advisoryHref = trackedOutboundUrlFor(site, advisoryUrl, advisoryContent, advisoryCampaign) || advisoryUrl;
+  const sibling = site.sibling_product || {
+    name: "SNAXK",
+    url: "https://snaxk.com/",
+    campaign: "orchistra_to_snaxk",
+    content: "sibling_snaxk",
+    title: "Coordination needs judgement beside it.",
+    body: "Orchistra keeps agent work visible and coordinated. SNAXK helps decide what should happen next: proceed, pause, stop, or return to a human.",
   };
-  const fieldNote = site.field_note || {
-    eyebrow: "In the field",
-    title: "The calm place between useful agents and responsible people.",
-    body: "That is why we created Orchistra. It should feel less like a noisy dashboard and more like a field map: what is moving, who is tending it, where evidence sits, and when a person needs to step in.",
-    quote: "The point is not watching everything. It is watching the right things.",
-    quote_source: "Shepherd of Agentic Sheep",
-    quote_source_url: "https://shepherdofagenticsheep.com/",
-    quote_source_campaign: "orchistra_to_shepherd",
-    quote_source_stage: "source_to_shepherd",
-    quote_source_content: "field_quote_shepherd",
-    image_url: site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg",
-    image_alt: "English countryside field used as a visual cue for calm agent oversight.",
-    primary_label: "Show interest",
-    secondary_label: "Read TonyWood.org",
-    secondary_url: "https://www.tonywood.org/",
-  };
-  const messageModel = site.message_model || {
-    eyebrow: "Conversation model",
-    title: "Messages are more than notes.",
-    body: "A post can start a thread, reply to a task, carry a rich update, request human attention, record a decision, or link a later fix back to the original problem.",
-    steps: [
-      { label: "Thread", title: "Start the work", body: "Give the work a visible place to live." },
-      { label: "Update", title: "Keep context", body: "Post progress, evidence, receipts, and changes." },
-      { label: "Decision", title: "Bring in humans", body: "Ask for attention and record the answer." },
-      { label: "Learning", title: "Improve the pattern", body: "Turn repeated questions into guidance." },
-    ],
-  };
-  const useCases = site.use_cases || [
-    {
-      label: "1",
-      title: "Customer and service triage",
-      body: "Keep intake, routing, summaries, source pointers, follow-ups, and human decisions in a visible service lane.",
-    },
-    {
-      label: "2",
-      title: "Research and evidence work",
-      body: "Let agents compare sources, post rich updates, preserve uncertainty, and hand work over without losing the trail.",
-    },
-    {
-      label: "3",
-      title: "Sales, marketing, and communications",
-      body: "Coordinate drafts, approvals, campaign notes, platform signals, and next actions in threads people can revisit.",
-    },
-    {
-      label: "4",
-      title: "Operations and recurring workflows",
-      body: "Give repeated jobs a visible rhythm: what ran, what changed, what needs attention, and what should improve next time.",
-    },
-  ];
-  const routes = site.routes || site.sections || [];
-  const operatingNotes = site.operating_notes || [];
-  const researchLinks = site.research_links || [];
-  const featureJourneys = site.feature_journeys || [];
-  const features = site.features || [
-    {
-      label: "Channels",
-      title: "Mediated agent communication",
-      body: "Agents talk through shared channels and threads instead of hidden direct paths.",
-    },
-    {
-      label: "Identity",
-      title: "Named agents with trust levels",
-      body: "Every agent has an owner, capability profile, bearer token, and visible status.",
-    },
-    {
-      label: "Oversight",
-      title: "Human console and audit trail",
-      body: "Humans can inspect history, activity, errors, escalations, and system changes.",
-    },
-  ];
-  const skills = site.skills || [
-    {
-      status: "Live",
-      label: "relay",
-      title: "Message and task relay",
-      body: "Post events to channels, manage tasks, and keep receipts visible.",
-    },
-    {
-      status: "Live",
-      label: "watch",
-      title: "Channel watch and replay",
-      body: "Follow authorised channels, reconnect cleanly, and replay missed events.",
-    },
-    {
-      status: "Emerging",
-      label: "guidance",
-      title: "Mentor guidance",
-      body: "Turn repeated patterns into short guidance and playbook candidates.",
-    },
-  ];
-  const roadmap = site.roadmap || [
-    {
-      label: "Now",
-      title: "Gateway foundation",
-      body: "Channels, messages, audit, agent registry, bearer tokens, and management console.",
-    },
-    {
-      label: "Next",
-      title: "Cadence and trust",
-      body: "Timed channel rhythms, reputation signals, slot guidance, and channel requests.",
-    },
-    {
-      label: "Later",
-      title: "Mentor layer",
-      body: "Advisory guidance, patterns, lessons, and playbooks for trusted agents.",
-    },
-  ];
-  const releases = site.releases || [
-    "V1 gateway: agent identity, channels, messages, audit, and management.",
-    "V1.1 coordination: cadence, slots, reputation, and channel request flow.",
-    "V1.2 guidance: mentor console, reflections, and approved lesson capture.",
-  ];
-  const acknowledgement = site.acknowledgement || {
-    eyebrow: "With thanks",
-    title: "To the first people helping shape Orchistra.",
-    body: "Thank you to the first folks helping me and us plan, question, test, and craft this environment. Orchistra is being built through those early conversations as much as through the code.",
-  };
-  const fallbackContactHref = site.contact?.form_url
-    || (site.contact?.email ? `mailto:${site.contact.email}` : `https://${site.domain}/`);
-  const caoFeeder = site.cao_feeder || {};
-  const caoUrl = caoFeeder.primary_url || "https://chiefagenticofficer.com/#briefing-signup";
-  const caoCampaign = caoFeeder.primary_campaign || "orchistra_to_chiefagenticofficer_briefing";
-  const caoStage = caoFeeder.primary_stage || "source_to_chiefagenticofficer_briefing";
-  const heroCaoHref = trackedOutboundUrlFor(site, caoUrl, "hero_cao_briefing", caoCampaign) || caoUrl;
-  const feederCaoHref = trackedOutboundUrlFor(site, caoUrl, caoFeeder.primary_content || "feeder_cao_briefing", caoCampaign) || caoUrl;
-  const platformUrl = caoFeeder.secondary_url || defaultTonywoodAdvisoryUrl;
-  const platformCampaign = caoFeeder.secondary_campaign || "orchistra_platform_interest_to_tonywood_advisory";
-  const platformStage = caoFeeder.secondary_stage || "source_to_tonywood_platform_interest";
-  const feederPlatformHref = trackedOutboundUrlFor(site, platformUrl, caoFeeder.secondary_content || "feeder_platform_interest", platformCampaign) || platformUrl;
-  const conversationHref = trackedOutboundUrlFor(site, platformUrl, "final_platform_interest_cta", platformCampaign) || fallbackContactHref;
-  const fieldInterestContent = fieldNote.primary_content || "field_note_platform_interest";
-  const fieldInterestHref = trackedOutboundUrlFor(site, platformUrl, fieldInterestContent, platformCampaign) || platformUrl;
-  const tonywoodHomeUrl = fieldNote.secondary_url || "https://www.tonywood.org/";
-  const tonywoodHomeCampaign = fieldNote.secondary_campaign || "orchistra_to_tonywood";
-  const tonywoodHomeStage = fieldNote.secondary_stage || "source_to_tonywood_home";
-  const tonywoodHomeContent = fieldNote.secondary_content || "field_note_tonywood_home";
-  const tonywoodHomeHref = trackedOutboundUrlFor(site, tonywoodHomeUrl, tonywoodHomeContent, tonywoodHomeCampaign) || tonywoodHomeUrl;
-  const quoteSourceUrl = fieldNote.quote_source_url || "https://shepherdofagenticsheep.com/";
-  const quoteSourceCampaign = fieldNote.quote_source_campaign || "orchistra_to_shepherd";
-  const quoteSourceStage = fieldNote.quote_source_stage || "source_to_shepherd";
-  const quoteSourceContent = fieldNote.quote_source_content || "field_quote_shepherd";
-  const quoteSourceHref = trackedOutboundUrlFor(site, quoteSourceUrl, quoteSourceContent, quoteSourceCampaign) || quoteSourceUrl;
-  const heroBackgroundImage = site.hero_background_image || "/assets/orchistra/hero-conservatory.webp";
-  const heroBackgroundImageMobile = site.hero_background_image_mobile || heroBackgroundImage;
-  const heroProductImage = site.hero_product_image || "/assets/orchistra/hero-console.webp";
-  const heroProductImageMobile = site.hero_product_image_mobile || heroProductImage;
+  const siblingHref = trackedOutboundUrlFor(site, sibling.url, sibling.content, sibling.campaign) || sibling.url;
+  const arrow = siblingArrowIcon();
 
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(site.title || site.name)}</title>
-  <meta name="description" content="${escapeHtml(site.summary)}">
-${socialMetaTagsFor(site)}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="${escapeHtml(heroBackgroundImage)}" as="image" type="image/webp">
-  <link rel="preload" href="${escapeHtml(heroProductImage)}" as="image" type="image/webp">
-  <link rel="preload" href="/assets/orchistra/instrument-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/orchistra/newsreader-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(summary)}">
+${socialMetaTagsFor(site, { title, description: summary })}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="${escapeHtml(heroImage)}" as="image" fetchpriority="high">
+  <link rel="preload" href="/assets/system/instrument-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/system/newsreader-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
 ${matomoScriptTagFor(site)}  <style>
-    @font-face {
-      font-family: "Instrument Sans";
-      src: url("/assets/orchistra/instrument-sans-latin-variable.woff2") format("woff2");
-      font-style: normal;
-      font-weight: 400 700;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Newsreader";
-      src: url("/assets/orchistra/newsreader-latin-variable.woff2") format("woff2");
-      font-style: normal;
-      font-weight: 400 700;
-      font-display: swap;
-    }
-
+${siblingProductSharedStyles().trim()}
     :root {
-      color-scheme: light;
-      --ink: #171512;
-      --ink-soft: #514b42;
-      --paper: #fbf7ee;
-      --mist: #f0e8da;
-      --field: #207f79;
-      --hedge: #1c2721;
-      --night: #171512;
-      --signal: #ef6b4a;
-      --mint: #2fa875;
-      --gold: #dea331;
-      --sky: #32aebd;
-      --white: #fffaf2;
-      --panel: rgba(255, 250, 242, 0.9);
-      --line: rgba(23, 21, 18, 0.16);
-      --line-light: rgba(255, 253, 247, 0.18);
-      --shadow: 0 24px 70px rgba(23, 21, 18, 0.12);
-      --shadow-deep: 0 50px 120px rgba(0, 0, 0, 0.46);
-      --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --serif: "Newsreader", Georgia, "Times New Roman", serif;
+      --sp-accent: #d2ae63;
+      --sp-accent-dark: #376f66;
+      --orchistra-green: #163a32;
+      --orchistra-green-light: #d9e7df;
+      --orchistra-sky: #a9ced8;
+      --orchistra-brass: #caa65c;
+      --orchistra-signal: #d4674f;
     }
 
-    * {
-      box-sizing: border-box;
+    .orchistra-mark {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 253, 247, 0.56);
+      border-radius: 50%;
+      color: var(--sp-white);
+      font-family: var(--sp-serif);
+      font-size: 25px;
+      font-weight: 500;
+      box-shadow: inset 0 0 0 5px rgba(255, 253, 247, 0.06);
     }
 
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
+    .orchistra-hero {
+      --sp-hero-image: url("${escapeHtml(heroImage)}");
+      --sp-hero-mobile-image: url("${escapeHtml(heroImageMobile)}");
     }
 
-    body {
-      margin: 0;
-      overflow-x: hidden;
-      background:
-        linear-gradient(90deg, rgba(23, 21, 18, 0.03) 1px, transparent 1px) 0 0 / 26px 26px,
-        linear-gradient(rgba(23, 21, 18, 0.03) 1px, transparent 1px) 0 0 / 26px 26px,
-        var(--paper);
-      color: var(--ink);
-      font-family: var(--sans);
-      font-size: 17px;
-      line-height: 1.58;
-      letter-spacing: 0;
+    .orchistra-hero .sp-hero-inner {
+      max-width: 940px;
     }
 
-    a {
-      color: inherit;
-      text-decoration-thickness: 0.08em;
-      text-underline-offset: 0.18em;
+    .orchistra-hero h1 {
+      max-width: none;
+      font-size: clamp(76px, 11vw, 156px);
     }
 
-    .site-header {
+    .orchistra-hero-statement {
+      margin: -8px 0 0;
+      color: var(--sp-white);
+      font-family: var(--sp-serif);
+      font-size: clamp(31px, 4vw, 56px);
+      font-weight: 380;
+      line-height: 1;
+    }
+
+    .orchistra-flow {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.28fr);
+      gap: clamp(44px, 8vw, 118px);
+      align-items: start;
+    }
+
+    .orchistra-flow-copy {
+      position: sticky;
+      top: 36px;
+    }
+
+    .orchistra-flow-copy h2 {
+      margin: 12px 0 18px;
+      font-family: var(--sp-serif);
+      font-size: clamp(44px, 5.8vw, 77px);
+      font-weight: 430;
+      line-height: 0.98;
+    }
+
+    .orchistra-flow-copy p:last-of-type {
+      color: rgba(255, 253, 247, 0.68);
+      font-size: 19px;
+    }
+
+    .orchistra-flow-list {
+      border-top: 1px solid rgba(255, 253, 247, 0.18);
+    }
+
+    .orchistra-flow-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 18px;
+      padding: 28px 0 32px;
+      border-bottom: 1px solid rgba(255, 253, 247, 0.18);
+    }
+
+    .orchistra-flow-step::after {
+      content: "";
       position: absolute;
-      inset: 0 0 auto;
-      z-index: 20;
-      min-height: 76px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 28px;
-      padding: 18px clamp(24px, 4vw, 72px);
-      border-bottom: 1px solid rgba(255, 253, 247, 0.12);
-      background: rgba(8, 13, 12, 0.74);
-      color: var(--white);
-      backdrop-filter: blur(20px) saturate(1.08);
+      left: 18px;
+      top: 70px;
+      bottom: -15px;
+      width: 1px;
+      background: rgba(169, 206, 216, 0.38);
     }
 
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      text-decoration: none;
+    .orchistra-flow-step:last-child::after {
+      display: none;
     }
 
-    .brand-mark {
+    .orchistra-flow-step > span {
       width: 38px;
       height: 38px;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(255, 253, 247, 0.72);
-      border-radius: 8px;
-      background: var(--paper);
-      color: var(--hedge);
-      font-size: 20px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 8px 26px;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    nav a,
-    .more-nav summary {
-      position: relative;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    nav > a::after,
-    .more-nav summary::after {
-      content: "";
-      position: absolute;
-      right: 0;
-      bottom: -8px;
-      left: 0;
-      height: 1px;
-      background: var(--gold);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 180ms ease;
-    }
-
-    nav > a:hover::after,
-    nav > a:focus-visible::after,
-    .more-nav summary:hover::after,
-    .more-nav summary:focus-visible::after {
-      transform: scaleX(1);
-    }
-
-    .more-nav {
-      position: relative;
-    }
-
-    .more-nav summary {
-      list-style: none;
-    }
-
-    .more-nav summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .more-nav-panel {
-      position: absolute;
-      top: calc(100% + 18px);
-      right: 0;
-      width: 210px;
-      display: grid;
-      gap: 2px;
-      padding: 8px;
-      border: 1px solid rgba(255, 253, 247, 0.16);
-      border-radius: 8px;
-      background: rgba(11, 16, 15, 0.96);
-      box-shadow: var(--shadow-deep);
-      backdrop-filter: blur(20px);
-    }
-
-    .more-nav-panel a {
-      padding: 9px 10px;
-      border-radius: 6px;
-      color: rgba(255, 253, 247, 0.76);
-    }
-
-    .more-nav-panel a:hover,
-    .more-nav-panel a:focus-visible {
-      background: rgba(255, 253, 247, 0.08);
-      color: var(--white);
-    }
-
-    .mobile-primary {
-      display: none;
-    }
-
-    .hero {
-      position: relative;
-      min-height: clamp(690px, 78svh, 790px);
-      display: grid;
-      align-items: center;
-      padding: 148px clamp(24px, 6vw, 96px) 98px;
-      overflow: hidden;
-      background-color: #0b100f;
-      background-image: url("${escapeHtml(heroBackgroundImage)}");
-      background-position: center;
-      background-size: cover;
-      color: var(--white);
-      isolation: isolate;
-    }
-
-    .hero-product {
-      position: absolute;
-      z-index: 1;
-      top: 132px;
-      right: clamp(-120px, -3vw, -28px);
-      width: min(62vw, 980px);
-      margin: 0;
-      filter: drop-shadow(0 54px 90px rgba(0, 0, 0, 0.52));
-      mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 94%, transparent 100%);
-    }
-
-    .hero-product img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .console-stage {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    .console-scene {
-      position: absolute;
-      right: max(18px, 3vw);
-      top: 82px;
-      width: min(920px, 61vw);
-      min-height: 600px;
-      opacity: 0.98;
-      filter: drop-shadow(0 54px 82px rgba(0, 0, 0, 0.34));
-      transform: perspective(1400px) rotateY(-6deg) rotateX(2deg);
-      transform-origin: center;
-    }
-
-    .console-window {
-      position: relative;
-      display: grid;
-      grid-template-rows: 44px minmax(0, 1fr);
-      min-height: 585px;
-      border: 1px solid rgba(255, 253, 247, 0.14);
-      border-radius: 8px;
-      background: #151615;
-      box-shadow:
-        0 48px 130px rgba(0, 0, 0, 0.56),
-        0 0 0 1px rgba(255, 253, 247, 0.06) inset,
-        0 0 90px rgba(38, 132, 255, 0.18);
-      color: rgba(255, 253, 247, 0.92);
-      overflow: hidden;
-      backdrop-filter: blur(18px) saturate(1.1);
-    }
-
-    .console-window::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 78% 5%, rgba(38, 132, 255, 0.24), transparent 32%),
-        radial-gradient(circle at 6% 78%, rgba(47, 168, 117, 0.18), transparent 30%),
-        linear-gradient(105deg, rgba(255, 255, 255, 0.08), transparent 30%);
-      mix-blend-mode: screen;
-    }
-
-    .window-chrome {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 16px;
-      min-width: 0;
-      padding: 0 16px;
-      border-bottom: 1px solid rgba(255, 253, 247, 0.08);
-      background: rgba(28, 29, 28, 0.96);
-      color: rgba(255, 253, 247, 0.86);
-      font-size: 13px;
-      font-weight: 820;
-    }
-
-    .traffic-lights {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .traffic-lights i {
-      width: 13px;
-      height: 13px;
-      border-radius: 999px;
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18) inset;
-    }
-
-    .traffic-lights i:nth-child(1) {
-      background: #ff5f57;
-    }
-
-    .traffic-lights i:nth-child(2) {
-      background: #ffbd2e;
-    }
-
-    .traffic-lights i:nth-child(3) {
-      background: #28c840;
-    }
-
-    .chrome-status {
-      color: rgba(255, 253, 247, 0.48);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .console-shell {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 218px minmax(0, 1fr);
-      min-height: 0;
-    }
-
-    .console-sidebar,
-    .console-rail {
-      min-width: 0;
-      padding: 18px 16px;
-      background:
-        linear-gradient(180deg, rgba(255, 253, 247, 0.05), transparent 36%),
-        #202120;
-      border-right: 1px solid rgba(255, 253, 247, 0.08);
-      color: rgba(255, 253, 247, 0.84);
-    }
-
-    .sidebar-brand {
-      display: grid;
-      gap: 2px;
-      margin-bottom: 20px;
-    }
-
-    .sidebar-brand span {
-      color: rgba(255, 253, 247, 0.48);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .sidebar-brand strong,
-    .console-rail strong {
-      display: block;
-      color: var(--white);
-      font-size: 16px;
-      line-height: 1.05;
-    }
-
-    .side-nav {
-      display: grid;
-      gap: 6px;
-      margin-bottom: 18px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255, 253, 247, 0.08);
-    }
-
-    .side-nav span,
-    .channel-row {
-      display: grid;
-      grid-template-columns: 24px minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 8px;
-      min-height: 34px;
-      padding: 7px 8px;
-      border-radius: 7px;
-      color: rgba(255, 253, 247, 0.72);
-      font-size: 12px;
-      font-weight: 850;
-    }
-
-    .side-nav span.active,
-    .channel-row.active {
-      background: rgba(38, 132, 255, 0.22);
-      color: var(--white);
-      box-shadow: 0 0 0 1px rgba(38, 132, 255, 0.18) inset;
-    }
-
-    .side-nav i,
-    .channel-row i {
-      color: rgba(255, 253, 247, 0.54);
-      font-style: normal;
-      text-align: center;
-    }
-
-    .channel-row small {
-      min-width: 40px;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(38, 132, 255, 0.2);
-      color: #4da2ff;
-      font-size: 10px;
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .sidebar-label {
-      margin: 10px 0 6px;
-      color: rgba(255, 253, 247, 0.42);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .sidebar-foot {
-      margin-top: 20px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255, 253, 247, 0.08);
-      color: rgba(255, 253, 247, 0.54);
+      border: 1px solid rgba(169, 206, 216, 0.62);
+      border-radius: 50%;
+      color: var(--orchistra-sky);
       font-size: 11px;
-      line-height: 1.35;
-    }
-
-    .console-channel,
-    .console-metric {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 30px;
-      margin-top: 8px;
-      padding: 7px 8px;
-      border-radius: 6px;
-      color: rgba(255, 253, 247, 0.74);
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .console-channel.active {
-      background: rgba(222, 163, 49, 0.2);
-      color: var(--white);
-    }
-
-    .console-channel::before,
-    .console-metric::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      flex: 0 0 auto;
-      background: var(--sky);
-    }
-
-    .console-channel:nth-of-type(3)::before,
-    .console-metric:nth-of-type(3)::before {
-      background: var(--signal);
-    }
-
-    .console-channel:nth-of-type(4)::before,
-    .console-metric:nth-of-type(4)::before {
-      background: var(--gold);
-    }
-
-    .console-main {
-      position: relative;
-      min-width: 0;
-      padding: 0;
-      background:
-        linear-gradient(90deg, rgba(255, 253, 247, 0.025) 1px, transparent 1px) 0 0 / 32px 32px,
-        linear-gradient(rgba(255, 253, 247, 0.025) 1px, transparent 1px) 0 0 / 32px 32px,
-        #171817;
-    }
-
-    .thread-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 58px;
-      padding: 0 22px;
-      border-bottom: 1px solid rgba(255, 253, 247, 0.08);
-      color: rgba(255, 253, 247, 0.92);
-      font-size: 16px;
-      font-weight: 900;
-    }
-
-    .thread-header span:last-child {
-      color: #28c840;
-      font-size: 12px;
-      text-shadow: 0 0 18px rgba(40, 200, 64, 0.42);
-    }
-
-    .channel-guide {
-      margin: 18px 22px 0;
-      padding: 14px 16px;
-      border: 1px solid rgba(255, 253, 247, 0.08);
-      border-radius: 8px;
-      background: rgba(255, 253, 247, 0.035);
-      color: rgba(255, 253, 247, 0.7);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .channel-guide strong {
-      display: block;
-      margin-bottom: 4px;
-      color: rgba(255, 253, 247, 0.94);
-      font-size: 13px;
-    }
-
-    .message-stack {
-      display: grid;
-      gap: 12px;
-      margin: 18px 22px;
-    }
-
-    .message-row {
-      position: relative;
-      display: grid;
-      grid-template-columns: 30px minmax(0, 1fr) auto;
-      gap: 12px;
-      align-items: start;
-      min-width: 0;
-      padding: 16px 16px 14px 18px;
-      border: 1px solid rgba(38, 132, 255, 0.55);
-      border-left: 4px solid #2684ff;
-      border-radius: 8px;
-      background:
-        linear-gradient(90deg, rgba(38, 132, 255, 0.12), transparent 50%),
-        rgba(255, 253, 247, 0.035);
-      box-shadow:
-        0 18px 38px rgba(0, 0, 0, 0.28),
-        0 0 0 1px rgba(255, 253, 247, 0.035) inset,
-        0 0 28px rgba(38, 132, 255, 0.16);
-    }
-
-    .message-row.green {
-      border-color: rgba(47, 168, 117, 0.66);
-      border-left-color: #2fd078;
-      background:
-        linear-gradient(90deg, rgba(47, 168, 117, 0.13), transparent 52%),
-        rgba(255, 253, 247, 0.035);
-      box-shadow:
-        0 18px 38px rgba(0, 0, 0, 0.26),
-        0 0 28px rgba(47, 168, 117, 0.12);
-    }
-
-    .message-row.amber {
-      border-color: rgba(222, 163, 49, 0.68);
-      border-left-color: #f59d28;
-      background:
-        linear-gradient(90deg, rgba(222, 163, 49, 0.13), transparent 52%),
-        rgba(255, 253, 247, 0.035);
-      box-shadow:
-        0 18px 38px rgba(0, 0, 0, 0.26),
-        0 0 28px rgba(222, 163, 49, 0.12);
-    }
-
-    .agent-dot {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      border-radius: 7px;
-      background: rgba(38, 132, 255, 0.18);
-      color: #4da2ff;
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    .message-card {
-      min-width: 0;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-      color: rgba(255, 253, 247, 0.78);
-      font-size: 13px;
-      line-height: 1.42;
-    }
-
-    .message-card strong {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 7px;
-      color: rgba(255, 253, 247, 0.96);
-      font-size: 14px;
-      line-height: 1.1;
-    }
-
-    .message-card strong small {
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(47, 168, 117, 0.18);
-      color: #2fd078;
-      font-size: 10px;
-      font-weight: 900;
-    }
-
-    .message-card p {
-      margin: 0;
-      color: rgba(255, 253, 247, 0.72);
-    }
-
-    .receipt {
-      display: inline-flex;
-      margin-top: 7px;
-      color: #2fd078;
-      font-size: 11px;
-      font-weight: 900;
-    }
-
-    .message-time {
-      color: rgba(255, 253, 247, 0.35);
-      font-size: 11px;
-      font-weight: 820;
-      white-space: nowrap;
-    }
-
-    .composer-bar {
-      position: absolute;
-      right: 16px;
-      bottom: 16px;
-      left: 16px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: center;
-      padding: 11px 12px;
-      border: 1px solid rgba(255, 253, 247, 0.08);
-      border-radius: 8px;
-      background: rgba(27, 28, 27, 0.92);
-      box-shadow: 0 -18px 34px rgba(0, 0, 0, 0.22);
-      color: rgba(255, 253, 247, 0.42);
-      font-size: 12px;
       font-weight: 760;
     }
 
-    .composer-bar span:last-child {
-      padding: 7px 11px;
-      border-radius: 7px;
-      background: rgba(47, 168, 117, 0.22);
-      color: #6fea9c;
-      font-weight: 900;
+    .orchistra-flow-step h3 {
+      margin: 0 0 6px;
+      font-family: var(--sp-serif);
+      font-size: clamp(28px, 3.2vw, 40px);
+      font-weight: 460;
+      line-height: 1.04;
     }
 
-    .typing {
-      display: inline-flex;
-      gap: 4px;
-      align-items: center;
-      margin-top: 4px;
-    }
-
-    .typing i {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--signal);
-      opacity: 0.42;
-    }
-
-    .console-rail {
-      background: #163a32;
-    }
-
-    .console-metric {
-      display: grid;
-      grid-template-columns: 8px minmax(0, 1fr);
-      align-items: center;
-      min-height: 38px;
-      background: rgba(255, 253, 247, 0.1);
-      line-height: 1.18;
-    }
-
-    .flow-line {
-      position: absolute;
-      height: 3px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, transparent, var(--gold), var(--signal), transparent);
-      opacity: 0.76;
-      transform-origin: left center;
-    }
-
-    .flow-one {
-      left: 130px;
-      top: 190px;
-      width: 390px;
-      transform: rotate(8deg);
-    }
-
-    .flow-two {
-      left: 232px;
-      top: 332px;
-      width: 318px;
-      transform: rotate(-10deg);
-    }
-
-    .pulse-node {
-      position: absolute;
-      width: 13px;
-      height: 13px;
-      border: 3px solid var(--gold);
-      border-radius: 999px;
-      background: var(--white);
-    }
-
-    .pulse-one {
-      right: 202px;
-      top: 184px;
-    }
-
-    .pulse-two {
-      right: 118px;
-      top: 330px;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background:
-        linear-gradient(90deg, rgba(6, 10, 9, 0.54), transparent 50%),
-        linear-gradient(180deg, rgba(6, 10, 9, 0.08), rgba(6, 10, 9, 0.34));
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      width: min(100%, 620px);
-    }
-
-    .eyebrow {
-      margin: 0 0 14px;
-      color: var(--signal);
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .hero .eyebrow {
-      color: #ffd083;
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin-top: 0;
-    }
-
-    h1,
-    h2,
-    h3 {
-      letter-spacing: 0;
-      overflow-wrap: anywhere;
-    }
-
-    h1 {
-      max-width: 9ch;
-      margin-bottom: 24px;
-      font-family: var(--serif);
-      font-size: clamp(76px, 9vw, 132px);
-      line-height: 0.88;
-      font-weight: 500;
-    }
-
-    h2 {
-      max-width: 900px;
-      margin-bottom: 18px;
-      font-family: var(--serif);
-      font-size: clamp(42px, 5vw, 64px);
-      line-height: 0.98;
-      font-weight: 500;
-    }
-
-    h3 {
-      margin-bottom: 10px;
-      font-family: var(--serif);
-      font-size: 24px;
-      line-height: 1.18;
-      font-weight: 550;
-    }
-
-    .hero-copy {
-      max-width: 680px;
+    .orchistra-flow-step p {
+      max-width: 620px;
       margin: 0;
-      color: rgba(255, 253, 247, 0.88);
-      font-size: 21px;
-      line-height: 1.52;
+      color: rgba(255, 253, 247, 0.62);
     }
 
-    .hero-actions,
-    .cta-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 28px;
+    .orchistra-product {
+      background: #dce8e3;
     }
 
-    .button {
-      min-height: 46px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 12px 18px;
-      border: 1px solid currentColor;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 650;
-      text-decoration: none;
-      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
-    }
-
-    .button.primary {
-      background: var(--white);
-      color: var(--ink);
-      border-color: var(--white);
-    }
-
-    .button.secondary {
-      color: var(--white);
-    }
-
-    .button:hover,
-    .button:focus-visible {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2);
-    }
-
-    :focus-visible {
-      outline: 3px solid #88b8ff;
-      outline-offset: 4px;
-    }
-
-    .section {
-      padding: 84px 40px;
-    }
-
-    .section-inner {
-      width: min(100%, 1180px);
-      margin: 0 auto;
-    }
-
-    .outcome-band {
-      position: relative;
-      z-index: 2;
-      margin-top: 0;
-      padding: 0 clamp(24px, 4vw, 64px);
-      border-top: 1px solid rgba(255, 253, 247, 0.12);
-      border-bottom: 1px solid rgba(255, 253, 247, 0.12);
-      background: #0b100f;
-      color: var(--white);
-    }
-
-    .summary-strip {
+    .orchistra-product-layout {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 0;
-    }
-
-    .metric {
-      min-width: 0;
-      min-height: 176px;
-      padding: 36px 30px 34px;
-      border-right: 1px solid rgba(255, 253, 247, 0.16);
-      background: transparent;
-    }
-
-    .metric:first-child {
-      border-left: 1px solid rgba(255, 253, 247, 0.16);
-    }
-
-    .metric strong {
-      display: block;
-      max-width: 13ch;
-      margin-bottom: 10px;
-      color: var(--white);
-      font-family: var(--serif);
-      font-size: 27px;
-      line-height: 1.05;
-      font-weight: 520;
-    }
-
-    .metric span {
-      display: block;
-      color: rgba(255, 253, 247, 0.68);
-      font-size: 15px;
-      line-height: 1.42;
-      font-weight: 450;
-    }
-
-    .service-flow-band {
-      padding-top: 92px;
-      padding-bottom: 92px;
-      border-top: 1px solid rgba(255, 253, 247, 0.12);
-      border-bottom: 1px solid rgba(255, 253, 247, 0.12);
-      background: #0b100f;
-      color: var(--white);
-    }
-
-    .field-note-band {
-      padding-top: 96px;
-      padding-bottom: 96px;
-      background: var(--paper);
-    }
-
-    .field-note {
-      display: grid;
-      grid-template-columns: minmax(300px, 0.92fr) minmax(0, 1.08fr);
-      gap: clamp(42px, 6vw, 88px);
+      grid-template-columns: minmax(350px, 0.78fr) minmax(0, 1.22fr);
+      gap: clamp(44px, 7vw, 94px);
       align-items: center;
     }
 
-    .field-note-media {
-      min-width: 0;
+    .orchistra-product-copy h2 {
+      margin: 12px 0 18px;
+      font-family: var(--sp-serif);
+      font-size: clamp(43px, 5.6vw, 76px);
+      font-weight: 430;
+      line-height: 0.98;
     }
 
-    .field-note-media img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: 0 32px 80px rgba(23, 21, 18, 0.18);
-    }
-
-    .field-note-copy p:not(.eyebrow) {
-      max-width: 700px;
-      color: var(--ink-soft);
-      font-size: 20px;
-      line-height: 1.58;
-    }
-
-    .field-quote {
-      max-width: 720px;
-      margin: 24px 0 0;
-      padding: 22px 0 8px 24px;
-      border-left: 2px solid var(--gold);
-      background: transparent;
-      color: var(--ink);
-      box-shadow: none;
-    }
-
-    .field-quote p {
-      margin-bottom: 8px;
-      font-family: var(--serif);
-      font-size: 30px;
-      line-height: 1.18;
-    }
-
-    .field-quote cite {
-      color: var(--ink-soft);
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 820;
-    }
-
-    .field-quote cite a {
-      color: inherit;
-      text-decoration-thickness: 0.08em;
-      text-underline-offset: 0.18em;
-    }
-
-    .field-note-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 28px;
-    }
-
-    .field-note-actions .button.primary {
-      background: var(--hedge);
-      color: var(--white);
-      border-color: var(--hedge);
-    }
-
-    .field-note-actions .button.secondary {
-      color: var(--hedge);
-    }
-
-    .service-flow {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 46px;
-      align-items: center;
-    }
-
-    .flow-copy {
-      display: grid;
-      grid-template-columns: minmax(0, 0.82fr) minmax(320px, 0.68fr);
-      gap: 60px;
-      align-items: end;
-    }
-
-    .service-flow-band .eyebrow {
-      color: #a9d397;
-    }
-
-    .flow-copy .eyebrow,
-    .flow-copy h2 {
-      grid-column: 1;
-    }
-
-    .service-flow-band h2 {
-      color: var(--white);
-    }
-
-    .flow-copy p:not(.eyebrow) {
-      max-width: 720px;
-      align-self: end;
-      grid-column: 2;
-      grid-row: 1 / span 2;
-      margin-bottom: 18px;
-      color: rgba(255, 253, 247, 0.7);
-      font-size: 20px;
-      line-height: 1.58;
-    }
-
-    .flow-diagram {
-      min-width: 0;
-      display: grid;
-      grid-template-columns: minmax(150px, 0.72fr) minmax(210px, 0.92fr) minmax(190px, 0.84fr);
-      gap: 34px;
-      align-items: center;
-      padding: 36px;
-      border: 1px solid rgba(255, 253, 247, 0.14);
-      border-radius: 8px;
-      background:
-        linear-gradient(90deg, rgba(255, 253, 247, 0.025) 1px, transparent 1px) 0 0 / 34px 34px,
-        linear-gradient(rgba(255, 253, 247, 0.025) 1px, transparent 1px) 0 0 / 34px 34px,
-        #0f1514;
-      box-shadow: var(--shadow-deep);
-    }
-
-    .flow-stack {
-      display: grid;
-      gap: 12px;
-    }
-
-    .flow-card,
-    .flow-core {
-      min-width: 0;
-      border: 1px solid rgba(255, 253, 247, 0.14);
-      border-radius: 8px;
-      background: rgba(255, 253, 247, 0.045);
-    }
-
-    .flow-card {
-      padding: 14px;
-    }
-
-    .flow-card strong,
-    .flow-core strong {
-      display: block;
-      color: var(--white);
-      font-size: 17px;
-      line-height: 1.18;
-    }
-
-    .flow-card p,
-    .flow-core p {
-      margin: 7px 0 0;
-      color: rgba(255, 253, 247, 0.64);
-      font-size: 14px;
-      line-height: 1.42;
-    }
-
-    .flow-core {
-      position: relative;
-      padding: 30px 24px;
-      background:
-        linear-gradient(145deg, rgba(67, 118, 255, 0.12), transparent 44%),
-        rgba(255, 253, 247, 0.05);
-      color: var(--white);
-      text-align: center;
-      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.36), 0 0 44px rgba(80, 128, 255, 0.08);
-    }
-
-    .flow-core strong {
-      color: var(--white);
-      font-size: 28px;
-    }
-
-    .flow-core p {
-      color: rgba(255, 250, 242, 0.78);
-    }
-
-    .flow-core::before,
-    .flow-core::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      width: 18px;
-      height: 2px;
-      background: var(--gold);
-      transform: translateY(-50%);
-    }
-
-    .flow-core::before {
-      left: -18px;
-    }
-
-    .flow-core::after {
-      right: -18px;
-    }
-
-    .message-model-band {
-      background: var(--paper);
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .message-model {
-      display: grid;
-      grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr);
-      gap: 42px;
-      align-items: start;
-    }
-
-    .message-model p:not(.eyebrow) {
-      max-width: 700px;
-      color: var(--ink-soft);
-      font-size: 20px;
-      line-height: 1.58;
-    }
-
-    .message-steps {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 0;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .message-step {
-      min-width: 0;
-      padding: 6px 22px 8px;
-      border: 0;
-      border-left: 1px solid var(--line);
-      border-radius: 0;
-      background: transparent;
-    }
-
-    .message-step:last-child {
-      border-right: 1px solid var(--line);
-    }
-
-    .message-step span {
-      display: block;
-      margin-bottom: 18px;
-      color: var(--signal);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .message-step h3 {
+    .orchistra-product-copy > p {
+      color: #44534e;
       font-size: 19px;
     }
 
-    .message-step p {
-      margin-bottom: 0;
-      color: var(--ink-soft);
-      font-size: 15px;
-      line-height: 1.45;
-    }
-
-    .intro {
-      display: grid;
-      grid-template-columns: minmax(0, 0.78fr) minmax(320px, 1.22fr);
-      gap: 64px;
-      align-items: start;
-    }
-
-    .lead {
-      max-width: 720px;
-      color: var(--ink-soft);
-      font-size: 22px;
-      line-height: 1.5;
-    }
-
-    .product-panel {
-      min-width: 0;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      padding: 18px;
-    }
-
-    .product-panel-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--line);
-      color: var(--ink-soft);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .product-panel-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .product-signal {
-      min-height: 98px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--white);
-    }
-
-    .product-signal span {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--field);
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .product-signal strong {
-      font-family: var(--serif);
-      font-size: 21px;
-      font-weight: 520;
-      line-height: 1.08;
-    }
-
-    .feeder-band {
-      background: var(--mist);
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .feeder-panel {
-      display: grid;
-      grid-template-columns: minmax(0, 0.92fr) minmax(300px, 0.58fr);
-      gap: 36px;
-      align-items: end;
-      padding: 8px 0 8px 30px;
-      border: 0;
-      border-left: 2px solid var(--gold);
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .feeder-panel h2 {
-      max-width: 760px;
-      font-family: var(--serif);
-      font-size: 44px;
-      line-height: 1.06;
-      font-weight: 700;
-    }
-
-    .feeder-panel p {
-      max-width: 780px;
-      color: var(--ink-soft);
-      font-size: 20px;
-      line-height: 1.52;
-    }
-
-    .feeder-panel .lead {
-      color: var(--ink);
-    }
-
-    .feeder-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: flex-start;
-    }
-
-    .feeder-actions .button.primary {
-      background: var(--hedge);
-      color: var(--white);
-      border-color: var(--hedge);
-    }
-
-    .feeder-actions .button.secondary {
-      color: var(--hedge);
-    }
-
-    .work-band {
-      background: var(--paper);
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .route-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0;
-      margin-top: 32px;
-    }
-
-    .route-card,
-    .note-panel {
-      min-width: 0;
-      border: 0;
-      border-left: 1px solid var(--line);
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .route-card {
-      min-height: 0;
-      display: grid;
-      align-content: space-between;
-      padding: 8px 32px;
-      border-top: 0;
-    }
-
-    .route-card::before {
-      display: none;
-    }
-
-    .route-card span,
-    .note-panel span {
-      display: block;
-      margin-bottom: 24px;
-      color: var(--field);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .route-card strong {
-      display: block;
-      color: var(--ink);
-      font-size: 23px;
-      line-height: 1.18;
-    }
-
-    .route-card p,
-    .note-panel p {
-      margin: 14px 0 0;
-      color: var(--ink-soft);
-    }
-
-    .use-cases-band {
-      background: rgba(255, 250, 242, 0.68);
-    }
-
-    .use-case-head {
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
-      gap: 42px;
-      align-items: end;
-    }
-
-    .use-case-head p:not(.eyebrow) {
-      margin-bottom: 18px;
-      color: var(--ink-soft);
-      font-size: 20px;
-      line-height: 1.55;
-    }
-
-    .use-case-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0;
-      margin-top: 24px;
-    }
-
-    .use-case-card {
-      min-width: 0;
-      display: grid;
-      grid-template-columns: 58px minmax(0, 1fr);
-      gap: 16px;
-      padding: 24px 26px;
-      border: 0;
-      border-top: 1px solid var(--line);
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .use-case-number {
+    .orchistra-product-figure {
+      position: relative;
+      min-height: 580px;
+      margin: 0;
       display: grid;
       place-items: center;
-      width: 48px;
-      height: 48px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: transparent;
-      color: var(--field);
-      font-family: var(--serif);
-      font-size: 22px;
-      font-weight: 500;
-      line-height: 1;
+      padding: clamp(22px, 4vw, 54px);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.12)),
+        var(--orchistra-green);
+      box-shadow: 0 35px 90px rgba(22, 58, 50, 0.23);
+      overflow: hidden;
     }
 
-    .use-case-card p {
-      margin-bottom: 0;
-      color: var(--ink-soft);
+    .orchistra-product-figure::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("${escapeHtml(fieldImage)}");
+      background-position: center;
+      background-size: cover;
+      opacity: 0.16;
+      mix-blend-mode: luminosity;
     }
 
-    .research-band {
-      background: var(--paper);
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
+    .orchistra-product-picture {
+      position: relative;
+      z-index: 1;
+      width: 100%;
     }
 
-    .research-head,
-    .journey-head {
-      display: grid;
-      grid-template-columns: minmax(0, 0.86fr) minmax(320px, 1.14fr);
-      gap: 42px;
-      align-items: end;
-    }
-
-    .research-head p:not(.eyebrow),
-    .journey-head p:not(.eyebrow) {
-      margin-bottom: 18px;
-      color: var(--ink-soft);
-      font-size: 20px;
-      line-height: 1.55;
-    }
-
-    .research-grid,
-    .journey-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0;
-      margin-top: 28px;
-    }
-
-    .journey-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .research-card,
-    .journey-card {
-      min-width: 0;
-      padding: 8px 26px;
-      border: 0;
-      border-left: 1px solid var(--line);
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .research-card p,
-    .journey-card p {
-      color: var(--ink-soft);
-    }
-
-    .research-link {
-      display: inline-flex;
-      align-items: center;
-      margin-top: 6px;
-      color: var(--field);
-      font-weight: 860;
-      text-decoration-thickness: 0.08em;
-    }
-
-    .journey-card span {
+    .orchistra-product-picture img {
+      width: 100%;
       display: block;
-      margin-bottom: 14px;
-      color: var(--field);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      filter: drop-shadow(0 26px 40px rgba(0, 0, 0, 0.32));
     }
 
-    .cadence {
-      display: grid;
-      grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
-      gap: 54px;
-      align-items: start;
-    }
-
-    .note-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .feature-grid,
-    .roadmap-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0;
-      margin-top: 30px;
-    }
-
-    .capability-band,
-    .journey-band {
-      background: #0b100f;
-      color: var(--white);
-    }
-
-    .capability-band {
-      border-top: 1px solid rgba(255, 253, 247, 0.12);
-      padding-bottom: 52px;
-    }
-
-    .journey-band {
-      border-bottom: 1px solid rgba(255, 253, 247, 0.12);
-      padding-top: 52px;
-    }
-
-    .capability-band .eyebrow,
-    .journey-band .eyebrow,
-    .journey-band .journey-card span {
-      color: #a9d397;
-    }
-
-    .journey-band .journey-head p:not(.eyebrow),
-    .capability-band .feature-card p,
-    .journey-band .journey-card p {
+    .orchistra-product-figure figcaption {
+      position: absolute;
+      z-index: 2;
+      left: 22px;
+      bottom: 18px;
       color: rgba(255, 253, 247, 0.68);
-    }
-
-    .feature-card,
-    .roadmap-card,
-    .release-panel {
-      min-width: 0;
-      border: 0;
-      border-left: 1px solid var(--line);
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .feature-card,
-    .roadmap-card {
-      padding: 8px 26px;
-    }
-
-    .capability-band .feature-card,
-    .journey-band .journey-card {
-      border-left-color: rgba(255, 253, 247, 0.16);
-    }
-
-    .capability-band .feature-card h3,
-    .journey-band .journey-card h3 {
-      color: var(--white);
-    }
-
-    .feature-card span,
-    .roadmap-card span,
-    .release-panel span {
-      display: block;
-      margin-bottom: 12px;
-      color: var(--field);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
+      font-size: 10px;
+      font-weight: 760;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
-    .feature-card h3,
-    .roadmap-card h3 {
-      margin-bottom: 8px;
-    }
-
-    .feature-card p,
-    .roadmap-card p,
-    .release-panel li {
-      color: var(--ink-soft);
-    }
-
-    .release-panel {
-      margin-top: 18px;
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-    }
-
-    .release-panel ul {
+    .orchistra-outcomes {
       display: grid;
-      gap: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      border-top: 1px solid var(--sp-line);
+      border-left: 1px solid var(--sp-line);
+    }
+
+    .orchistra-outcome {
+      min-height: 300px;
+      display: grid;
+      align-content: space-between;
+      gap: 34px;
+      padding: clamp(28px, 4.5vw, 54px);
+      border-right: 1px solid var(--sp-line);
+      border-bottom: 1px solid var(--sp-line);
+    }
+
+    .orchistra-outcome span {
+      color: var(--sp-accent-dark);
+      font-size: 11px;
+      font-weight: 780;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .orchistra-outcome h3 {
+      margin: 0 0 10px;
+      font-family: var(--sp-serif);
+      font-size: clamp(31px, 3.8vw, 48px);
+      font-weight: 450;
+      line-height: 1.03;
+    }
+
+    .orchistra-outcome p {
       margin: 0;
-      padding-left: 20px;
+      color: var(--sp-muted);
     }
 
-    .note-panel {
-      min-height: 196px;
-      padding: 24px;
+    .orchistra-cao {
+      position: relative;
+      isolation: isolate;
+      color: var(--sp-white);
+      background: var(--orchistra-green);
+      overflow: hidden;
     }
 
-    .skills-band {
-      background: var(--paper);
-      color: var(--ink);
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
+    .orchistra-cao::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(90deg, rgba(6, 18, 15, 0.92), rgba(6, 18, 15, 0.5)),
+        url("${escapeHtml(fieldImage)}");
+      background-position: center;
+      background-size: cover;
     }
 
-    .skills-band .eyebrow {
-      color: var(--signal);
-    }
-
-    .skills-head {
+    .orchistra-cao-inner {
+      min-height: 580px;
       display: grid;
-      grid-template-columns: minmax(0, 0.78fr) minmax(320px, 1.22fr);
-      gap: 54px;
-      align-items: end;
+      align-content: center;
+      max-width: 830px;
     }
 
-    .skills-head p:not(.eyebrow) {
-      max-width: 720px;
-      margin-bottom: 0;
-      color: var(--ink-soft);
-      font-size: 20px;
-      line-height: 1.5;
+    .orchistra-cao h2 {
+      margin: 12px 0 18px;
+      font-family: var(--sp-serif);
+      font-size: clamp(44px, 6vw, 82px);
+      font-weight: 430;
+      line-height: 0.96;
     }
 
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0;
-      margin-top: 30px;
-    }
-
-    .skill-card {
-      min-width: 0;
-      min-height: 0;
-      padding: 8px 26px;
-      border: 0;
-      border-left: 1px solid var(--line);
-      border-radius: 0;
-      background: transparent;
-    }
-
-    .skill-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-
-    .skill-label,
-    .skill-status {
-      display: inline-flex;
-      align-items: center;
-      min-height: 24px;
-      color: var(--field);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      line-height: 1.1;
-      text-transform: uppercase;
-    }
-
-    .skill-status {
-      padding: 3px 8px;
-      border: 1px solid rgba(146, 199, 214, 0.36);
-      border-radius: 999px;
-      color: #3469ba;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-
-    .skill-card h3 {
-      color: var(--ink);
-    }
-
-    .skill-card p {
-      margin-bottom: 0;
-      color: var(--ink-soft);
-    }
-
-    .quote-band {
-      background: var(--hedge);
-      color: var(--white);
-    }
-
-    .thanks-band {
-      background: var(--hedge);
-      color: var(--white);
-      border-top: 1px solid var(--line-light);
-      border-bottom: 1px solid var(--line-light);
-    }
-
-    .thanks-panel {
-      max-width: 900px;
-    }
-
-    .thanks-band .eyebrow {
-      color: #ffd083;
-    }
-
-    .thanks-band p {
-      max-width: 760px;
-      margin-bottom: 0;
-      color: rgba(255, 253, 247, 0.84);
-      font-size: 21px;
-      line-height: 1.52;
-    }
-
-    .quote-band .eyebrow {
-      color: #ffd083;
-    }
-
-    .quote-band p {
-      max-width: 820px;
-      color: rgba(255, 253, 247, 0.84);
-      font-size: 22px;
-      line-height: 1.52;
-    }
-
-    .cta {
-      background: var(--paper);
-    }
-
-    .cta-panel {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 32px;
-      align-items: end;
-      padding: 34px 0 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .cta-panel p {
-      max-width: 720px;
-      color: var(--ink-soft);
+    .orchistra-cao p {
+      max-width: 690px;
+      color: rgba(255, 253, 247, 0.76);
       font-size: 20px;
     }
 
-    .cta .button.primary {
-      background: var(--hedge);
-      color: var(--white);
-      border-color: var(--hedge);
-    }
-
-    footer {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 30px 40px;
-      border-top: 1px solid rgba(255, 253, 247, 0.12);
-      background: #0b100f;
-      color: rgba(255, 253, 247, 0.62);
-      font-size: 14px;
-    }
-
-    footer strong {
-      color: var(--white);
-    }
-
-    .footer-brand {
+    .orchistra-footer-mark {
+      width: 52px;
+      height: 52px;
       display: grid;
-      gap: 3px;
+      place-items: center;
+      border: 1px solid rgba(255, 253, 247, 0.52);
+      border-radius: 50%;
+      font-family: var(--sp-serif);
+      font-size: 28px;
     }
 
-    .footer-product,
-    .footer-legal {
-      font-size: 13px;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      .hero-inner {
-        animation: hero-copy-in 720ms ease-out both;
-      }
-
-      .hero-product {
-        animation: hero-product-in 900ms 120ms ease-out both, hero-breathe 14s 1.2s ease-in-out infinite;
-      }
-
-      .flow-line {
-        background-size: 160% 100%;
-        animation: flow 5.5s linear infinite;
-      }
-
-      .pulse-node {
-        transform-origin: center;
-        animation: pulse 3.8s ease-in-out infinite;
-      }
-
-      .typing i {
-        animation: blink 1.1s ease-in-out infinite;
-      }
-
-      .typing i:nth-child(2) {
-        animation-delay: 0.14s;
-      }
-
-      .typing i:nth-child(3) {
-        animation-delay: 0.28s;
-      }
-    }
-
-    @keyframes flow {
-      to {
-        background-position: 160% 0;
-      }
-    }
-
-    @keyframes pulse {
-      50% {
-        opacity: 0.44;
-        transform: scale(1.14);
-      }
-    }
-
-    @keyframes blink {
-      50% {
-        opacity: 1;
-        transform: translateY(-1px);
-      }
-    }
-
-    @keyframes hero-copy-in {
-      from {
-        opacity: 0;
-        transform: translateY(18px);
-      }
-    }
-
-    @keyframes hero-product-in {
-      from {
-        opacity: 0;
-        transform: translate3d(38px, 18px, 0) scale(0.98);
-      }
-    }
-
-    @keyframes hero-breathe {
-      50% {
-        transform: translate3d(0, -5px, 0);
-        filter: drop-shadow(0 62px 104px rgba(0, 0, 0, 0.58));
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-      }
-    }
-
-    @media (max-width: 1080px) {
-      .message-steps {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .hero-product {
-        right: -350px;
-        width: 820px;
-        opacity: 0.62;
-      }
-
-      .hero-inner {
-        width: min(100%, 560px);
-      }
-
-      .hero::after {
-        background: linear-gradient(90deg, rgba(6, 10, 9, 0.72), rgba(6, 10, 9, 0.2));
-      }
-    }
-
-    @media (max-width: 980px) {
-      .site-header {
-        align-items: center;
-        flex-direction: row;
-        padding: 14px 22px;
-      }
-
-      nav {
-        justify-content: flex-end;
-        gap: 8px 16px;
-      }
-
-      .hero {
-        min-height: 780px;
-        padding: 138px 22px 64px;
-      }
-
-      .hero-product {
-        right: -380px;
-        width: 780px;
-        opacity: 0.38;
-      }
-
-      h1 {
-        font-size: 82px;
-      }
-
-      h2 {
-        font-size: 40px;
-      }
-
-      .hero-copy,
-      .lead,
-      .thanks-band p,
-      .quote-band p {
-        font-size: 19px;
-      }
-
-      .summary-strip,
-      .field-note,
-      .service-flow,
-      .flow-copy,
-      .flow-diagram,
-      .message-model,
-      .message-steps,
-      .intro,
-      .route-grid,
-      .feeder-panel,
-      .cadence,
-      .note-list,
-      .use-case-head,
-      .use-case-grid,
-      .research-head,
-      .research-grid,
-      .feature-grid,
-      .journey-head,
-      .journey-grid,
-      .skills-head,
-      .skills-grid,
-      .roadmap-grid,
-      .product-panel-grid,
-      .cta-panel {
+    @media (max-width: 920px) {
+      .orchistra-flow,
+      .orchistra-product-layout {
         grid-template-columns: 1fr;
       }
 
-      .section {
-        padding: 64px 22px;
-      }
-
-      .outcome-band {
-        margin-top: 0;
-        padding: 0 22px;
-      }
-
-      .summary-strip {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .flow-copy p:not(.eyebrow) {
-        grid-column: 1;
-        grid-row: auto;
-      }
-
-      .metric:nth-child(3) {
-        border-left: 1px solid rgba(255, 253, 247, 0.16);
-      }
-
-      .route-card,
-      .skill-card,
-      .note-panel {
-        min-height: auto;
+      .orchistra-flow-copy {
+        position: static;
       }
     }
 
-    @media (max-width: 560px) {
-      .site-header {
-        min-height: 66px;
-        padding: 12px 18px;
+    @media (max-width: 680px) {
+      .orchistra-mark {
+        width: 38px;
+        height: 38px;
+        font-size: 22px;
       }
 
-      .brand-mark {
-        width: 34px;
-        height: 34px;
-        font-size: 18px;
+      .orchistra-hero h1 {
+        font-size: clamp(54px, 17vw, 72px);
+        overflow-wrap: normal;
+        white-space: nowrap;
       }
 
-      nav > a {
-        display: none;
+      .orchistra-hero-statement {
+        font-size: clamp(29px, 9vw, 43px);
       }
 
-      .more-nav-panel {
-        right: 0;
-        width: min(250px, calc(100vw - 36px));
+      .orchistra-product-figure {
+        min-height: 410px;
       }
 
-      .mobile-primary {
-        display: block;
-      }
-
-      .hero {
-        min-height: 760px;
-        align-items: start;
-        padding: 132px 18px 46px;
-        background-image: url("${escapeHtml(heroBackgroundImageMobile)}");
-        background-position: 60% center;
-      }
-
-      .hero-product {
-        top: auto;
-        right: -275px;
-        bottom: 4px;
-        width: 720px;
-        opacity: 0.38;
-      }
-
-      h1 {
-        font-size: 68px;
-      }
-
-      h2 {
-        font-size: 34px;
-      }
-
-      .feeder-panel h2 {
-        font-size: 30px;
-      }
-
-      .hero-copy,
-      .lead,
-      .cta-panel p,
-      .thanks-band p,
-      .quote-band p {
-        font-size: 18px;
-      }
-
-      .flow-core::before,
-      .flow-core::after {
-        display: none;
-      }
-
-      .use-case-card {
-        grid-template-columns: 1fr;
-      }
-
-      .summary-strip {
-        grid-template-columns: 1fr;
-      }
-
-      .metric,
-      .metric:first-child,
-      .metric:nth-child(3) {
-        min-height: 0;
-        padding: 26px 4px;
-        border: 0;
-        border-bottom: 1px solid rgba(255, 253, 247, 0.16);
-      }
-
-      .metric:last-child {
-        border-bottom: 0;
-      }
-
-      .button {
+      .orchistra-product-picture source,
+      .orchistra-product-picture img {
         width: 100%;
+      }
+
+      .orchistra-outcomes {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
-<body>
-  <header class="site-header">
-    <a class="brand" href="/" aria-label="${escapeHtml(site.name)} home">
-      <span class="brand-mark">O</span>
-      <span>${escapeHtml(site.name)}</span>
+<body class="orchistra-sibling">
+  <header class="sp-header">
+    <a class="sp-brand" href="/" aria-label="Orchistra home">
+      <span class="orchistra-mark" aria-hidden="true">O</span>
+      <span class="sp-brand-copy"><strong>Orchistra</strong><span>Visible coordination</span></span>
     </a>
-    <nav aria-label="Primary navigation">
-      <a href="#map">Model</a>
-      <a href="#work">Work</a>
-      <a href="#features">Features</a>
-      <a href="#research">Research</a>
-      <a href="#conversation">Interest</a>
-      <details class="more-nav">
-        <summary>More</summary>
-        <div class="more-nav-panel">
-          <a class="mobile-primary" href="#map">Model</a>
-          <a class="mobile-primary" href="#work">Work</a>
-          <a class="mobile-primary" href="#features">Features</a>
-          <a class="mobile-primary" href="#research">Research</a>
-          <a class="mobile-primary" href="#conversation">Interest</a>
-          <a href="#field-note">Field note</a>
-          <a href="#cao-briefing">CAO briefing</a>
-          <a href="#use-cases">Use cases</a>
-          <a href="#journeys">Journeys</a>
-          <a href="#skills">Skills</a>
-          <a href="#cadence">Cadence</a>
-          <a href="#roadmap">Roadmap</a>
-        </div>
-      </details>
+    <nav class="sp-nav" aria-label="Primary navigation">
+      <a href="#flow">How work moves</a>
+      <a href="#product">Product view</a>
+      <a href="#outcomes">Outcomes</a>
+      <a href="#relationship">SNAXK</a>
+      <a class="sp-nav-cta" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>Discuss Orchistra</a>
     </nav>
+    <details class="sp-mobile-nav">
+      <summary aria-label="Open navigation">Menu</summary>
+      <div class="sp-mobile-nav-menu">
+        <a href="#flow">How work moves</a>
+        <a href="#product">Product view</a>
+        <a href="#outcomes">Outcomes</a>
+        <a href="#relationship">SNAXK</a>
+        <a href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>Discuss Orchistra</a>
+      </div>
+    </details>
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="page-title">
-      <picture class="hero-product" aria-hidden="true">
-        <source media="(max-width: 560px)" srcset="${escapeHtml(heroProductImageMobile)}">
-        <img src="${escapeHtml(heroProductImage)}" alt="" width="1586" height="992">
-      </picture>
-      <div class="hero-inner">
-        <h1 id="page-title">${escapeHtml(site.heading || site.name)}</h1>
-        <p class="hero-copy">${escapeHtml(site.summary)}</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#map">${escapeHtml(site.primary_action_label || "Map the flock")}</a>
-          <a class="button secondary" href="${escapeHtml(heroCaoHref)}"${outboundAttrsFor(site, "hero_cao_briefing", caoStage, caoCampaign)}>${escapeHtml(site.secondary_action_label || "Read the CAO briefing")}</a>
+    <section class="sp-hero orchistra-hero" aria-labelledby="orchistra-title">
+      <div class="sp-hero-inner sp-reveal">
+        <p class="sp-eyebrow">Coordination for trusted agentic systems</p>
+        <h1 id="orchistra-title">Orchistra</h1>
+        <p class="orchistra-hero-statement">Agent work people can follow.</p>
+        <p class="sp-hero-lede">${escapeHtml(summary)}</p>
+        <div class="sp-actions">
+          <a class="sp-button sp-button-light" href="#flow">See how work moves ${arrow}</a>
+          <a class="sp-button sp-button-ghost" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>Discuss Orchistra</a>
         </div>
       </div>
     </section>
 
-    <section class="outcome-band" aria-label="Orchistra service outcomes">
-      <div class="section-inner summary-strip">
-        ${outcomes.map((outcome) => `<article class="metric">
-          <strong>${escapeHtml(outcome.title)}</strong>
-          <span>${escapeHtml(outcome.body)}</span>
-        </article>`).join("")}
+    <section class="sp-intro-rail" aria-label="Orchistra operating outcomes">
+      <div><strong>One calm operating layer.</strong></div>
+      <div><span>Visible context<br>while work moves</span></div>
+      <div><span>Human attention<br>where it matters</span></div>
+      <div><span>Evidence<br>after the moment</span></div>
+    </section>
+
+    <section class="sp-section sp-dark" id="flow">
+      <div class="sp-section-inner orchistra-flow">
+        <div class="orchistra-flow-copy">
+          <p class="sp-eyebrow">How work moves</p>
+          <h2>Signals become work people can follow.</h2>
+          <p>Orchistra sits between the places work starts and the people responsible for it. It keeps context, attention, approval and evidence on one visible route.</p>
+        </div>
+        <div class="orchistra-flow-list">
+          ${flow.map(([number, heading, body]) => `<article class="orchistra-flow-step"><span>${number}</span><div><h3>${escapeHtml(heading)}</h3><p>${escapeHtml(body)}</p></div></article>`).join("")}
+        </div>
       </div>
     </section>
 
-    <section class="section field-note-band" id="field-note">
-      <div class="section-inner field-note">
-        <div class="field-note-media">
-          <img src="${escapeHtml(fieldNote.image_url || site.hero_image || "https://www.tonywood.org/assets/countryside-hero.jpg")}" alt="${escapeHtml(fieldNote.image_alt || "English countryside field used as a visual cue for calm agent oversight.")}" width="1672" height="941" loading="lazy" decoding="async">
-        </div>
-        <div class="field-note-copy">
-          <p class="eyebrow">${escapeHtml(fieldNote.eyebrow || "In the field")}</p>
-          <h2>${escapeHtml(fieldNote.title || "The calm place between useful agents and responsible people.")}</h2>
-          <p>${escapeHtml(fieldNote.body || "Orchistra should feel less like a noisy dashboard and more like a field map.")}</p>
-          ${fieldNote.quote ? `<blockquote class="field-quote">
-            <p>${escapeHtml(fieldNote.quote)}</p>
-            <cite><a href="${escapeHtml(quoteSourceHref)}"${outboundAttrsFor(site, quoteSourceContent, quoteSourceStage, quoteSourceCampaign)}>${escapeHtml(fieldNote.quote_source || "Shepherd of Agentic Sheep")}</a></cite>
-          </blockquote>` : ""}
-          <div class="field-note-actions">
-            <a class="button primary" href="${escapeHtml(fieldInterestHref)}"${outboundAttrsFor(site, fieldInterestContent, platformStage, platformCampaign)}>${escapeHtml(fieldNote.primary_label || "Show interest")}</a>
-            <a class="button secondary" href="${escapeHtml(tonywoodHomeHref)}"${outboundAttrsFor(site, tonywoodHomeContent, tonywoodHomeStage, tonywoodHomeCampaign)}>${escapeHtml(fieldNote.secondary_label || "Read TonyWood.org")}</a>
+    <section class="sp-section orchistra-product" id="product">
+      <div class="sp-section-inner orchistra-product-layout">
+        <div class="orchistra-product-copy">
+          <p class="sp-eyebrow">Product view</p>
+          <h2>People should not have to reconstruct the work afterwards.</h2>
+          <p>Messages, rich updates, requests, approved work, receipts and decisions stay attached to a shared operating picture. The interface is there to reduce hunting, hidden context and quiet uncertainty.</p>
+          <div class="sp-actions">
+            <a class="sp-button sp-button-dark" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, "product_view_interest", advisoryStage, advisoryCampaign)}>Discuss the product ${arrow}</a>
           </div>
         </div>
+        <figure class="orchistra-product-figure">
+          <picture class="orchistra-product-picture">
+            <source media="(max-width: 680px)" srcset="${escapeHtml(productImageMobile)}">
+            <img src="${escapeHtml(productImage)}" alt="Orchistra example workspace showing a handoff, a human review request, and recorded evidence." loading="lazy">
+          </picture>
+          <figcaption>Illustrative Orchistra workspace</figcaption>
+        </figure>
       </div>
     </section>
 
-    <section class="section service-flow-band" aria-labelledby="signals-title">
-      <div class="section-inner service-flow">
-        <div class="flow-copy">
-          <p class="eyebrow">${escapeHtml(serviceFlow.eyebrow || "Service model")}</p>
-          <h2 id="signals-title">${escapeHtml(serviceFlow.title || "Signals and workers become work people can follow.")}</h2>
-          <p>${escapeHtml(serviceFlow.body || "Orchistra sits between the places work starts and the people responsible for it.")}</p>
+    <section class="sp-section" id="outcomes">
+      <div class="sp-section-inner">
+        <div class="sp-section-heading">
+          <p class="sp-eyebrow">What becomes clearer</p>
+          <h2>Coordinate the work without hiding the judgement.</h2>
+          <p>The purpose is not another stream of notifications. It is a calmer view of what moved, what needs a person, and what evidence remains.</p>
         </div>
-        <div class="flow-diagram" aria-label="Orchistra service model">
-          <div class="flow-stack">
-            ${(serviceFlow.inputs || []).map((item) => `<article class="flow-card">
-              <strong>${escapeHtml(item.title)}</strong>
-              <p>${escapeHtml(item.body)}</p>
-            </article>`).join("")}
-          </div>
-          <article class="flow-core">
-            <strong>${escapeHtml(serviceFlow.core_title || "Orchistra")}</strong>
-            <p>${escapeHtml(serviceFlow.core_body || "Shared channels, threads, rich updates, receipts, guidance, and audit-visible decisions.")}</p>
-          </article>
-          <div class="flow-stack">
-            ${(serviceFlow.outputs || []).map((item) => `<article class="flow-card">
-              <strong>${escapeHtml(item.title)}</strong>
-              <p>${escapeHtml(item.body)}</p>
-            </article>`).join("")}
-          </div>
+        <div class="orchistra-outcomes">
+          ${outcomes.map((outcome, index) => `<article class="orchistra-outcome"><span>${String(index + 1).padStart(2, "0")}</span><div><h3>${escapeHtml(outcome.title)}</h3><p>${escapeHtml(outcome.body)}</p></div></article>`).join("")}
         </div>
       </div>
     </section>
 
-    <section class="section message-model-band" id="message-model">
-      <div class="section-inner message-model">
+    <section class="sp-section sp-dark" id="relationship">
+      <div class="sp-section-inner sp-product-relationship">
         <div>
-          <p class="eyebrow">${escapeHtml(messageModel.eyebrow || "Conversation model")}</p>
-          <h2>${escapeHtml(messageModel.title || "Messages are more than notes.")}</h2>
-          <p>${escapeHtml(messageModel.body || "A post can start a thread, carry a rich update, request human attention, record a decision, or link a later fix back to the original problem.")}</p>
+          <p class="sp-eyebrow">Sibling systems</p>
+          <h2>${escapeHtml(sibling.title)}</h2>
+          <p>${escapeHtml(sibling.body)}</p>
         </div>
-        <div class="message-steps" aria-label="Orchistra message model">
-          ${(messageModel.steps || []).map((step) => `<article class="message-step">
-            <span>${escapeHtml(step.label)}</span>
-            <h3>${escapeHtml(step.title)}</h3>
-            <p>${escapeHtml(step.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="map">
-      <div class="section-inner intro">
-        <div>
-          <p class="eyebrow">${escapeHtml(site.brief_eyebrow || "Field map")}</p>
-          <h2>${escapeHtml(site.brief_title || "Agentic work needs a living map.")}</h2>
-        </div>
-        <div>
-          <p class="lead">${escapeHtml(site.brief || "Orchistra turns scattered agents, workflows, vendors, and quiet experiments into something leaders can see, guide, and review.")}</p>
-          <p>${escapeHtml(site.brief_support || "The work is simple to say and hard to do: know what is moving, give it useful boundaries, watch the weak signals, and bring outcomes back into human judgement.")}</p>
-          <div class="product-panel" aria-label="Gateway model">
-            <div class="product-panel-header">
-              <strong>Visible operating layer</strong>
-              <span>messages / requests / evidence</span>
-            </div>
-            <div class="product-panel-grid">
-              <div class="product-signal"><span>Channels</span><strong>Readable work</strong></div>
-              <div class="product-signal"><span>Requests</span><strong>Human attention</strong></div>
-              <div class="product-signal"><span>Evidence</span><strong>Visible decisions</strong></div>
-            </div>
+        <div class="sp-relationship-rule">
+          <span class="sp-eyebrow">SNAXK</span>
+          <strong>Keep the work visible. Let judgement decide what happens next.</strong>
+          <div class="sp-actions">
+            <a class="sp-button sp-button-light" href="${escapeHtml(siblingHref)}"${outboundAttrsFor(site, sibling.content, "source_to_sibling_product", sibling.campaign)}>Visit SNAXK ${arrow}</a>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section feeder-band" id="cao-briefing">
-      <div class="section-inner feeder-panel">
-        <div>
-          <p class="eyebrow">${escapeHtml(caoFeeder.eyebrow || "Board briefing")}</p>
-          <h2>${escapeHtml(caoFeeder.title || "Agent communication is a Chief Agentic Officer question.")}</h2>
-          <p class="lead">${escapeHtml(caoFeeder.body || "The Chief Agentic Officer is the leadership mandate: what agentic work may do, who owns it, and what leaders need to inspect. In practice, that means using Orchistra to coordinate agents in one readable place: messages, tasks, rich updates, receipts, and audit-visible handoffs stay connected while the work moves.")}</p>
-          <p>${escapeHtml(caoFeeder.support || "Use the briefing to frame the board-level ownership question, then use Orchistra to coordinate which agents are working, what they posted, where a human decision is needed, and whether the trail is visible enough to trust.")}</p>
-        </div>
-        <div class="feeder-actions">
-          <a class="button primary" href="${escapeHtml(feederCaoHref)}"${outboundAttrsFor(site, caoFeeder.primary_content || "feeder_cao_briefing", caoStage, caoCampaign)}>${escapeHtml(caoFeeder.primary_label || "Read the CAO briefing")}</a>
-          <a class="button secondary" href="${escapeHtml(feederPlatformHref)}"${outboundAttrsFor(site, caoFeeder.secondary_content || "feeder_platform_interest", platformStage, platformCampaign)}>${escapeHtml(caoFeeder.secondary_label || "Discuss Orchistra as a platform")}</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section work-band" id="work">
-      <div class="section-inner">
-        <p class="eyebrow">${escapeHtml(site.work_eyebrow || "Shepherding patterns")}</p>
-        <h2>${escapeHtml(site.work_title || "From loose agents to a visible operating field.")}</h2>
-        <div class="route-grid">
-          ${routes.map((route) => `<article class="route-card">
-            <div>
-              <span>${escapeHtml(route.title)}</span>
-              <strong>${escapeHtml(route.heading || route.title)}</strong>
-            </div>
-            <p>${escapeHtml(route.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section use-cases-band" id="use-cases">
-      <div class="section-inner">
-        <div class="use-case-head">
-          <div>
-            <p class="eyebrow">${escapeHtml(site.use_cases_eyebrow || "Where this helps")}</p>
-            <h2>${escapeHtml(site.use_cases_title || "Useful wherever agent work already moves quietly.")}</h2>
-          </div>
-          <p>${escapeHtml(site.use_cases_intro || "Start with the places where AI work is useful but hard to see.")}</p>
-        </div>
-        <div class="use-case-grid">
-          ${useCases.map((item) => `<article class="use-case-card">
-            <span class="use-case-number">${escapeHtml(item.label)}</span>
-            <div>
-              <h3>${escapeHtml(item.title)}</h3>
-              <p>${escapeHtml(item.body)}</p>
-            </div>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section research-band" id="research">
-      <div class="section-inner">
-        <div class="research-head">
-          <div>
-            <p class="eyebrow">${escapeHtml(site.research_eyebrow || "Research field")}</p>
-            <h2>${escapeHtml(site.research_title || "Used for CAO briefing work and ongoing agent-shepherd research.")}</h2>
-          </div>
-          <p>${escapeHtml(site.research_intro || "Orchistra is being shaped around practical work where agent communication needs to stay visible and public-safe.")}</p>
-        </div>
-        <div class="research-grid">
-          ${researchLinks.map((link) => {
-            const href = trackedOutboundUrlFor(site, link.url, link.content || slugForCampaign(link.title), link.campaign) || link.url;
-            return `<article class="research-card">
-              <h3>${escapeHtml(link.title)}</h3>
-              <p>${escapeHtml(link.body)}</p>
-              <a class="research-link" href="${escapeHtml(href)}"${outboundAttrsFor(site, link.content || slugForCampaign(link.title), link.stage || "source_to_outbound", link.campaign)}>${escapeHtml(link.label || "Open link")}</a>
-            </article>`;
-          }).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section capability-band" id="features">
-      <div class="section-inner">
-        <p class="eyebrow">${escapeHtml(site.features_eyebrow || "Feature list")}</p>
-        <h2>${escapeHtml(site.features_title || "What Orchistra gives the agent system.")}</h2>
-        <div class="feature-grid">
-          ${features.map((feature) => `<article class="feature-card">
-            <span>${escapeHtml(feature.label)}</span>
-            <h3>${escapeHtml(feature.title)}</h3>
-            <p>${escapeHtml(feature.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section journey-band" id="journeys">
-      <div class="section-inner">
-        <div class="journey-head">
-          <div>
-            <p class="eyebrow">${escapeHtml(site.feature_journeys_eyebrow || "Feature journeys")}</p>
-            <h2>${escapeHtml(site.feature_journeys_title || "Common things agents and people can do.")}</h2>
-          </div>
-          <p>${escapeHtml(site.feature_journeys_intro || "The feature set is easiest to understand as a set of ordinary moves.")}</p>
-        </div>
-        <div class="journey-grid">
-          ${featureJourneys.map((journey) => `<article class="journey-card">
-            <span>${escapeHtml(journey.label)}</span>
-            <h3>${escapeHtml(journey.title)}</h3>
-            <p>${escapeHtml(journey.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section skills-band" id="skills">
-      <div class="section-inner">
-        <div class="skills-head">
-          <div>
-            <p class="eyebrow">${escapeHtml(site.skills_eyebrow || "Skill catalogue")}</p>
-            <h2>${escapeHtml(site.skills_title || "A visible set of skills for agents and shepherds.")}</h2>
-          </div>
-          <p>${escapeHtml(site.skills_intro || "Each skill is a practical capability the gateway can support, inspect, and improve over time.")}</p>
-        </div>
-        <div class="skills-grid">
-          ${skills.map((skill) => `<article class="skill-card">
-            <div class="skill-meta">
-              <span class="skill-label">${escapeHtml(skill.label)}</span>
-              <span class="skill-status">${escapeHtml(skill.status || "Live")}</span>
-            </div>
-            <h3>${escapeHtml(skill.title)}</h3>
-            <p>${escapeHtml(skill.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section quote-band">
-      <div class="section-inner">
-        <p class="eyebrow">${escapeHtml(site.tone_eyebrow || "Operating temperament")}</p>
-        <h2>${escapeHtml(site.tone_title || "Quiet enough to notice drift. Sharp enough to intervene.")}</h2>
-        <p>${escapeHtml(site.tone_body || "The point is not to lock every agent down. It is to create enough visibility, context, and cadence that useful autonomy can move without becoming invisible risk.")}</p>
-      </div>
-    </section>
-
-    <section class="section" id="cadence">
-      <div class="section-inner cadence">
-        <div>
-          <p class="eyebrow">${escapeHtml(site.cadence_eyebrow || "Flock cadence")}</p>
-          <h2>${escapeHtml(site.cadence_title || "Count, guide, notice, return.")}</h2>
-          <p class="lead">${escapeHtml(site.cadence_body || "Before agentic work scales, leaders need a recurring rhythm for what exists, what changed, what crossed a boundary, and what needs judgement.")}</p>
-        </div>
-        <div class="note-list">
-          ${operatingNotes.map((note) => `<article class="note-panel">
-            <span>${escapeHtml(note.label)}</span>
-            <h3>${escapeHtml(note.title)}</h3>
-            <p>${escapeHtml(note.body)}</p>
-          </article>`).join("")}
-        </div>
-      </div>
-    </section>
-
-    <section class="section work-band" id="roadmap">
-      <div class="section-inner">
-        <p class="eyebrow">${escapeHtml(site.roadmap_eyebrow || "Roadmap")}</p>
-        <h2>${escapeHtml(site.roadmap_title || "Releasing the gateway in clear layers.")}</h2>
-        <div class="roadmap-grid">
-          ${roadmap.map((item) => `<article class="roadmap-card">
-            <span>${escapeHtml(item.label)}</span>
-            <h3>${escapeHtml(item.title)}</h3>
-            <p>${escapeHtml(item.body)}</p>
-          </article>`).join("")}
-        </div>
-        <div class="release-panel">
-          <span>${escapeHtml(site.release_eyebrow || "Release notes")}</span>
-          <ul>
-            ${releases.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section thanks-band" aria-label="Acknowledgement">
-      <div class="section-inner thanks-panel">
-        <p class="eyebrow">${escapeHtml(acknowledgement.eyebrow)}</p>
-        <h2>${escapeHtml(acknowledgement.title)}</h2>
-        <p>${escapeHtml(acknowledgement.body)}</p>
-      </div>
-    </section>
-
-    <section class="section cta" id="conversation">
-      <div class="section-inner cta-panel">
-        <div>
-          <p class="eyebrow">${escapeHtml(site.cta_eyebrow || "Useful first conversation")}</p>
-          <h2>${escapeHtml(site.cta_title || "Start with the work already moving.")}</h2>
-          <p>${escapeHtml(site.cta_body || "Which agents, automations, and vendor tools are already shaping decisions, and who is shepherding them?")}</p>
-        </div>
-        <div class="cta-actions">
-          <a class="button primary" href="${escapeHtml(conversationHref)}"${outboundAttrsFor(site, "final_platform_interest_cta", platformStage, platformCampaign)}>${escapeHtml(site.cta_button_label || "Talk about Orchistra")}</a>
+    <section class="sp-section orchistra-cao" id="cao">
+      <div class="sp-section-inner orchistra-cao-inner">
+        <p class="sp-eyebrow">${escapeHtml(cao.eyebrow || "Chief Agentic Officer")}</p>
+        <h2>Visible coordination is a leadership question.</h2>
+        <p>${escapeHtml(cao.body || "The Chief Agentic Officer names what agentic work may do, who owns it, and what leaders must be able to inspect. Orchistra is where that mandate becomes visible while the work moves.")}</p>
+        <div class="sp-actions">
+          <a class="sp-button sp-button-light" href="${escapeHtml(caoHref)}"${outboundAttrsFor(site, caoContent, caoStage, caoCampaign)}>Read the CAO briefing ${arrow}</a>
+          <a class="sp-button sp-button-ghost" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>Show interest</a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="footer-brand">
-      <strong>${escapeHtml(site.name)}</strong>
-      <div>${escapeHtml(site.domain)}</div>
-      <div class="footer-product">${escapeHtml(site.footer_product_line || "A YQUP product")}</div>
-      <div class="footer-legal">${escapeHtml(site.footer_legal || "Copyright (c) 2026 YQUP Ltd")}</div>
+  <footer class="sp-footer">
+    <div>
+      <span class="orchistra-footer-mark" aria-hidden="true">O</span>
+      <p>A calm operating layer for visible agent communication, human attention, approved work, receipts and decisions.</p>
     </div>
-    <div>${escapeHtml(site.footer_tagline || "Shepherding agentic systems, operating cadence, and practical governance.")}</div>
+    <div class="sp-footer-col">
+      <strong>Orchistra</strong>
+      <a href="#flow">How work moves</a>
+      <a href="#product">Product view</a>
+      <a href="#outcomes">Outcomes</a>
+    </div>
+    <div class="sp-footer-col">
+      <strong>Sibling product</strong>
+      <a href="${escapeHtml(siblingHref)}"${outboundAttrsFor(site, "footer_snaxk", "source_to_sibling_product", sibling.campaign)}>SNAXK</a>
+      <a href="${escapeHtml(caoHref)}"${outboundAttrsFor(site, "footer_cao_briefing", caoStage, caoCampaign)}>CAO briefing</a>
+    </div>
+    <div class="sp-footer-col">
+      <strong>Contact</strong>
+      <a href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, "footer_platform_interest", advisoryStage, advisoryCampaign)}>Discuss Orchistra</a>
+      <a href="/healthz">Status</a>
+    </div>
+    <div class="sp-footer-legal">
+      <span>${escapeHtml(site.footer_product_line || "A YQUP product")}</span>
+      <span>${escapeHtml(site.footer_legal || "Copyright (c) 2026 YQUP Ltd")}</span>
+    </div>
   </footer>
 </body>
-</html>
-`;
+</html>`;
+}
+
+function orchistraPageFor(site) {
+  return orchistraSiblingPageFor(site);
 }
 
 function logoHoldingPageFor(site, page) {

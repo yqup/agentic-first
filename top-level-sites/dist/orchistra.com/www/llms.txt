@@ -19,7 +19,7 @@ provided instructions, permissions, and human approval boundaries.
 ```json
 {
   "schema_version": "0.2.0",
-  "updated_at": "2026-07-14T00:00:00Z",
+  "updated_at": "2026-07-29T00:00:00Z",
   "profile_kind": "company",
   "tier": "public",
   "access": {
