@@ -1,6 +1,6 @@
 {
   "schema_version": "0.2.0",
-  "updated_at": "2026-07-29T00:00:00Z",
+  "updated_at": "2026-08-16T00:00:00Z",
   "profile_kind": "company",
   "tier": "public",
   "access": {
@@ -18,8 +18,8 @@
       "operations",
       "governance"
     ],
-    "tagline": "Orchistra",
-    "summary": "Orchistra turns agent activity into work people can follow: messages, rich updates, human requests, approved work, evidence, and decisions in one calm operating layer."
+    "tagline": "Company operating system for human-and-agent work",
+    "summary": "Turn leadership direction into coordinated action across people, AI agents, and existing systems - with priorities, approvals, evidence, and learning connected from boardroom to task."
   },
   "links": {
     "website": "https://orchistra.com"
@@ -31,7 +31,7 @@
   },
   "analytics": {
     "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "site_goal": "Measure interest in Orchistra as a feeder for the Chief Agentic Officer briefing and as a platform for visible agent communication, MCP access, human attention, approved work, and oversight.",
+    "site_goal": "Measure interest in Orchistra as a company operating system for governed human-and-agent work and as a feeder for the Chief Agentic Officer briefing.",
     "primary_conversion": "agentic_coordination_product_interest",
     "primary_destination": "https://www.tonywood.org/advisory/",
     "campaign": "orchistra_to_tonywood_advisory"

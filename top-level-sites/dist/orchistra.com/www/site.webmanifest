@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Orchistra",
   "short_name": "Orchistra",
-  "description": "Orchistra turns agent activity into work people can follow: messages, rich updates, human requests, approved work, evidence, and decisions in one calm operating layer.",
+  "description": "Turn leadership direction into coordinated action across people, AI agents, and existing systems - with priorities, approvals, evidence, and learning connected from boardroom to task.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

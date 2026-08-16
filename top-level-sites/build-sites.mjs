@@ -1659,9 +1659,10 @@ governed work. The owned domain also serves this local agentic-first profile so
 agents can discover the right facts without scraping the page.`
             : site.mode === "orchistra"
               ? `The human-facing page is a local static Orchistra page with a
-field-map orchestration treatment. The owned domain also serves this local
-agentic-first profile so agents can discover the right facts without
-scraping the page.`
+company operating system treatment for governed human-and-agent work across
+direction, goals, processes, decisions, evidence, and learning. The owned
+domain also serves this local agentic-first profile so agents can discover the
+right public facts without scraping the page or gaining authority.`
               : site.mode === "agentic_leader"
                 ? `The human-facing page is a local static Agentic Leader field
 guide for learning how to manage agentic workers: outcomes, boundaries,
@@ -10508,21 +10509,19 @@ ${matomoScriptTagFor(site)}  <style>
 }
 
 function orchistraSiblingPageFor(site) {
-  const title = site.title || "Orchistra | Visible agent work for people in charge";
-  const summary = site.summary || "Orchistra turns agent activity into work people can follow.";
+  const title = site.title || "Orchistra | The company operating system for people and AI agents";
+  const summary = site.summary || "Turn leadership direction into coordinated action across people, AI agents, and existing systems.";
   const heroImage = site.hero_background_image || "/assets/orchistra/hero-conservatory.webp";
   const heroImageMobile = site.hero_background_image_mobile || heroImage;
   const productImage = site.hero_product_image || "/assets/orchistra/hero-console.webp";
   const productImageMobile = site.hero_product_image_mobile || productImage;
   const fieldImage = site.hero_image || "/assets/orchistra/countryside-field.webp";
   const outcomes = site.outcomes || [];
-  const flow = [
-    ["01", "Signals arrive", "Customer notes, research, operations, incidents, routines, and quiet changes enter one visible route."],
-    ["02", "Context stays attached", "Channels, threads, attachments, owners, and work packets keep meaning beside the work."],
-    ["03", "Human attention has a place", "Requests, blockers, acknowledgements, and decisions land where a responsible person can see them."],
-    ["04", "Approved work moves", "Agents and people can follow what was proposed, what was approved, and which boundary still applies."],
-    ["05", "Evidence remains", "Receipts, decisions, outcomes, and useful learning stay available after the work has moved on."],
-  ];
+  const companyFlow = site.company_flow || [];
+  const operatingModes = site.operating_modes || [];
+  const systemsBoundary = site.systems_boundary || {};
+  const progressStory = site.progress_story || {};
+  const progressItems = progressStory.items || [];
   const cao = site.cao_feeder || {};
   const caoUrl = cao.primary_url || "https://chiefagenticofficer.com/#briefing-signup";
   const caoCampaign = cao.primary_campaign || "orchistra_to_chiefagenticofficer_briefing";
@@ -10534,6 +10533,10 @@ function orchistraSiblingPageFor(site) {
   const advisoryStage = cao.secondary_stage || "source_to_tonywood_platform_interest";
   const advisoryContent = cao.secondary_content || "feeder_platform_interest";
   const advisoryHref = trackedOutboundUrlFor(site, advisoryUrl, advisoryContent, advisoryCampaign) || advisoryUrl;
+  const productInterestContent = "product_view_interest";
+  const productInterestHref = trackedOutboundUrlFor(site, advisoryUrl, productInterestContent, advisoryCampaign) || advisoryUrl;
+  const finalInterestContent = "final_platform_interest_cta";
+  const finalInterestHref = trackedOutboundUrlFor(site, advisoryUrl, finalInterestContent, advisoryCampaign) || advisoryUrl;
   const sibling = site.sibling_product || {
     name: "SNAXK",
     url: "https://snaxk.com/",
@@ -10605,6 +10608,53 @@ ${siblingProductSharedStyles().trim()}
       line-height: 1;
     }
 
+    .orchistra-modes-section {
+      background: #f1ede2;
+    }
+
+    .orchistra-modes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-top: 1px solid var(--sp-line);
+      border-left: 1px solid var(--sp-line);
+    }
+
+    .orchistra-mode {
+      min-height: 360px;
+      display: grid;
+      align-content: space-between;
+      gap: 54px;
+      padding: clamp(30px, 5vw, 64px);
+      border-right: 1px solid var(--sp-line);
+      border-bottom: 1px solid var(--sp-line);
+    }
+
+    .orchistra-mode > span,
+    .orchistra-flow-step small,
+    .orchistra-progress-label {
+      color: var(--sp-accent-dark);
+      font-size: 11px;
+      font-weight: 780;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .orchistra-mode h3 {
+      max-width: 16ch;
+      margin: 0 0 14px;
+      font-family: var(--sp-serif);
+      font-size: clamp(34px, 4vw, 54px);
+      font-weight: 440;
+      line-height: 1;
+    }
+
+    .orchistra-mode p {
+      max-width: 56ch;
+      margin: 0;
+      color: var(--sp-muted);
+      font-size: 18px;
+    }
+
     .orchistra-flow {
       display: grid;
       grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.28fr);
@@ -10670,11 +10720,15 @@ ${siblingProductSharedStyles().trim()}
     }
 
     .orchistra-flow-step h3 {
-      margin: 0 0 6px;
+      margin: 6px 0 6px;
       font-family: var(--sp-serif);
       font-size: clamp(28px, 3.2vw, 40px);
       font-weight: 460;
       line-height: 1.04;
+    }
+
+    .orchistra-flow-step small {
+      color: var(--orchistra-sky);
     }
 
     .orchistra-flow-step p {
@@ -10794,6 +10848,90 @@ ${siblingProductSharedStyles().trim()}
       color: var(--sp-muted);
     }
 
+    .orchistra-systems {
+      color: var(--sp-white);
+      background: #10231e;
+    }
+
+    .orchistra-systems-layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
+      gap: clamp(46px, 8vw, 120px);
+      align-items: end;
+    }
+
+    .orchistra-systems h2 {
+      margin: 12px 0 18px;
+      font-family: var(--sp-serif);
+      font-size: clamp(43px, 5.8vw, 76px);
+      font-weight: 430;
+      line-height: 0.98;
+    }
+
+    .orchistra-systems p {
+      margin: 0;
+      color: rgba(255, 253, 247, 0.7);
+      font-size: 19px;
+    }
+
+    .orchistra-system-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid rgba(255, 253, 247, 0.2);
+      list-style: none;
+    }
+
+    .orchistra-system-list li {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      border-right: 1px solid rgba(255, 253, 247, 0.2);
+      border-bottom: 1px solid rgba(255, 253, 247, 0.2);
+      color: rgba(255, 253, 247, 0.82);
+      font-weight: 680;
+    }
+
+    .orchistra-progress {
+      background: #eef3ef;
+    }
+
+    .orchistra-progress-list {
+      border-top: 1px solid var(--sp-line);
+    }
+
+    .orchistra-progress-item {
+      display: grid;
+      grid-template-columns: minmax(120px, 0.34fr) minmax(220px, 0.72fr) minmax(0, 1fr);
+      gap: clamp(24px, 5vw, 72px);
+      align-items: start;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--sp-line);
+    }
+
+    .orchistra-progress-item h3 {
+      margin: 0;
+      font-family: var(--sp-serif);
+      font-size: clamp(29px, 3vw, 42px);
+      font-weight: 450;
+      line-height: 1.04;
+    }
+
+    .orchistra-progress-item p {
+      margin: 0;
+      color: var(--sp-muted);
+      font-size: 17px;
+    }
+
+    .orchistra-progress-note {
+      max-width: 88ch;
+      margin: 28px 0 0;
+      color: var(--sp-muted);
+      font-size: 14px;
+    }
+
     .orchistra-cao {
       position: relative;
       isolation: isolate;
@@ -10835,6 +10973,34 @@ ${siblingProductSharedStyles().trim()}
       font-size: 20px;
     }
 
+    .orchistra-final-cta {
+      color: #15221e;
+      background: var(--orchistra-brass);
+    }
+
+    .orchistra-final-cta-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: clamp(38px, 8vw, 120px);
+      align-items: end;
+    }
+
+    .orchistra-final-cta h2 {
+      max-width: 15ch;
+      margin: 12px 0 18px;
+      font-family: var(--sp-serif);
+      font-size: clamp(46px, 6.3vw, 88px);
+      font-weight: 430;
+      line-height: 0.96;
+    }
+
+    .orchistra-final-cta p {
+      max-width: 690px;
+      margin: 0;
+      color: rgba(21, 34, 30, 0.78);
+      font-size: 19px;
+    }
+
     .orchistra-footer-mark {
       width: 52px;
       height: 52px;
@@ -10848,12 +11014,22 @@ ${siblingProductSharedStyles().trim()}
 
     @media (max-width: 920px) {
       .orchistra-flow,
-      .orchistra-product-layout {
+      .orchistra-product-layout,
+      .orchistra-systems-layout,
+      .orchistra-final-cta-layout {
         grid-template-columns: 1fr;
       }
 
       .orchistra-flow-copy {
         position: static;
+      }
+
+      .orchistra-progress-item {
+        grid-template-columns: minmax(110px, 0.32fr) minmax(0, 1fr);
+      }
+
+      .orchistra-progress-item p {
+        grid-column: 2;
       }
     }
 
@@ -10886,6 +11062,24 @@ ${siblingProductSharedStyles().trim()}
       .orchistra-outcomes {
         grid-template-columns: 1fr;
       }
+
+      .orchistra-modes,
+      .orchistra-system-list,
+      .orchistra-progress-item {
+        grid-template-columns: 1fr;
+      }
+
+      .orchistra-mode {
+        min-height: 310px;
+      }
+
+      .orchistra-progress-item {
+        gap: 12px;
+      }
+
+      .orchistra-progress-item p {
+        grid-column: auto;
+      }
     }
   </style>
 </head>
@@ -10893,22 +11087,24 @@ ${siblingProductSharedStyles().trim()}
   <header class="sp-header">
     <a class="sp-brand" href="/" aria-label="Orchistra home">
       <span class="orchistra-mark" aria-hidden="true">O</span>
-      <span class="sp-brand-copy"><strong>Orchistra</strong><span>Visible coordination</span></span>
+      <span class="sp-brand-copy"><strong>Orchistra</strong><span>Company operating system</span></span>
     </a>
     <nav class="sp-nav" aria-label="Primary navigation">
-      <a href="#flow">How work moves</a>
-      <a href="#product">Product view</a>
+      <a href="#flow">Model</a>
+      <a href="#modes">Ways to begin</a>
+      <a href="#product">Product</a>
       <a href="#outcomes">Outcomes</a>
-      <a href="#relationship">SNAXK</a>
+      <a href="#progress">Progress</a>
       <a class="sp-nav-cta" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>Discuss Orchistra</a>
     </nav>
     <details class="sp-mobile-nav">
       <summary aria-label="Open navigation">Menu</summary>
       <div class="sp-mobile-nav-menu">
-        <a href="#flow">How work moves</a>
-        <a href="#product">Product view</a>
+        <a href="#flow">Model</a>
+        <a href="#modes">Ways to begin</a>
+        <a href="#product">Product</a>
         <a href="#outcomes">Outcomes</a>
-        <a href="#relationship">SNAXK</a>
+        <a href="#progress">Progress</a>
         <a href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>Discuss Orchistra</a>
       </div>
     </details>
@@ -10917,33 +11113,46 @@ ${siblingProductSharedStyles().trim()}
   <main>
     <section class="sp-hero orchistra-hero" aria-labelledby="orchistra-title">
       <div class="sp-hero-inner sp-reveal">
-        <p class="sp-eyebrow">Coordination for trusted agentic systems</p>
+        <p class="sp-eyebrow">${escapeHtml(site.eyebrow || "Company operating system")}</p>
         <h1 id="orchistra-title">Orchistra</h1>
-        <p class="orchistra-hero-statement">Agent work people can follow.</p>
+        <p class="orchistra-hero-statement">Run a company where people and AI agents move as one.</p>
         <p class="sp-hero-lede">${escapeHtml(summary)}</p>
         <div class="sp-actions">
-          <a class="sp-button sp-button-light" href="#flow">See how work moves ${arrow}</a>
+          <a class="sp-button sp-button-light" href="#flow">See how Orchistra works ${arrow}</a>
           <a class="sp-button sp-button-ghost" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>Discuss Orchistra</a>
         </div>
       </div>
     </section>
 
     <section class="sp-intro-rail" aria-label="Orchistra operating outcomes">
-      <div><strong>One calm operating layer.</strong></div>
-      <div><span>Visible context<br>while work moves</span></div>
-      <div><span>Human attention<br>where it matters</span></div>
-      <div><span>Evidence<br>after the moment</span></div>
+      <div><strong>Turn direction into momentum.</strong></div>
+      <div><span>Priorities people<br>and agents can act on</span></div>
+      <div><span>Leadership at the<br>moments that matter</span></div>
+      <div><span>Evidence that improves<br>the next cycle</span></div>
     </section>
 
     <section class="sp-section sp-dark" id="flow">
       <div class="sp-section-inner orchistra-flow">
         <div class="orchistra-flow-copy">
-          <p class="sp-eyebrow">How work moves</p>
-          <h2>Signals become work people can follow.</h2>
-          <p>Orchistra sits between the places work starts and the people responsible for it. It keeps context, attention, approval and evidence on one visible route.</p>
+          <p class="sp-eyebrow">Company model</p>
+          <h2>Set the direction. Let the company move. Keep control.</h2>
+          <p>Orchistra connects leadership intent to goals, recurring operations, exceptions, human judgement, agent execution, and evidence, so the company can move without losing accountability.</p>
         </div>
         <div class="orchistra-flow-list">
-          ${flow.map(([number, heading, body]) => `<article class="orchistra-flow-step"><span>${number}</span><div><h3>${escapeHtml(heading)}</h3><p>${escapeHtml(body)}</p></div></article>`).join("")}
+          ${companyFlow.map((step, index) => `<article class="orchistra-flow-step"><span>${String(index + 1).padStart(2, "0")}</span><div><small>${escapeHtml(step.label)}</small><h3>${escapeHtml(step.title)}</h3><p>${escapeHtml(step.body)}</p></div></article>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="sp-section orchistra-modes-section" id="modes">
+      <div class="sp-section-inner">
+        <div class="sp-section-heading">
+          <p class="sp-eyebrow">Two ways to begin</p>
+          <h2>Start with one operating problem. Grow into the whole company.</h2>
+          <p>Use Orchistra to direct a highly agentic company from a small leadership team, or introduce agents into an established organisation without weakening human responsibility.</p>
+        </div>
+        <div class="orchistra-modes">
+          ${operatingModes.map((mode) => `<article class="orchistra-mode"><span>${escapeHtml(mode.label)}</span><div><h3>${escapeHtml(mode.title)}</h3><p>${escapeHtml(mode.body)}</p></div></article>`).join("")}
         </div>
       </div>
     </section>
@@ -10951,17 +11160,17 @@ ${siblingProductSharedStyles().trim()}
     <section class="sp-section orchistra-product" id="product">
       <div class="sp-section-inner orchistra-product-layout">
         <div class="orchistra-product-copy">
-          <p class="sp-eyebrow">Product view</p>
-          <h2>People should not have to reconstruct the work afterwards.</h2>
-          <p>Messages, rich updates, requests, approved work, receipts and decisions stay attached to a shared operating picture. The interface is there to reduce hunting, hidden context and quiet uncertainty.</p>
+          <p class="sp-eyebrow">Human control surface</p>
+          <h2>Know what is moving, what is blocked, and what needs you.</h2>
+          <p>Direction, goals, processes, requests, work orders, receipts, and decisions stay attached to one operating picture. Leaders get the context to decide without becoming the manual relay for every agent.</p>
           <div class="sp-actions">
-            <a class="sp-button sp-button-dark" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, "product_view_interest", advisoryStage, advisoryCampaign)}>Discuss the product ${arrow}</a>
+            <a class="sp-button sp-button-dark" href="${escapeHtml(productInterestHref)}"${outboundAttrsFor(site, productInterestContent, advisoryStage, advisoryCampaign)}>Discuss Orchistra ${arrow}</a>
           </div>
         </div>
         <figure class="orchistra-product-figure">
           <picture class="orchistra-product-picture">
             <source media="(max-width: 680px)" srcset="${escapeHtml(productImageMobile)}">
-            <img src="${escapeHtml(productImage)}" alt="Orchistra example workspace showing a handoff, a human review request, and recorded evidence." loading="lazy">
+            <img src="${escapeHtml(productImage)}" alt="Illustrative Orchistra workspace showing company work, a human review request, and recorded evidence." loading="lazy">
           </picture>
           <figcaption>Illustrative Orchistra workspace</figcaption>
         </figure>
@@ -10971,13 +11180,40 @@ ${siblingProductSharedStyles().trim()}
     <section class="sp-section" id="outcomes">
       <div class="sp-section-inner">
         <div class="sp-section-heading">
-          <p class="sp-eyebrow">What becomes clearer</p>
-          <h2>Coordinate the work without hiding the judgement.</h2>
-          <p>The purpose is not another stream of notifications. It is a calmer view of what moved, what needs a person, and what evidence remains.</p>
+          <p class="sp-eyebrow">Company outcomes</p>
+          <h2>Everything leadership needs to turn AI into company performance.</h2>
+          <p>Connect direction, responsibility, work, authority, evidence, and improvement so useful AI becomes part of how the company performs, not another experiment leaders have to chase.</p>
         </div>
         <div class="orchistra-outcomes">
           ${outcomes.map((outcome, index) => `<article class="orchistra-outcome"><span>${String(index + 1).padStart(2, "0")}</span><div><h3>${escapeHtml(outcome.title)}</h3><p>${escapeHtml(outcome.body)}</p></div></article>`).join("")}
         </div>
+      </div>
+    </section>
+
+    <section class="sp-section orchistra-systems" id="systems">
+      <div class="sp-section-inner orchistra-systems-layout">
+        <div>
+          <p class="sp-eyebrow">${escapeHtml(systemsBoundary.eyebrow || "Existing systems")}</p>
+          <h2>${escapeHtml(systemsBoundary.title || "Coordinate across the company without replacing its records.")}</h2>
+          <p>${escapeHtml(systemsBoundary.body || "Orchistra connects intent, work, decisions, and evidence across the systems a company already trusts.")}</p>
+        </div>
+        <ul class="orchistra-system-list" aria-label="Systems that remain authoritative">
+          ${(systemsBoundary.systems || []).map((system) => `<li>${escapeHtml(system)}</li>`).join("")}
+        </ul>
+      </div>
+    </section>
+
+    <section class="sp-section orchistra-progress" id="progress">
+      <div class="sp-section-inner">
+        <div class="sp-section-heading">
+          <p class="sp-eyebrow">${escapeHtml(progressStory.eyebrow || "Current progress")}</p>
+          <h2>${escapeHtml(progressStory.title || "A company operating system taking shape in working layers.")}</h2>
+          <p>${escapeHtml(progressStory.intro || "Current capability is separated from controlled proof and future direction.")}</p>
+        </div>
+        <div class="orchistra-progress-list">
+          ${progressItems.map((item) => `<article class="orchistra-progress-item"><span class="orchistra-progress-label">${escapeHtml(item.label)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.body)}</p></article>`).join("")}
+        </div>
+        <p class="orchistra-progress-note">${escapeHtml(progressStory.note || "Availability and authority depend on the configured environment.")}</p>
       </div>
     </section>
 
@@ -11001,12 +11237,24 @@ ${siblingProductSharedStyles().trim()}
     <section class="sp-section orchistra-cao" id="cao">
       <div class="sp-section-inner orchistra-cao-inner">
         <p class="sp-eyebrow">${escapeHtml(cao.eyebrow || "Chief Agentic Officer")}</p>
-        <h2>Visible coordination is a leadership question.</h2>
+        <h2>${escapeHtml(cao.title || "The Chief Agentic Officer defines the mandate. Orchistra makes it operational.")}</h2>
         <p>${escapeHtml(cao.body || "The Chief Agentic Officer names what agentic work may do, who owns it, and what leaders must be able to inspect. Orchistra is where that mandate becomes visible while the work moves.")}</p>
+        ${cao.support ? `<p>${escapeHtml(cao.support)}</p>` : ""}
         <div class="sp-actions">
-          <a class="sp-button sp-button-light" href="${escapeHtml(caoHref)}"${outboundAttrsFor(site, caoContent, caoStage, caoCampaign)}>Read the CAO briefing ${arrow}</a>
-          <a class="sp-button sp-button-ghost" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>Show interest</a>
+          <a class="sp-button sp-button-light" href="${escapeHtml(caoHref)}"${outboundAttrsFor(site, caoContent, caoStage, caoCampaign)}>${escapeHtml(cao.primary_label || "Read the CAO briefing")} ${arrow}</a>
+          <a class="sp-button sp-button-ghost" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>${escapeHtml(cao.secondary_label || "Discuss Orchistra")}</a>
         </div>
+      </div>
+    </section>
+
+    <section class="sp-section orchistra-final-cta" id="interest">
+      <div class="sp-section-inner orchistra-final-cta-layout">
+        <div>
+          <p class="sp-eyebrow">${escapeHtml(site.cta_eyebrow || "Platform interest")}</p>
+          <h2>${escapeHtml(site.cta_title || "Where could Orchistra unlock momentum in your company?")}</h2>
+          <p>${escapeHtml(site.cta_body || "Start with one operating problem, prove the value, and grow from there.")}</p>
+        </div>
+        <a class="sp-button sp-button-dark" href="${escapeHtml(finalInterestHref)}"${outboundAttrsFor(site, finalInterestContent, advisoryStage, advisoryCampaign)}>${escapeHtml(site.cta_button_label || "Discuss where to start")} ${arrow}</a>
       </div>
     </section>
   </main>
@@ -11014,13 +11262,14 @@ ${siblingProductSharedStyles().trim()}
   <footer class="sp-footer">
     <div>
       <span class="orchistra-footer-mark" aria-hidden="true">O</span>
-      <p>A calm operating layer for visible agent communication, human attention, approved work, receipts and decisions.</p>
+      <p>${escapeHtml(site.footer_tagline || "A company operating system for governed human-and-agent work.")}</p>
     </div>
     <div class="sp-footer-col">
       <strong>Orchistra</strong>
-      <a href="#flow">How work moves</a>
-      <a href="#product">Product view</a>
+      <a href="#flow">Company model</a>
+      <a href="#modes">Ways to begin</a>
       <a href="#outcomes">Outcomes</a>
+      <a href="#progress">Progress</a>
     </div>
     <div class="sp-footer-col">
       <strong>Sibling product</strong>

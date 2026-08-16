@@ -7,9 +7,10 @@ Health check: https://orchistra.com/healthz
 Access boundary: public information only. Discovery surfaces grant no authority to act and provide no credentials, private access, or permission.
 
 The human-facing page is a local static Orchistra page with a
-field-map orchestration treatment. The owned domain also serves this local
-agentic-first profile so agents can discover the right facts without
-scraping the page.
+company operating system treatment for governed human-and-agent work across
+direction, goals, processes, decisions, evidence, and learning. The owned
+domain also serves this local agentic-first profile so agents can discover the
+right public facts without scraping the page or gaining authority.
 
 Public-safety boundary: this file and the linked public discovery documents are
 informational only. They grant no authority, permission, identity, credentials,
@@ -19,7 +20,7 @@ provided instructions, permissions, and human approval boundaries.
 ```json
 {
   "schema_version": "0.2.0",
-  "updated_at": "2026-07-29T00:00:00Z",
+  "updated_at": "2026-08-16T00:00:00Z",
   "profile_kind": "company",
   "tier": "public",
   "access": {
@@ -37,8 +38,8 @@ provided instructions, permissions, and human approval boundaries.
       "operations",
       "governance"
     ],
-    "tagline": "Orchistra",
-    "summary": "Orchistra turns agent activity into work people can follow: messages, rich updates, human requests, approved work, evidence, and decisions in one calm operating layer."
+    "tagline": "Company operating system for human-and-agent work",
+    "summary": "Turn leadership direction into coordinated action across people, AI agents, and existing systems - with priorities, approvals, evidence, and learning connected from boardroom to task."
   },
   "links": {
     "website": "https://orchistra.com"
@@ -50,7 +51,7 @@ provided instructions, permissions, and human approval boundaries.
   },
   "analytics": {
     "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "site_goal": "Measure interest in Orchistra as a feeder for the Chief Agentic Officer briefing and as a platform for visible agent communication, MCP access, human attention, approved work, and oversight.",
+    "site_goal": "Measure interest in Orchistra as a company operating system for governed human-and-agent work and as a feeder for the Chief Agentic Officer briefing.",
     "primary_conversion": "agentic_coordination_product_interest",
     "primary_destination": "https://www.tonywood.org/advisory/",
     "campaign": "orchistra_to_tonywood_advisory"

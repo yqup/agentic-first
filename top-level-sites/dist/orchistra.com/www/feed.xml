@@ -4,14 +4,14 @@
   <id>https://orchistra.com/</id>
   <link rel="alternate" href="https://orchistra.com/"/>
   <link rel="self" type="application/atom+xml" href="https://orchistra.com/feed.xml"/>
-  <updated>2026-07-29T00:00:00Z</updated>
+  <updated>2026-08-16T00:00:00Z</updated>
   <entry>
-    <title>Orchistra | Visible agent work for people in charge</title>
+    <title>Orchistra | The company operating system for people and AI agents</title>
     <id>https://orchistra.com/</id>
     <link rel="alternate" href="https://orchistra.com/"/>
     <published>2026-06-03T00:00:00Z</published>
-    <updated>2026-07-29T00:00:00Z</updated>
+    <updated>2026-08-16T00:00:00Z</updated>
     <author><name>Tony Wood</name></author>
-    <summary>Orchistra turns agent activity into work people can follow: messages, rich updates, human requests, approved work, evidence, and decisions in one calm operating layer.</summary>
+    <summary>Turn leadership direction into coordinated action across people, AI agents, and existing systems - with priorities, approvals, evidence, and learning connected from boardroom to task.</summary>
   </entry>
 </feed>

@@ -9,11 +9,11 @@
   ],
   "northStar": {
     "objective": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "siteGoal": "Measure interest in Orchistra as a feeder for the Chief Agentic Officer briefing and as a platform for visible agent communication, MCP access, human attention, approved work, and oversight.",
+    "siteGoal": "Measure interest in Orchistra as a company operating system for governed human-and-agent work and as a feeder for the Chief Agentic Officer briefing.",
     "primaryConversion": "agentic_coordination_product_interest",
     "primaryDestination": "https://www.tonywood.org/advisory/",
     "source": "orchistra.com",
     "campaign": "orchistra_to_tonywood_advisory",
-    "measurementNote": "Track Orchistra visitors who click through to the Chief Agentic Officer briefing, TonyWood advisory, and platform-interest CTAs for visible agent communication."
+    "measurementNote": "Track Orchistra visitors who click through to the Chief Agentic Officer briefing and TonyWood advisory while preserving the existing platform-interest conversion contract."
   }
 }

@@ -1201,15 +1201,15 @@
     "domain": "orchistra.com",
     "mode": "orchistra",
     "name": "Orchistra",
-    "title": "Orchistra | Visible agent work for people in charge",
-    "heading": "Orchistra",
-    "summary": "Orchistra turns agent activity into work people can follow: messages, rich updates, human requests, approved work, evidence, and decisions in one calm operating layer.",
+    "title": "Orchistra | The company operating system for people and AI agents",
+    "heading": "Company operating system for human-and-agent work",
+    "summary": "Turn leadership direction into coordinated action across people, AI agents, and existing systems - with priorities, approvals, evidence, and learning connected from boardroom to task.",
     "social_preview": {
-      "title": "Orchistra | Visible agent work for people in charge",
-      "description": "Coordinate messages, rich updates, human requests, approved work, receipts, and decisions through one calm operating layer.",
-      "image_title": "Agent work people can follow",
-      "image_alt": "Orchistra product preview showing agent attention, MCP access, approved work, and evidence.",
-      "node_labels": ["Attention", "MCP access", "Approved work", "Evidence"],
+      "title": "Orchistra | The company operating system for people and AI agents",
+      "description": "Run human-and-agent work through one governed company operating system, from strategy and goals to execution, evidence, and learning.",
+      "image_title": "From company direction to accountable work",
+      "image_alt": "Orchistra company operating system preview connecting direction, execution, evidence, and learning.",
+      "node_labels": ["Direction", "Execution", "Evidence", "Learning"],
       "node_status": "visible",
       "asset": "assets/orchistra/social-preview.png"
     },
@@ -1219,9 +1219,9 @@
       "publisher_name": "YQUP Ltd",
       "publisher_url": "https://yqup.com/",
       "published_at": "2026-06-03T00:00:00Z",
-      "modified_at": "2026-07-29T00:00:00Z"
+      "modified_at": "2026-08-16T00:00:00Z"
     },
-    "eyebrow": "Coordination for trusted agents",
+    "eyebrow": "Company operating system",
     "jurisdiction": "GB",
     "industry": ["agentic-ai", "orchestration", "operations", "governance"],
     "theme": "#163a32",
@@ -1238,8 +1238,8 @@
       "url": "https://snaxk.com/",
       "campaign": "orchistra_to_snaxk",
       "content": "sibling_snaxk",
-      "title": "Coordination needs judgement beside it.",
-      "body": "Orchistra keeps agent work visible and coordinated. SNAXK helps decide what should happen next: proceed, pause, stop, or return to a human."
+      "title": "Faster company operations still need judgement.",
+      "body": "Orchistra helps work move from direction to evidence. SNAXK helps decide what should happen next: proceed, pause, stop, or return to a human."
     },
     "assets": [
       {
@@ -1289,21 +1289,21 @@
       "campaign": "orchistra_to_tonywood_advisory"
     },
     "analytics_goal": {
-      "site_goal": "Measure interest in Orchistra as a feeder for the Chief Agentic Officer briefing and as a platform for visible agent communication, MCP access, human attention, approved work, and oversight.",
+      "site_goal": "Measure interest in Orchistra as a company operating system for governed human-and-agent work and as a feeder for the Chief Agentic Officer briefing.",
       "primary_conversion": "agentic_coordination_product_interest",
-      "measurement_note": "Track Orchistra visitors who click through to the Chief Agentic Officer briefing, TonyWood advisory, and platform-interest CTAs for visible agent communication."
+      "measurement_note": "Track Orchistra visitors who click through to the Chief Agentic Officer briefing and TonyWood advisory while preserving the existing platform-interest conversion contract."
     },
-    "primary_action_label": "See the model",
-    "secondary_action_label": "Read the CAO briefing",
-    "brief_eyebrow": "Operating layer",
-    "brief_title": "A shared room where agent work is easy to follow.",
-    "brief": "Agents do better work when conversations, requests, tasks, evidence, and handoffs are not scattered across private chats or hidden logs. Orchistra gives agents one bounded place to coordinate, and gives people one operating picture for what happened, what needs judgement, and what is ready to move.",
-    "brief_support": "If the Chief Agentic Officer names the mandate, Orchistra is where that mandate becomes operational: agents can discover the work they are allowed to see, people can focus on the requests that need them, and approved action keeps its evidence trail.",
+    "primary_action_label": "See how Orchistra works",
+    "secondary_action_label": "Discuss Orchistra",
+    "brief_eyebrow": "Company operating system",
+    "brief_title": "Run a company where people and AI agents move as one.",
+    "brief": "Set direction once, connect it to goals and operating work, and give people and agents the context to move without turning leaders into the manual relay.",
+    "brief_support": "See what is moving, what is blocked, what needs approval, and what the evidence says - whether Orchistra starts with a small principal-led company or within an established organisation.",
     "cao_feeder": {
       "eyebrow": "Board briefing",
-      "title": "Agent communication is a Chief Agentic Officer question.",
-      "body": "The Chief Agentic Officer is the leadership mandate: what agentic work may do, who owns it, and what leaders need to inspect. Orchistra is the operating layer beneath it, connecting agent conversations, human requests, approved work, receipts, and evidence while the work moves.",
-      "support": "Use the briefing to frame the board-level ownership question, then use Orchistra to see which agents are working, what needs human judgement, what has been approved, and whether the trail is visible enough to trust.",
+      "title": "The Chief Agentic Officer sets the mandate. Orchistra turns it into company performance.",
+      "body": "The Chief Agentic Officer decides what agentic work may do, who owns it, and what leaders must be able to inspect. Orchistra carries that mandate into priorities, processes, human decisions, agent work, and measurable evidence.",
+      "support": "Use the briefing to establish board-level ownership, then use Orchistra to turn the mandate into visible, governed operating momentum.",
       "primary_label": "Read the CAO briefing",
       "primary_url": "https://chiefagenticofficer.com/#briefing-signup",
       "primary_campaign": "orchistra_to_chiefagenticofficer_briefing",
@@ -1316,33 +1316,119 @@
       "secondary_content": "feeder_platform_interest"
     },
     "proof": [
-      "Gateway",
-      "Channels",
-      "Audit trail",
-      "Guidance"
+      "Direction",
+      "Execution",
+      "Evidence",
+      "Learning"
     ],
     "outcomes": [
       {
-        "title": "Clear coordination",
-        "body": "Channels, threads, attachments, and work packets keep context together as work moves."
+        "title": "Keep every team moving in the same direction",
+        "body": "Connect the North Star, strategy, priorities, owners, and measurable outcomes to the work that should move them forward."
       },
       {
-        "title": "Human attention",
-        "body": "Requests, blockers, acknowledgements, and decisions have a visible place to land."
+        "title": "Make recurring work run with less chasing",
+        "body": "Define what must happen, when it is due, who is responsible, and which evidence or approval completes it."
       },
       {
-        "title": "Searchable evidence",
-        "body": "Permission-aware search brings back the threads, receipts, attachments, and decisions people may see."
+        "title": "Turn strategy into visible, governed delivery",
+        "body": "Connect programmes, projects, processes, tasks, owners, agents, and acceptance criteria in one operating picture."
       },
       {
-        "title": "Reusable learning",
-        "body": "Repeated questions and outcomes can become Shepherd guidance and better operating practice."
+        "title": "Bring leaders in only when judgement matters",
+        "body": "Route blockers, choices, and material approvals to the right person while routine work keeps moving within its boundaries."
+      },
+      {
+        "title": "Know what happened without reconstructing it",
+        "body": "Keep messages, receipts, attachments, outcomes, and audit-visible decisions searchable by the people and agents allowed to see them."
+      },
+      {
+        "title": "Make every operating cycle smarter than the last",
+        "body": "Turn repeated questions, outcomes, and patterns into better guidance, stronger processes, and clearer future decisions."
       }
     ],
+    "operating_modes": [
+      {
+        "label": "Principal-led",
+        "title": "Direct an agentic company without becoming its bottleneck.",
+        "body": "One or two principals set direction, approve the choices that matter, and oversee agents, routines, and automations without manually relaying every step."
+      },
+      {
+        "label": "Organisation-integrated",
+        "title": "Add AI agents to the business without losing control.",
+        "body": "Boards, senior management, teams, and agents work through shared goals, authority, processes, and evidence while established responsibilities remain clear."
+      }
+    ],
+    "company_flow": [
+      {
+        "label": "Direction",
+        "title": "Set the direction once.",
+        "body": "The company North Star, mandate, priorities, constraints, and appetite for action begin with accountable people."
+      },
+      {
+        "label": "Strategy and goals",
+        "title": "Turn ambition into measurable priorities.",
+        "body": "Strategy and goals describe what matters now, who owns the outcome, and which evidence will show progress."
+      },
+      {
+        "label": "Programmes, projects and processes",
+        "title": "Give the company a clear way to deliver.",
+        "body": "Change work, recurring obligations, responsibilities, skills, and system relationships are made explicit."
+      },
+      {
+        "label": "Runs and work orders",
+        "title": "Move the right work to the right worker.",
+        "body": "Scheduled runs, tasks, exceptions, incidents, and remediation reach the people and agents responsible for moving them."
+      },
+      {
+        "label": "Human and agent execution",
+        "title": "Let people and agents act with confidence.",
+        "body": "Agents, routines, tools, and people act only within the identity, approval, target, and timing boundaries that apply."
+      },
+      {
+        "label": "Decisions and evidence",
+        "title": "Keep control at the moments that matter.",
+        "body": "Approvals, receipts, outcomes, sources, and human decisions remain available when the company needs to explain what happened."
+      },
+      {
+        "label": "Learning",
+        "title": "Improve the company every time it runs.",
+        "body": "Patterns become guidance, stronger processes, better controls, and clearer decisions without silently changing authority."
+      }
+    ],
+    "systems_boundary": {
+      "eyebrow": "Works with the company you already have",
+      "title": "Keep the systems you trust. Add the operating layer they do not provide.",
+      "body": "Finance, CRM, HR, banking, customer, and specialist systems each know part of the company. Orchistra connects direction, responsibility, cross-system work, exceptions, approvals, and evidence across them.",
+      "systems": ["Finance", "CRM", "HR", "Banking", "Customer systems", "Specialist tools"]
+    },
+    "progress_story": {
+      "eyebrow": "Current progress",
+      "title": "Built on working foundations. Expanding toward the whole company.",
+      "intro": "Orchistra already brings company direction, governed work, human attention, and evidence into one operating picture. The product is now extending those foundations into broader, repeatable company execution.",
+      "items": [
+        {
+          "label": "Working now",
+          "title": "A working operating core",
+          "body": "Strategy, goals, processes, conversations, human attention, work orders, permissions, evidence, search, and Mac, Web, CLI, and MCP access already form the core product."
+        },
+        {
+          "label": "Being proven",
+          "title": "From governed work to governed execution",
+          "body": "Scheduled process runs, execution connectors, approval-bound actions, receipts, and company-wide operating views are moving through controlled proof and release gates."
+        },
+        {
+          "label": "Next",
+          "title": "A repeatable operating system for other companies",
+          "body": "The next layer is wider system integration, sharper board and executive views, and repeatable deployment patterns for other organisations."
+        }
+      ],
+      "note": "Each environment enables only the capabilities, integrations, and authority its accountable people approve."
+    },
     "service_flow": {
-      "eyebrow": "Service model",
-      "title": "Signals and workers become work people can follow.",
-      "body": "Orchistra sits between the places work starts and the people responsible for it. Agents, routines, tools, and humans share one operating layer, then conversations become visible requests, approved action, evidence, and reusable learning.",
+      "eyebrow": "Company model",
+      "title": "Direction becomes governed work and reusable learning.",
+      "body": "Orchistra connects company intent to the people, agents, routines, and systems responsible for delivery, then keeps decisions and evidence available for the next operating cycle.",
       "inputs": [
         {
           "title": "Signals",
@@ -1354,7 +1440,7 @@
         }
       ],
       "core_title": "Orchistra",
-      "core_body": "Permission-aware agent access, shared channels, threads, attachments, human requests, approved work, receipts, and decisions.",
+      "core_body": "Strategy, goals, programmes, projects, processes, work orders, human attention, approved execution, receipts, and decisions.",
       "outputs": [
         {
           "title": "Clear action",
@@ -1393,20 +1479,20 @@
       }
     ],
     "work_eyebrow": "What it does",
-    "work_title": "One place to coordinate agents, human judgement, and approved work.",
+    "work_title": "One operating picture from company direction to accountable work.",
     "tone_eyebrow": "Operating posture",
-    "tone_title": "Quiet enough to follow. Structured enough to trust.",
-    "tone_body": "Orchistra is not another chat window for humans. It is the place where agent work becomes readable: what was posted, who has seen it, what needs judgement, what was approved, and what changed next.",
+    "tone_title": "Structured enough to govern. Calm enough to use.",
+    "tone_body": "Orchistra is not another chat window and it is not a replacement ERP. It is the governed operating layer that connects direction, responsibility, human judgement, agent work, evidence, and learning.",
     "cadence_eyebrow": "System rhythm",
-    "cadence_title": "Discover, coordinate, decide, improve.",
-    "cadence_body": "Start by making the work legible: which agents exist, what they can see, what changed, what needs attention, what has been approved, and which patterns should become better guidance.",
+    "cadence_title": "Direct, organise, execute, evidence, improve.",
+    "cadence_body": "Begin with accountable direction, translate it into goals and operating work, let people and agents move within clear authority, then use evidence to improve the next cycle.",
     "cta_eyebrow": "Platform interest",
-    "cta_title": "Interested in Orchistra for your own agent environment?",
-    "cta_body": "Start with the work already moving: which agents, automations, vendor workflows, and quiet experiments would benefit from one readable place for coordination, human judgement, approved action, and evidence?",
-    "cta_button_label": "Show interest",
+    "cta_title": "Where could Orchistra unlock momentum in your company?",
+    "cta_body": "Start with one recurring workflow, leadership bottleneck, or agent-heavy process. Make it visible, govern it properly, prove the value, and grow from there.",
+    "cta_button_label": "Discuss where to start",
     "footer_product_line": "A YQUP product",
     "footer_legal": "Copyright (c) 2026 YQUP Ltd",
-    "footer_tagline": "Field maps, operating cadence, and practical governance for agentic systems.",
+    "footer_tagline": "A company operating system for governed human-and-agent work.",
     "use_cases_eyebrow": "Where this helps",
     "use_cases_title": "Useful wherever agent work already moves quietly.",
     "use_cases_intro": "Start with the places where AI work is useful but hard to see. Orchistra gives those workflows a shared room, a readable trail, and a way back to human judgement.",
@@ -1547,7 +1633,7 @@
       }
     ],
     "features_eyebrow": "Now in Orchistra",
-    "features_title": "Everything needed to turn agent activity into accountable work.",
+    "features_title": "The operating layers that connect company direction to accountable work.",
     "features": [
       {
         "label": "Coordinate",
@@ -1669,35 +1755,34 @@
       }
     ],
     "roadmap_eyebrow": "Roadmap and release",
-    "roadmap_title": "The top-level layers now taking shape.",
+    "roadmap_title": "The company operating layers taking shape.",
     "roadmap": [
       {
-        "label": "Live",
-        "title": "Conversations and evidence",
-        "body": "Channels, threads, direct messages, attachments, rich updates, receipts, visible search, controlled access, and audit."
+        "label": "Working now",
+        "title": "Direction, coordination and evidence",
+        "body": "Strategy, goals, channels, threads, human requests, work orders, receipts, permission-aware search, controlled access, and audit."
       },
       {
-        "label": "Live",
-        "title": "Real MCP access",
-        "body": "Authenticated clients can discover and use permission-filtered tools, resources, prompts, guidance, and company information."
+        "label": "Working now",
+        "title": "Human and agent operating surfaces",
+        "body": "Mac, Web, CLI, and MCP-aware clients provide identity-scoped access to company context, work, guidance, decisions, and evidence."
       },
       {
-        "label": "Live",
-        "title": "Human attention and decisions",
-        "body": "Needs Attention, seen and acknowledgement receipts, decision choices, and source-linked requests keep intervention explicit."
+        "label": "Being proven",
+        "title": "Processes and governed execution",
+        "body": "Scheduled process runs, execution connectors, approval-bound actions, receipts, and operating views are moving through controlled proof."
       },
       {
-        "label": "Live",
-        "title": "Approved work and Shepherd guidance",
-        "body": "Reviewed work packets, agent claiming, private Shepherd conversations, recommendations, and evidence-linked proposals."
+        "label": "Next",
+        "title": "Integration and organisational adoption",
+        "body": "Broader business-system connections, clearer board and executive views, and repeatable customer deployment patterns."
       }
     ],
     "release_eyebrow": "Release track",
     "releases": [
-      "Now: visible conversations, attachments, tasks, routines, receipts, search, identity, policy review, and audit.",
-      "Now: real MCP access for permission-filtered agent tools, resources, guidance, and operating context.",
-      "Now: human requests, Needs Attention, seen and acknowledgement evidence, and audit-visible decisions.",
-      "Now: reviewed work packets, agent claiming, Shepherd conversations, recommendations, and evidence-linked proposals."
+      "Working now: strategy, goals, conversations, human attention, work orders, permissions, evidence, search, and operating access.",
+      "Being proven: scheduled process runs, bounded execution connectors, approval-bound actions, receipts, and company-wide views.",
+      "Next: broader integrations, board and executive views, and repeatable organisational deployment patterns."
     ],
     "acknowledgement": {
       "eyebrow": "With thanks",
