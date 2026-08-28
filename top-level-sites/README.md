@@ -1,8 +1,9 @@
 # Top-Level Sites
 
-SNAXK-specific brand and content ownership is recorded in
-[`SNAXK-NOTICE.md`](SNAXK-NOTICE.md). Shared repository software remains under
-the repository's top-level MIT License.
+Product-specific ownership is recorded in
+[`SNAXK-NOTICE.md`](SNAXK-NOTICE.md) and
+[`ORCHISTRA-NOTICE.md`](ORCHISTRA-NOTICE.md). Shared repository software
+remains under the repository's top-level MIT License.
 
 One local container per public domain. Gamma-fronting containers keep the
 current Gamma design by proxying normal page requests to Gamma. Holding-page
