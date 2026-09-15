@@ -1,0 +1,116 @@
+/* Orchistra-only polish. Still imagery stays useful when motion is disabled. */
+.orchistra-sibling { --sp-paper: #fbf9f4; }
+.orchistra-sibling *, .orchistra-sibling *::before, .orchistra-sibling *::after { letter-spacing: 0; }
+.orchistra-sibling .sp-header {
+  background: rgba(8, 21, 17, .78);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, .18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .08);
+}
+.orchistra-hero {
+  min-height: min(800px, 85svh);
+  background-image: none;
+}
+.orchistra-hero::before {
+  inset: -3%;
+  z-index: -2;
+  background-image: var(--sp-hero-image);
+  background-position: center;
+  background-size: cover;
+  filter: brightness(1.18);
+  animation: orchistra-camera 24s ease-in-out infinite alternate paused;
+}
+.orchistra-hero::after {
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(5, 15, 12, .9), rgba(5, 15, 12, .63) 46%, rgba(5, 15, 12, .05) 85%),
+    linear-gradient(0deg, rgba(5, 15, 12, .55), transparent 60%);
+  transform: none;
+  animation: none;
+}
+.orchistra-hero .sp-hero-inner { max-width: 940px; gap: 22px; padding-top: 128px; padding-bottom: 86px; }
+.orchistra-hero h1 { font-size: 128px; text-shadow: 0 8px 36px rgba(0, 0, 0, .12); }
+.orchistra-hero-statement { max-width: 640px; font-size: 48px; line-height: 1.06; }
+.orchistra-hero .sp-hero-lede { max-width: 650px; font-size: 21px; color: #f0f3ef; }
+.orchistra-sibling .sp-button { border-radius: 8px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22), 0 8px 22px rgba(0, 0, 0, .12); }
+.orchistra-sibling .sp-button-ghost { background: rgba(255, 255, 255, .06); backdrop-filter: blur(12px); }
+.orchistra-sibling :is(a, button, summary):focus-visible { outline: 3px solid #dba746; outline-offset: 5px; }
+.orchistra-motion-toggle {
+  position: absolute;
+  right: var(--sp-gutter);
+  bottom: 22px;
+  min-width: 128px;
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, .42);
+  border-radius: 8px;
+  background: rgba(8, 21, 17, .85);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.orchistra-sibling .sp-intro-rail { background: #f5f9f7; box-shadow: inset 0 2px 0 #c5ded3; }
+.orchistra-sibling .sp-intro-rail strong { font-size: 30px; }
+.orchistra-sibling .sp-section-heading h2 { font-size: 60px; line-height: 1.05; }
+.orchistra-flow-copy h2, .orchistra-product-copy h2, .orchistra-systems h2 { font-size: 62px; line-height: 1.04; }
+.orchistra-flow-step h3 { font-size: 34px; }
+.orchistra-flow-step > span { background: #244438; box-shadow: 0 0 0 6px rgba(169, 206, 216, .04), inset 0 1px 0 rgba(255, 255, 255, .15); }
+.orchistra-flow-step p { color: #c9d8d1; }
+.orchistra-modes-section { background: #fbf9f4; }
+.orchistra-mode { min-height: 330px; gap: 36px; }
+.orchistra-mode h3 { font-size: 44px; line-height: 1.05; }
+.orchistra-product { background: #dfefeb; }
+.orchistra-product-figure {
+  min-height: 510px;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  perspective: 1400px;
+}
+.orchistra-product-figure::before { display: none; }
+.orchistra-product-picture { transform: rotateY(-5deg) rotateX(3deg); animation: orchistra-float 10s ease-in-out infinite alternate paused; }
+.orchistra-product-picture img { border-radius: 8px; filter: drop-shadow(0 35px 26px rgba(13, 52, 40, .28)) drop-shadow(0 1px 1px rgba(255, 255, 255, .8)); }
+.orchistra-product-figure figcaption { color: #3c5950; left: 0; bottom: 0; }
+.orchistra-outcome { min-height: 240px; gap: 26px; transition: background-color .25s ease; }
+.orchistra-outcome:nth-child(3n + 1) > span { color: #a73e2a; }
+.orchistra-outcome:nth-child(3n + 2) > span { color: #806016; }
+.orchistra-outcome h3 { font-size: 38px; line-height: 1.08; }
+@media (hover: hover) { .orchistra-outcome:hover { background: #f0f5f2; } }
+.orchistra-progress-item h3 { font-size: 34px; }
+.orchistra-sibling .sp-product-relationship h2 { font-size: 58px; }
+.orchistra-cao h2 { font-size: 66px; line-height: 1.04; }
+.orchistra-final-cta { background: #d6b675; box-shadow: inset 0 1px 0 #f9e5ba; }
+.orchistra-final-cta h2 { max-width: 19ch; font-size: 68px; line-height: 1.03; }
+.orchistra-sibling .sp-reveal { animation: none; }
+.orchistra-sibling .orchistra-enter { animation: orchistra-enter .75s cubic-bezier(.2, .7, .25, 1) both; }
+html[data-orchistra-motion="running"] .orchistra-hero[data-in-view="true"]::before,
+html[data-orchistra-motion="running"] .orchistra-product-figure[data-in-view="true"] .orchistra-product-picture { animation-play-state: running; }
+html[data-orchistra-motion="paused"] .orchistra-enter { animation: none; }
+@keyframes orchistra-camera { from { transform: scale(1) translateX(-.4%); } to { transform: scale(1.055) translateX(.4%); } }
+@keyframes orchistra-float { from { transform: translateY(0) rotateY(-5deg) rotateX(3deg); } to { transform: translateY(-10px) rotateY(-2deg) rotateX(1deg); } }
+@keyframes orchistra-enter { from { opacity: .55; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 1100px) {
+  .orchistra-hero h1 { font-size: 110px; }
+  .orchistra-sibling .sp-section-heading h2, .orchistra-flow-copy h2, .orchistra-product-copy h2, .orchistra-systems h2 { font-size: 50px; }
+  .orchistra-mode h3 { font-size: 38px; }
+}
+@media (max-width: 680px) {
+  .orchistra-hero { min-height: 720px; }
+  .orchistra-hero::before { background-image: var(--sp-hero-mobile-image); }
+  .orchistra-hero::after { background: linear-gradient(90deg, rgba(5, 15, 12, .84), rgba(5, 15, 12, .48)), linear-gradient(0deg, rgba(5, 15, 12, .65), transparent); }
+  .orchistra-hero .sp-hero-inner { padding-top: 132px; padding-bottom: 92px; gap: 22px; }
+  .orchistra-hero h1 { font-size: 68px; }
+  .orchistra-hero-statement { font-size: 36px; }
+  .orchistra-hero .sp-hero-lede { font-size: 18px; }
+  .orchistra-sibling .sp-section-heading h2, .orchistra-flow-copy h2, .orchistra-product-copy h2, .orchistra-systems h2,
+  .orchistra-sibling .sp-product-relationship h2, .orchistra-cao h2, .orchistra-final-cta h2 { font-size: 40px; line-height: 1.08; }
+  .orchistra-mode h3 { font-size: 34px; }
+  .orchistra-outcome h3, .orchistra-flow-step h3, .orchistra-progress-item h3 { font-size: 30px; }
+  .orchistra-product-figure { min-height: 320px; padding: 10px 4px 44px; }
+  .orchistra-mode { min-height: 280px; }
+  .orchistra-product-picture { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orchistra-sibling *, .orchistra-sibling *::before, .orchistra-sibling *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .orchistra-product-picture { transform: none; }
+  .orchistra-motion-toggle { display: none; }
+}

@@ -1659,7 +1659,7 @@ governed work. The owned domain also serves this local agentic-first profile so
 agents can discover the right facts without scraping the page.`
             : site.mode === "orchistra"
               ? `The human-facing page is a local static Orchistra page with a
-company operating system treatment for governed human-and-agent work across
+control panel for people, AI agents, and company work across
 direction, goals, processes, decisions, evidence, and learning. The owned
 domain also serves this local agentic-first profile so agents can discover the
 right public facts without scraping the page or gaining authority.`
@@ -10509,8 +10509,8 @@ ${matomoScriptTagFor(site)}  <style>
 }
 
 function orchistraSiblingPageFor(site) {
-  const title = site.title || "Orchistra | The company operating system for people and AI agents";
-  const summary = site.summary || "Turn leadership direction into coordinated action across people, AI agents, and existing systems.";
+  const title = site.title || "Orchistra | The control panel for people and AI agents";
+  const summary = site.summary || "Bring your people, AI agents, and workflows into one clear view.";
   const heroImage = site.hero_background_image || "/assets/orchistra/hero-conservatory.webp";
   const heroImageMobile = site.hero_background_image_mobile || heroImage;
   const productImage = site.hero_product_image || "/assets/orchistra/hero-console.webp";
@@ -11082,12 +11082,14 @@ ${siblingProductSharedStyles().trim()}
       }
     }
   </style>
+  <link rel="stylesheet" href="/assets/orchistra/presentation.css">
+  <script src="/assets/orchistra/presentation.js" defer></script>
 </head>
 <body class="orchistra-sibling">
   <header class="sp-header">
     <a class="sp-brand" href="/" aria-label="Orchistra home">
       <span class="orchistra-mark" aria-hidden="true">O</span>
-      <span class="sp-brand-copy"><strong>Orchistra</strong><span>Company operating system</span></span>
+      <span class="sp-brand-copy"><strong>Orchistra</strong><span>Your company's control panel</span></span>
     </a>
     <nav class="sp-nav" aria-label="Primary navigation">
       <a href="#flow">Model</a>
@@ -11113,30 +11115,31 @@ ${siblingProductSharedStyles().trim()}
   <main>
     <section class="sp-hero orchistra-hero" aria-labelledby="orchistra-title">
       <div class="sp-hero-inner sp-reveal">
-        <p class="sp-eyebrow">${escapeHtml(site.eyebrow || "Company operating system")}</p>
+        <p class="sp-eyebrow">${escapeHtml(site.eyebrow || "Your company's control panel")}</p>
         <h1 id="orchistra-title">Orchistra</h1>
-        <p class="orchistra-hero-statement">Run a company where people and AI agents move as one.</p>
+        <p class="orchistra-hero-statement">${escapeHtml(site.brief_title || "See what's moving. Know what needs you.")}</p>
         <p class="sp-hero-lede">${escapeHtml(summary)}</p>
         <div class="sp-actions">
           <a class="sp-button sp-button-light" href="#flow">See how Orchistra works ${arrow}</a>
           <a class="sp-button sp-button-ghost" href="${escapeHtml(advisoryHref)}"${outboundAttrsFor(site, advisoryContent, advisoryStage, advisoryCampaign)}>Discuss Orchistra</a>
         </div>
       </div>
+      <button class="orchistra-motion-toggle" type="button" aria-pressed="false" hidden>Pause motion</button>
     </section>
 
-    <section class="sp-intro-rail" aria-label="Orchistra operating outcomes">
-      <div><strong>Turn direction into momentum.</strong></div>
-      <div><span>Priorities people<br>and agents can act on</span></div>
-      <div><span>Leadership at the<br>moments that matter</span></div>
-      <div><span>Evidence that improves<br>the next cycle</span></div>
+    <section class="sp-intro-rail" aria-label="Orchistra outcomes">
+      <div><strong>A clear view. A confident next step.</strong></div>
+      <div><span>Know who owns<br>the next move</span></div>
+      <div><span>See what needs<br>your decision</span></div>
+      <div><span>Find the evidence<br>behind the update</span></div>
     </section>
 
     <section class="sp-section sp-dark" id="flow">
       <div class="sp-section-inner orchistra-flow">
         <div class="orchistra-flow-copy">
-          <p class="sp-eyebrow">Company model</p>
-          <h2>Set the direction. Let the company move. Keep control.</h2>
-          <p>Orchistra connects leadership intent to goals, recurring operations, exceptions, human judgement, agent execution, and evidence, so the company can move without losing accountability.</p>
+          <p class="sp-eyebrow">How it works</p>
+          <h2>From priorities to progress. All in view.</h2>
+          <p>Set direction, follow the work, and bring the right decisions back to people. Orchistra keeps the context together so you can see what to do next.</p>
         </div>
         <div class="orchistra-flow-list">
           ${companyFlow.map((step, index) => `<article class="orchistra-flow-step"><span>${String(index + 1).padStart(2, "0")}</span><div><small>${escapeHtml(step.label)}</small><h3>${escapeHtml(step.title)}</h3><p>${escapeHtml(step.body)}</p></div></article>`).join("")}
@@ -11148,8 +11151,8 @@ ${siblingProductSharedStyles().trim()}
       <div class="sp-section-inner">
         <div class="sp-section-heading">
           <p class="sp-eyebrow">Two ways to begin</p>
-          <h2>Start with one operating problem. Grow into the whole company.</h2>
-          <p>Use Orchistra to direct a highly agentic company from a small leadership team, or introduce agents into an established organisation without weakening human responsibility.</p>
+          <h2>A small team or an established company. Stay in control.</h2>
+          <p>Direct agents and routines as a small leadership team, or bring people and agents together across an existing organisation. Start with the work you need to see more clearly.</p>
         </div>
         <div class="orchistra-modes">
           ${operatingModes.map((mode) => `<article class="orchistra-mode"><span>${escapeHtml(mode.label)}</span><div><h3>${escapeHtml(mode.title)}</h3><p>${escapeHtml(mode.body)}</p></div></article>`).join("")}
@@ -11160,7 +11163,7 @@ ${siblingProductSharedStyles().trim()}
     <section class="sp-section orchistra-product" id="product">
       <div class="sp-section-inner orchistra-product-layout">
         <div class="orchistra-product-copy">
-          <p class="sp-eyebrow">Human control surface</p>
+          <p class="sp-eyebrow">Your control panel</p>
           <h2>Know what is moving, what is blocked, and what needs you.</h2>
           <p>Direction, goals, processes, requests, work orders, receipts, and decisions stay attached to one operating picture. Leaders get the context to decide without becoming the manual relay for every agent.</p>
           <div class="sp-actions">
@@ -11181,8 +11184,8 @@ ${siblingProductSharedStyles().trim()}
       <div class="sp-section-inner">
         <div class="sp-section-heading">
           <p class="sp-eyebrow">Company outcomes</p>
-          <h2>Everything leadership needs to turn AI into company performance.</h2>
-          <p>Connect direction, responsibility, work, authority, evidence, and improvement so useful AI becomes part of how the company performs, not another experiment leaders have to chase.</p>
+          <h2>Less chasing. Clearer priorities. Better oversight.</h2>
+          <p>Bring goals, updates, responsibilities, approvals, and evidence together so people and agents can work with a shared understanding of what matters.</p>
         </div>
         <div class="orchistra-outcomes">
           ${outcomes.map((outcome, index) => `<article class="orchistra-outcome"><span>${String(index + 1).padStart(2, "0")}</span><div><h3>${escapeHtml(outcome.title)}</h3><p>${escapeHtml(outcome.body)}</p></div></article>`).join("")}
@@ -11207,7 +11210,7 @@ ${siblingProductSharedStyles().trim()}
       <div class="sp-section-inner">
         <div class="sp-section-heading">
           <p class="sp-eyebrow">${escapeHtml(progressStory.eyebrow || "Current progress")}</p>
-          <h2>${escapeHtml(progressStory.title || "A company operating system taking shape in working layers.")}</h2>
+          <h2>${escapeHtml(progressStory.title || "A clearer view today. More connections ahead.")}</h2>
           <p>${escapeHtml(progressStory.intro || "Current capability is separated from controlled proof and future direction.")}</p>
         </div>
         <div class="orchistra-progress-list">
@@ -11251,7 +11254,7 @@ ${siblingProductSharedStyles().trim()}
       <div class="sp-section-inner orchistra-final-cta-layout">
         <div>
           <p class="sp-eyebrow">${escapeHtml(site.cta_eyebrow || "Platform interest")}</p>
-          <h2>${escapeHtml(site.cta_title || "Where could Orchistra unlock momentum in your company?")}</h2>
+          <h2>${escapeHtml(site.cta_title || "Bring your people and agents into one clear view.")}</h2>
           <p>${escapeHtml(site.cta_body || "Start with one operating problem, prove the value, and grow from there.")}</p>
         </div>
         <a class="sp-button sp-button-dark" href="${escapeHtml(finalInterestHref)}"${outboundAttrsFor(site, finalInterestContent, advisoryStage, advisoryCampaign)}>${escapeHtml(site.cta_button_label || "Discuss where to start")} ${arrow}</a>
@@ -11262,7 +11265,7 @@ ${siblingProductSharedStyles().trim()}
   <footer class="sp-footer">
     <div>
       <span class="orchistra-footer-mark" aria-hidden="true">O</span>
-      <p>${escapeHtml(site.footer_tagline || "A company operating system for governed human-and-agent work.")}</p>
+      <p>${escapeHtml(site.footer_tagline || "The control panel for people, AI agents, and company work.")}</p>
     </div>
     <div class="sp-footer-col">
       <strong>Orchistra</strong>
