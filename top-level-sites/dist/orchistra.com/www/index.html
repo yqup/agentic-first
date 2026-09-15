@@ -28,7 +28,8 @@
   <meta name="twitter:image:alt" content="Orchistra control panel preview connecting direction, execution, evidence, and learning.">
   <script id="public-page-jsonld" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://yqup.com/#organization","name":"YQUP Ltd","url":"https://yqup.com/"},{"@type":"WebSite","@id":"https://orchistra.com/#website","name":"Orchistra","url":"https://orchistra.com/","description":"Bring your people, AI agents, and workflows into one clear view. Set priorities, follow progress, handle approvals, and see what happened, while keeping important decisions in human hands.","inLanguage":"en-GB","publisher":{"@id":"https://yqup.com/#organization"}},{"@type":"Article","@id":"https://orchistra.com/#webpage","headline":"Orchistra | The control panel for people and AI agents","name":"Orchistra | The control panel for people and AI agents","description":"Bring your people, AI agents, and workflows into one clear view. Set priorities, follow progress, handle approvals, and see what happened, while keeping important decisions in human hands.","url":"https://orchistra.com/","mainEntityOfPage":"https://orchistra.com/","inLanguage":"en-GB","datePublished":"2026-06-03T00:00:00Z","dateModified":"2026-09-15T00:00:00Z","author":{"@type":"Person","name":"Tony Wood","url":"https://www.tonywood.org/"},"publisher":{"@id":"https://yqup.com/#organization"},"isPartOf":{"@id":"https://orchistra.com/#website"},"image":{"@type":"ImageObject","url":"https://orchistra.com/assets/og-image.png","width":1200,"height":627}}]}</script>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="/assets/orchistra/hero-conservatory.webp" as="image" fetchpriority="high">
+  <link rel="preload" href="/assets/orchistra/coastal-garden.webp" as="image" media="(min-width: 681px)" fetchpriority="high">
+  <link rel="preload" href="/assets/orchistra/coastal-garden-mobile.webp" as="image" media="(max-width: 680px)" fetchpriority="high">
   <link rel="preload" href="/assets/system/instrument-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/system/newsreader-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <script defer src="/static/js/matomo-loader.js"></script>
@@ -722,8 +723,8 @@
     }
 
     .orchistra-hero {
-      --sp-hero-image: url("/assets/orchistra/hero-conservatory.webp");
-      --sp-hero-mobile-image: url("/assets/orchistra/hero-conservatory-mobile.webp");
+      --sp-hero-image: url("/assets/orchistra/coastal-garden.webp");
+      --sp-hero-mobile-image: url("/assets/orchistra/coastal-garden-mobile.webp");
     }
 
     .orchistra-hero .sp-hero-inner {
@@ -915,7 +916,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background-image: url("/assets/orchistra/countryside-field.webp");
+      background-image: url("/assets/orchistra/garden-gate.webp");
       background-position: center;
       background-size: cover;
       opacity: 0.16;
@@ -1083,7 +1084,7 @@
       z-index: -1;
       background-image:
         linear-gradient(90deg, rgba(6, 18, 15, 0.92), rgba(6, 18, 15, 0.5)),
-        url("/assets/orchistra/countryside-field.webp");
+        url("/assets/orchistra/garden-gate.webp");
       background-position: center;
       background-size: cover;
     }
@@ -1218,8 +1219,8 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="/assets/orchistra/presentation.css">
-  <script src="/assets/orchistra/presentation.js" defer></script>
+  <link rel="stylesheet" href="/assets/orchistra/presentation.css?v=country-coast-1">
+  <script src="/assets/orchistra/presentation.js?v=country-coast-1" defer></script>
 </head>
 <body class="orchistra-sibling">
   <header class="sp-header">
@@ -1283,6 +1284,14 @@
       </div>
     </section>
 
+    <figure class="orchistra-garden-scene">
+      <picture>
+        <source media="(max-width: 680px)" srcset="/assets/orchistra/garden-gate-mobile.webp">
+        <img src="/assets/orchistra/garden-gate.webp" width="1536" height="1024" alt="An imagined English garden, with a sunlit path opening towards the sea." loading="lazy">
+      </picture>
+      <figcaption>Room to see the bigger picture.</figcaption>
+    </figure>
+
     <section class="sp-section orchistra-modes-section" id="modes">
       <div class="sp-section-inner">
         <div class="sp-section-heading">
@@ -1308,10 +1317,10 @@
         </div>
         <figure class="orchistra-product-figure">
           <picture class="orchistra-product-picture">
-            <source media="(max-width: 680px)" srcset="/assets/orchistra/hero-console-mobile.webp">
-            <img src="/assets/orchistra/hero-console.webp" alt="Illustrative Orchistra workspace showing company work, a human review request, and recorded evidence." loading="lazy">
+            <source media="(max-width: 680px)" srcset="/assets/orchistra/control-panel-light-mobile.webp">
+            <img src="/assets/orchistra/control-panel-light.webp" width="1536" height="1024" alt="Illustrative light-mode Orchistra concept with fictional priorities, work updates, and requests for human review." loading="lazy">
           </picture>
-          <figcaption>Illustrative Orchistra workspace</figcaption>
+          <figcaption>Illustrative product concept. Fictional demonstration data.</figcaption>
         </figure>
       </div>
     </section>

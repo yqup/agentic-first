@@ -10511,11 +10511,12 @@ ${matomoScriptTagFor(site)}  <style>
 function orchistraSiblingPageFor(site) {
   const title = site.title || "Orchistra | The control panel for people and AI agents";
   const summary = site.summary || "Bring your people, AI agents, and workflows into one clear view.";
-  const heroImage = site.hero_background_image || "/assets/orchistra/hero-conservatory.webp";
+  const heroImage = site.hero_background_image || "/assets/orchistra/coastal-garden.webp";
   const heroImageMobile = site.hero_background_image_mobile || heroImage;
-  const productImage = site.hero_product_image || "/assets/orchistra/hero-console.webp";
+  const productImage = site.hero_product_image || "/assets/orchistra/control-panel-light.webp";
   const productImageMobile = site.hero_product_image_mobile || productImage;
-  const fieldImage = site.hero_image || "/assets/orchistra/countryside-field.webp";
+  const fieldImage = site.hero_image || "/assets/orchistra/garden-gate.webp";
+  const fieldImageMobile = site.field_image_mobile || fieldImage;
   const outcomes = site.outcomes || [];
   const companyFlow = site.company_flow || [];
   const operatingModes = site.operating_modes || [];
@@ -10556,7 +10557,8 @@ function orchistraSiblingPageFor(site) {
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(summary)}">
 ${socialMetaTagsFor(site, { title, description: summary })}  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="${escapeHtml(heroImage)}" as="image" fetchpriority="high">
+  <link rel="preload" href="${escapeHtml(heroImage)}" as="image" media="(min-width: 681px)" fetchpriority="high">
+  <link rel="preload" href="${escapeHtml(heroImageMobile)}" as="image" media="(max-width: 680px)" fetchpriority="high">
   <link rel="preload" href="/assets/system/instrument-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/system/newsreader-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
 ${matomoScriptTagFor(site)}  <style>
@@ -11082,8 +11084,8 @@ ${siblingProductSharedStyles().trim()}
       }
     }
   </style>
-  <link rel="stylesheet" href="/assets/orchistra/presentation.css">
-  <script src="/assets/orchistra/presentation.js" defer></script>
+  <link rel="stylesheet" href="/assets/orchistra/presentation.css?v=country-coast-1">
+  <script src="/assets/orchistra/presentation.js?v=country-coast-1" defer></script>
 </head>
 <body class="orchistra-sibling">
   <header class="sp-header">
@@ -11147,6 +11149,14 @@ ${siblingProductSharedStyles().trim()}
       </div>
     </section>
 
+    <figure class="orchistra-garden-scene">
+      <picture>
+        <source media="(max-width: 680px)" srcset="${escapeHtml(fieldImageMobile)}">
+        <img src="${escapeHtml(fieldImage)}" width="1536" height="1024" alt="An imagined English garden, with a sunlit path opening towards the sea." loading="lazy">
+      </picture>
+      <figcaption>Room to see the bigger picture.</figcaption>
+    </figure>
+
     <section class="sp-section orchistra-modes-section" id="modes">
       <div class="sp-section-inner">
         <div class="sp-section-heading">
@@ -11173,9 +11183,9 @@ ${siblingProductSharedStyles().trim()}
         <figure class="orchistra-product-figure">
           <picture class="orchistra-product-picture">
             <source media="(max-width: 680px)" srcset="${escapeHtml(productImageMobile)}">
-            <img src="${escapeHtml(productImage)}" alt="Illustrative Orchistra workspace showing company work, a human review request, and recorded evidence." loading="lazy">
+            <img src="${escapeHtml(productImage)}" width="1536" height="1024" alt="Illustrative light-mode Orchistra concept with fictional priorities, work updates, and requests for human review." loading="lazy">
           </picture>
-          <figcaption>Illustrative Orchistra workspace</figcaption>
+          <figcaption>Illustrative product concept. Fictional demonstration data.</figcaption>
         </figure>
       </div>
     </section>

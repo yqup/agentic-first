@@ -1228,11 +1228,12 @@
     "accent": "#e05d45",
     "matomo_site_id": "14",
     "brand_mark": "O",
-    "hero_image": "/assets/orchistra/countryside-field.webp",
-    "hero_background_image": "/assets/orchistra/hero-conservatory.webp",
-    "hero_background_image_mobile": "/assets/orchistra/hero-conservatory-mobile.webp",
-    "hero_product_image": "/assets/orchistra/hero-console.webp",
-    "hero_product_image_mobile": "/assets/orchistra/hero-console-mobile.webp",
+    "hero_image": "/assets/orchistra/garden-gate.webp",
+    "field_image_mobile": "/assets/orchistra/garden-gate-mobile.webp",
+    "hero_background_image": "/assets/orchistra/coastal-garden.webp",
+    "hero_background_image_mobile": "/assets/orchistra/coastal-garden-mobile.webp",
+    "hero_product_image": "/assets/orchistra/control-panel-light.webp",
+    "hero_product_image_mobile": "/assets/orchistra/control-panel-light-mobile.webp",
     "sibling_product": {
       "name": "SNAXK",
       "url": "https://snaxk.com/",
@@ -1250,6 +1251,12 @@
         "source": "assets/orchistra/presentation.css",
         "target": "assets/orchistra/presentation.css"
       },
+      { "source": "assets/orchistra/coastal-garden.webp", "target": "assets/orchistra/coastal-garden.webp" },
+      { "source": "assets/orchistra/coastal-garden-mobile.webp", "target": "assets/orchistra/coastal-garden-mobile.webp" },
+      { "source": "assets/orchistra/garden-gate.webp", "target": "assets/orchistra/garden-gate.webp" },
+      { "source": "assets/orchistra/garden-gate-mobile.webp", "target": "assets/orchistra/garden-gate-mobile.webp" },
+      { "source": "assets/orchistra/control-panel-light.webp", "target": "assets/orchistra/control-panel-light.webp" },
+      { "source": "assets/orchistra/control-panel-light-mobile.webp", "target": "assets/orchistra/control-panel-light-mobile.webp" },
       {
         "source": "assets/orchistra/countryside-field.webp",
         "target": "assets/orchistra/countryside-field.webp"

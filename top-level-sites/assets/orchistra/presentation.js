@@ -32,5 +32,5 @@
     }
   }, { threshold: 0.08 });
   update();
-  document.querySelectorAll('.orchistra-hero, .orchistra-product-figure, .sp-section-inner').forEach(element => observer.observe(element));
+  document.querySelectorAll('.orchistra-hero, .orchistra-garden-scene, .orchistra-product-figure, .sp-section-inner').forEach(element => observer.observe(element));
 })();
