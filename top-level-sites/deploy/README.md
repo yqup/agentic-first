@@ -41,6 +41,17 @@ bash install-on-ani.sh top-level-sites-<timestamp> "$PWD/top-level-sites-<timest
 
 ## Run Through ANI Deploy Gate
 
+For the Orchistra public marketing site, this is the established
+`top-level-sites` route, not the Orchistra Gateway runtime deployment lane.
+Keep work in this bundle. Check the current release and its receipt before
+proposing a replacement route or changing host setup. The configured SSH alias
+is `top-level-sites-deploy-ani`; upload only the archive and checksum for this
+gate. Do not execute the staged installer directly.
+
+The gate was verified again for the 2026-09-15 public-site release. See
+`../docs/orchistra-green-orchestra-deployment.md` for the exact release,
+digest, previous release and independent public checks.
+
 Once the `top-level-sites` deploy gate is installed on ANI, a local machine can
 upload the archive/checksum to `/home/ani-cursor/top-level-sites-staging/`, then
 trigger the server-side gate with:
