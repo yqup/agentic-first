@@ -10511,7 +10511,7 @@ ${matomoScriptTagFor(site)}  <style>
 function orchistraSiblingPageFor(site) {
   const title = site.title || "Orchistra | The control panel for people and AI agents";
   const summary = site.summary || "Bring your people, AI agents, and workflows into one clear view.";
-  const heroImage = site.hero_background_image || "/assets/orchistra/coastal-garden.webp";
+  const heroImage = site.hero_background_image || "/assets/orchistra/country-orchestra.webp";
   const heroImageMobile = site.hero_background_image_mobile || heroImage;
   const productImage = site.hero_product_image || "/assets/orchistra/control-panel-light.webp";
   const productImageMobile = site.hero_product_image_mobile || productImage;
@@ -11084,8 +11084,8 @@ ${siblingProductSharedStyles().trim()}
       }
     }
   </style>
-  <link rel="stylesheet" href="/assets/orchistra/presentation.css?v=country-coast-1">
-  <script src="/assets/orchistra/presentation.js?v=country-coast-1" defer></script>
+  <link rel="stylesheet" href="/assets/orchistra/presentation.css?v=country-orchestra-1">
+  <script src="/assets/orchistra/presentation.js?v=country-orchestra-1" defer></script>
 </head>
 <body class="orchistra-sibling">
   <header class="sp-header">
@@ -11116,6 +11116,7 @@ ${siblingProductSharedStyles().trim()}
 
   <main>
     <section class="sp-hero orchistra-hero" aria-labelledby="orchistra-title">
+      <span class="orchistra-daylight" aria-hidden="true"></span>
       <div class="sp-hero-inner sp-reveal">
         <p class="sp-eyebrow">${escapeHtml(site.eyebrow || "Your company's control panel")}</p>
         <h1 id="orchistra-title">Orchistra</h1>
