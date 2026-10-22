@@ -75,7 +75,9 @@ for (const site of sites) {
     }
     await writeFile(
       path.join(wwwRoot, "index.html"),
-      yqupHtml.replace("<!--@yqup-ecosystem-->", () => yqupEcosystemSectionFor(site)),
+      yqupHtml
+        .replace("<!--@yqup-ecosystem-->", () => yqupEcosystemSectionFor(site))
+        .replace("<!--@yqup-agentic-first-->", () => yqupAgenticFirstSectionFor()),
       "utf8",
     );
   }
@@ -1987,6 +1989,64 @@ function hasFaviconReference(html) {
   return /rel=["'][^"']*(?:shortcut\s+)?icon[^"']*["']/i.test(html)
     || /rel=["']apple-touch-icon["']/i.test(html)
     || /\/favicon\./i.test(html);
+}
+
+// Agentic-first work harness block. agenticleader.com is the source of truth:
+// the copy below and the harness_cards / harness_links in its sites.json entry.
+// The YQUP page renders the same wording and the European links in the weave
+// styling, so editing either place keeps both sites in sync.
+function agenticFirstHarnessCopy() {
+  return {
+  eyebrow: "Work harnesses",
+  title: "Move out of chat and into the harness.",
+  lead: "A chat can produce words. A harness lets an agentic worker see the work, use tools, change files, run checks, create reports, and bring evidence back for review.",
+  linksEyebrow: "Starter harness links",
+  linksTitle: "Places to inspect the pattern.",
+  linksLead: "The important question is not which logo wins. Ask what work it can see, what tools it can use, what it can change, how it verifies, and what evidence it leaves behind.",
+  };
+}
+
+function agenticFirstHarnessSource() {
+  const source = sites.find((candidate) => candidate.domain === "agenticleader.com");
+  if (!source || !Array.isArray(source.harness_cards) || !Array.isArray(source.harness_links)) {
+    throw new Error("agenticleader.com harness_cards / harness_links are required for the YQUP agentic-first section");
+  }
+  return { cards: source.harness_cards, links: source.harness_links };
+}
+
+function yqupAgenticFirstSectionFor() {
+  const copy = agenticFirstHarnessCopy();
+  const { cards, links } = agenticFirstHarnessSource();
+  const european = links.filter((link) => /^Europe\b/.test(link.region || ""));
+  return `<section class="agentic-first" id="agentic-first" aria-labelledby="harness-title">
+  <div class="wrap">
+    <div class="eyebrow">${escapeHtml(copy.eyebrow)}</div>
+    <h2 id="harness-title">${escapeHtml(copy.title)}</h2>
+    <p class="lead">${escapeHtml(copy.lead)}</p>
+    <div class="af-grid">
+      ${cards.map((card, index) => `<article class="af-card">
+        <div class="weave-band thin" role="presentation"></div>
+        <span class="eco-num">${String(index + 1).padStart(2, "0")}.</span>
+        <h3>${escapeHtml(card.title)}</h3>
+        <p>${escapeHtml(card.body)}</p>
+      </article>`).join("\n      ")}
+    </div>
+    <div class="af-links" aria-labelledby="harness-links-title">
+      <div class="eyebrow">${escapeHtml(copy.linksEyebrow)}</div>
+      <h3 id="harness-links-title">${escapeHtml(copy.linksTitle)}</h3>
+      <p class="lead">${escapeHtml(copy.linksLead)}</p>
+      <div class="af-tools">
+        ${european.map((link) => `<a class="af-tool" href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer">
+          <span>${escapeHtml(link.region)}</span>
+          <strong>${escapeHtml(link.name)}</strong>
+          <p>${escapeHtml(link.audience)}</p>
+          <small>Open official page</small>
+        </a>`).join("\n        ")}
+      </div>
+    </div>
+    <div class="cta-row"><span>Want to work out what this means for your team? Let's talk.</span><a class="btn btn-primary" href="#book">Book a conversation</a></div>
+  </div>
+</section>`;
 }
 
 // Connected body of work for the hand-built YQUP page. Same data, wording and
@@ -9108,9 +9168,9 @@ ${matomoScriptTagFor(site)}  <style>
 
     <section class="section" id="harnesses" aria-labelledby="harness-title">
       <div class="section-inner">
-        <p class="eyebrow">Work harnesses</p>
-        <h2 id="harness-title">Move out of chat and into the harness.</h2>
-        <p class="lead">A chat can produce words. A harness lets an agentic worker see the work, use tools, change files, run checks, create reports, and bring evidence back for review.</p>
+        <p class="eyebrow">${escapeHtml(agenticFirstHarnessCopy().eyebrow)}</p>
+        <h2 id="harness-title">${escapeHtml(agenticFirstHarnessCopy().title)}</h2>
+        <p class="lead">${escapeHtml(agenticFirstHarnessCopy().lead)}</p>
         <div class="harness-grid">
           ${harnessCards.map((card, index) => `<article class="harness-card">
             <span>${String(index + 1).padStart(2, "0")}</span>
@@ -9119,9 +9179,9 @@ ${matomoScriptTagFor(site)}  <style>
           </article>`).join("\n          ")}
         </div>
         <div class="harness-links" aria-labelledby="harness-links-title">
-          <p class="eyebrow">Starter harness links</p>
-          <h3 id="harness-links-title">Places to inspect the pattern.</h3>
-          <p class="lead">The important question is not which logo wins. Ask what work it can see, what tools it can use, what it can change, how it verifies, and what evidence it leaves behind.</p>
+          <p class="eyebrow">${escapeHtml(agenticFirstHarnessCopy().linksEyebrow)}</p>
+          <h3 id="harness-links-title">${escapeHtml(agenticFirstHarnessCopy().linksTitle)}</h3>
+          <p class="lead">${escapeHtml(agenticFirstHarnessCopy().linksLead)}</p>
           <div class="resources-grid">
             ${harnessLinks.map((link) => `<a class="resource" href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer">
               <span>${escapeHtml(link.region)}</span>
