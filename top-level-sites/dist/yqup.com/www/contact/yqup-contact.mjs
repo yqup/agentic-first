@@ -29,9 +29,19 @@ const RETENTION_DAYS = Math.min(730, Math.max(1, Number(env.YQUP_CONTACT_RETENTI
 const DAY_MS = 864e5;
 if (!/^[^@\s<>]+@yqup\.com$/i.test(TO)) throw new Error("YQUP_CONTACT_EMAIL_TO must be a yqup.com mailbox");
 
-// Ready only when the lane gave us somewhere to store messages and a mail route.
+// Same mail route and fallbacks as the CAO contact backend (account-contact.mjs
+// contactEmailConfig): host smtp.hostinger.com, port 465, secure "" (implicit TLS
+// on 465, STARTTLS on 587). The lane writes all three explicitly anyway.
+const v = (name) => String(env[name] || "").trim();
+const SMTP = {
+  host: v("YQUP_CONTACT_SMTP_HOST") || "smtp.hostinger.com",
+  port: Number(v("YQUP_CONTACT_SMTP_PORT") || 465),
+  secure: v("YQUP_CONTACT_SMTP_SECURE") || "",
+};
+
+// Ready only when the lane gave us somewhere to store messages and a mail login.
 export function contactReady() {
-  if (!env.YQUP_CONTACT_SMTP_PASSWORD || !env.YQUP_CONTACT_SMTP_HOST || !env.YQUP_CONTACT_SMTP_USER) return false;
+  if (!v("YQUP_CONTACT_SMTP_PASSWORD") || !v("YQUP_CONTACT_SMTP_USER")) return false;
   try { mkdirSync(MESSAGES_DIR, { recursive: true, mode: 0o700 }); accessSync(MESSAGES_DIR, constants.W_OK); return true; } catch { return false; }
 }
 
@@ -178,8 +188,8 @@ export async function handleYqupContact(req, res) {
   let status = "pending";
   let error = "";
   try {
-    await sendSmtpMessage({ host: env.YQUP_CONTACT_SMTP_HOST, port: Number(env.YQUP_CONTACT_SMTP_PORT || 465),
-      secure: env.YQUP_CONTACT_SMTP_SECURE, user: env.YQUP_CONTACT_SMTP_USER, password: env.YQUP_CONTACT_SMTP_PASSWORD,
+    await sendSmtpMessage({ host: SMTP.host, port: SMTP.port,
+      secure: SMTP.secure, user: env.YQUP_CONTACT_SMTP_USER, password: env.YQUP_CONTACT_SMTP_PASSWORD,
       from, to: TO, raw: headers.join("\r\n") + "\r\n\r\n" + lines.join("\r\n") + "\r\n" });
     status = "delivered";
   } catch (e) { status = "failed_pending_replay"; error = String((e && e.message) || "smtp_failed").slice(0, 80); }
