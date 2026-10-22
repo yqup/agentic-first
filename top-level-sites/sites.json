@@ -12,6 +12,8 @@
     "theme": "#111111",
     "accent": "#6f7f67",
     "matomo_site_id": "5",
+    "page_source": "pages/yqup/index.html",
+    "local_pages": [{ "path": "/privacy/", "source": "pages/yqup/privacy.html" }],
     "analytics_goal": {
       "site_goal": "Create qualified consulting conversations with CEOs, boards, and operators who need agent-readable system sites, human-visible governance surfaces, and clarity around AI and agentic work.",
       "primary_conversion": "qualified_consulting_enquiry",
@@ -68,6 +70,42 @@
       {
         "source": "assets/orchistra/newsreader-latin-variable.woff2",
         "target": "assets/yqup/newsreader-latin-variable.woff2"
+      },
+      {
+        "source": "assets/yqup/fonts/cormorant-garamond-italic-500.woff2",
+        "target": "assets/yqup/fonts/cormorant-garamond-italic-500.woff2"
+      },
+      {
+        "source": "assets/yqup/fonts/cormorant-garamond-normal-500.woff2",
+        "target": "assets/yqup/fonts/cormorant-garamond-normal-500.woff2"
+      },
+      {
+        "source": "assets/yqup/fonts/cormorant-garamond-normal-600.woff2",
+        "target": "assets/yqup/fonts/cormorant-garamond-normal-600.woff2"
+      },
+      {
+        "source": "assets/yqup/fonts/cormorant-garamond-normal-700.woff2",
+        "target": "assets/yqup/fonts/cormorant-garamond-normal-700.woff2"
+      },
+      {
+        "source": "assets/yqup/fonts/fonts.css",
+        "target": "assets/yqup/fonts/fonts.css"
+      },
+      {
+        "source": "assets/yqup/fonts/source-sans-3-normal-400.woff2",
+        "target": "assets/yqup/fonts/source-sans-3-normal-400.woff2"
+      },
+      {
+        "source": "assets/yqup/fonts/source-sans-3-normal-500.woff2",
+        "target": "assets/yqup/fonts/source-sans-3-normal-500.woff2"
+      },
+      {
+        "source": "assets/yqup/fonts/source-sans-3-normal-600.woff2",
+        "target": "assets/yqup/fonts/source-sans-3-normal-600.woff2"
+      },
+      {
+        "source": "assets/yqup/fonts/source-sans-3-normal-700.woff2",
+        "target": "assets/yqup/fonts/source-sans-3-normal-700.woff2"
       }
     ],
     "primary_action_label": "Discuss advisory",

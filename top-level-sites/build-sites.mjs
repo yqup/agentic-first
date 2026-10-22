@@ -67,7 +67,26 @@ for (const site of sites) {
   await copySiteAssets(site, wwwRoot);
   await generateSocialPreviewImage(site, wwwRoot);
   if (site.mode === "yqup") {
-    await writeFile(path.join(wwwRoot, "index.html"), yqupPageFor(site), "utf8");
+    const yqupHtml = site.page_source
+      ? await readFile(path.join(__dirname, site.page_source), "utf8")
+      : yqupPageFor(site);
+    if (site.page_source && !yqupHtml.includes("<!--@yqup-ecosystem-->")) {
+      throw new Error("yqup page_source is missing the <!--@yqup-ecosystem--> placeholder");
+    }
+    await writeFile(
+      path.join(wwwRoot, "index.html"),
+      yqupHtml.replace("<!--@yqup-ecosystem-->", () => yqupEcosystemSectionFor(site)),
+      "utf8",
+    );
+  }
+  for (const localPage of site.local_pages || []) {
+    const localPageRoot = path.join(wwwRoot, localPage.path.replace(/^\/+|\/+$/g, ""));
+    await mkdir(localPageRoot, { recursive: true });
+    await writeFile(
+      path.join(localPageRoot, "index.html"),
+      await readFile(path.join(__dirname, localPage.source), "utf8"),
+      "utf8",
+    );
   }
   if (site.mode === "holding") {
     const holdingPage = site.holding_page || {};
@@ -947,6 +966,7 @@ function nodeServerFor(site) {
     redirectWwwToApex: Boolean(site.redirect_www_to_apex),
   };
   if (site.mode === "cao") serverConfig.forAgentsPage = true;
+  if ((site.local_pages || []).length) serverConfig.localPages = site.local_pages.map((page) => page.path);
   if (site.briefing?.mailerlite) {
     serverConfig.mailerlite = {
       signupEndpoint: site.briefing.mailerlite.endpoint || "/api/briefing-signup",
@@ -963,6 +983,13 @@ function nodeServerFor(site) {
   const forAgentsRouteBlock = site.mode === "cao" ? `
   if (pathname === "/for-agents" || pathname === "/for-agents/") {
     await serveLocalFile(req, res, "/for-agents/index.html", "no-store");
+    return;
+  }
+` : "";
+  const localPagesRouteBlock = serverConfig.localPages ? `
+  if (config.localPages.includes(pathname) || config.localPages.includes(pathname + "/")) {
+    const localPagePath = pathname.endsWith("/") ? pathname : pathname + "/";
+    await serveLocalFile(req, res, localPagePath + "index.html", "no-store");
     return;
   }
 ` : "";
@@ -1208,7 +1235,7 @@ async function routeRequest(req, res) {
     redirectToApex(req, res, url);
     return;
   }
-${mailerLiteRouteBlock}${forAgentsRouteBlock}
+${mailerLiteRouteBlock}${forAgentsRouteBlock}${localPagesRouteBlock}
   if (isLocalStaticPath(pathname)) {
     const served = await serveLocalFile(req, res, pathname);
     if (!served) notFound(res);
@@ -1911,6 +1938,40 @@ function hasFaviconReference(html) {
   return /rel=["'][^"']*(?:shortcut\s+)?icon[^"']*["']/i.test(html)
     || /rel=["']apple-touch-icon["']/i.test(html)
     || /\/favicon\./i.test(html);
+}
+
+// Connected body of work for the hand-built YQUP page. Same data, wording and
+// tracked links as the ecosystem band in yqupPageFor(), in the weave styling.
+function yqupEcosystemSectionFor(site) {
+  const featured = site.ecosystem_featured || [];
+  const secondary = site.ecosystem_secondary || [];
+  const marks = ["TW", "CAO", "O", "S", "SAS"];
+  return `<section class="ecosystem" id="ecosystem" aria-labelledby="ecosystem-title">
+  <div class="wrap">
+    <div class="eyebrow">YQUP world</div>
+    <h2 id="ecosystem-title">A connected body of work.</h2>
+    <p class="lead">Each YQUP site explores one part of making agentic work useful, governed and visible.</p>
+    <div class="eco-grid">
+      ${featured.map((item, index) => {
+        const href = trackedOutboundUrlFor(site, item.url, item.content, item.campaign) || item.url;
+        const mark = marks[index] || item.name.slice(0, 2).toUpperCase();
+        return `<article class="eco-item">
+        <div class="weave-band thin" role="presentation"></div>
+        <span class="eco-num">${String(index + 1).padStart(2, "0")}.</span>
+        <div class="eco-mark" aria-hidden="true">${escapeHtml(mark)}</div>
+        <h3><a href="${escapeHtml(href)}"${outboundAttrsFor(site, item.content, "source_to_yqup_ecosystem", item.campaign)}>${escapeHtml(item.name)}</a></h3>
+        <p>${escapeHtml(item.label)}</p>
+      </article>`;
+      }).join("\n      ")}
+    </div>
+    <nav class="eco-directory" aria-label="Additional YQUP sites">
+      ${secondary.map((item) => {
+        const href = trackedOutboundUrlFor(site, item.url, item.content, item.campaign) || item.url;
+        return `<a href="${escapeHtml(href)}"${outboundAttrsFor(site, item.content, "source_to_yqup_directory", item.campaign)}>${escapeHtml(item.name)}</a>`;
+      }).join("\n      ")}
+    </nav>
+  </div>
+</section>`;
 }
 
 function yqupPageFor(site) {

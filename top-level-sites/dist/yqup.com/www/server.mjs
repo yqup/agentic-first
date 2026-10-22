@@ -13,7 +13,10 @@ const config = {
   "analyticsTag": "<script defer src=\"/static/js/matomo-loader.js\"></script>",
   "faviconTag": "<link rel=\"icon\" href=\"/favicon.svg\" type=\"image/svg+xml\">",
   "hostHoldingPages": [],
-  "redirectWwwToApex": false
+  "redirectWwwToApex": false,
+  "localPages": [
+    "/privacy/"
+  ]
 };
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || 8080);
@@ -60,6 +63,12 @@ async function routeRequest(req, res) {
 
   if (config.redirectWwwToApex && requestHost === "www." + hostOnly(config.domain)) {
     redirectToApex(req, res, url);
+    return;
+  }
+
+  if (config.localPages.includes(pathname) || config.localPages.includes(pathname + "/")) {
+    const localPagePath = pathname.endsWith("/") ? pathname : pathname + "/";
+    await serveLocalFile(req, res, localPagePath + "index.html", "no-store");
     return;
   }
 

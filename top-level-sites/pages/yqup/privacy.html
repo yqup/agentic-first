@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<!-- Draft, pending solicitor review. Not yet approved for publication. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy notice | YQUP</title>
+  <meta name="description" content="How YQUP LTD uses the details you send through the yqup.com contact form.">
+  <link rel="canonical" href="https://yqup.com/privacy/">
+  <link rel="alternate" type="application/atom+xml" title="YQUP updates" href="https://yqup.com/feed.xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#111111">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script defer src="/static/js/matomo-loader.js"></script>
+<link rel="stylesheet" href="/assets/yqup/fonts/fonts.css">
+<style>
+:root{
+  --oat:#F2ECE0; --oat-2:#EAE2D2; --wool:#F8F4EC;
+  --slate:#2E3A46; --slate-soft:#4F5A65;
+  --moss:#4E5E2E; --moss-dark:#3D4A23;
+  --madder:#8C2F2B;
+  --heather:#8C857A; --heather-light:#CFC6B6; --brown:#6E5B47;
+  --serif:"Cormorant Garamond", "EB Garamond", Georgia, serif;
+  --sans:"Source Sans 3", "Source Sans Pro", Inter, system-ui, sans-serif;
+  --max:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--oat);color:var(--slate);font-family:var(--sans);font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--moss);text-underline-offset:3px}
+a:hover{color:var(--moss-dark)}
+h1,h2,h3{font-family:var(--serif);font-weight:600;color:var(--slate);line-height:1.12;margin:0 0 .5em}
+h1{font-size:clamp(2.6rem,5.6vw,4.6rem);letter-spacing:-.01em}
+h2{font-size:clamp(2rem,3.4vw,2.9rem)}
+h3{font-size:1.75rem}
+p{margin:0 0 1em}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 32px}
+.skip{position:absolute;left:-999px}
+.skip:focus{left:16px;top:16px;background:#fff;padding:8px 12px;z-index:100}
+
+/* placeholder tags */
+.ph{display:inline-block;font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.02em;line-height:1.3;color:var(--madder);border:1.5px dashed var(--madder);border-radius:4px;padding:2px 7px;background:rgba(255,255,255,.55);vertical-align:middle;font-style:normal;text-transform:none}
+.ph-block{display:flex;align-items:center;justify-content:center;text-align:center}
+
+/* review banner */
+.review{background:var(--slate);color:#E9E3D6;font-size:.8rem;text-align:center;padding:6px 16px;letter-spacing:.03em}
+
+/* weave textures */
+.weave-band{height:16px;border:0;margin:0;
+  background:
+   repeating-linear-gradient(90deg, rgba(140,47,43,.0) 0 6px, rgba(140,47,43,.55) 6px 8px, rgba(140,47,43,0) 8px 16px),
+   repeating-linear-gradient(90deg, #8C857A 0 8px, #B9AF9F 8px 16px),
+   #B9AF9F;
+  background-size:auto;
+  -webkit-mask: repeating-linear-gradient(0deg,#000 0 3px, rgba(0,0,0,.72) 3px 4px);
+          mask: repeating-linear-gradient(0deg,#000 0 3px, rgba(0,0,0,.72) 3px 4px);
+}
+.weave-band.thin{height:8px}
+.tweed{
+  background-color:#CBBFAA;
+  background-image:
+   repeating-linear-gradient(45deg, rgba(46,58,70,.10) 0 2px, transparent 2px 6px),
+   repeating-linear-gradient(-45deg, rgba(110,91,71,.14) 0 2px, transparent 2px 7px),
+   repeating-linear-gradient(0deg, rgba(255,255,255,.12) 0 1px, transparent 1px 4px),
+   repeating-linear-gradient(90deg, rgba(140,47,43,.10) 0 1px, transparent 1px 24px);
+}
+
+/* header */
+header.site{position:sticky;top:0;z-index:50;background:rgba(242,236,224,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--heather-light)}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:24px;height:84px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--slate)}
+.brand-logo{width:100px;height:auto;display:block}
+.footer-logo{width:108px;height:auto;display:block}
+nav.main{display:flex;align-items:center;gap:30px}
+nav.main a.nl{color:var(--slate-soft);text-decoration:none;font-size:.95rem;font-weight:500}
+nav.main a.nl:hover{color:var(--moss)}
+
+/* buttons */
+.btn{display:inline-block;font-family:var(--sans);font-weight:600;font-size:1rem;text-decoration:none;border-radius:999px;padding:14px 28px;transition:background .15s, color .15s;white-space:nowrap}
+.btn-primary{background:var(--moss);color:#fff;box-shadow:0 2px 0 var(--moss-dark)}
+.btn-primary:hover{background:var(--moss-dark);color:#fff}
+.btn-sm{padding:10px 20px;font-size:.95rem}
+.btn-lg{padding:17px 34px;font-size:1.08rem}
+.light-links{font-size:.98rem;color:var(--slate-soft)}
+.light-links a{font-weight:600}
+.light-links .sep{margin:0 10px;color:var(--heather)}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:8px}
+
+/* thread motif */
+main{position:relative}
+.threaded{position:relative}
+.thread{position:absolute;left:max(16px, calc((100vw - var(--max))/2 - 18px));top:0;bottom:0;width:3px;pointer-events:none;
+  background:repeating-linear-gradient(180deg,var(--madder) 0 22px, transparent 22px 30px);opacity:.55}
+.thread{z-index:2}
+.knot{position:absolute;left:-5px;bottom:-6px;width:13px;height:13px;border-radius:50%;background:var(--madder)}
+
+section{padding:104px 0}
+.eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--brown);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:28px;height:2px;background:var(--madder)}
+.lead{font-size:1.25rem;color:var(--slate-soft);max-width:40em}
+.narrow{max-width:760px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:96px 0 112px}
+.hero .bgmark{position:absolute;right:-60px;top:50%;transform:translateY(-50%);width:520px;height:520px;opacity:.10}
+.hero-inner{position:relative;max-width:780px}
+.hero h1 em{font-style:italic;color:var(--moss)}
+.hero .lead{margin:22px 0 34px}
+.hero .route{margin-top:14px}
+
+/* problem */
+.problem{background:var(--wool)}
+.problem .grid{display:grid;grid-template-columns:5fr 7fr;gap:64px;align-items:start}
+.problem .q{font-family:var(--serif);font-size:1.6rem;line-height:1.35;color:var(--slate);border-left:3px solid var(--madder);padding-left:22px;margin:8px 0 26px}
+
+/* cards */
+.cards-intro{max-width:640px;margin-bottom:48px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.card{background:var(--wool);border:1px solid var(--heather-light);border-radius:6px;padding:0 30px 32px;display:flex;flex-direction:column;position:relative}
+.card .strip{height:10px;margin:0 -30px 30px;border-radius:6px 6px 0 0}
+.card:nth-child(1) .strip{background:repeating-linear-gradient(90deg,var(--madder) 0 6px,#A9524C 6px 8px)}
+.card:nth-child(2) .strip{background:repeating-linear-gradient(90deg,var(--moss) 0 6px,#6D7C47 6px 8px)}
+.card:nth-child(3) .strip{background:repeating-linear-gradient(90deg,var(--brown) 0 6px,#8C7860 6px 8px)}
+.card h3{font-size:1.65rem}
+.card p{font-size:1rem;color:var(--slate-soft)}
+.card .price{font-weight:600;color:var(--slate);font-size:.98rem;margin-top:auto;padding-top:8px}
+.card .btn{align-self:flex-start;margin-top:14px}
+.card.first{background:#EFE8D9}
+
+/* workshop lines */
+.workshop{padding:80px 0;background:var(--oat-2)}
+.wl{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:28px 0 30px}
+.wl div{background:var(--wool);border-radius:6px;padding:26px 28px;border:1px solid var(--heather-light)}
+.wl .k{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brown)}
+.wl p{font-family:var(--serif);font-size:1.5rem;line-height:1.3;margin:6px 0 0}
+
+/* who */
+.who .grid{display:grid;grid-template-columns:7fr 5fr;gap:64px;align-items:center}
+.who .big{font-family:var(--serif);font-size:clamp(1.7rem,2.6vw,2.2rem);line-height:1.3;margin-bottom:20px}
+.who aside{background:var(--wool);border:1px solid var(--heather-light);border-radius:6px;padding:28px 30px}
+.who aside h3{font-size:1.3rem;margin-bottom:.3em}
+.who aside p{font-size:1rem;color:var(--slate-soft);margin:0}
+
+/* how I work + bio */
+.how{background:var(--wool)}
+.method{font-family:var(--serif);font-size:clamp(1.9rem,3.2vw,2.75rem);line-height:1.22;font-weight:600;max-width:900px;margin:0 0 12px}
+.how .grid{display:grid;grid-template-columns:5fr 7fr;gap:64px;margin-top:64px;align-items:start}
+.photo{aspect-ratio:4/5;border-radius:6px;position:relative;border:1px solid var(--heather-light)}
+.photo .photo-mark{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:180px;height:180px;opacity:.18}
+.photo .ph-unused{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:.85rem;padding:6px 12px;background:rgba(248,244,236,.9)}
+.bio h3{font-size:2rem}
+.bio p{color:var(--slate-soft)}
+.roles{list-style:none;padding:0;margin:0 0 1.2em}
+.roles li{padding:10px 0 10px 22px;border-top:1px solid var(--heather-light);position:relative;font-size:1rem}
+.roles li:last-child{border-bottom:1px solid var(--heather-light)}
+.roles li::before{content:"";position:absolute;left:0;top:20px;width:10px;height:2px;background:var(--madder)}
+
+/* thinking */
+.pieces{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin:34px 0 34px}
+.piece{border-top:3px solid var(--slate);padding-top:18px}
+.piece h3{font-size:1.45rem;margin-bottom:.35em}
+.piece h3 a{color:var(--slate);text-decoration:none}
+.piece h3 a:hover{color:var(--moss)}
+.piece p{font-size:1rem;color:var(--slate-soft)}
+
+/* briefing */
+.briefing{padding:104px 0}
+.bcard{border-radius:8px;overflow:hidden;border:1px solid #B9AF9F;background:var(--wool);display:grid;grid-template-columns:1fr}
+.bcard .head{padding:44px 52px 36px;position:relative}
+.bcard .head h2{margin-bottom:.25em}
+.bcard .body{padding:0 52px 46px;display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.bcard ul{padding-left:1.1em;margin:0 0 1em}
+.bcard li{margin-bottom:.55em;font-size:1rem;color:var(--slate-soft)}
+.bcard h3{font-size:1.35rem;margin-bottom:.4em}
+.bcard .def{font-size:1rem;color:var(--slate-soft)}
+.guard{font-size:.92rem;color:var(--brown);font-style:italic;border-left:2px solid var(--heather);padding-left:14px}
+.btn-outline{border:2px solid var(--moss);color:var(--moss);background:transparent;padding:12px 26px}
+.btn-outline:hover{background:var(--moss);color:#fff}
+
+/* contact */
+.contact{background:var(--slate);color:#E9E3D6;position:relative;overflow:hidden;text-align:center;padding:120px 0}
+.contact h2{color:#F8F4EC;font-size:clamp(2.3rem,4.2vw,3.5rem)}
+.contact p{color:#D6CFC1;max-width:620px;margin:0 auto 1em;font-size:1.15rem}
+.contact .btn-primary{background:#6F8240;box-shadow:0 2px 0 #4E5E2E;margin:14px 0 18px}
+.contact .btn-primary:hover{background:#5E6F34}
+.contact a{color:#E8DFC9}
+.contact .ph{color:#F0B4AE;border-color:#F0B4AE;background:rgba(0,0,0,.15)}
+.contact .light-links{color:#C9C1B2}
+.contact .bgmark{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;height:760px;opacity:.035}
+.contact .inner{position:relative}
+
+/* footer */
+footer{background:#27313B;color:#B9B2A5;font-size:.9rem;padding:0 0 48px}
+footer .tw{height:28px;opacity:.85}
+footer .cols{display:grid;grid-template-columns:5fr 4fr 4fr;gap:48px;padding-top:48px}
+footer h4{font-family:var(--sans);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:#E2DACB;margin:0 0 12px}
+footer a{color:#D9D0BE}
+footer p{margin:0 0 .8em}
+footer .ph{color:#F0B4AE;border-color:#F0B4AE;background:transparent;font-size:.68rem}
+footer .sis{line-height:2}
+footer .cols>div{min-width:0}
+footer .sis span{display:inline}
+footer .sis span:not(:last-child)::after{content:" · ";color:#6F6A61}
+.policies a{margin-right:14px}
+
+/* responsive */
+@media (max-width:980px){
+  nav.main a.nl{display:none}
+  .cards,.pieces{grid-template-columns:1fr}
+  .problem .grid,.who .grid,.how .grid{grid-template-columns:1fr;gap:36px}
+  .bcard .body{grid-template-columns:1fr;gap:8px}
+  footer .cols{grid-template-columns:1fr;gap:28px}
+  .thread{display:none}
+  .photo{max-width:420px;aspect-ratio:4/3}
+}
+@media (max-width:600px){
+  body{font-size:17px}
+  .wrap{padding:0 20px}
+  section{padding:68px 0}
+  .hero{padding:56px 0 72px}
+  .hero .bgmark{width:260px;height:260px;right:-90px;top:auto;bottom:-70px;transform:none;opacity:.08}
+  .hdr{height:64px}
+  .brand-logo{width:82px}
+  .btn-sm{padding:9px 15px;font-size:.88rem}
+  .wl{grid-template-columns:1fr}
+  .bcard .head{padding:32px 24px 24px}
+  .bcard .body{padding:0 24px 32px}
+  .light-links .sep{margin:0 6px}
+  .btn-lg{padding:15px 26px}
+  .contact{padding:80px 0}
+}
+
+/* contact form */
+#book{scroll-margin-top:84px}
+.contact{text-align:left}
+.contact .cgrid{display:grid;grid-template-columns:5fr 7fr;gap:64px;align-items:start}
+.contact .intro p{margin:0 0 1em;max-width:none}
+.contact .intro .note{font-size:1rem;color:#C9C1B2;border-left:2px solid #A9524C;padding-left:14px;margin-top:22px}
+.fcard{background:var(--wool);color:var(--slate);border-radius:8px;overflow:hidden;border:1px solid #B9AF9F;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.fcard .fbody{padding:34px 38px 36px}
+.fcard h3{font-size:1.7rem;margin-bottom:.2em}
+.fcard .sub{font-size:.98rem;color:var(--slate-soft);margin-bottom:22px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field{margin-bottom:18px}
+.field label,.field legend{display:block;font-size:.92rem;font-weight:600;color:var(--slate);margin-bottom:6px;padding:0}
+.field .opt{font-weight:400;color:var(--slate-soft)}
+.field input[type=text],.field input[type=email],.field input[type=tel],.field textarea{width:100%;font:inherit;font-size:1rem;color:var(--slate);background:#fff;border:1.5px solid #B9AF9F;border-radius:6px;padding:11px 13px}
+.field textarea{min-height:128px;resize:vertical;line-height:1.5}
+.field input:focus,.field textarea:focus{outline:3px solid rgba(78,94,46,.35);outline-offset:1px;border-color:var(--moss)}
+.field .hint{display:flex;justify-content:space-between;gap:12px;font-size:.85rem;color:var(--slate-soft);margin-top:5px}
+.field .count{white-space:nowrap;flex:none}
+.field .count.near{color:var(--madder);font-weight:600}
+fieldset.field{border:0;margin:0 0 18px;padding:0;min-width:0}
+.choices{display:flex;flex-wrap:wrap;gap:10px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;width:1px;height:1px}
+.choice span{display:inline-block;border:1.5px solid #B9AF9F;border-radius:999px;padding:8px 18px;font-size:.96rem;background:#fff;cursor:pointer}
+.choice input:checked+span{background:var(--moss);border-color:var(--moss);color:#fff}
+.choice input:focus-visible+span{outline:3px solid rgba(78,94,46,.45);outline-offset:2px}
+.tick{display:flex;gap:10px;align-items:flex-start;font-size:.95rem;color:var(--slate-soft);margin:4px 0 22px}
+.tick input{width:20px;height:20px;margin-top:3px;accent-color:var(--moss);flex:none}
+.tick a{color:var(--moss)}
+.hp{position:absolute!important;left:-10000px!important;width:1px;height:1px;overflow:hidden}
+.fcard .btn-primary{border:0;cursor:pointer;background:var(--moss);box-shadow:0 2px 0 var(--moss-dark);margin:0}
+.fcard .btn-primary:hover{background:var(--moss-dark)}
+.fcard .ph{color:var(--madder);border-color:var(--madder);background:rgba(255,255,255,.55)}
+.fcard a{color:var(--moss);font-weight:600}
+.fcard .small{font-size:.85rem;color:var(--slate-soft);margin:16px 0 0}
+.thanks{padding:46px 38px 50px;text-align:center}
+.thanks h3{font-size:2rem}
+.thanks p{color:var(--slate-soft);max-width:30em;margin:0 auto 1em}
+.thanks svg{width:54px;height:54px;margin-bottom:14px}
+.contact .light-links{margin-top:26px}
+@media (max-width:980px){.contact .cgrid{grid-template-columns:1fr;gap:36px}}
+@media (max-width:600px){.frow{grid-template-columns:1fr;gap:0}.fcard .fbody,.thanks{padding:26px 22px 28px}#book{scroll-margin-top:64px}}
+</style>
+<style>
+.privacy-page{padding:150px 0 90px}
+.narrow-page{max-width:780px}
+.privacy-page h1{font-size:clamp(2.2rem,4.4vw,3.4rem)}
+.privacy-page h2{font-size:1.75rem;margin-top:1.6em}
+.privacy-page ul{padding-left:1.2em;margin:0 0 1em}
+.privacy-page li{margin-bottom:.5em}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="weave" viewBox="0 0 36 36">
+      <!-- vertical threads (madder) -->
+      <rect x="5" y="2" width="6" height="32" rx="1" fill="#8C2F2B"/>
+      <rect x="15" y="2" width="6" height="32" rx="1" fill="#8C2F2B"/>
+      <rect x="25" y="2" width="6" height="32" rx="1" fill="#8C2F2B"/>
+      <!-- horizontal threads (moss) -->
+      <rect x="2" y="5" width="32" height="6" rx="1" fill="#4E5E2E"/>
+      <rect x="2" y="15" width="32" height="6" rx="1" fill="#4E5E2E"/>
+      <rect x="2" y="25" width="32" height="6" rx="1" fill="#4E5E2E"/>
+      <!-- vertical over at alternating crossings -->
+      <rect x="5" y="4" width="6" height="8" fill="#8C2F2B"/>
+      <rect x="25" y="4" width="6" height="8" fill="#8C2F2B"/>
+      <rect x="15" y="14" width="6" height="8" fill="#8C2F2B"/>
+      <rect x="5" y="24" width="6" height="8" fill="#8C2F2B"/>
+      <rect x="25" y="24" width="6" height="8" fill="#8C2F2B"/>
+    </symbol>
+  </defs>
+</svg>
+<header class="site">
+  <div class="wrap hdr">
+    <a class="brand" href="/#top" aria-label="YQUP home">
+      <img class="brand-logo" src="/assets/yqup-logo.svg" alt="YQUP">
+    </a>
+    <nav class="main" aria-label="Main">
+      <a class="nl" href="/#ways">Ways to work</a>
+      <a class="nl" href="/#how">How I work</a>
+      <a class="nl" href="/#briefing">The briefing</a>
+      <a class="btn btn-primary btn-sm" href="/#book">Book a conversation</a>
+    </nav>
+  </div>
+</header>
+<main id="content">
+<section class="privacy-page">
+  <div class="wrap narrow-page">
+    <div class="eyebrow">Privacy</div>
+    <h1>Privacy notice for the contact form</h1>
+    <p class="lead">This notice explains what happens to the details you send through the "Book a conversation" form on yqup.com, and when you email us about an enquiry.</p>
+
+    <h2>Who we are</h2>
+    <p>YQUP LTD ("YQUP", "we") is the controller of your personal data. YQUP LTD is registered in England and Wales, company number 04811754. To contact us about your data, email <a href="mailto:amy@yqup.com">amy@yqup.com</a> (Tony Wood's office).</p>
+
+    <h2>What we collect</h2>
+    <ul>
+      <li>What you type into the form: your name, work email, organisation, role, your question, how you would like us to contact you, and your phone number if you choose a call.</li>
+      <li>A one-way coded value made from your internet (IP) address, used only to stop spam and repeated sending. We do not store the address itself with your message.</li>
+    </ul>
+
+    <h2>Why we use it, and our lawful basis</h2>
+    <p>We use your details to read your enquiry, reply to it and, if you want, arrange a conversation. Our lawful basis is legitimate interests (UK GDPR Article 6(1)(f)): replying to people who contact us about our work. You can object at any time (see Your rights).</p>
+    <p>We do not use form details for marketing and we do not add you to a mailing list. If you want the Chief Agentic Officer Briefing, you sign up for it separately.</p>
+
+    <h2>Safety checks and AI tools</h2>
+    <p>Each message is checked automatically for spam and harmful content before anyone reads it. A message that looks harmful is held for a person to look at. We may use AI assistants to help sort messages and draft replies, under our instructions. A person checks every reply before it is sent, and no decision with legal or similarly significant effects is made about you automatically.</p>
+
+    <h2>Who sees it</h2>
+    <p>Tony Wood and his office at YQUP. We do not sell your data. These service providers handle it for us, under contract and only on our instructions:</p>
+    <ul>
+      <li><strong>Hostinger</strong>: hosts the website server where your message is received and stored.</li>
+      <li><strong>Google Workspace</strong>: our email. Your message is delivered to our mailbox and any reply is sent from it.</li>
+      <li><strong>Matomo Cloud</strong>: website visit statistics. It runs without cookies and stores its data in the EU. It does not receive what you type into the form.</li>
+    </ul>
+    <p>Where a provider handles data outside the UK, we rely on UK adequacy regulations or approved contract terms for the transfer.</p>
+
+    <h2>How long we keep it</h2>
+    <p>Up to 24 months from our last contact with you, then we delete it. If you become a client, the records of that work are kept under our client terms instead.</p>
+
+    <h2>Your rights</h2>
+    <p>You can ask to see the data we hold about you, have it corrected or deleted, restrict how we use it, or object to our using it. Email <a href="mailto:amy@yqup.com">amy@yqup.com</a>. We reply within one month.</p>
+    <p>If you are unhappy with how we handle your data, please tell us first. You also have the right to complain to the Information Commissioner's Office: <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk/make-a-complaint</a>, telephone 0303 123 1113.</p>
+
+    <h2>Changes</h2>
+    <p>We will update this page if anything changes. Last updated 22 October 2026.</p>
+    <p><a class="btn btn-primary" href="/">Back to the homepage</a></p>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="weave-band tw" role="presentation"></div>
+  <div class="wrap cols">
+    <div>
+      <a class="brand" href="/" style="margin-bottom:18px"><img class="footer-logo" src="/assets/yqup-logo.svg" alt="YQUP"></a>
+      <p>YQUP Ltd. Registered in England and Wales, company number 04811754.</p>
+      <p>London · Copyright (c) 2026 YQUP Ltd</p>
+      <p class="policies"><a href="/privacy/">Privacy</a><a href="/#book">Contact</a></p>
+    </div>
+    <div>
+      <h4>For agents</h4>
+      <p><a href="/llms.txt">llms.txt</a><br><a href="/.well-known/agentic-profile.json">agentic profile</a></p>
+      <h4 style="margin-top:22px">Stay in touch</h4>
+      <p><a href="https://www.linkedin.com/in/tonywood">Connect on LinkedIn</a><br><a href="https://chiefagenticofficer.com/">Get the briefing</a></p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
