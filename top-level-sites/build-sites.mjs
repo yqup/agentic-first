@@ -88,6 +88,15 @@ for (const site of sites) {
       "utf8",
     );
   }
+  if (site.contact_form) {
+    // Server-side form handler, loaded lazily by server.mjs. Only the yqup.com
+    // standalone lane supplies the settings and storage it needs.
+    const contactRoot = path.join(wwwRoot, "contact");
+    await mkdir(contactRoot, { recursive: true });
+    for (const file of site.contact_form.files) {
+      await copyFile(path.join(__dirname, site.contact_form.source_dir, file), path.join(contactRoot, file));
+    }
+  }
   if (site.mode === "holding") {
     const holdingPage = site.holding_page || {};
     let html;
@@ -967,6 +976,7 @@ function nodeServerFor(site) {
   };
   if (site.mode === "cao") serverConfig.forAgentsPage = true;
   if ((site.local_pages || []).length) serverConfig.localPages = site.local_pages.map((page) => page.path);
+  if (site.contact_form) serverConfig.contactForm = { module: "./contact/" + site.contact_form.module };
   if (site.briefing?.mailerlite) {
     serverConfig.mailerlite = {
       signupEndpoint: site.briefing.mailerlite.endpoint || "/api/briefing-signup",
@@ -985,6 +995,45 @@ function nodeServerFor(site) {
     await serveLocalFile(req, res, "/for-agents/index.html", "no-store");
     return;
   }
+` : "";
+  const contactRouteBlock = serverConfig.contactForm ? `
+  if (pathname === "/api/contact/token" || pathname === "/api/contact") {
+    await handleContactRoute(req, res, pathname);
+    return;
+  }
+` : "";
+  const contactHandlerBlock = serverConfig.contactForm ? `
+let contactModulePromise = null;
+function loadContactModule() {
+  if (!contactModulePromise) {
+    contactModulePromise = import(config.contactForm.module)
+      .then((contact) => {
+        contact.startRetention();
+        console.log("contact_module_ready ready=" + contact.contactReady());
+        return contact;
+      })
+      .catch((error) => {
+        console.error("contact_module_unavailable", error && error.message);
+        return null;
+      });
+  }
+  return contactModulePromise;
+}
+loadContactModule();
+
+async function handleContactRoute(req, res, pathname) {
+  const contact = await loadContactModule();
+  if (!contact) {
+    res.writeHead(503, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
+    res.end(JSON.stringify({ ok: false, error: "contact_unavailable" }));
+    return;
+  }
+  if (pathname === "/api/contact/token") {
+    await contact.handleContactToken(req, res);
+    return;
+  }
+  await contact.handleYqupContact(req, res);
+}
 ` : "";
   const localPagesRouteBlock = serverConfig.localPages ? `
   if (config.localPages.includes(pathname) || config.localPages.includes(pathname + "/")) {
@@ -1235,7 +1284,7 @@ async function routeRequest(req, res) {
     redirectToApex(req, res, url);
     return;
   }
-${mailerLiteRouteBlock}${forAgentsRouteBlock}${localPagesRouteBlock}
+${mailerLiteRouteBlock}${contactRouteBlock}${forAgentsRouteBlock}${localPagesRouteBlock}
   if (isLocalStaticPath(pathname)) {
     const served = await serveLocalFile(req, res, pathname);
     if (!served) notFound(res);
@@ -1307,7 +1356,7 @@ async function serveLocalFile(req, res, requestPath, cacheControl = "public, max
   }).pipe(res);
   return true;
 }
-${mailerLiteHandlerBlock}
+${mailerLiteHandlerBlock}${contactHandlerBlock}
 function safeLocalPath(requestPath) {
   let decoded;
   try {

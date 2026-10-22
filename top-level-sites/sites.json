@@ -14,6 +14,7 @@
     "matomo_site_id": "5",
     "page_source": "pages/yqup/index.html",
     "local_pages": [{ "path": "/privacy/", "source": "pages/yqup/privacy.html" }],
+    "contact_form": { "source_dir": "pages/yqup/contact", "module": "yqup-contact.mjs", "files": ["yqup-contact.mjs", "contact-quarantine.mjs", "contact-smtp.mjs"] },
     "analytics_goal": {
       "site_goal": "Create qualified consulting conversations with CEOs, boards, and operators who need agent-readable system sites, human-visible governance surfaces, and clarity around AI and agentic work.",
       "primary_conversion": "qualified_consulting_enquiry",

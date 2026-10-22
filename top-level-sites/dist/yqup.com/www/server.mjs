@@ -16,7 +16,10 @@ const config = {
   "redirectWwwToApex": false,
   "localPages": [
     "/privacy/"
-  ]
+  ],
+  "contactForm": {
+    "module": "./contact/yqup-contact.mjs"
+  }
 };
 const root = path.dirname(fileURLToPath(import.meta.url));
 const listenPort = Number(process.env.PORT || 8080);
@@ -63,6 +66,11 @@ async function routeRequest(req, res) {
 
   if (config.redirectWwwToApex && requestHost === "www." + hostOnly(config.domain)) {
     redirectToApex(req, res, url);
+    return;
+  }
+
+  if (pathname === "/api/contact/token" || pathname === "/api/contact") {
+    await handleContactRoute(req, res, pathname);
     return;
   }
 
@@ -142,6 +150,38 @@ async function serveLocalFile(req, res, requestPath, cacheControl = "public, max
     res.end();
   }).pipe(res);
   return true;
+}
+
+let contactModulePromise = null;
+function loadContactModule() {
+  if (!contactModulePromise) {
+    contactModulePromise = import(config.contactForm.module)
+      .then((contact) => {
+        contact.startRetention();
+        console.log("contact_module_ready ready=" + contact.contactReady());
+        return contact;
+      })
+      .catch((error) => {
+        console.error("contact_module_unavailable", error && error.message);
+        return null;
+      });
+  }
+  return contactModulePromise;
+}
+loadContactModule();
+
+async function handleContactRoute(req, res, pathname) {
+  const contact = await loadContactModule();
+  if (!contact) {
+    res.writeHead(503, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
+    res.end(JSON.stringify({ ok: false, error: "contact_unavailable" }));
+    return;
+  }
+  if (pathname === "/api/contact/token") {
+    await contact.handleContactToken(req, res);
+    return;
+  }
+  await contact.handleYqupContact(req, res);
 }
 
 function safeLocalPath(requestPath) {

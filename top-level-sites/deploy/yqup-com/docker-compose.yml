@@ -1,0 +1,53 @@
+# yqup.com standalone site on ANI (srv1339660), with the contact form.
+# Packaged by deploy/package-yqup-com-release.sh and installed only through the
+# root-owned ani-deploy-gate-yqup. The gate rejects changes to the container
+# name, loopback port, image pin, hardening, settings file and state mount.
+# No setting values live here: the contact settings file is root-only on ANI.
+name: yqup-com
+
+services:
+  site:
+    image: node:24-alpine@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f
+    container_name: site-yqup_com
+    restart: unless-stopped
+    user: "10411:10411"
+    read_only: true
+    working_dir: /srv/site
+    command: ["node", "/srv/site/server.mjs"]
+    environment:
+      HOST: 0.0.0.0
+      PORT: "8080"
+      YQUP_CONTACT_STATE_DIR: /srv/state
+    env_file:
+      - /srv/apps/yqup.com/shared/yqup-contact.env
+    ports:
+      - "127.0.0.1:8211:8080"
+    volumes:
+      - ./www:/srv/site:ro
+      - /srv/apps/yqup.com/state:/srv/state:rw
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
+    cpus: 0.25
+    pids_limit: 64
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/healthz').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge

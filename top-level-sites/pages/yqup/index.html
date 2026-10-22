@@ -277,6 +277,7 @@ fieldset.field{border:0;margin:0 0 18px;padding:0;min-width:0}
 .tick{display:flex;gap:10px;align-items:flex-start;font-size:.95rem;color:var(--slate-soft);margin:4px 0 22px}
 .tick input{width:20px;height:20px;margin-top:3px;accent-color:var(--moss);flex:none}
 .tick a{color:var(--moss)}
+[hidden]{display:none!important}
 .hp{position:absolute!important;left:-10000px!important;width:1px;height:1px;overflow:hidden}
 .fcard .btn-primary{border:0;cursor:pointer;background:var(--moss);box-shadow:0 2px 0 var(--moss-dark);margin:0}
 .fcard .btn-primary:hover{background:var(--moss-dark)}
@@ -549,15 +550,86 @@ fieldset.field{border:0;margin:0 0 18px;padding:0;min-width:0}
 
     <div class="fcard" id="contact">
       <div class="weave-band thin" role="presentation"></div>
-      <div class="fbody">
+      <div class="fbody" id="book-interim">
         <h3>Book a conversation</h3>
         <p class="sub">The booking form here opens shortly. Until then, you can reach Tony through his advisory page.</p>
         <a class="btn btn-primary btn-lg" href="https://www.tonywood.org/advisory/?mtm_campaign=yqup_to_tonywood_advisory&amp;mtm_source=yqup.com&amp;mtm_medium=owned-referral&amp;mtm_content=contact_interim" data-funnel-category="Source site funnel" data-funnel-stage="source_to_tonywood_advisory" data-funnel-source="yqup.com" data-funnel-campaign="yqup_to_tonywood_advisory" data-funnel-content="contact_interim">Discuss advisory</a>
         <p class="small" style="margin-top:16px">How we handle enquiry details: <a href="/privacy/">privacy notice</a>.</p>
       </div>
+      <form id="book-form" class="fbody" hidden action="/api/contact" method="post" novalidate>
+        <input type="hidden" name="form_token" id="f-token" value="">
+        <h3>Book a conversation</h3>
+        <p class="sub">A few lines is plenty. All fields are needed unless marked optional.</p>
+        <div class="frow">
+          <div class="field"><label for="f-name">Name</label><input type="text" id="f-name" name="name" autocomplete="name" required maxlength="120"></div>
+          <div class="field"><label for="f-email">Work email</label><input type="email" id="f-email" name="email" autocomplete="email" required maxlength="200"></div>
+        </div>
+        <div class="frow">
+          <div class="field"><label for="f-org">Organisation</label><input type="text" id="f-org" name="organisation" autocomplete="organization" required maxlength="160"></div>
+          <div class="field"><label for="f-role">Role</label><input type="text" id="f-role" name="role" autocomplete="organization-title" required maxlength="120"></div>
+        </div>
+        <div class="field">
+          <label for="f-q">What's your live question?</label>
+          <textarea id="f-q" name="question" maxlength="500" required aria-describedby="f-q-hint"></textarea>
+          <div class="hint" id="f-q-hint"><span>The decision or rollout you are stuck on, in your own words.</span><span class="count" id="f-q-count" aria-live="polite">0 / 500</span></div>
+        </div>
+        <fieldset class="field">
+          <legend>Preferred contact</legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="contact_pref" value="email" checked><span>Email</span></label>
+            <label class="choice"><input type="radio" name="contact_pref" value="call"><span>Call</span></label>
+          </div>
+        </fieldset>
+        <div class="field" id="phone-field" hidden>
+          <label for="f-phone">Phone number <span class="opt">(for a call)</span></label>
+          <input type="tel" id="f-phone" name="phone" autocomplete="tel" maxlength="40">
+        </div>
+        <!-- honeypot: hidden from people and assistive tech; bots that fill it are dropped by the server scan -->
+        <div class="hp" aria-hidden="true">
+          <label for="f-website">Leave this field empty</label>
+          <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <label class="tick"><input type="checkbox" id="f-privacy" name="privacy" value="yes" required><span>I have read the <a href="/privacy/">privacy notice</a>. YQUP Ltd will use these details only to reply to me.</span></label>
+        <button type="submit" class="btn btn-primary btn-lg">Send to Tony's office</button>
+        <p class="small" id="book-error" role="alert" hidden></p>
+      </form>
+      <div class="thanks" id="book-thanks" hidden tabindex="-1">
+        <svg aria-hidden="true"><use href="#weave"/></svg>
+        <h3>Thank you.</h3>
+        <p>Your message is with Tony's office.</p>
+        <p>While you wait, the <a href="#briefing">Chief Agentic Officer Briefing</a> is a good read.</p>
+      </div>
     </div>
   </div>
 </section>
+<script>
+(function(){
+  var f=document.getElementById('book-form'),q=document.getElementById('f-q'),c=document.getElementById('f-q-count'),
+      ph=document.getElementById('phone-field'),pi=document.getElementById('f-phone'),t=document.getElementById('book-thanks');
+  function count(){var n=q.value.length;c.textContent=n+' / 500';c.classList.toggle('near',n>=450);}
+  q.addEventListener('input',count);count();
+  var im=document.getElementById('book-interim');
+  function ready(){im.hidden=true;f.hidden=false;}
+  if(/[?&]sent=1/.test(location.search)){im.hidden=true;f.hidden=true;t.hidden=false;}
+  f.addEventListener('change',function(e){if(e.target.name==='contact_pref'){var call=e.target.value==='call';ph.hidden=!call;pi.required=call;}});
+  var err=document.getElementById('book-error'),tok=document.getElementById('f-token');
+  fetch('/api/contact/token',{headers:{accept:'application/json'},cache:'no-store'})
+    .then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.form_token){tok.value=j.form_token;if(t.hidden)ready();}}).catch(function(){});
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    err.hidden=true;
+    if(!f.checkValidity()){f.reportValidity();return;}
+    var btn=f.querySelector('button[type=submit]');btn.disabled=true;
+    fetch(f.action,{method:'POST',headers:{accept:'application/json','content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()})
+      .then(function(r){return r.json().catch(function(){return {ok:false}}).then(function(j){return {ok:r.ok&&j.ok!==false,j:j}})})
+      .then(function(x){
+        if(x.ok){f.hidden=true;t.hidden=false;t.focus();if(window._paq){window._paq.push(['trackEvent','contact','submit','book_a_conversation']);}}
+        else{err.textContent=(x.j&&x.j.message)||'Sorry, that did not send. Please try again in a moment.';err.hidden=false;btn.disabled=false;}
+      })
+      .catch(function(){err.textContent='Sorry, that did not send. Please try again in a moment.';err.hidden=false;btn.disabled=false;});
+  });
+})();
+</script>
 </main>
 
 <!-- 11. Footer -->

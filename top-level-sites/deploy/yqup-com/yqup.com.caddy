@@ -1,0 +1,29 @@
+# Edge route for yqup.com (standalone lane).
+# Installed by install-yqup-site-on-ani from the reviewed yqup/agentic-first
+# release package. Same routing as the shared top-level-sites fragment:
+# apex and www both proxied. Do not edit on the host; ship a new release.
+
+yqup.com, www.yqup.com {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options    "nosniff"
+		Referrer-Policy           "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	reverse_proxy 127.0.0.1:8211 {
+		header_up Host {host}
+		header_up X-Forwarded-Host {host}
+		header_up X-Real-IP {http.request.remote.host}
+	}
+
+	log {
+		output file /var/log/caddy/yqup.com.access.log {
+			roll_size 10mb
+			roll_keep 14
+		}
+		format json
+	}
+}
