@@ -1,5 +1,7 @@
 # Public Directory Facts: Prepared
 
+Superseded by the [terminal deployment receipt](2026-10-26-directory-facts-deployed.md).
+
 Tony approved the search/brand release and a compact public facts layer, then
 explicitly asked for company logos. This homepage change uses the paired
 Directory's locally cached Lucide icons and routes all eight category links to
