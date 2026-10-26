@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import xml.etree.ElementTree as ET
 import struct
 import sys
 from html.parser import HTMLParser
@@ -210,9 +211,18 @@ def _validate_local_files(root: Path, parser: PageParser, failures: list[str]) -
     _require(failures, "Sitemap: https://agentic-first.co/sitemap.xml" in robots, "robots.txt must point to sitemap.xml.")
     _require(failures, "Disallow: /" not in robots, "robots.txt must not block the public site.")
 
-    sitemap = (root / "sitemap.xml").read_text(encoding="utf-8")
-    for url in (CANONICAL, "https://agentic-first.co/companies/", "https://agentic-first.co/directory/"):
-        _require(failures, f"<loc>{url}</loc>" in sitemap, f"sitemap.xml must include {url}.")
+    namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    try:
+        sitemap = ET.parse(root / "sitemap.xml").getroot()
+        _require(failures, sitemap.tag == "{" + namespace["s"] + "}sitemapindex", "sitemap.xml must be a sitemap index.")
+        children = [node.text for node in sitemap.findall("s:sitemap/s:loc", namespace)]
+        _require(failures, children == ["https://agentic-first.co/sitemap-pages.xml", "https://agentic-first.co/directory/sitemap.xml"], "Sitemap index must link the root pages and Directory sub-sitemaps.")
+        pages = ET.parse(root / "sitemap-pages.xml").getroot()
+        urls = [node.text for node in pages.findall("s:url/s:loc", namespace)]
+        for url in (CANONICAL, "https://agentic-first.co/companies/"):
+            _require(failures, url in urls, f"sitemap-pages.xml must include {url}.")
+    except (ET.ParseError, OSError) as exc:
+        failures.append(f"Invalid or missing sitemap XML: {exc}")
 
     feed = (root / "feed.xml").read_text(encoding="utf-8")
     _require(failures, f"<link>{CANONICAL}</link>" in feed, "feed.xml must link to the canonical homepage.")

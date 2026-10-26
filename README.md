@@ -22,6 +22,12 @@ The product surfaces live in the sibling
 
 ## Routes
 
+Public search discovery uses `/sitemap.xml` as an index of the root-page
+`/sitemap-pages.xml` and the product-owned `/directory/sitemap.xml`. The
+Directory sub-sitemap is generated in `pitch-mcp`; preserve that route when
+releasing the root site. Page modification dates are omitted where no current
+page-change evidence was reviewed rather than advancing them on every release.
+
 - `https://agentic-first.co/` - top-level Agentic First route map.
 - `https://agentic-first.co/companies/` - Open Company Information, served from `pitch-mcp`.
 - `https://agentic-first.co/companies/mcp` - company/profile MCP endpoint, served from `pitch-mcp`.

@@ -82,7 +82,12 @@ smoke_tests:
     method: GET
     path: /sitemap.xml
     expected_status: 200
-    expected_body_contains: https://agentic-first.co/directory/
+    expected_body_contains: https://agentic-first.co/directory/sitemap.xml
+  - name: root_pages_sitemap
+    method: GET
+    path: /sitemap-pages.xml
+    expected_status: 200
+    expected_body_contains: https://agentic-first.co/companies/
   - name: rss_feed
     method: GET
     path: /feed.xml
