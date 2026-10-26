@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate crawler preview and app icon PNGs for Agentic First.
 
-The output is deliberately dependency-free so release checks can recreate the
-assets on a plain Python install.
+The social image uses Python's standard library. Brand-icon exports use the
+checked-in generated master and macOS sips on AKAAR; shipped exports are portable.
 """
 
 from __future__ import annotations
@@ -10,6 +10,8 @@ from __future__ import annotations
 import struct
 import zlib
 from pathlib import Path
+
+from export_brand_assets import export_icons
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -302,9 +304,7 @@ def _icon(path: Path, size: int) -> None:
 
 def main() -> int:
     _social_image()
-    _icon(WWW / "apple-touch-icon.png", 180)
-    _icon(WWW / "icon-192.png", 192)
-    _icon(WWW / "icon-512.png", 512)
+    export_icons()
     social = WWW / "static/img/agentic-first-social.png"
     if social.stat().st_size >= 1_000_000:
         raise SystemExit(f"{social} must stay below 1 MB")

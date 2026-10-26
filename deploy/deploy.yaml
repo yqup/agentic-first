@@ -37,6 +37,8 @@ artifact:
     - deploy/check-homepage-links.py
     - deploy/check-public-page-discovery.py
     - deploy/generate-preview-assets.py
+    - deploy/export_brand_assets.py
+    - brand-assets/agentic-first-mark-master.png
   exclude:
     - .git/
     - .DS_Store

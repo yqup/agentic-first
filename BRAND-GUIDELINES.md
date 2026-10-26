@@ -1,7 +1,14 @@
 # Agentic First Brand Guidelines
 
-Version: 0.1
-Date: 2026-05-20
+Version: 0.2
+Date: 2026-10-26
+
+The current directory-led identity uses a forest-green AF monogram, sage and
+muted rose, with a Georgia wordmark and headings. It replaces the black
+route-map favicon. The original route palettes below remain secondary area
+colours, not a requirement to recolour the approved English-country homepage.
+Production assets, exact generation prompt and export instructions are in
+[`brand-assets/README.md`](brand-assets/README.md).
 
 Agentic First should feel calm, trustworthy, and quietly technical. The brand
 is about making public information usable by agents without making humans feel
@@ -66,14 +73,14 @@ possible. Reserve white text for larger buttons on darker anchor colors.
 
 | Area | Anchor | Background | Soft Panel | Meaning |
 | --- | --- | --- | --- | --- |
-| Agentic First | `#625C8D` | `#E7E4F5` | `#F3F1FB` | Parent route map, governance, system identity |
+| Agentic First | `#345B48` | `#E8EFE8` | `#F4F7F3` | Parent identity, wayfinding, trusted discovery |
 | Companies | `#5E8B75` | `#DFF0E8` | `#F2FAF6` | Source-owned company facts, trust, verification |
 | Directory | `#8C789E` | `#ECE2F2` | `#F8F2FB` | Discovery, tools, experiments, field notes |
 | Approvals | `#A47C54` | `#F3E3CB` | `#FCF6EC` | Permission, review, audit boundaries |
 | Standards | `#668AAA` | `#DDECF7` | `#F3F8FC` | Schemas, protocols, machine-readable contracts |
 
-The Agentic First parent color should be the darkest pastel: a muted
-lavender-slate, not black. It should hold the identity without overpowering
+The Agentic First parent color is a muted forest green, not black. It should
+hold the identity without overpowering
 Companies or Directory.
 
 ### Suggested CSS Tokens
@@ -88,9 +95,9 @@ Companies or Directory.
   --af-line: #d8d3cb;
   --af-focus: #7ea6e8;
 
-  --af-agentic: #625c8d;
-  --af-agentic-bg: #e7e4f5;
-  --af-agentic-soft: #f3f1fb;
+  --af-agentic: #345b48;
+  --af-agentic-bg: #e8efe8;
+  --af-agentic-soft: #f4f7f3;
 
   --af-companies: #5e8b75;
   --af-companies-bg: #dff0e8;
@@ -116,7 +123,7 @@ Use the background tint as the first signal of which area someone is in.
 Keep the shared navigation and page structure consistent so the colors feel
 like siblings, not separate brands.
 
-- `/` Agentic First: lavender-slate hero background, parent route-map accents.
+- `/` Agentic First: forest-green identity and a soft countryside hero.
 - `/companies/`: sage background bands, Companies anchor color for primary
   buttons and card accents.
 - `/directory/`: soft violet background bands, Directory anchor color for
@@ -129,11 +136,11 @@ like siblings, not separate brands.
 
 Use the existing type direction:
 
-- Primary type: `Inter`, then system UI fallbacks.
+- Body type: system UI sans-serif; Georgia for the live wordmark and headings.
 - Headings should be large, plain, and confident.
 - Body copy should stay compact and readable.
 - Do not use negative letter spacing.
-- Do not introduce a second decorative font.
+- Do not introduce additional decorative fonts.
 
 Suggested hierarchy:
 
@@ -158,17 +165,16 @@ Keep the site practical and navigable:
 
 ## Logo, Favicon, And Route Map
 
-The current route-map mark is directionally right: paths, nodes, and
-relationships. It should be softened to match the palette.
+Use the AF monogram as the primary symbol. It suggests joined routes and
+forward discovery, without depicting circuitry or generic AI stars.
 
-Update direction:
-
-- Replace the black favicon background with `--af-agentic`.
-- Keep route paths as Companies sage, Directory violet, and Approvals amber.
-- Use `--af-panel` or `--af-paper` for nodes.
-- The favicon should remain legible at 16px, so keep thick strokes and simple
-  node shapes.
-- The route-map SVG should use tinted cards or nodes, not only white boxes.
+- Forest `#345B48`, sage `#A8BFA8`, muted rose `#C99290`.
+- Header: 44px symbol plus accessible live brand text, with 10px separation.
+- Standalone lockup: `www/static/img/agentic-first-logo.svg`.
+- Browser: self-contained SVG favicon on light sage, with PNG/ICO fallbacks.
+- Keep transparent master exports undistorted and retain generous clear space.
+- Never recolour the mark per product area or put detailed labels into the icon.
+- Historical route-map illustrations are secondary diagrams, not the current logo.
 
 ## Imagery And Illustration
 
