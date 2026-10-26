@@ -40,3 +40,14 @@ Status: local checks passed; no static deployment was started. After the Directo
 gate migration, rehearse both sanitised releases on JENZ, promote the exact
 qualified Directory image, verify its assets, then use the existing restricted
 homepage static gate. Record both terminal receipts and independent public checks.
+
+## Prepared Homepage Package
+
+- Package: `agentic-first-20261026T113329Z.tar.gz`.
+- Source commit: `70a3b197ebd8dd861ceb8893505e8734bb70fe71`.
+- SHA256: `933db5acfb3fd8ee2ef1efd2e3f6f15b098c5554ef701355435cd73e0cbd2b1e`.
+- Private temporary location: `/private/tmp/agentic-first-public-release.natzUk`.
+- Built with the public-only builder. The extracted web root passed the paired
+  research-boundary scan; its adjacent checksum sidecar verifies.
+- Not uploaded, rehearsed or deployed. Temporary storage is not a durable release
+  registry, and the current production site remains unchanged.
