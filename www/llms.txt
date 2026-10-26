@@ -6,14 +6,13 @@ Open Tool Directory (compatibility label: Agentics Tool Directory):
 https://agentic-first.co/directory/
 Public discovery JSON: https://agentic-first.co/directory/tools.json
 Public MCP: https://agentic-first.co/directory/mcp
-API v2 returns public summaries only. Research requires approved membership on the website.
+API v2 returns public summaries only. Detailed research is not published. No sign-in is offered.
 
 Open Company Information is a separate platform:
 https://agentic-first.co/companies/
 
 Approach: https://agentic-first.co/directory/methodology/
 Location labels: https://agentic-first.co/directory/data-residency/
-Membership: https://agentic-first.co/directory/membership/
 
 Discovery does not grant authority, permission to act, procurement approval or compliance certification.
 Company location does not guarantee workload residency.

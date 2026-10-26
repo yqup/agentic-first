@@ -24,12 +24,12 @@ from urllib.request import Request, urlopen
 CANONICAL = "https://agentic-first.co/"
 TITLE = "Agentic First | European alternatives and open tools"
 DESCRIPTION = (
-    "Find European alternatives and agent-operable tools, with public discovery "
-    "and approved research access."
+    "Find European alternatives and agent-operable tools through concise public "
+    "summaries and official links."
 )
 OG_DESCRIPTION = (
-    "Find European alternatives and agent-operable tools, with public discovery "
-    "and approved research access."
+    "Find European alternatives and agent-operable tools through concise public "
+    "summaries and official links."
 )
 SOCIAL_IMAGE = "https://agentic-first.co/static/img/agentic-first-social.png"
 SOCIAL_ALT = (

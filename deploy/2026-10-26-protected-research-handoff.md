@@ -1,5 +1,10 @@
 # Search-First Homepage And Private Artifact Prerequisite
 
+**Scope superseded:** Tony deferred login on 26 October 2026. The current
+public-only directory has no member prompts or auth dependency. Use the sibling
+`pitch-mcp/directory/PUBLIC-ONLY-RELEASE.md`. Private artifact migration remains
+parked; the notes below are retained for a future protected-member launch.
+
 Status: implementation and local verification only. Do not deploy before the
 paired directory v2 release and its protected-research runbook are ready.
 

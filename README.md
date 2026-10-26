@@ -1,5 +1,8 @@
 # Agentic First
 
+Current scope: a public directory with concise listings and official links.
+Login and membership are deferred; detailed research remains unpublished.
+
 The homepage now leads with search-first tool discovery. Open Company Information
 is a secondary, separate platform. The protected research implementation and
 release prerequisites are documented in
