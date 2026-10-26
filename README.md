@@ -3,6 +3,10 @@
 Current scope: a public directory with concise listings and official links.
 Login and membership are deferred; detailed research remains unpublished.
 
+The homepage offers eight category routes into European-tool searches. Company
+information is a secondary More-menu link. Directory matching runs on browser
+CPU over the public catalogue, with no model or agent calls.
+
 The homepage now leads with search-first tool discovery. Open Company Information
 is a secondary, separate platform. The protected research implementation and
 release prerequisites are documented in
