@@ -60,9 +60,18 @@ Ani writes server-side deploy receipts under:
 Current live release:
 
 ```text
-agentic-first-20260714T095359Z
-100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
+agentic-first-20261026T113329Z
+933db5acfb3fd8ee2ef1efd2e3f6f15b098c5554ef701355435cd73e0cbd2b1e
 ```
+
+Source: `70a3b197ebd8dd861ceb8893505e8734bb70fe71`. Terminal receipt passed
+26 October 2026 at `15:47:00Z`; see
+[the public-only release receipt](receipts/2026-10-26-public-only-deployed.md).
+Only use sanitised public-only rollback `agentic-first-20261026T152108Z`,
+SHA256 `9359df943d785795e16b9392e69fedc07d98792c490e03fdafd882e43c25dd68`.
+Do not restore older copied research catalogues. This static gate does not
+automatically restore a prior release after failure; inspect its receipt before
+retrying, and use only the approved safe fallback for any manual rollback.
 
 ## Required Handoff Message
 

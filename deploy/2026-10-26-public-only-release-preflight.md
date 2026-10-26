@@ -1,5 +1,8 @@
 # Search-First Homepage: Release Preflight
 
+Historical preflight. The hold below was superseded by the approved installation,
+JENZ qualification and [terminal public-only release](receipts/2026-10-26-public-only-deployed.md).
+
 26 October 2026, AKAAR. Tony approved documenting, committing, pushing and
 deploying the public directory experience. The reviewed homepage source is
 `25017401883037b35d8e0d4b3418caba003c8673` on `yqup/agentic-first` main.
