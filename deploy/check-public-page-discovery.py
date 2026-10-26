@@ -22,14 +22,14 @@ from urllib.request import Request, urlopen
 
 
 CANONICAL = "https://agentic-first.co/"
-TITLE = "Agentic First | Open Company Information and Tool Directory"
+TITLE = "Agentic First | European alternatives and open tools"
 DESCRIPTION = (
-    "Agentic First maps Open Company Information and the Open Tool Directory so "
-    "companies and agentic builders can publish and find reliable agent-readable resources."
+    "Find European alternatives and agent-operable tools, with public discovery "
+    "and approved research access."
 )
 OG_DESCRIPTION = (
-    "A route map for Open Company Information and the Open Tool Directory, helping companies "
-    "and agentic builders publish and find reliable agent-readable resources."
+    "Find European alternatives and agent-operable tools, with public discovery "
+    "and approved research access."
 )
 SOCIAL_IMAGE = "https://agentic-first.co/static/img/agentic-first-social.png"
 SOCIAL_ALT = (

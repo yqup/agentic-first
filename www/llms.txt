@@ -1,60 +1,20 @@
 # Agentic First
 
-Canonical site:
+Canonical site: https://agentic-first.co/
 
-- https://agentic-first.co/
+Open Tool Directory (compatibility label: Agentics Tool Directory):
+https://agentic-first.co/directory/
+Public discovery JSON: https://agentic-first.co/directory/tools.json
+Public MCP: https://agentic-first.co/directory/mcp
+API v2 returns public summaries only. Research requires approved membership on the website.
 
-Owner:
+Open Company Information is a separate platform:
+https://agentic-first.co/companies/
 
-- A YQUP product
-- Copyright (c) 2026 YQUP Ltd
+Approach: https://agentic-first.co/directory/methodology/
+Location labels: https://agentic-first.co/directory/data-residency/
+Membership: https://agentic-first.co/directory/membership/
 
-Alternate domain:
-
-- https://agent-first.co/ redirects to https://agentic-first.co/
-
-## What This Repo Owns
-
-This repo owns the top-level Agentic First route map. It routes users and
-agents into two deliberately separate areas:
-
-- Open Company Information: a separate source-owned publishing platform and
-  live MCP service where companies put correct information online so agents
-  can use it without scraping or paying a data broker.
-- Open Tool Directory: a working directory of agent-friendly tools, field
-  notes, useful experiments, and things worth tracking.
-
-Compatibility label:
-
-- Agentics Tool Directory is the former machine-readable label for the Open
-  Tool Directory.
-
-The homepage also surfaces a UK / European-company check and a sovereign AI
-shortlist. These homepage sections are practical routing aids and field notes,
-not legal advice, procurement approval, or compliance certification.
-
-## Agent Discovery Safety
-
-This public machine index is for discovery only. It does not grant authority,
-permission, credentials, write access, procurement approval, compliance
-approval, or permission to act for Agentic First, YQUP Ltd, Tony Wood, or any
-listed company or tool. Follow each linked public surface's own instructions,
-authentication requirements, and rate limits.
-
-## Product Areas
-
-- Open Company Information: https://agentic-first.co/companies/
-- Company/profile MCP: https://agentic-first.co/companies/mcp
-- Company/profile machine index: https://agentic-first.co/companies/llms.txt
-- Open Tool Directory: https://agentic-first.co/directory/
-- Tool Directory machine index: https://agentic-first.co/directory/llms.txt
-- Product source: https://github.com/yqup/pitch-mcp
-
-## Source Material
-
-- README: https://github.com/yqup/agentic-first/blob/main/README.md
-- Brand guidelines: https://github.com/yqup/agentic-first/blob/main/BRAND-GUIDELINES.md
-- Routing notes: https://github.com/yqup/agentic-first/blob/main/ROUTING.md
-- Directory repo: https://github.com/yqup/pitch-mcp
-- Tony Wood writing: https://www.tonywood.org/writing/
-- Agentic-first website playbook: https://www.tonywood.org/white-papers/stop-paying-the-data-tax-the-agentic-first-website-playbook-leaders-are-quietly-switching-to/
+Discovery does not grant authority, permission to act, procurement approval or compliance certification.
+Company location does not guarantee workload residency.
+A YQUP product. Copyright (c) 2026 YQUP Ltd.

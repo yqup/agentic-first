@@ -1,5 +1,11 @@
 # Agentic First
 
+The homepage now leads with search-first tool discovery. Open Company Information
+is a secondary, separate platform. The protected research implementation and
+release prerequisites are documented in
+[the current handoff](deploy/2026-10-26-protected-research-handoff.md).
+These changes are prepared locally; that handoff is not a production receipt.
+
 Agentic First is an operating stance for organisations preparing for a
 world where agents read, reason, and act alongside humans.
 
