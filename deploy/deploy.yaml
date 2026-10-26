@@ -3,7 +3,7 @@ schema_version: 1
 app:
   name: agentic-first
   owner: yqup
-  description: Top-level Agentic First umbrella static site.
+  description: Search-first Agentic First homepage for European tools and alternatives.
 
 source:
   repo: https://github.com/yqup/agentic-first
@@ -62,12 +62,12 @@ smoke_tests:
     method: GET
     path: /
     expected_status: 200
-    expected_body_contains: Company-first agentic creation
+    expected_body_contains: Find a European tool
   - name: machine_index
     method: GET
     path: /llms.txt
     expected_status: 200
-    expected_body_contains: Agentic First route map
+    expected_body_contains: API v2 returns public summaries only.
   - name: favicon
     method: GET
     path: /favicon.svg
@@ -77,7 +77,7 @@ smoke_tests:
     method: GET
     path: /robots.txt
     expected_status: 200
-    expected_body_contains: Sitemap: https://agentic-first.co/sitemap.xml
+    expected_body_contains: 'Sitemap: https://agentic-first.co/sitemap.xml'
   - name: sitemap
     method: GET
     path: /sitemap.xml
@@ -126,7 +126,7 @@ smoke_tests:
 rollback:
   strategy: release_symlink
   state_file: /srv/deploy-state/agentic-first/current-release.yaml
-  instructions: Restore the previous release directory recorded in deploy state and repoint the app-owned current symlink. No database migration or secret rotation is part of this release.
+  instructions: Repoint the app-owned current symlink only to a verified public-only release. Do not restore a legacy copied catalogue or detailed research. Deploy and verify the paired Directory assets before switching this homepage. No database migration or secret rotation is part of this release.
 
 public_route_contract:
   managed_by_app_package: false
