@@ -1,5 +1,6 @@
 """Homepage navigation and public category links; no browser or provider calls."""
 import json
+import importlib.util
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
@@ -65,17 +66,25 @@ class DirectoryHomepageTests(unittest.TestCase):
         if not catalog_path.exists():
             self.skipTest("Paired directory checkout is needed for catalogue integration")
         entries = json.loads(catalog_path.read_text())["entries"]
+        spec = importlib.util.spec_from_file_location("public_listing", ROOT.parent / "pitch-mcp/apps/api/src/pitch_api/public_listing.py")
+        listing = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(listing)
+        overrides = json.loads((ROOT.parent / "pitch-mcp/directory/public-listing-facts.json").read_text())["tools"]
         european = [item for item in entries if item.get("company", {}).get("region") in {"eu", "uk", "ch", "europe"}]
         for link in (link for link in self.page.links if link["category"]):
             params = parse_qs(urlsplit(link["href"]).query, keep_blank_values=True)
             query, group = params.get("q", [""])[0], params.get("group", [""])[0]
-            results = [item for item in european if (not group or item["directory_group"] == group)
+            results = [item for item in european if (not group or {**listing.inferred(item), **overrides.get(item["slug"],{})}["area"] == group)
                        and (not query or query in item.get("alternatives_to", []))]
             self.assertTrue(results, link["href"])
 
     def test_no_login_or_research_promotion(self):
         for path in ("/directory/access", "/directory/membership"):
             self.assertNotIn(path, self.html)
+
+    def test_categories_use_one_local_icon_set(self):
+        for name in ("bot", "cpu", "database", "workflow", "users", "mail", "cloud", "terminal"):
+            self.assertIn(f'src="/directory/assets/icons/{name}.svg"',self.html)
 
 
 if __name__ == "__main__":
