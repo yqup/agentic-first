@@ -8,207 +8,127 @@ app:
 source:
   repo: https://github.com/yqup/agentic-first
   branch: main
-  commit_sha: a04f05041ecc00c7d68bb5c0bd4f8da8d365d524
-  source_tree_state: clean
-  note: The release archive was built from this committed source tree and is the immutable source of truth for this request.
+  commit_sha: 9fb3016924679c92a1bc3e50396974ab5937013f
+  source_tree_state: clean_at_packaging
+  note: Closeout documentation is a later commit, not a change to the deployed source.
 
 artifact:
-  version: agentic-first-20260714T095359Z
-  uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260714T095359Z/agentic-first-20260714T095359Z.tar.gz
-  local_path: deploy/releases/agentic-first-20260714T095359Z.tar.gz
+  version: agentic-first-20261027T123906Z
+  uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20261027T123906Z/agentic-first-20261027T123906Z.tar.gz
   type: release_archive
   format: tar.gz
-  sha256: 100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
-  checksum_uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260714T095359Z/agentic-first-20260714T095359Z.sha256
-  checksum_file: deploy/releases/agentic-first-20260714T095359Z.sha256
-  build_timestamp: "2026-07-14T09:53:59Z"
+  sha256: 66678a29bdf1dd58986c67c5b54c2965bc7d8cd71c34a74f70c33a0233c63c1e
+  checksum_uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20261027T123906Z/agentic-first-20261027T123906Z.sha256
+  content_boundary: public-only-v2
+  deploy_manifest: deploy/deploy.yaml
   build_command: >-
-    git archive --format=tar.gz --prefix=agentic-first/
-    -o deploy/releases/agentic-first-20260714T095359Z.tar.gz HEAD
-    README.md BRAND-GUIDELINES.md ROUTING.md MIGRATION.md LICENSE llms.txt
-    www deploy/deploy.yaml deploy/README.md deploy/check-homepage-links.py
-    deploy/check-public-page-discovery.py deploy/generate-preview-assets.py
-    && cd deploy/releases
-    && shasum -a 256 agentic-first-20260714T095359Z.tar.gz >
-    agentic-first-20260714T095359Z.sha256
+    python3 deploy/build-public-release.py
+    --release agentic-first-20261027T123906Z
+    --output /private/tmp/agentic-first-guided-deploy-20261027T123906Z/agentic-first-20261027T123906Z.tar.gz
 
 preconditions:
   artifact_download:
-    required: true
     source: github_release_asset
-    required_downloads:
-      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260714T095359Z/agentic-first-20260714T095359Z.tar.gz
-        name: agentic-first-20260714T095359Z.tar.gz
-        sha256: 100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
-      - uri: https://github.com/yqup/agentic-first/releases/download/agentic-first-20260714T095359Z/agentic-first-20260714T095359Z.sha256
-        name: agentic-first-20260714T095359Z.sha256
-        contains: 100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
     stop_if_download_fails: true
     stop_if_checksum_fails: true
-    note: Download the release assets from GitHub, verify SHA256 before inspection or staging, and stop without deploying if the download or checksum verification fails.
-  public_routing_approval:
-    required: false
-    deferred: false
-    stop_if_not_approved: true
-    note: No Caddy or DNS change is requested. Existing public routing already serves this app and must not be changed without a separate explicit Tony approval.
+  jenz_rehearsal:
+    required: true
+    host: srv1362489
+    run: agentic-first-static-1254a26d1b064456a830e7f8ceab5c8d
+    result: pass
+    finished_at: "2026-10-27T12:41:01Z"
+    checks: [candidate, restart, synthetic_failure, sanitised_rollback, repromotion, data_preservation]
+  paired_directory:
+    required_first: true
+    release: pitch-mcp-20261027T123906Z
+    source_commit: 1eec88accb0908e10502303db4459250c2adab5a
+    ani_run: pitch-mcp-image-2b816488bd3a46ca97dc74f9f28dd8d0
+    result: pass
+  public_routing_change:
+    requested: false
+    note: Preserve all existing public routes, Caddy configuration and DNS.
 
 runtime:
   type: static_site
   service_name: agentic-first
   runtime_user: app-agentic-first
-  upload_user: upload-agentic-first
   install_root: /srv/apps/agentic-first
   deploy_inbox: /srv/deploy-inbox/agentic-first
-  upload_inbox: /srv/deploy-inbox/agentic-first/incoming
-  artifact_verification_dir: /srv/deploy-inbox/agentic-first
   deploy_state: /srv/deploy-state/agentic-first
   document_root: www
   requested_ports: []
-  bind_policy: 127.0.0.1-only
+  service_restarts: []
+  deployment_gate: agentic-first-deploy-ani
 
 environment:
   required_names: []
-
 secrets:
   required_names: []
 
 health_check:
   path: /healthz
-  url_when_routed: https://agentic-first.co/healthz
+  url: https://agentic-first.co/healthz
   expected_status: 200
   expected_body_contains: '"status":"ok"'
+  note: The static health version is not a source-commit or deployment identity.
 
 smoke_tests:
-  - name: artifact_checksum
+  - name: checksum
     action: verify_sha256
-    file: downloaded agentic-first-20260714T095359Z.tar.gz
-    sha256: 100f2c898574e6e2d866a1ead560cf7d37aebd618b163917742699a50ce5012c
-  - name: deployed_home_file
-    action: assert_file_exists
-    path: /srv/apps/agentic-first/current/www/index.html
-  - name: deployed_home_message
-    action: assert_file_contains
-    path: /srv/apps/agentic-first/current/www/index.html
-    contains: Company-first agentic creation
-  - name: deployed_yqup_product_line
-    action: assert_file_contains
-    path: /srv/apps/agentic-first/current/www/index.html
-    contains: A YQUP product
-  - name: deployed_yqup_legal_line
-    action: assert_file_contains
-    path: /srv/apps/agentic-first/current/www/index.html
-    contains: Copyright (c) 2026 YQUP Ltd
-  - name: deployed_company_directory_link
-    action: assert_file_contains
-    path: /srv/apps/agentic-first/current/www/index.html
-    contains: href="/companies/"
-  - name: deployed_tool_directory_link
-    action: assert_file_contains
-    path: /srv/apps/agentic-first/current/www/index.html
-    contains: href="/directory/"
-  - name: deployed_brand_guidelines_link
-    action: assert_file_contains
-    path: /srv/apps/agentic-first/current/www/index.html
-    contains: BRAND-GUIDELINES.md
-  - name: deployed_favicon_file
-    action: assert_file_contains
-    path: /srv/apps/agentic-first/current/www/favicon.svg
-    contains: Agentic First
-  - name: homepage_link_check
-    action: run_command
+    expected: 66678a29bdf1dd58986c67c5b54c2965bc7d8cd71c34a74f70c33a0233c63c1e
+  - name: homepage
+    method: GET
+    path: /
+    expected_status: 200
+    expected_body_contains: Find a European tool
+  - name: homepage_links
     command: python3 deploy/check-homepage-links.py --root www --base-url https://agentic-first.co
-  - name: public_discovery_check
-    action: run_command
-    command: python3 deploy/check-public-page-discovery.py --root www
-  - name: deployed_health_file
-    action: assert_file_contains
-    path: /srv/apps/agentic-first/current/www/healthz
-    contains: '"app":"agentic-first"'
-  - name: deployed_social_image_file
-    action: assert_file_exists
-    path: /srv/apps/agentic-first/current/www/static/img/agentic-first-social.png
-  - name: deployed_robots_file
-    action: assert_file_contains
-    path: /srv/apps/agentic-first/current/www/robots.txt
-    contains: Sitemap: https://agentic-first.co/sitemap.xml
-  - name: public_home
+    result: pass
+    links_checked: 43
+  - name: public_discovery
+    command: python3 deploy/check-public-page-discovery.py --root www --live-url https://agentic-first.co/
+    result: pass
+  - name: legacy_catalogue_empty
     method: GET
-    url: https://agentic-first.co/
+    path: /static/agentic-tools.json
     expected_status: 200
-    expected_body_contains: Company-first agentic creation
-    run_only_if_route_is_available: true
-  - name: public_home_metadata
+    expected_entries: []
+    expected_catalog_version: "2.0"
+  - name: packaged_documentation_not_served
     method: GET
-    url: https://agentic-first.co/
-    expected_status: 200
-    expected_body_contains: https://agentic-first.co/static/img/agentic-first-social.png
-    run_only_if_route_is_available: true
-  - name: public_home_yqup_owner
-    method: GET
-    url: https://agentic-first.co/
-    expected_status: 200
-    expected_body_contains: A YQUP product
-    run_only_if_route_is_available: true
-  - name: public_machine_index
-    method: GET
-    url: https://agentic-first.co/llms.txt
-    expected_status: 200
-    expected_body_contains: Agentic First route map
-    run_only_if_route_is_available: true
-  - name: public_machine_index_yqup_owner
-    method: GET
-    url: https://agentic-first.co/llms.txt
-    expected_status: 200
-    expected_body_contains: Copyright (c) 2026 YQUP Ltd
-    run_only_if_route_is_available: true
-  - name: public_favicon
-    method: GET
-    url: https://agentic-first.co/favicon.svg
-    expected_status: 200
-    expected_body_contains: Agentic First
-    run_only_if_route_is_available: true
-  - name: public_social_image
-    method: GET
-    url: https://agentic-first.co/static/img/agentic-first-social.png
-    expected_status: 200
-    run_only_if_route_is_available: true
-  - name: public_robots
-    method: GET
-    url: https://agentic-first.co/robots.txt
-    expected_status: 200
-    expected_body_contains: Sitemap: https://agentic-first.co/sitemap.xml
-    run_only_if_route_is_available: true
-  - name: public_health
-    method: GET
-    url: https://agentic-first.co/healthz
-    expected_status: 200
-    expected_body_contains: '"version":"2026-05-20"'
-    run_only_if_route_is_available: true
+    path: /README.md
+    expected_status: 404
+  - name: independent_full_site
+    command_on_akaar_paired_directory: .venv/bin/python deploy/verify-public-only.py --full-site --output NEW_RECEIPT.json
+    result: pass
+    finished_at: "2026-10-27T12:46:19Z"
+    homepage_file_hashes_checked: 26
+    directory_file_hashes: matched
+    research_denied: true
+    accounts_disabled: true
 
-rollback_plan:
-  strategy: release_symlink
-  previous_release_source: /srv/deploy-state/agentic-first/current-release.yaml
-  steps:
-    - Read /srv/deploy-state/agentic-first/current-release.yaml to identify the previous release.
-    - Repoint /srv/apps/agentic-first/current to the previous release directory using the app-owned deployment mechanism.
-    - Re-run the file-level smoke tests and public smoke tests if the route is available.
-  data_migrations: none
-  secrets_changed: false
-
-caddy_route_request:
-  required: false
-  deferred: false
-  reason: No Caddy or DNS change is requested. Existing public routes remain unchanged.
-  constraints:
-    - This package does not edit Caddy and does not require Caddy/admin/root access from the packaging agent.
-    - Route changes must not be applied from this request; they require a separate explicit Tony approval.
-    - Do not serve /companies/* or /directory/* from this app; those paths are reserved for pitch-mcp.
-  requested_routes: []
+rollback:
+  policy: sanitised-public-only
+  automatic: false
+  release: agentic-first-20261026T152108Z
+  sha256: 9359df943d785795e16b9392e69fedc07d98792c490e03fdafd882e43c25dd68
+  command: ssh agentic-first-deploy-ani deploy agentic-first-20261026T152108Z 9359df943d785795e16b9392e69fedc07d98792c490e03fdafd882e43c25dd68
+  note: Inspect the named failure receipt first. Never restore historical research-exposing catalogues.
 
 risk_flags:
   data_migration: false
+  new_dependencies: false
   new_secrets: false
   caddy_change: false
+  dns_change: false
   privileged_container: false
-  host_mounts: false
+  host_mount_change: false
   downtime_expected: false
+  login_or_research_publication: false
+
+completion:
+  result: pass
+  finished_at: "2026-10-27T12:44:27Z"
+  current: /srv/apps/agentic-first/releases/agentic-first-20261027T123906Z
+  receipt: /srv/deploy-state/agentic-first/receipts/agentic-first-20261027T123906Z.yaml
+  documentation: deploy/receipts/2026-10-27-guided-discovery-deployed.md
