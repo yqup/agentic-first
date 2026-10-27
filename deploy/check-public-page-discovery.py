@@ -150,18 +150,16 @@ def _validate_html(parser: PageParser, failures: list[str]) -> None:
     _require(failures, parser.links.get("apple-touch-icon") == "/apple-touch-icon.png", "Apple touch icon link is missing.")
 
     json_ld = _read_json_ld(parser, failures)
-    article = next((record for record in json_ld if _json_type(record) & {"Article", "BlogPosting"}), None)
-    _require(failures, article is not None, "Article or BlogPosting JSON-LD is required.")
-    if article:
-        _require(failures, bool(article.get("headline")), "JSON-LD headline is required.")
-        _require(failures, bool(article.get("author")), "JSON-LD author is required.")
-        _require(failures, bool(article.get("datePublished")), "JSON-LD datePublished is required.")
-        _require(failures, bool(article.get("dateModified")), "JSON-LD dateModified is required.")
-        _require(failures, article.get("url") == CANONICAL, "JSON-LD url must match canonical.")
-        image = article.get("image")
+    site = next((record for record in json_ld if "WebSite" in _json_type(record)), None)
+    _require(failures, site is not None, "WebSite JSON-LD is required for the directory homepage.")
+    if site:
+        _require(failures, site.get("name") == "Agentic First", "JSON-LD website name must identify Agentic First.")
+        _require(failures, bool(site.get("publisher")), "JSON-LD publisher is required.")
+        _require(failures, site.get("url") == CANONICAL, "JSON-LD url must match canonical.")
+        image = site.get("image")
         image_values = image if isinstance(image, list) else [image]
         _require(failures, SOCIAL_IMAGE in image_values, "JSON-LD image must include the social image.")
-        page = article.get("mainEntityOfPage")
+        page = site.get("mainEntityOfPage")
         if isinstance(page, dict):
             _require(failures, page.get("@id") == CANONICAL, "JSON-LD mainEntityOfPage must match canonical.")
         else:
