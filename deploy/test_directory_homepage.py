@@ -88,6 +88,11 @@ class DirectoryHomepageTests(unittest.TestCase):
         self.assertIn("/directory/overview.json", source)
         self.assertNotIn("innerHTML", source)
 
+    def test_three_guided_entry_points_are_crawlable(self):
+        self.assertIn('/directory/?mode=replace', self.html)
+        self.assertIn('/directory/?mode=task', self.html)
+        self.assertIn('href="#explore-heading"', self.html)
+
     def test_metadata_gate_accepts_website_but_rejects_old_article(self):
         spec = importlib.util.spec_from_file_location("homepage_discovery_check", ROOT / "deploy/check-public-page-discovery.py")
         checker = importlib.util.module_from_spec(spec)
