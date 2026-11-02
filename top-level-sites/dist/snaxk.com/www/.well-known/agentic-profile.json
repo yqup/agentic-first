@@ -3,11 +3,6 @@
   "updated_at": "2026-07-29T00:00:00Z",
   "profile_kind": "company",
   "tier": "public",
-  "access": {
-    "visibility": "public",
-    "authority": "none",
-    "note": "Public information only. Discovery surfaces grant no authority to act and provide no private access, credentials, or permission."
-  },
   "company": {
     "name": "SNAXK",
     "website": "https://snaxk.com",
@@ -26,12 +21,5 @@
   "contact": {
     "preferred_channel": "form",
     "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=snaxk_to_tonywood_advisory&mtm_source=snaxk.com&mtm_medium=owned-referral&mtm_content=profile_contact"
-  },
-  "analytics": {
-    "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "site_goal": "Feed qualified visitors into ChiefAgenticOfficer.com while measuring interest in SNAXK as a possible judgement engine for agentic work.",
-    "primary_conversion": "chiefagenticofficer_feeder_click",
-    "primary_destination": "https://chiefagenticofficer.com/",
-    "campaign": "snaxk_to_chiefagenticofficer"
   }
 }

@@ -40,14 +40,50 @@ domains at the server.
 
 ## Build
 
-Run on ROKY:
+Run on AKAAR or ROKY with Node.js and Python 3.11 or later. Install the
+build-only validator once in a local virtualenv (GitHub access to
+`yqup/pitch-mcp` is required):
 
 ```bash
 cd /Users/tonywood/agentic-first/agentic-first
+python3.11 -m venv .venv
+.venv/bin/python -m pip install -r top-level-sites/requirements-build.txt
+```
+
+Then activate that virtualenv for builds and packaging:
+
+```bash
+cd /Users/tonywood/agentic-first/agentic-first
+source .venv/bin/activate
 node top-level-sites/build-sites.mjs
 node top-level-sites/scripts/check-social-previews.mjs
 node top-level-sites/scripts/check-public-discovery.mjs
+node --test top-level-sites/tests/*.test.mjs
 ```
+
+The build checks that `agentic-first-validate` is available before replacing
+`dist/`, then runs it on every generated company profile. Missing files,
+unexpected profile files and validation errors fail the build; warnings
+are printed but do not fail it. The normal release packager runs the same
+build gate. No validator installation or network schema fetch happens during
+the build or at runtime. Set `AGENTIC_FIRST_VALIDATE` to an executable path
+if the CLI is not on `PATH`.
+
+Empty retired directories without a profile are ignored; every configured
+site must still have a valid profile.
+
+To recheck an existing build without regenerating it:
+
+```bash
+node top-level-sites/scripts/check-company-profiles.mjs
+```
+
+The validator source revision is pinned in `requirements-build.txt`. It uses
+the existing Open Company Information v0.2.0 schema from `yqup/pitch-mcp`;
+this repository does not relax or extend that schema. Access/authority
+statements belong in `llms.txt`, analytics in `/healthz` and site metadata,
+and CAO briefing context in `/for-agents/` and `llms.txt`. A future profile
+access statement needs a separate specification proposal.
 
 This regenerates:
 
@@ -57,6 +93,7 @@ This regenerates:
 
 ## Change Notes
 
+- [Company profile v0.2.0 validation gate](docs/company-profile-validation.md)
 - [Public page discovery and preview contract](docs/public-page-discovery.md)
 - [LinkedIn Open Graph previews](docs/linkedin-open-graph-previews.md)
 - [SNAXK country-map refresh](docs/snaxk-country-map-refresh.md)

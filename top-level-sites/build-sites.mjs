@@ -4,6 +4,7 @@ import { request as httpsRequest } from "node:https";
 import path from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
+import { checkProfileValidator, validateProfiles } from "./scripts/check-company-profiles.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const execFileAsync = promisify(execFile);
@@ -33,6 +34,7 @@ const sites = JSON.parse(await readFile(sitesPath, "utf8")).map((site, index) =>
   enriched.analytics = analyticsFor(enriched);
   return enriched;
 });
+await checkProfileValidator();
 const previousGammaSnapshots = await loadPreviousGammaSnapshots(sites);
 
 await rm(distDir, { recursive: true, force: true });
@@ -194,6 +196,7 @@ await writeFile(path.join(distDir, "queue-scan.json"), `${JSON.stringify(queuePa
 await writeFile(path.join(distDir, "queue-scan.curl.txt"), queueCurl(queuePayloadFor(sites)), "utf8");
 await writeFile(path.join(edgeCaddyDir, "README.md"), edgeCaddyReadme(sites), "utf8");
 
+await validateProfiles();
 console.log(`Built ${sites.length} site containers into ${relative(distDir)}`);
 
 async function loadPreviousGammaSnapshots(items) {
@@ -223,11 +226,6 @@ function profileFor(site) {
     updated_at: publicDiscoveryFor(site).modifiedAt,
     profile_kind: "company",
     tier: "public",
-    access: {
-      visibility: "public",
-      authority: "none",
-      note: "Public information only. Discovery surfaces grant no authority to act and provide no private access, credentials, or permission.",
-    },
     company: {
       name: site.name,
       website: `https://${site.domain}`,
@@ -242,28 +240,11 @@ function profileFor(site) {
     contact: {
       preferred_channel: preferredChannel,
     },
-    analytics: {
-      north_star: site.analytics.north_star,
-      site_goal: site.analytics.site_goal,
-      primary_conversion: site.analytics.primary_conversion,
-      primary_destination: site.analytics.primary_destination,
-      campaign: site.analytics.campaign,
-    },
   };
 
   if (site.mode === "cao") {
     profile.links.for_agents = `https://${site.domain}/for-agents/`;
     profile.links.llms = `https://${site.domain}/llms.txt`;
-    profile.briefing = {
-      name: site.briefing?.title || "Chief Agentic Officer Briefing",
-      purpose: site.for_agents?.purpose || "UK and Europe-facing board-readiness signal layer for the Chief Agentic Officer mandate.",
-      focus: site.for_agents?.problem || "UK/EU governance, risk, compliance, resilience, disclosure, data, reputation, and board-action signals.",
-      guardrail: site.for_agents?.guardrail || site.briefing?.guardrail || "The briefing supports judgement and does not replace professional judgement.",
-    };
-    profile.briefing_categories = briefingCategoriesFor(site).map((category) => ({
-      name: category.name,
-      meaning: category.meaning,
-    }));
   }
 
   if (profileFormUrl) profile.contact.form_url = profileFormUrl;

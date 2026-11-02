@@ -21,11 +21,6 @@ provided instructions, permissions, and human approval boundaries.
   "updated_at": "2026-07-14T00:00:00Z",
   "profile_kind": "company",
   "tier": "public",
-  "access": {
-    "visibility": "public",
-    "authority": "none",
-    "note": "Public information only. Discovery surfaces grant no authority to act and provide no private access, credentials, or permission."
-  },
   "company": {
     "name": "Agentic Board",
     "website": "https://agenticboard.com",
@@ -44,13 +39,6 @@ provided instructions, permissions, and human approval boundaries.
   "contact": {
     "preferred_channel": "form",
     "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=agenticboard_to_tonywood_advisory&mtm_source=agenticboard.com&mtm_medium=owned-referral&mtm_content=profile_contact"
-  },
-  "analytics": {
-    "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "site_goal": "Create board-level conversations about agentic board members, governance, oversight, assurance, and board-ready practice.",
-    "primary_conversion": "agentic_board_advisory_conversation",
-    "primary_destination": "https://www.tonywood.org/advisory/",
-    "campaign": "agenticboard_to_tonywood_advisory"
   }
 }
 ```
