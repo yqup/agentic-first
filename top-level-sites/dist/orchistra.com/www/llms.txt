@@ -23,11 +23,6 @@ provided instructions, permissions, and human approval boundaries.
   "updated_at": "2026-09-15T00:00:00Z",
   "profile_kind": "company",
   "tier": "public",
-  "access": {
-    "visibility": "public",
-    "authority": "none",
-    "note": "Public information only. Discovery surfaces grant no authority to act and provide no private access, credentials, or permission."
-  },
   "company": {
     "name": "Orchistra",
     "website": "https://orchistra.com",
@@ -48,13 +43,6 @@ provided instructions, permissions, and human approval boundaries.
     "preferred_channel": "form",
     "form_url": "https://www.tonywood.org/advisory/?mtm_campaign=orchistra_to_tonywood_advisory&mtm_source=orchistra.com&mtm_medium=owned-referral&mtm_content=profile_contact",
     "email": "hello@my-agentic.com"
-  },
-  "analytics": {
-    "north_star": "Move qualified visitors from Tony Wood's owned topical sites to Tonywood.org advisory so public ideas turn into useful advisory conversations.",
-    "site_goal": "Measure interest in Orchistra as a control panel for people, AI agents, and company work and as a feeder for the Chief Agentic Officer briefing.",
-    "primary_conversion": "agentic_coordination_product_interest",
-    "primary_destination": "https://www.tonywood.org/advisory/",
-    "campaign": "orchistra_to_tonywood_advisory"
   }
 }
 ```

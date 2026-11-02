@@ -62,7 +62,7 @@ for (const site of sites) {
   if (!llms.includes("public information only") || !llms.includes("authority to act")) failures.push(`${site.domain}: llms.txt lacks the public no-authority boundary`);
   const profileText = await readFile(path.join(wwwRoot, ".well-known", "agentic-profile.json"), "utf8");
   const profile = JSON.parse(profileText);
-  if (profile.tier !== "public" || profile.access?.authority !== "none") failures.push(`${site.domain}: agentic profile must be public-safe and grant no authority`);
+  if (profile.schema_version !== "0.2.0" || profile.profile_kind !== "company" || profile.tier !== "public") failures.push(`${site.domain}: expected a v0.2.0 public company profile`);
   if (/"(?:api[_-]?key|password|secret|token)"\s*:/i.test(profileText)) failures.push(`${site.domain}: agentic profile contains a secret-like field`);
 }
 

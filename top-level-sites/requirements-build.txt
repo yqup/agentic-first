@@ -1,0 +1,2 @@
+# Build-only canonical validator, pinned to the reviewed pitch-mcp source.
+agentic-first-schema @ git+https://github.com/yqup/pitch-mcp.git@ff50b9d881a4e27b6d954cf4dc6b84b94ff4087b#subdirectory=companies/python/agentic_first_schema
